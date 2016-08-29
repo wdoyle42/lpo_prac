@@ -79,7 +79,7 @@ Software
 --------
 
 You need to have access to a working version of Stata, (at least v
-12.0). Stata is installed on computers on Peabody campus, including our
+13.0). Stata is installed on computers on Peabody campus, including our
 classroom (Wyatt 132), and on stations in the Peabody library. You are
 not required to purchase Stata, but you will need to use it for class
 assignments.
@@ -89,12 +89,6 @@ Vanderbilt has what’s called a gradplan with Stata under which you can
 purchase the software at greatly reduced prices. Stata SE is a
 more-powerful version of Stata that is useful for the larger datasets
 many of you may be working with.
-
-In addition, all of the assignments for this course must be turned in
-using LaTex. LaTex is a document-preparation software that is used
-widely in academic research and greatly enhances scholarly productivity
-once mastered. LaTex is open source software and is available in many
-free distributions.
 
 Honor Code {#sec:honor-code}
 ----------
