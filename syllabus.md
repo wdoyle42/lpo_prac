@@ -1,14 +1,23 @@
-#Vanderbilt University
-#Leadership, Policy and Organizations
-#Class Number 9951
-#Fall 2016
+
+# PhD Practicum
+
+##Vanderbilt University
+##Leadership, Policy and Organizations
+##Class Number 9951
+##Fall 2016
 
 
-#William R. Doyle
-#Office: 207D Payne
-#Office Hours: Monday and Wednesday 1-3 or by Appointment
-#w.doyle@vanderbilt.edu
-#phone (615) 322-2904
+William R. Doyle
+
+Office: 207D Payne
+
+Office Hours: Monday and Wednesday 1-3 or by Appointment
+
+w.doyle@vanderbilt.edu
+
+@wdoyle42
+
+phone (615) 322-2904
 
 
 Course Overview
