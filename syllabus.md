@@ -1,16 +1,15 @@
-Vanderbilt University\
-Leadership, Policy and Organizations\
-Class Number 9951\
-Fall 2016\
+Vanderbilt University
+Leadership, Policy and Organizations
+Class Number 9951
+Fall 2016
 
-\
 
-William R. Doyle\
-Office: 207D Payne\
-Office Hours: Monday and Wednesday 1-3 or by Appointment\
-w.doyle@vanderbilt.edu\
-phone (615) 322-2904\
-12 pt
+William R. Doyle
+Office: 207D Payne
+Office Hours: Monday and Wednesday 1-3 or by Appointment
+w.doyle@vanderbilt.edu
+phone (615) 322-2904
+
 
 Course Overview
 ===============
@@ -57,8 +56,8 @@ will ask you to work with variables and datasets of your own choosing.
 At the end of the semester, you will need to present the results of your
 data collection efforts, with a summary paper of no more than five pages
 of text, accompanied by properly formatted tables and graphics. The
-summary paper and codebook will be due on December 4th. You will present
-your work to the rest of the class on December
+summary paper and codebook will be due on December 6. You will present
+your work to the rest of the class on December 6.
 
 Texts
 -----
@@ -111,85 +110,85 @@ Schedule for Meetings
 
 The schedule for all class meetings is as follows:
 
-August 21
+August 30
 ---------
 
 *Topics*:
 
 Class introduction
 
-August 28
----------
+September 6
+-----------
 
 *Topics*: STATA Basics
 
-*Assignments:* Assignment 1 due August 25, midnight
+*Assignments:* Assignment 1 due September 4, midnight
 
-Septermber 4
-------------
+Septermber 13
+-------------
 
 *Topics*:
 
-Working with NCES databases
+Working with publicly available datasets
 
-*Assignments:* Assignment 2 due September 1, midnight
+*Assignments:* Assignment 2 due September 11, midnight
 
-September 11
+September 20
 ------------
 
 *Topics*:
 
 Dataset manipulation: Collapsing, merging, bending the data to your will
 
-*Assignments:* Assignment 3 due September 8, midnight
+*Assignments:* Assignment 3 due September 18, midnight
 
-September 18
+September 27
 ------------
 
 *Topics*: More dataset manipulation: One to many merging, many to one
 merging, appending datasets
 
-*Assignments:* Assignment 4 due September 15, midnight
+*Assignments:* Assignment 4 due September 25, midnight
 
 Summary research area due
 
-September 25
-------------
+October 4
+---------
 
 *Topics*:
 
 Sampling: Simple sampling designs
 
-*Assignments:* Assignment 5 due September 22, midnight
+*Assignments:* Assignment 5 due October 2, midnight
 
-October 2
----------
+October 11
+----------
 
 *Topics*: Sampling: Complex sampling designs
 
-*Assignments:* Assignment 6 due September 29, midnight
+*Assignments:* Assignment 6 due October 9, midnight
 
-October 9
----------
+October 18
+----------
 
 *Topics*:
 
 Data Cleaning
 
-*Assignments:* Assignment 7 due October 6, midnight
+*Assignments:* Assignment 7 due October 16, midnight
 
-October 16
+October 25
 ----------
 
 *Topics*:
 
 Data Validation
 
-*Assignments:* Assignment 8 due October 13, midnight
+*Assignments:* Assignment 8 due October 23, midnight
 
 Research questions due.
 
-October 23
+November 1
 ----------
 
 *Topics*:
@@ -198,56 +197,41 @@ Descriptive Statistics: Tabular and Graphical Approaches
 
 *Assignments:*
 
-Assignment 9 due October 20, midnight
+Assignment 9 due September 30, midnight
 
-October 30
+November 8
 ----------
 
 *Topics*:
 
 An Introduction to Programming: Using Macros
 
-Baum, C (2005) A little bit of Stata programming goes a long way. Boston
-College Working Papers in Economics, 612. pp 1-10
-[Online](http://fmwww.bc.edu/EC-P/WP612.pdf)
-
 *Assignments:*
 
 Assignment 10 due October 27, midnight
 
-November 6
-----------
-
-*Topics*:
-
-Lab Hours: We will go over everyone’s projects in detail. Come prepared
-to discuss your research questions, code, and results of descriptive
-analysis.
-
-November 13
+November 15
 -----------
 
 *Topics*:
 
-Graphical approaches to describing data
+Further graphical approaches to describing data
 
-Gelman, A & Pasarica, C & and Dodhia, Rahul (2002) Let’s practice what
-we preach: Turning tables into graphs. *American Statistician* 56:2 p.
-121
+Assignment 11 due November 13, midnight
 
-November 20
+November 22
+-----------
+
+No Class, Thanksgiving Break
+
+November 29
 -----------
 
 *Topics*:
 
 Topic TBA: based on student work.
 
-November 27
------------
-
-No Class- Thanksgiving Break
-
-December 4
+December 6
 ----------
 
 *Topics*:
@@ -256,4 +240,4 @@ Class Presentations
 
 *Assignments:*
 
-Summary Papers, Do-File and Codebooks due before class, December 4.
+Summary Papers, Do-File and Codebooks due before class, December 6.
