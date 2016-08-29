@@ -98,7 +98,7 @@ purchase the software at greatly reduced prices. Stata SE is a
 more-powerful version of Stata that is useful for the larger datasets
 many of you may be working with.
 
-Honor Code {#sec:honor-code}
+Honor Code 
 ----------
 
 For this course, you are bound by the terms of the Peabody Honor System.
