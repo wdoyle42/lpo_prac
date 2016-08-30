@@ -43,11 +43,22 @@ data:
 -  ELS [http://nces.ed.gov/edat/](http://nces.ed.gov/edat/)
 -  PISA [http://pisa2012.acer.edu.au/downloads.php](http://pisa2012.acer.edu.au/downloads.php)
   
-You will need your selected dataset to complete assignments for the course. The first assignment
-based on these will be due in two weeks.
-This assignment is due on Monday night before our next class. The file should be named as
-follows:
+You will need your selected dataset to complete assignments for
+the course. The first assignment based on these will be due in two
+weeks. This assignment is due on Monday night before our next
+class. The file should be named asfollows:
 
   `assignment1_<lastname>.docx`
   
 All subsequent files to be turned in should be named the same way.
+
+I want this assignment and all subsequent assignments turned in on [github](http://github.com). You'll need to do the following:
+
+1. Get a github id. It's free. Email me your id as soon as you have it. 
+2. Figure out a way to interact with git and github. The easiest way is through [GitHub Desktop](https://desktop.github.com/). This is also free and open source. 
+3. Answer your invitation from me to join [lpoprac](https://github.com/lpoprac). 
+4. Clone your student directory to your computer. 
+5. Save your assignment file in `assignment1` folder. 
+6. Push your changes up to github. 
+
+
