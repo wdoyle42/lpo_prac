@@ -28,8 +28,8 @@ value labels for each school size as follows:
 5. Create another graphic showing the relationship between
 expenditures per student and math scores by district size.
 
-Submit a well-documented and well-organized do file, with the proper
-name to our class website on Blackboard by the deadline. Remember proper
+Upload a well-documented and well-organized do file, with the proper
+name to your github repo by the deadline. Remember proper
 naming conventions for files submitted. 
 
 <br>
