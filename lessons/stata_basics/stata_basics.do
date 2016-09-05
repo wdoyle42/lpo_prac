@@ -1,5 +1,5 @@
 capture log close                       // closes any logs, should they be open
-log using "lecture2_stata_basics.log", replace    // open new log
+log using "stata_basics.log", replace    // open new log
 
 // NAME: Stata Basics
 // FILE: lecture2_stata_basic.do

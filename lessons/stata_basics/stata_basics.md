@@ -1,3 +1,10 @@
+Stata Basics
+============
+
+*Will Doyle*
+
+*9 5 2016*
+
 <br>
 
 #### PURPOSE
