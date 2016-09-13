@@ -14,6 +14,7 @@ set more off                            // turn off annoying "__more__" feature
 // set globals for entire file
 global workdir `c(pwd)'
 global datadir "../../data/"
+global auxdir "../../aux/"
 
 // display globals
 di "$workdir"
@@ -64,8 +65,9 @@ renvars *, lower
 // save reduced ELS dataset
 save $datadir$elssave, replace
 
-exit
 // Early Childhood Longitudinal Study - Kindergarten (ECLS-K)
+
+cd $workdir
 
 // set globals for ECLS-K files
 global ecl_zip "ECLSK_1998-99_v1_0_Stata_Datasets.zip"
@@ -75,11 +77,11 @@ global eclsave "eclsk_reduced.dta"
     
 // unzip ECLS file
 cd $datadir
-unzipfile $datadir$ecl_zip, replace
+unzipfile $ecl_zip, replace
 cd $workdir
 
 // read in ECLS file
-infile using $auxldir$ecl_dct, using($datadir$ecl_dat) clear
+infile using $datadir$ecl_dct, using($datadir$ecl_dat) clear
 
 // lower all variable names using wildcard
 renvars *, lower
@@ -122,6 +124,9 @@ renvars *, lower
 
 // save reduced HSLS dataset
 save $datadir$hslssave, replace
+
+
+exit
 
 // Programme for International Student Assessment (PISA)
 
