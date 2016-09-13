@@ -89,6 +89,11 @@ renvars *, lower
 // save reduced ECLS-K dataset
 save $datadir$eclsave, replace
 
+// download dictionary file that we will need
+capture log close
+
+exit
+
 // High School Longitudinal Study (HSLS)
 
 // set globals for HSLS files
