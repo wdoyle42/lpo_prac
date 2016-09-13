@@ -1,0 +1,7 @@
+dictionary {
+
+_column(1)     str8 CHILDID   %8s       "CHILD IDENTIFICATION NUMBER"
+_column(1418)  double C3R4RSCL%6.2f     "C3 RC4 READING IRT SCALE SCORE"
+_column(1510)  double C3R4MSCL%6.2f     "C3 RC4 MATH IRT SCALE SCORE"
+
+}
