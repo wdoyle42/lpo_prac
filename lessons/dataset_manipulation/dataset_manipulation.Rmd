@@ -3,6 +3,7 @@ title: Dataset Manipulation
 author: LPO 9951 | Fall 2016
 output: md_document
 ---
+## Dataset Manipulation
 
 ```{r, echo = FALSE, message = FALSE}
 require(knitr)
