@@ -22,17 +22,19 @@ a wide variety of delimited files.
 excel worksheet before importing to understand which range should be
 imported.
 
-    . import delimited "http://www.ats.ucla.edu/stat/r/modules/hsb2.csv", clear
+    . import delimited "http://www.ats.ucla.edu/stat/r/modules/hsb2.csv
+    > ", clear
     (11 vars, 200 obs)
 
     . // Excel
-    . import excel "https://nces.ed.gov/programs/digest/d14/tables/xls/tabn304.10.xls", cellrange(A5:L
-    > 64) clear
+    . import excel "https://nces.ed.gov/programs/digest/d14/tables/xls/
+    > tabn304.10.xls", cellrange(A5:L64) clear
 
 For the rest of today's lecture, we'll use the `apipop` dataset, which
 is available online.
 
-    . global urldata "http://www.ats.ucla.edu/stat/stata/library/apipop"
+    . global urldata "http://www.ats.ucla.edu/stat/stata/library/apipop
+    > "
 
     . // read web data into memory
     . use $urldata, clear
@@ -68,7 +70,7 @@ are:
     . keep if stype == 1                      
     (1773 observations deleted)
 
-    . save elem, replace
+    . save elem ,replace 
     file elem.dta saved
 
     . restore
@@ -84,7 +86,41 @@ are:
 
     . restore
 
-    . // middle schools (keep this one in memory so no preserve/restore needed)
+    . // Right now, this should be the full dataset
+    . di _N
+    6194
+
+    . // Middle and high schools
+    . codebook stype
+
+    -------------------------------------------------------------------
+    stype                                                   (unlabeled)
+    -------------------------------------------------------------------
+
+                      type:  numeric (byte)
+                     label:  stype
+
+                     range:  [1,3]                        units:  1
+             unique values:  3                        missing .:  0/619
+    > 4
+
+                tabulation:  Freq.   Numeric  Label
+                              4421         1  E
+                               755         2  H
+                              1018         3  M
+
+    . preserve
+
+    . keep if stype==2 | stype==3
+    (4421 observations deleted)
+
+    . save middle_and_hs,replace
+    file middle_and_hs.dta saved
+
+    . restore
+
+    . // middle schools (keep this one in memory so no preserve/restore
+    >  needed)
     . keep if stype == 3                      
     (5176 observations deleted)
 
@@ -106,7 +142,7 @@ appropriately enough, the `append` command, which takes the format
 in memory; remember that the middle school subset data are still in
 memory):
 
-    . append using elem   
+    . append using elem 
     (label yr_rnd already defined)
     (label awards already defined)
     (label both already defined)
@@ -162,12 +198,12 @@ you're done.
         -----------------------------------------
 
     . merge 1:1 snum using middle, gen(_merge_b)
-    (label stype already defined)
-    (label sch_wide already defined)
-    (label comp_imp already defined)
-    (label both already defined)
-    (label awards already defined)
     (label yr_rnd already defined)
+    (label awards already defined)
+    (label both already defined)
+    (label comp_imp already defined)
+    (label sch_wide already defined)
+    (label stype already defined)
 
         Result                           # of obs.
         -----------------------------------------
@@ -250,10 +286,34 @@ Now for the merge and view of merge stats:
         matched                             6,194  (_merge==3)
         -----------------------------------------
 
-    . // view merge stats
-    . tab _merge
+    . use $urldata, clear
 
-                     _merge |      Freq.     Percent        Cum.
+    . preserve
+
+    . keep snum mobility pcttest
+
+    . save api_3, replace
+    file api_3.dta saved
+
+    . restore
+
+    . keep snum yr_rnd pct_resp
+
+    . save api_4, replace
+    file api_4.dta saved
+
+    . merge 1:1 snum using api_3, gen(_merge_c)
+
+        Result                           # of obs.
+        -----------------------------------------
+        not matched                             0
+        matched                             6,194  (_merge_c==3)
+        -----------------------------------------
+
+    . // view merge stats
+    . tab _merge_c
+
+                   _merge_c |      Freq.     Percent        Cum.
     ------------------------+-----------------------------------
                 matched (3) |      6,194      100.00      100.00
     ------------------------+-----------------------------------
@@ -289,7 +349,8 @@ set of characteristics. The command would look like this:
     . // mean of pcttest and mobility within countyr
     . collapse (mean) pcttest mobility, by (cnum)
 
-    . // give count of number of observations (should be number of unique counties)
+    . // give count of number of observations (should be number of uniq
+    > ue counties)
     . count
        57
 
@@ -303,7 +364,7 @@ code.
 
 > Create a district level dataset that contains district level averages
 > for the following variables:  
-> 1. apioo  
+> 1. api00  
 > 2. api99  
 > 3. ell  
 > 4. meals  
@@ -311,6 +372,6 @@ code.
 
 <br> <br>
 
-*Init: 15 August 2015; Updated: 19 September 2016*
+*Init: 15 August 2015; Updated: 20 September 2016*
 
 <br>
