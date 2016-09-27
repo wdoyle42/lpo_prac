@@ -132,7 +132,6 @@ kdensity api99 if ell_flag == 1, ///
 graph export api99_kdens.eps, name(api99_kdens) replace
 
 
-
 use api, clear
 
 preserve
@@ -141,15 +140,16 @@ sample 50
 save api_1, replace
 restore
 
-drop avg_ed
+drop not_hsg hsg some_col col_grad grad_sch avg_ed
 sample 50
 save api_2, replace
 
 // merge datasets
-merge snum using api_1, sort
+merge 1:1 snum using api_1 
 
 // inspect messy merge
 tab _merge 
+
 
 // code for looking at missing values, other patterns
 
@@ -160,23 +160,23 @@ inspect meals
 // command: mdesc
 mdesc meals emer, all
 
+mdesc not_hsg hsg some_col col_grad grad_sch 
+
 // command: mvpatterns
-mvpatterns meals emer avg_ed
+mvpatterns meals emer avg_ed not_hsg hsg some_col col_grad grad_sch 
 
 // create flag if missing ell
 gen emer_flag = emer == .
 
 // plot kernal density of api99 of observations missing ell
 kdensity api99 if emer_flag == 1, ///
-    name(api99_kdens) ///
+    name(api99_2_kdens) ///
     addplot(kdensity api99 if emer_flag == 0) ///
     legend(label(1 "Not Missing Emer")  label(2 "Missing Emer")) ///
     note("") ///
     title("")
 
 
-
-exit 
 // reshaping: wide to long
 
 // read in data and sort
@@ -203,9 +203,10 @@ drop if fips < 1 | fips > 56
 
 // graph
 xtline inc_, i(areaname) t(date) name(xtline_fipsinc)
-graph export ${plotdir}xtline_fipsinc.eps, name(xtline_fipsinc) replace
+graph export xtline_fipsinc.eps, name(xtline_fipsinc) replace
 
 // reshaping: long to wide
+
 
 // drop date that we added (no longer needed)
 drop date
@@ -215,6 +216,26 @@ reshape wide inc_, i(fips) j(year_quarter, string)
 
 // list first rows
 list if _n < 4
+
+// Final exercise
+
+
+
+import delimited SA1_1929_2015.csv,   clear numericcols(1 8/94)
+
+keep if description=="Per capita personal income (dollars) 2/"
+
+drop region linecode industry
+
+reshape long v, i(geofips) j(year)
+
+replace year=year+1921
+
+drop if year<1950
+
+xtset geofips year, yearly
+
+xtline v, i(geoname) t(year)
 
 // end file
 log close                               // close log
