@@ -1,27 +1,28 @@
 capture log close                       // closes any logs, should they be open
 set linesize 90
-log using "lecture7_sampling_part1.log", replace    // open new log
+log using "sampling_part1.log", replace    // open new log
 
 // NAME: Sampling: Part 1
 // FILE: lecture7_sampling_part1.do
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 1 October 2014
-// LAST: 18 August 2015
+// LAST: 10 October 2016
      
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
 
-global datadir "../data/"
+global datadir "./"
 
 // install gsample and moremata for probability samples
-ssc install gsample
-ssc install moremata
+// ssc install gsample
+// ssc install moremata
 
 // SIMPLE RANDOM SAMPLING
 
 // read in fake SAT score data
 use ${datadir}fakesat, clear
+
 
 // calculate population mean, variance, sd, and sem by hand
 egen scoretot = total(score)            // total of all scores
@@ -56,6 +57,7 @@ scalar sampsem = sampsd / sqrt(_N)      // standard error of sample mean
 scalar list sampmean sampsd sampsem
 summarize score
 mean score
+
 
 // SIMPLE RANDOM SAMPLING WITH FINITE POPULATION CORRECTION
 
@@ -96,12 +98,14 @@ di xbar + invnormal(.975) * sampsem
 di xbar - invnormal(.975) * sampsemfpc
 di xbar + invnormal(.975) * sampsemfpc
 
+
 // SIMPLE RANDOM SAMPLING WITH FREQUENCY WEIGHTS
 
 use ${datadir}fakesat_freq, clear
 
 // list first few observations
 list if _n < 11
+
 
 // compare simple mean with freqency-weighted mean
 mean score
@@ -140,9 +144,12 @@ mean atrisk, over(grade)                // within each grade
 global ss = 50                          // set within grade sample size
 sample $ss, count by(grade)             // sample
 
+
+
 // compute within grade and overall means and sems
 preserve 
 collapse (mean) propatr = atrisk (sd) sdatr = atrisk (first) nstgrade, by(grade)
+
 
 scalar Ybar9 = propatr[1]               // 9th grade average
 scalar Ybar10 = propatr[2]              // 10th grade average
@@ -176,6 +183,7 @@ mean atrisk
 scalar list Ybar9 Ybar9_sem Ybar10 Ybar10_sem Ybar11 Ybar11_sem Ybar12 Ybar12_sem 
 mean atrisk, over(grade)
 
+
 // CLUSTER SAMPLING WITH PROBABILITY PROPORTIONAL TO SIZE
 
 // open full fake highschool data again
@@ -190,11 +198,13 @@ global cut = 10                         // number of classes to keep in each gra
 keep if classid <= $cut                 // keep only sampled classes
 scalar m = _N                           // number of students in sample
 
+
 // get estimated population (should be close to 2003)
 gen weight = nclgrade / $cut            // 1 / (n_h / N_h) or just (N_h / n_h) 
 qui sum weight                          // quietly -summarize-
 scalar Mhat = r(sum)                    // store sum of weights
 di Mhat                                 // estimated population
+
 
 // get population score estimate, by class and overall
 preserve
@@ -215,6 +225,7 @@ scalar list Ybar9 Ybar10 Ybar11 Ybar12 Ybar_school
 
 // mean of overall school score
 mean testscore
+
 
 // get right-ish estimate of standard error of school test mean
 gen wscore = testscore * weight         // (w_hij * y_hij)

@@ -1,0 +1,323 @@
+---
+title: Sampling II
+author: LPO 9951 | Fall 2016
+output: github_document
+---
+
+```{r, echo = FALSE, message = FALSE}
+require(knitr)
+source('../../r/stataknitrhelper.r')
+opts_chunk$set(echo = FALSE, message = FALSE, comment = NA, cache = FALSE)
+```
+
+```{r, engine = 'bash'}
+## run accompanying .do file to get log file for parsing
+#stata -b -q do ../do/lecture8_sampling_part2.do
+```
+
+```{r}
+## save log file in object
+lf <- 'sampling_part2.log'
+```
+
+<br>
+
+#### PURPOSE
+
+In the last lecture, we discussed a number of ways to properly
+estimate the means and variances of complex survey designs. In this
+lecture, we'll discuss how to use Stata's internal `svy` commands and
+various variance estimation methods to more easily and correctly
+estimate what we want.
+
+<br>
+
+## Complex survey designs: Cluster sampling and stratification
+
+In the NCES surveys you'll be using this semester, the designers
+combined a design that includes multistage cluster sampling with
+stratification. In ECLS, for example, the designers designated
+counties as *PSUs*. They next stratified the sample by creating strata
+that combined census region with msa status, percent minority, and per
+capita income. They then randomly selected schools within each *PSU*
+(schools were the *SSUs*) and then randomly selected kindergarteners
+within each school (students were the *TSUs*). They then created two
+strata for each school with Asian and Pacific Islander students in one
+stratum and all other students in the other. Students were randomly
+sampled within this second stratum. The target number of children per
+school was 24.
+
+Weights in complex survey designs such as the one employed with ECLS
+are calculated via the same that we discussed in the last
+lecture. Nothing changes except for the layers of complexity. The good
+news, however, is that we a researchers don't have to compute the
+weights ourselves. Instead, we can use information provided by the
+survey makers.  
+
+The *PSUs* that are provided by NCES are what is known as "analysis
+*PSUs*". They aren't the identifier for the actual school or
+student. Instead, they are allocated within strata (many times 2 *PSU*
+per strata). Strata themselves may be analysis strata, that is, not
+the same strata that were used to run the survey. Oftentimes, this is
+done in service of further protecting the anonimity of
+participants. As far your analyses go, the end result is the same, but
+sometimes this can be a source of confusion.
+
+<br>
+
+## Variance estimation in complex survey designs
+
+There are four common options for estimating variance in complex
+survey designs:
+
+  1. Taylor series linearized estimates
+  2. Balanced repeated replication (BRR) estimates
+  3. Jackknife estimates
+  4. Bootstrap estimates
+  
+Remember that these are all estimates: you cannot directly compute the
+variance of quantities of interest from complex surveys. Instead, you
+must use one of these techniques, with trade-offs for each. We'll be
+using a couple of datasets for this lesson:
+
+  * *nhanes*, which is a health survey conducted using a complex
+  survey design that comes with a variety of weights   
+  * *nmihs_bs*, which is a survey of births that comes with bootstrap
+  replicate weights
+
+Let's start with the *nhanes* dataset from which we'd like to get
+average height weight and age for the US population. First, let's get
+the naive estimate:  
+
+```{r}
+start <- 'load data from web, nhanes2f'
+end <- 'explore survey design'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+We can also take a look at the sampling design, particularly the
+designation of strata and *PSUs*: 
+
+```{r}
+start <- 'explore survey design'
+end <- 'mean with probability weights'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+We can use the weights supplied with *nhanes* to get accurate
+estimates of the means, but the variance estimates will be off:
+
+```{r}
+start <- 'mean with probability weights'
+end <- 'TAYLOR SERIES LINEARIZED ESTIMATES'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+## `svyset` and `svy: <command>`
+
+To aid in the analysis of complex survey data, Stata has incorporated
+the `svyset` command and the `svy:` prefix, with its suite of
+commands. With `svyset`, you can set the *PSU* (and *SSU* and *TSU* if
+applicable), the weights, and the type of variance estimation along
+with the variance weights (if applicable). Once set, most Stata
+estimation commands such as `mean` can be combined with `svy:` in
+order to produce correct estimates.
+
+<br>
+
+## Variance estimators
+
+### Taylor series linearized estimates
+
+Taylor series linearized estimates are based on the general strategy
+of Taylor series estimation, which is used to linearize a non-linear
+function in order to describe the function in question. In this case,
+a Taylor series is used to approximate the function, and the
+variance of the result is the estimate of the variance.
+
+The basic intuition behind a linearized estimate is that the variance
+in a complex survey will be a nonlinear function of the set of
+variances calculated within each stratum. We can calculate these, then
+use the first derivative of the function that would calculate the
+actual variance as a first order approximation of the actual
+variance. This works well enough in practice. To do this, you
+absolutely must have multiple *PSUs* in each stratum so you can
+calculate variance within each stratum.  
+
+This is the most common method and is used as the default by
+Stata. You must, however, have within-stratum variance among *PSUs*
+for this to work, which means that you must have at least two *PSUs*
+per stratum. This lonely PSU problem is common and difficult to deal
+with. We'll return the lonely PSU later.  
+
+To set up a dataset to use linearized estimates in Stata, we use the
+`svyset` command:
+
+```{r}
+start <- 'TAYLOR SERIES LINEARIZED ESTIMATES'
+end <- 'compute mean using svy pre-command and taylor series estimates'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+Now that we've set the data, every time we want estimates that reflect
+the sampling design, we use the `svy: <command>` format: 
+
+```{r}
+start <- 'compute mean using svy pre-command and taylor series estimates'
+end <- 'BRR ESTIMATES'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+<br>
+
+As you can see, the parameter estimates (means) are exactly the same
+as using the weighted sample, but the standard errors are quite
+different: nearly twice as large for age, but actually smaller for
+weight.
+
+<br>
+
+### Balanced repeated replication (BRR) estimates
+
+In a balanced repeated replication (BRR) design, the quantity of
+interests is estimated repeatedly by using half the sample at a
+time. In a survey which is designed with BRR in mind, each sampling
+stratum contains two *PSUs*. BRR proceeds by estimating the quantity
+of interest from one of the *PSUs* within each stratum. For *H* strata,
+\(2^H\) replications are done, and the variance of the quantity of interest
+across these strata forms the basis for the estimate.
+
+BRR weights are usually supplied with a survey. These weights result
+in appropriate half samples being formed across strata. BRR weights
+should generally be used when the sample was designed with them in
+mind, and not elsewhere. This can be a serious complication when
+survey data are subset.
+
+To get variance estimates using BRR in stata, you either need to have
+a set of replicate weights set up or you need to create a set of
+balanced replicates yourself. If the data has BRR weights it's simple:  
+
+```{r}
+start <- 'load data from web, nhanes2brr'
+end <- 'load data from web, nhanes2 no brr'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+If you don't have the data set up this way, you need to create a Hadamard
+with dimensions equal to the number of strata. Hadamard
+matrices are special in that they are square matrices comprised of 1s
+and -1s that arranged in such a way that each row and column sums to
+zero (equal numbers of ones and negative ones) and adjacent
+rows/columns are orthogonal (correlation of zero).
+
+```{r}
+start <- 'load data from web, nhanes2 no brr'
+end <- 'use our BRR weighting matrix with svy'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+Now that we've made our matrix, we can use it with the BRR command to
+get our estimates:
+
+```{r}
+start <- 'use our BRR weighting matrix with svy'
+end <- 'JACKNIFE ESTIMATES'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+### Jackknife estimates
+
+The Jackknife is a general strategy for variance estimation, so named
+by Tukey because of its general usefulness. The strategy for creating
+a jackknifed estimate is to delete every observation save one, then
+estimate the quantity of interest. This is repeated for every single
+observation in the dataset. The variance of every estimate computed
+provides an estimate of the variance for the quantity of interest.
+
+In a complex sample, this is done by *PSUs*, deleting each *PSU* one
+at a time and re-weighting the observations within the stratum, then
+calculating the parameter of interest. The variance of these
+parameters estimates is the within-stratum variance estimate. The
+within stratum variances calculated this way are then averaged across
+strata to give the final variance estimate.
+
+The jackknife is best used when Taylor series estimation cannot be
+done, for instance in the case of lonely *PSUs*.
+
+In Stata, the command is:
+
+```{r}
+start <- 'load data from web, nhanes2jknife'
+end <- 'compute naive means without jackknife weights'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+Now we can compare the naive estimates with the `svyset` estimates:
+
+```{r}
+start <- 'compute naive means without jackknife weights'
+end <- 'BOOTSTRAP ESTIMATES'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+### Bootstrap estimates
+
+The bootstrap is a more general method than the
+jackknife. Bootstrapping involves repeatedly resampling within the
+sample itself and generating estimates of the quantity of
+interest. The variance of these replications (usually many, many
+replications) provides an estimate of the total variance. In NCES
+surveys, within stratum bootstrapping can be used, with the sum of the
+variances obtained used as an estimate of the population
+variance. Bootstrapping is an accurate, but computationally intense
+method of variance estimation.
+
+As with the jackknife, bootstrapping must be accomplished by deleting
+each *PSU* within the stratum one at a time, re-weighting, calculating
+the estimate, than calculating the bootstrap variance estimate from
+the compiled samples.  
+
+```{r}
+start <- 'load data from web, nmihs_bs'
+end <- 'end file'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+## Lonely *PSUs*
+
+The most common problem that students have with complex surveys is
+what is known as "lonely *PSUs*." When you subset the data, you may very
+well end up with a sample that does not have mutliple *PSUs* per
+stratum. There are several options for what do in this case:
+
+  * Eliminate the offending data by dropping strata with singleton
+  *PSUs*. This is a terrible idea.
+  * Reassign the *PSU* to a neighboring stratum. This is okay, but you
+  must have a reason why you're doing this.
+  * Assign a variance to the stratum with a singleton *PSU*. This
+  could be the average of the variance across the other strata. This
+  process is also known as "scaling" and generally is okat, but you
+  should take a look at how different this stratum is from the others
+  before proceeding.
+  
+The svyset command includes three possible options for dealing with
+loney *PSUs*. Based on the above, I recommend you use the
+`singleunit(scaled)` command, but with caution and full knowledge of
+the implications for your estimates. 
+
+<br>
+<br>
+
+*Init: 23 August 2015; Updated: `r format(Sys.Date(), format = "%d %B %Y")`*
+
+<br>

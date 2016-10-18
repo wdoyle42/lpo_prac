@@ -1,27 +1,23 @@
 ---
 title: Sampling I
-author: LPO 9951 | Fall 2015
-output: 
-  html_document:
-   toc: true
-   theme: cosmo
-   css: ./css/custom.css
+author: LPO 9951 | Fall 2016
+output: pdf_document
 ---
 
 ```{r, echo = FALSE, message = FALSE}
 require(knitr)
-source('./r/stataknitrhelper.r')
+source('../../r/stataknitrhelper.r')
 opts_chunk$set(echo = FALSE, message = FALSE, comment = NA, cache = FALSE)
 ```
 
 ```{r, engine = 'bash'}
 ## run accompanying .do file to get log file for parsing
-stata -b -q do ../do/lecture7_sampling_part1.do
+#stata -b -q do ../do/lecture7_sampling_part1.do
 ```
 
 ```{r}
 ## save log file in object
-lf <- 'lecture7_sampling_part1.log'
+lf <- 'sampling_part1.log'
 ```
 
 <br>

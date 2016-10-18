@@ -3,7 +3,7 @@
        log:  /Users/doylewr/practicum/fall_2016/central/lessons/sampling/sampling_part1.lo
 > g
   log type:  text
- opened on:  11 Oct 2016, 08:15:26
+ opened on:  11 Oct 2016, 11:29:06
 
 . 
 . // NAME: Sampling: Part 1
@@ -22,20 +22,15 @@
 
 . 
 . // install gsample and moremata for probability samples
-. ssc install gsample
-checking gsample consistency and verifying not already installed...
-all files already exist and are up to date.
-
-. ssc install moremata
-checking moremata consistency and verifying not already installed...
-all files already exist and are up to date.
-
+. // ssc install gsample
+. // ssc install moremata
 . 
 . // SIMPLE RANDOM SAMPLING
 . 
 . // read in fake SAT score data
 . use ${datadir}fakesat, clear
 
+. 
 . 
 . // calculate population mean, variance, sd, and sem by hand
 . egen scoretot = total(score)            // total of all scores
@@ -103,15 +98,15 @@ Mean estimation                     Number of obs    = 1500000
 . 
 . // compare to stata internal calculation of sample
 . scalar list sampmean sampsd sampsem
-  sampmean =  499.56235
-    sampsd =  99.761053
-   sampsem =  .25758193
+  sampmean =  499.67707
+    sampsd =  99.786156
+   sampsem =  .25764675
 
 . summarize score
 
     Variable |       Obs        Mean    Std. Dev.       Min        Max
 -------------+--------------------------------------------------------
-       score |    150000    499.5623    99.76105        200        800
+       score |    150000    499.6771    99.78616        200        800
 
 . mean score
 
@@ -120,9 +115,10 @@ Mean estimation                     Number of obs    =  150000
 --------------------------------------------------------------
              |       Mean   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
-       score |   499.5623   .2575819      499.0575    500.0672
+       score |   499.6771   .2576467      499.1721     500.182
 --------------------------------------------------------------
 
+. 
 . 
 . // SIMPLE RANDOM SAMPLING WITH FINITE POPULATION CORRECTION
 . 
@@ -164,10 +160,10 @@ Mean estimation                     Number of obs    =  150000
 
 . 
 . scalar list xbar var_x sd_x sampsem
-      xbar =  80.342855
-     var_x =  44.824396
-      sd_x =  6.6951024
-   sampsem =  1.2223529
+      xbar =  80.139437
+     var_x =  41.645424
+      sd_x =  6.4533266
+   sampsem =  1.1782108
 
 . 
 . // calculate fpc
@@ -178,25 +174,26 @@ Mean estimation                     Number of obs    =  150000
 . scalar sampsemfpc = sampsem * fpc
 
 . scalar list sampsem sampsemfpc
-   sampsem =  1.2223529
-sampsemfpc =   .7809326
+   sampsem =  1.1782108
+sampsemfpc =   .7527313
 
 . 
 . // 95% CI for the mean
 . di xbar - invnormal(.975) * sampsem
-77.947087
+77.830186
 
 . di xbar + invnormal(.975) * sampsem
-82.738622
+82.448688
 
 . 
 . // 95% CI for fpc-adjusted mean
 . di xbar - invnormal(.975) * sampsemfpc
-78.812255
+78.664111
 
 . di xbar + invnormal(.975) * sampsemfpc
-81.873455
+81.614763
 
+. 
 . 
 . // SIMPLE RANDOM SAMPLING WITH FREQUENCY WEIGHTS
 . 
@@ -222,6 +219,7 @@ sampsemfpc =   .7809326
  10. |   290   6621 |
      +--------------+
 
+. 
 . 
 . // compare simple mean with freqency-weighted mean
 . mean score
@@ -256,8 +254,8 @@ Mean estimation                     Number of obs    = 1500000
 . 
 . // sample based on probability of reporting
 . gsample 1 [w = preport], percent
-(78 observations created)
-(1485078 observations deleted)
+(77 observations created)
+(1485077 observations deleted)
 
 . 
 . // mean of sample
@@ -268,7 +266,7 @@ Mean estimation                     Number of obs    =   15000
 --------------------------------------------------------------
              |       Mean   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
-       score |   519.5567   .7960878      517.9962    521.1171
+       score |   519.1793   .7937115      517.6236    520.7351
 --------------------------------------------------------------
 
 . 
@@ -284,7 +282,7 @@ Mean estimation                     Number of obs    =   15000
 --------------------------------------------------------------
              |       Mean   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
-       score |   499.8143   .8678559      498.1132    501.5154
+       score |   499.4138   .8699881      497.7085     501.119
 --------------------------------------------------------------
 
 . 
@@ -335,11 +333,14 @@ atrisk       |
 (1803 observations deleted)
 
 . 
+. 
+. 
 . // compute within grade and overall means and sems
 . preserve 
 
 . collapse (mean) propatr = atrisk (sd) sdatr = atrisk (first) nstgrade, by(grade)
 
+. 
 . 
 . scalar Ybar9 = propatr[1]               // 9th grade average
 
@@ -386,8 +387,8 @@ atrisk       |
 . 
 . // compare computed to Stata version
 . scalar list Ybar Ybar_sem
-      Ybar =  .32009985
-  Ybar_sem =  .03129723
+      Ybar =  .27179231
+  Ybar_sem =  .02966507
 
 . mean atrisk
 
@@ -396,18 +397,18 @@ Mean estimation                     Number of obs    =     200
 --------------------------------------------------------------
              |       Mean   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
-      atrisk |        .32   .0330676      .2547921    .3852079
+      atrisk |        .27   .0314715      .2079397    .3320603
 --------------------------------------------------------------
 
 . scalar list Ybar9 Ybar9_sem Ybar10 Ybar10_sem Ybar11 Ybar11_sem Ybar12 Ybar12_sem 
-     Ybar9 =  .36000001
- Ybar9_sem =  .06534968
-    Ybar10 =         .2
-Ybar10_sem =  .05421661
-    Ybar11 =  .31999999
-Ybar11_sem =  .06330363
-    Ybar12 =  .40000001
-Ybar12_sem =  .06625319
+     Ybar9 =        .34
+ Ybar9_sem =  .06449316
+    Ybar10 =        .12
+Ybar10_sem =  .04404578
+    Ybar11 =        .34
+Ybar11_sem =  .06428514
+    Ybar12 =        .28
+Ybar12_sem =  .06072205
 
 . mean atrisk, over(grade)
 
@@ -422,12 +423,13 @@ Mean estimation                     Number of obs    =     200
         Over |       Mean   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
 atrisk       |
-           9 |        .36   .0685714      .2247801    .4952199
-          10 |         .2   .0571429      .0873168    .3126832
-          11 |        .32   .0666395      .1885899    .4514101
-          12 |         .4   .0699854      .2619918    .5380082
+           9 |        .34   .0676727      .2065524    .4734476
+          10 |        .12   .0464231      .0284557    .2115443
+          11 |        .34   .0676727      .2065524    .4734476
+          12 |        .28   .0641427      .1535134    .4064866
 --------------------------------------------------------------
 
+. 
 . 
 . // CLUSTER SAMPLING WITH PROBABILITY PROPORTIONAL TO SIZE
 . 
@@ -476,6 +478,7 @@ testscore    |
 . scalar m = _N                           // number of students in sample
 
 . 
+. 
 . // get estimated population (should be close to 2003)
 . gen weight = nclgrade / $cut            // 1 / (n_h / N_h) or just (N_h / n_h) 
 
@@ -486,6 +489,7 @@ testscore    |
 . di Mhat                                 // estimated population
 1963
 
+. 
 . 
 . // get population score estimate, by class and overall
 . preserve
@@ -532,6 +536,7 @@ Mean estimation                     Number of obs    =     872
    testscore |   511.1055   1.852679      507.4693    514.7417
 --------------------------------------------------------------
 
+. 
 . 
 . // get right-ish estimate of standard error of school test mean
 . gen wscore = testscore * weight         // (w_hij * y_hij)
@@ -581,5 +586,5 @@ Ybar_school_sem =  .33002674
        log:  /Users/doylewr/practicum/fall_2016/central/lessons/sampling/sampling_part1.lo
 > g
   log type:  text
- closed on:  11 Oct 2016, 08:15:44
+ closed on:  11 Oct 2016, 11:29:12
 ------------------------------------------------------------------------------------------
