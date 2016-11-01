@@ -1,0 +1,180 @@
+------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum/fall_2016/central/lessons/validation/lecture10_valid
+> ation.log
+  log type:  text
+ opened on:   1 Nov 2016, 09:07:49
+
+. 
+. // NAME: Data cleaning
+. // FILE: lecture10_validation.do
+. // AUTH: Will Doyle
+. // REVS: Benjamin Skinner
+. // INIT: 22 October 2014
+. // LAST: 29 October 2016
+.      
+. clear all                               // clear memory
+
+. set more off                            // turn off annoying "__more__" feature
+
+. 
+. 
+. // load plans data
+. use plans.dta
+
+. 
+. // set up data for survey commands 
+. svyset psu [pw = bystuwt], str(strat_id) singleunit(scaled)
+
+      pweight: bystuwt
+          VCE: linearized
+  Single unit: scaled
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. // set up local to hold variables we wish to recode 
+. local allvar bystexp bysex byrace byses1 f1psepln
+
+. 
+. // change values for vars in local that in (-4,-8,-9) to missing
+. foreach myvar in `allvar' {
+  2.     replace `myvar' = . if `myvar' == -4   
+  3.     replace `myvar' = . if `myvar' == -8 
+  4.     replace `myvar' = . if `myvar' == -9 
+  5. } 
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(1131 real changes made, 1131 to missing)
+(781 real changes made, 781 to missing)
+(46 real changes made, 46 to missing)
+
+. 
+. // student expectations for education 
+. tab bystexp
+
+  how far in school student thinks will |
+                          get-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+                           {don^t know} |      1,450        9.52        9.52
+       less than high school graduation |        128        0.84       10.36
+     high school graduation or ged only |        983        6.45       16.81
+attend or complete 2-year college/schoo |        879        5.77       22.58
+attend college, 4-year degree incomplet |        561        3.68       26.26
+                  graduate from college |      5,416       35.55       61.81
+   obtain master^s degree or equivalent |      3,153       20.69       82.50
+obtain phd, md, or other advanced degre |      2,666       17.50      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,236      100.00
+
+. svy: proportion bystexp
+(running proportion on estimation sample)
+
+Survey: Proportion estimation
+
+Number of strata =     361         Number of obs    =    16160
+Number of PSUs   =     751         Population size  =  3408319
+                                   Design df        =      390
+
+      _prop_1: bystexp = {don^t know}
+      _prop_2: bystexp = less than high school graduation
+      _prop_3: bystexp = high school graduation or ged on
+      _prop_4: bystexp = attend or complete 2-year colleg
+      _prop_5: bystexp = attend college, 4-year degree in
+      _prop_6: bystexp = graduate from college
+      _prop_7: bystexp = obtain master^s degree or equiva
+      _prop_8: bystexp = obtain phd, md, or other advance
+
+--------------------------------------------------------------
+             |             Linearized
+             | Proportion   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+bystexp      |
+     _prop_1 |   .0987875   .0030196      .0930076    .1048851
+     _prop_2 |   .0094831     .00098       .007738    .0116172
+     _prop_3 |   .0724693   .0030538      .0666899    .0787074
+     _prop_4 |   .0643949   .0028925      .0589365    .0703211
+     _prop_5 |   .0389852   .0018459      .0355139    .0427808
+     _prop_6 |   .3578959   .0046507      .3488048    .3670902
+     _prop_7 |   .1971035    .004424      .1885502    .2059464
+     _prop_8 |   .1608805   .0039873      .1531947    .1688749
+--------------------------------------------------------------
+
+. 
+. // store estimates
+. estimates store expect_tab
+
+. 
+. // save as table using esttab
+. esttab expect_tab using expect_tab.rtf, b(3) se(4) ///
+>     varlabels(_prop_1 "Unsure" ///
+>               _prop_2 "Less than HS" ///
+>               _prop_3 "HS or GED" ///
+>               _prop_4 "AA/AS" ///
+>               _prop_5 "Some college" ///
+>               _prop_6 "BA/BS" ///
+>               _prop_7 "MA/MS" ///
+>               _prop_8 "PhD or Prof") ///
+>     replace
+(note: file expect_tab.rtf not found)
+(output written to expect_tab.rtf)
+
+. 
+. // post clean table to output window
+. esttab expect_tab, b(3) se(4) ///
+>     varlabels(_prop_1 "Unsure" ///
+>               _prop_2 "Less than HS" ///
+>               _prop_3 "HS or GED" ///
+>               _prop_4 "AA/AS" ///
+>               _prop_5 "Some college" ///
+>               _prop_6 "BA/BS" ///
+>               _prop_7 "MA/MS" ///
+>               _prop_8 "PhD or Prof")
+
+----------------------------
+                      (1)   
+               Proportion   
+----------------------------
+bystexp                     
+Unsure              0.099***
+                 (0.0030)   
+Less than HS        0.009***
+                 (0.0010)   
+HS or GED           0.072***
+                 (0.0031)   
+AA/AS               0.064***
+                 (0.0029)   
+Some college        0.039***
+                 (0.0018)   
+BA/BS               0.358***
+                 (0.0047)   
+MA/MS               0.197***
+                 (0.0044)   
+PhD or Prof         0.161***
+                 (0.0040)   
+----------------------------
+N                   16160   
+----------------------------
+Standard errors in parentheses
+* p<0.05, ** p<0.01, *** p<0.001
+
+. 
+. // end file     
+. log close
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum/fall_2016/central/lessons/validation/lecture10_valid
+> ation.log
+  log type:  text
+ closed on:   1 Nov 2016, 09:07:50
+------------------------------------------------------------------------------------------
