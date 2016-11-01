@@ -48,6 +48,7 @@ esttab expect_tab using expect_tab.rtf, b(3) se(4) ///
               _prop_8 "PhD or Prof") ///
     replace
 
+// Another way!
 	
 estpost svy: tabulate byrace bystexp, row percent
 estimates store expect_tab2
@@ -55,6 +56,8 @@ estimates store expect_tab2
 esttab expect_tab2 using expect_tab2.rtf, se  nostar replace unstack ///	
 	varlabels(`e(labels)') eqlabels(`e(eqlabels)')
 
+	
+	
 // post clean table to output window
 esttab expect_tab, b(3) se(4) ///
     varlabels(_prop_1 "Unsure" ///
