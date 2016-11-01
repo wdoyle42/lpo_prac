@@ -50,13 +50,29 @@ esttab expect_tab using expect_tab.rtf, b(3) se(4) ///
 
 // Another way!
 	
+	
 estpost svy: tabulate byrace bystexp, row percent
 estimates store expect_tab2
 	
 esttab expect_tab2 using expect_tab2.rtf, se  nostar replace unstack ///	
 	varlabels(`e(labels)') eqlabels(`e(eqlabels)')
-
 	
+
+svy: prop bystexp if byrace==1
+estimates store exp_race_1
+svy: prop bystexp if byrace==2
+estimates store exp_race_2
+
+esttab exp_race_1 exp_race_2, mlabels("Low Income" "Middle Income" "High Income") title("My Super Ultra Fancy Table")
+
+egen ses_q=cut(byses1) ,at(-1e5,-.54,.52,1e5)
+
+estpost svy: tabulate ses_q bystexp, row percent
+estimates store expect_tab3
+	
+esttab expect_tab3 using expect_tab3.rtf, se  nostar replace unstack ///	
+	varlabels(`e(labels)') eqlabels(`e(eqlabels)')	
+
 	
 // post clean table to output window
 esttab expect_tab, b(3) se(4) ///
