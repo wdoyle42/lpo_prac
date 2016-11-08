@@ -1,7 +1,7 @@
 ### Vanderbilt University
 ### Leadership, Policy and Organizations
-### Class Number 3921
-### Fall 2014
+### Class Number 9951
+### Fall 2016
 # Fall Project
 
 The final project will take the form of a written description of the data to be used for your
