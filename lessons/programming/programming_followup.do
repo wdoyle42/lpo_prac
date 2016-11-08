@@ -343,30 +343,34 @@ local thoughts ideas1 ideas2 ideas3
 
 matrix results=J(6,3,.)
 
+mat li results
     
 forvalues i = 1/2 {
     if `i' == 1 {
         local type "Not a loon"
-		local row=1
+		local row=1 // Three variables: first three are 1:3
     }
     if `i' == 2 {
         local type "Loon"
-		local row=4
+		local row=4 // Three variables last four are 4:6
     }
     foreach var of local thoughts {
         di "`i': `type'"
 	sum `var' if loon == `i' - 1
+// Add results to matrix
 	mat results[`row',1]=r(N)
 	mat results[`row',2]=r(mean)
 	mat results[`row',3]=r(sd)
 	
     local row=`row'+1
+	
+	mat li results
 	}
 
 	}
 
 	mat li results
-exit 
+
 
 // end file     
 log close
