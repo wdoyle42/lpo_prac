@@ -1,6 +1,6 @@
 Assignment 10
 ================
-LPO 9951 | Fall 2015
+LPO 9951 | Fall 2016
 
 Data validation, like data cleaning, is a rather unclear term that refers to a set of techniques to ensure that the characteristics of your dataset conform with known characteristics of the same sample or a similar sample.
 
