@@ -35,13 +35,9 @@ documents, why use git? Isn't it a bit overkill to learn an entirely
 new syntax? Why not just email files or use something like DropBox?
 Because it is very easy to end up with something like this:
 
-<br>
-<p style="width: 50%; margin-left: auto; margin-right: auto;">
-[![](https://pbs.twimg.com/media/B9HgQmDIEAALfb4.jpg)](http://www.phdcomics.com/comics/archive.php?comicid=1531)
-</p>
-*Credit: Jorge Chan*
 
-<br>
+[Jorge Cham: Final!](http://www.phdcomics.com/comics/archive.php?comicid=1531)
+
 
 ### As complexity increases, so does the need for git
 
