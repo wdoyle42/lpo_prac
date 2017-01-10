@@ -5,7 +5,7 @@ author: "Will Doyle"
 
 First of all, academic writing is *hard*. Really hard. You have to take
 years of work and summarize it in a brief format for people who will
-have no other engagement in the project. Most of the hard decisions are
+have no other engagement in the project. Most of the difficult decisions are
 about what to leave out. To make it easier, we have a set of specific
 structures that we use to make it easier to communicate your work. Learn
 to use these really well before you think about violating them.
@@ -18,7 +18,8 @@ Here are some tips, in no particular order.
 
 -   Go back to basics: make sure every paragraph has a topic sentence,
     and that each of the sentences in the paragraph support that
-    topic sentence.
+    topic sentence. This sounds dumb, but I see way too much academic writing that 
+    doesn't follow this seventh grade rule. 
 
 -   Use the active voice constantly. You will be amazed at what this
     does to your writing.
