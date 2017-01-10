@@ -1,0 +1,629 @@
+-----------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum/lpo_prac_2016/central/lessons/condition
+> al_means/cond_mean.log
+  log type:  text
+ opened on:  10 Jan 2017, 12:51:15
+
+. 
+. /* Conditional Means*/
+. /* Making the link between conditional means and regression */
+. /* Will Doyle */
+. /* 2017-01-10 */
+. /* Github Repo:  */
+. 
+. clear matrix
+
+. 
+. clear
+
+. 
+. clear mata /* Clears any fluff that might be in mata */
+
+. 
+. estimates clear /* Clears any estimates hanging around */
+
+. 
+. set more off /*Get rid of annoying "more" feature */ 
+
+. 
+. set scheme s1color /* My  preferred graphics scheme */
+
+. 
+. graph drop _all    
+
+. 
+. /* Data Directory */
+. 
+. global ddir "../../data/"
+
+. 
+. /*Graphics Type*/
+. local gtype eps
+
+. 
+. /*Locals for analysis*/
+. local y fouryr
+
+. 
+. local test bynels2m bynels2r
+
+. 
+. local race amind asian black hispanic multiracial
+
+. 
+. local pared bypared_nohs bypared_2yrnodeg bypared_2yr bypared_some4 bypared
+> _masters bypared_phd 
+
+. 
+. local income byses1
+
+. 
+. /**************************************************/
+. /* Outline */
+. /**************************************************/
+. 
+. /*Coding    */
+. 
+. local coding=1
+
+.     
+. 
+. /**************************************************/
+. 
+. 
+. /**************************************************/
+. /* Coding */
+. /**************************************************/
+.     
+. if `coding'==1{
+. 
+. use ${ddir}plans.dta, clear
+. 
+. foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
+  2.               foreach i of numlist -4 -8 -9 { /* Start inner loop */
+  3.                      replace `myvar'=. if `myvar'== `i'
+  4.                                             }  /* End inner loop */
+  5.                                           } /* End outer loop */
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(3782 real changes made, 3782 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(53 real changes made, 53 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(37 real changes made, 37 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(40 real changes made, 40 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(57 real changes made, 57 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1131 real changes made, 1131 to missing)
+(781 real changes made, 781 to missing)
+(46 real changes made, 46 to missing)
+. 
+. local race_names amind asian black hispanic_no hispanic_race multiracial wh
+> ite
+. 
+. tab(byrace), gen(race_)
+
+     student^s race/ethnicity-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+amer. indian/alaska native, non-hispani |        130        0.85        0.85
+asian, hawaii/pac. islander,non-hispani |      1,460        9.58       10.44
+black or african american, non-hispanic |      2,019       13.25       23.69
+            hispanic, no race specified |        994        6.52       30.21
+               hispanic, race specified |      1,220        8.01       38.22
+              multiracial, non-hispanic |        735        4.82       43.04
+                    white, non-hispanic |      8,678       56.96      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,236      100.00
+. 
+. local i=1
+. 
+. foreach val of local race_names{
+  2.   rename race_`i' `val'
+  3.   local i=`i'+1
+  4. }
+. 
+. label variable byincome "Income"
+. label variable amind "American Indian/AK Native"
+. label variable asian "Asian/ PI"
+. label variable black "African American"
+. label variable white "White"
+. label variable multiracial "Multiracial"
+. 
+. 
+. gen hispanic=0
+. replace hispanic=1 if hispanic_no==1|hispanic_race==1
+(2214 real changes made)
+. replace hispanic=. if byrace==.
+(924 real changes made, 924 to missing)
+. 
+. label variable hispanic "Hispanic"
+. 
+. local plan_names noplan dontknow votech cc fouryr earlygrad
+. 
+. recode byrace (4/5=4) (6=5) (7=6) (.=.), gen(byrace2)
+(10633 differences between byrace and byrace2)
+. 
+. label define byrace2 1 "Am.Ind." 2 "Asian/PI" 3 "Black" 4 "Hispanic" 5 "Mul
+> tiracial" 6 "White"
+. 
+. label values byrace2 byrace2
+. 
+. gen urm=.
+(16160 missing values generated)
+. replace urm=0 if byrace2==4 | byrace2==6
+(10892 real changes made)
+. replace urm=1 if byrace2==1 | byrace2==2 | byrace2==3 | byrace2==5
+(4344 real changes made)
+.   
+. tab(f1psepln), gen(plan_)
+
+   f1 post-secondary plans right after |
+                           high school |      Freq.     Percent        Cum.
+---------------------------------------+-----------------------------------
+                don^t plan to continue |        207        1.46        1.46
+don^t know or planning but unspecified |        834        5.87        7.33
+vocational, technical, or trade school |        986        6.94       14.27
+            two-year community college |      2,894       20.38       34.65
+       four-year college or university |      8,955       63.05       97.70
+early hs grad attending postsec school |        326        2.30      100.00
+---------------------------------------+-----------------------------------
+                                 Total |     14,202      100.00
+. 
+. local i=1
+. 
+. foreach val of local plan_names{
+  2.   rename plan_`i' `val'
+  3.   local i=`i'+1
+  4. }
+. 
+. 
+. label variable noplan "Plans: No plans"
+. label variable dontknow "Plans: Don't know"
+. label variable votech "Plans: Voc/Tech School"
+. label variable cc "Plans: Comm Coll"
+. label variable fouryr "Four Year"
+. label variable earlygrad "Early Graduation"
+. 
+. /* Plans for those who have them */
+. 
+. gen order_plan=.
+(16160 missing values generated)
+. replace order_plan=1 if noplan==1| dontknow==1
+(1041 real changes made)
+.   replace order_plan=2 if votech==1|cc==1
+(3880 real changes made)
+.   replace order_plan=3 if fouryr==1
+(8955 real changes made)
+. 
+. label define orderplan 1 "No Plans/DK" 2 "Votech/CC" 3 "Four Year"
+. 
+. label values order_plan orderplan
+.   
+. local pareds bymothed byfathed bypared
+. 
+. local ed_names nohs hs 2yrnodeg 2yr some4  4yrgrad masters phd
+. 
+. foreach pared of local pareds{
+  2. 
+. tab(`pared'), gen(`pared'_)
+  3. 
+. local i=1
+  4. 
+. foreach val of local ed_names{
+  5.   rename `pared'_`i' `pared'_`val'
+  6.   local i=`i'+1
+  7. }
+  8. 
+. label variable `pared'_nohs "Less than HS"
+  9. label variable `pared'_hs "HS/GED"
+ 10. label variable `pared'_2yr "CC" 
+ 11. label variable `pared'_some4 "Four year attend"
+ 12. label variable `pared'_4yrgrad "Bachelor's"
+ 13. label variable `pared'_masters "Master's"
+ 14. label variable `pared'_phd "PhD"
+ 15. }
+
+              mother^s highest level of |
+                    education-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |      1,935       12.65       12.65
+      graduated from high school or ged |      4,117       26.91       39.55
+      attended 2-year school, no degree |      1,849       12.08       51.64
+           graduated from 2-year school |      1,620       10.59       62.22
+     attended college, no 4-year degree |      1,589       10.38       72.61
+                 graduated from college |      2,820       18.43       91.04
+completed master^s degree or equivalent |      1,060        6.93       97.97
+completed phd, md, other advanced degre |        311        2.03      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,301      100.00
+
+              father^s highest level of |
+                    education-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |      2,039       13.34       13.34
+      graduated from high school or ged |      4,314       28.23       41.57
+      attended 2-year school, no degree |      1,438        9.41       50.97
+           graduated from 2-year school |      1,194        7.81       58.79
+     attended college, no 4-year degree |      1,417        9.27       68.06
+                 graduated from college |      2,735       17.89       85.95
+completed master^s degree or equivalent |      1,282        8.39       94.34
+completed phd, md, other advanced degre |        865        5.66      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,284      100.00
+
+    parents^ highest level of education |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |        942        6.16        6.16
+      graduated from high school or ged |      3,044       19.89       26.05
+      attended 2-year school, no degree |      1,663       10.87       36.91
+           graduated from 2-year school |      1,597       10.44       47.35
+     attended college, no 4-year degree |      1,758       11.49       58.83
+                 graduated from college |      3,466       22.65       81.48
+completed master^s degree or equivalent |      1,785       11.66       93.15
+completed phd, md, other advanced degre |      1,049        6.85      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,304      100.00
+. 
+. label define expect -1 "Don't Know" 1 "Less than HS" 2 "HS" 3 "2 yr" 4 "4 y
+> r No Deg" ///
+>     5 "Bachelors" 6 "Masters" 7 "Advanced"
+. 
+. label values bystexp expect
+.   
+. tab bystexp,gen(exp_)
+
+  how far in |
+      school |
+     student |
+ thinks will |
+get-composit |
+           e |      Freq.     Percent        Cum.
+-------------+-----------------------------------
+  Don't Know |      1,450        9.52        9.52
+Less than HS |        128        0.84       10.36
+          HS |        983        6.45       16.81
+        2 yr |        879        5.77       22.58
+ 4 yr No Deg |        561        3.68       26.26
+   Bachelors |      5,416       35.55       61.81
+     Masters |      3,153       20.69       82.50
+    Advanced |      2,666       17.50      100.00
+-------------+-----------------------------------
+       Total |     15,236      100.00
+. 
+. gen female=bysex==2
+. replace female=. if bysex==.
+(819 real changes made, 819 to missing)
+. 
+. lab var female "Female"
+. 
+. replace bynels2m=bynels2m/100
+(15884 real changes made)
+. 
+. replace bynels2r=bynels2r/100  
+(15884 real changes made)
+.   
+. recode f2ps1sec (1=1) (2=2) (4=3) (3=4) (5/9=4), gen(first_inst)
+(4167 differences between f2ps1sec and first_inst)
+. 
+. label define sector 1 "Public 4 Year" 2 "Private 4 Year" 3 "Public 2 Year" 
+>  4 "Other"
+. 
+. label values first_inst sector
+.    
+. lab var bynels2m "10th Grade Math Scores"
+. lab var bynels2r "10th Grade Reading Scores"
+. lab var byses1 "SES v1"
+. lab var byses2 "SES v2"
+. 
+. save ${ddir}plans2.dta, replace
+file ../../data/plans2.dta saved
+. 
+. }/*End coding section */
+
+. 
+. else use ${ddir}plans2.dta, clear
+
+. 
+. /**************************************************/
+.     
+. /**************************************************/
+. /*Analysis*/
+. /**************************************************/
+. 
+. //Using the mean as a prediction
+. 
+. sort byses1
+
+. 
+. graph twoway scatter bynels2m byses1, msize(vtiny)
+
+. 
+. egen uncond_mean=mean(bynels2m)
+
+. 
+. gen uncond_mean_error=bynels2m-uncond_mean
+(276 missing values generated)
+
+. 
+. gen uncond_mean_error_sq=uncond_mean_error*uncond_mean_error
+(276 missing values generated)
+
+. 
+. quietly sum uncond_mean_error_sq
+
+. 
+. scalar uncond_mean_mse=r(mean)
+
+. 
+. graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
+>     (line uncond_mean byses1,lcolor(blue)), legend(order(2 "Unconditional M
+> ean"))
+
+. 
+. graph export "uncond_mean.`gtype'", replace
+(file uncond_mean.eps written in EPS format)
+
+. 
+. 
+. //Above average vs. below average 
+. 
+. egen sesq2=cut(byses1), group(2)
+(924 missing values generated)
+
+. 
+. egen cond_mean2=mean(bynels2m), by(sesq2)
+
+. 
+. gen cond_mean2_error=bynels2m-cond_mean2
+(276 missing values generated)
+
+. 
+. gen cond_mean2_error_sq=cond_mean2_error*cond_mean2_error
+(276 missing values generated)
+
+. 
+. quietly sum cond_mean2_error_sq
+
+. 
+. scalar cond_mean2_mse=r(mean)
+
+. 
+. graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
+>              (line uncond_mean byses1,lcolor(blue)) ///
+>              (line cond_mean2 byses1,lcolor(orange)), ///
+>               legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 gro
+> ups") )
+
+. 
+. graph export "cond_mean2.`gtype'", replace
+(file cond_mean2.eps written in EPS format)
+
+. 
+. /*Conditional mean by Quartiles*/
+. 
+. egen sesq4=cut(byses1), group(4)
+(924 missing values generated)
+
+. 
+. egen cond_mean4=mean(bynels2m), by(sesq4)
+
+. 
+. gen cond_mean4_error=bynels2m-cond_mean4
+(276 missing values generated)
+
+. 
+. gen cond_mean4_error_sq=cond_mean4_error*cond_mean2_error
+(276 missing values generated)
+
+. 
+. quietly sum cond_mean4_error_sq
+
+. 
+. scalar cond_mean4_mse=r(mean)
+
+. 
+. scalar li
+cond_mean10_mse =  .03228102
+   reg_mse =  .01506973
+cond_mean4_mse =  .01528936
+cond_mean2_mse =  .01600496
+uncond_mean_mse_read =  .01832291
+uncond_mean_mse =  .01832291
+
+. 
+. graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
+>              (line uncond_mean byses1,lcolor(blue)) ///
+>              (line cond_mean2 byses1,lcolor(orange)) ///
+>              (line cond_mean4 byses1,lcolor(yellow)), ///    
+>              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 grou
+> ps" 4 "Conditional Mean, 4 Groups") )
+
+. 
+. 
+. graph export "cond_mean4.`gtype'", replace
+(file cond_mean4.eps written in EPS format)
+
+. 
+. /*Conditional means across Deciles*/
+. 
+. egen sesq10=cut(byses1), group(10)
+(924 missing values generated)
+
+. 
+. egen cond_mean_10_math=mean(bynels2m), by(sesq10)
+
+. 
+. gen cond_mean10_error=bynels2r-cond_mean_10
+(276 missing values generated)
+
+. 
+. gen cond_mean10_error_sq=cond_mean10_error*cond_mean10_error
+(276 missing values generated)
+
+. 
+. quietly sum cond_mean10_error_sq
+
+. 
+. scalar cond_mean10_mse=r(mean)
+
+. 
+. // scalar li
+. 
+. graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
+>              (line uncond_mean byses1,lcolor(blue)) ///
+>              (line cond_mean2 byses1,lcolor(orange)) ///
+>              (line cond_mean4 byses1,lcolor(yellow)) ///  
+>                          (line cond_mean_10_math byses1,lcolor(purple)), //
+> /  
+>              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 grou
+> ps" 4 "Conditional Mean, 4 Groups" 5 "Conditional Mean, 10 Groups"))
+
+. 
+. graph export "cond_mean10.`gtype'", replace
+(file cond_mean10.eps written in EPS format)
+
+. 
+. /*Conditional Mean: Regression*/
+. 
+. reg bynels2m byses1
+
+      Source |       SS       df       MS              Number of obs =   1523
+> 6
+-------------+------------------------------           F(  1, 15234) = 3532.1
+> 8
+       Model |  53.2360435     1  53.2360435           Prob > F      =  0.000
+> 0
+    Residual |    229.6024 15234  .015071708           R-squared     =  0.188
+> 2
+-------------+------------------------------           Adj R-squared =  0.188
+> 2
+       Total |  282.838444 15235  .018565044           Root MSE      =  .1227
+> 7
+
+-----------------------------------------------------------------------------
+> -
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval
+> ]
+-------------+---------------------------------------------------------------
+> -
+      byses1 |   .0795636   .0013387    59.43   0.000     .0769396    .082187
+> 7
+       _cons |   .4504293   .0009962   452.15   0.000     .4484766    .452381
+> 9
+-----------------------------------------------------------------------------
+> -
+
+. 
+. predict reg_predict
+(option xb assumed; fitted values)
+(924 missing values generated)
+
+. 
+. predict reg_error, residual
+(924 missing values generated)
+
+. 
+. gen reg_error_sq=reg_error*reg_error
+(924 missing values generated)
+
+. 
+. quietly sum reg_error_sq
+
+. 
+. scalar reg_mse=r(mean)
+
+. 
+. graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
+>              (line uncond_mean byses1,lcolor(blue)) ///
+>              (line cond_mean2 byses1,lcolor(orange)) ///
+>              (line cond_mean4 byses1,lcolor(yellow)) ///
+>              (line reg_predict byses1,lcolor(red)), ///        
+>              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 grou
+> ps" 4 "Conditional Mean, 4 Groups" 5 "Regression Prediction") )
+
+. 
+. graph export "regress.`gtype'", replace
+(file regress.eps written in EPS format)
+
+. 
+. scalar li
+cond_mean10_mse =  .03228102
+   reg_mse =  .01506973
+cond_mean4_mse =  .01528936
+cond_mean2_mse =  .01600496
+uncond_mean_mse_read =  .01832291
+uncond_mean_mse =  .01832291
+
+. 
+. 
+. 
+. 
+. 
+end of do-file
+

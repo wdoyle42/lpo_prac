@@ -211,24 +211,10 @@ quietly sum uncond_mean_error_sq
 
 scalar uncond_mean_mse=r(mean)
 
-graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) (line uncond_mean byses1,lcolor(blue)), legend(order(2 "Unconditional Mean"))
+graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
+    (line uncond_mean byses1,lcolor(blue)), legend(order(2 "Unconditional Mean"))
 
 graph export "uncond_mean.`gtype'", replace
-
-graph twoway scatter bynels2r byses1, msize(vtiny)
-
-egen uncond_mean_read=mean(bynels2r)
-
-gen uncond_mean_error_read=bynels2r-uncond_mean
-
-gen uncond_mean_error_sq_read=uncond_mean_error*uncond_mean_error
-
-quietly sum uncond_mean_error_sq_read
-
-scalar uncond_mean_mse_read=r(mean)
-
-graph twoway (scatter bynels2r byses1,msize(vtiny) mcolor(black)) (line uncond_mean_read byses1,lcolor(blue)), legend(order(2 "Unconditional Mean"))
-
 
 
 //Above average vs. below average 
@@ -252,7 +238,7 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
 
 graph export "cond_mean2.`gtype'", replace
 
-/*Quartiles*/
+/*Conditional mean by Quartiles*/
 
 egen sesq4=cut(byses1), group(4)
 
@@ -277,7 +263,7 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
 
 graph export "cond_mean4.`gtype'", replace
 
-/*Deciles for reading*/
+/*Conditional means across Deciles*/
 
 egen sesq10=cut(byses1), group(10)
 
@@ -302,7 +288,7 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
 
 graph export "cond_mean10.`gtype'", replace
 
-/*Regression*/
+/*Conditional Mean: Regression*/
 
 reg bynels2m byses1
 
@@ -326,16 +312,6 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
 graph export "regress.`gtype'", replace
 
 scalar li
-
-/*Regression*/
-
-reg bynels2r byses1
-
-predict reg_predict_r
-
-graph twoway (scatter bynels2r byses1,msize(vtiny) mcolor(black)) ///
-			(line reg_predict_r byses1,lcolor(red)), ///        
-             legend(order(2 "Regression"))
 
 
 
