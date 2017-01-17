@@ -1,0 +1,482 @@
+------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/wdoyle_work/practicum/lpo_prac_2016/central/lessons/reg_ba
+> sics/reg_basic.log
+  log type:  text
+ opened on:  17 Jan 2017, 11:06:15
+
+. 
+. /* PhD Practicum, Spring 2015 */
+. /* Getting Started with Regression */
+. /* Will Doyle*/
+. /* 1/17/16 */
+. /* Saved on Blackboard */
+. 
+.  /*Graph type postscript */
+. // local gtype ps
+. 
+. /* Graph type: pdf */
+. //local gtype pdf
+. 
+. /* Graph type: eps */
+. local gtype eps
+
+. 
+. clear
+
+. 
+. capture
+
+. 
+. use nlsy97, clear
+(Written by R.              )
+
+. 
+. set seed 070328
+
+. 
+. sample 10
+(8086 observations deleted)
+
+. 
+. local y yinc
+
+. 
+. local x ccol 
+
+. 
+. local ytitle "Income"
+
+. 
+. local xtitle "Months of College"
+
+. 
+. /*First plot the data*/
+. 
+. graph twoway scatter `y' `x', msize(small) ytitle(`ytitle') xtitle(`xtitle')
+
+. 
+. graph export "simple_scatter.`gtype'", replace
+(file simple_scatter.eps written in EPS format)
+
+. 
+. /* Add a lowess fit */
+. 
+. graph twoway lowess `y' `x', msize(small) ytitle(`ytitle') xtitle(`xtitle')
+
+. 
+. graph export "simple_lowess.`gtype'", replace
+(file simple_lowess.eps written in EPS format)
+
+. 
+. graph twoway lowess `y' `x' || ///
+>       scatter `y' `x', ///
+>       msize(tiny) ///
+>       msymbol(smcircle) ///
+>       ytitle(`ytitle') ///
+>       xtitle(`xtitle') ///
+>       legend( order(2 "`xtitle'" 1 "Lowess fit") )
+
+.       
+. graph export "scatter_lowess.`gtype'", replace
+(file scatter_lowess.eps written in EPS format)
+
+. 
+. /*Exercise: do the same with another covariate*/
+. 
+. 
+.  /*Linear fit to the data*/
+.     
+. graph twoway lfit `y' `x' || ///
+>       scatter `y' `x', ///
+>       msize(tiny) ///
+>       msymbol(cricle) ///
+>       ytitle(`ytitle') ///
+>       xtitle(`xtitle') ///
+>       legend( order(2 `xtitle' 1 "Linear fit") ) //
+(note:  named style cricle not found in class symbol, default attributes
+    used)
+Months not an integer, option order() ignored
+
+.       
+. 
+. graph export "scatter_linear.`gtype'",replace
+(file scatter_linear.eps written in EPS format)
+
+. 
+. 
+. /*Get regression results */
+. 
+. reg `y' `x'
+
+      Source |       SS       df       MS              Number of obs =     898
+-------------+------------------------------           F(  1,   896) =  117.29
+       Model |  7.5359e+10     1  7.5359e+10           Prob > F      =  0.0000
+    Residual |  5.7570e+11   896   642521746           R-squared     =  0.1157
+-------------+------------------------------           Adj R-squared =  0.1148
+       Total |  6.5106e+11   897   725817279           Root MSE      =   25348
+
+------------------------------------------------------------------------------
+        yinc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |   303.2167   27.99823    10.83   0.000      248.267    358.1665
+       _cons |   12815.63   1145.818    11.18   0.000     10566.83    15064.43
+------------------------------------------------------------------------------
+
+. 
+. /*Extracting regression results */
+. 
+. /*What's Beta? */
+. 
+. mat betamat=e(b)
+
+. 
+. /*Where are the standard errors ?*/
+. 
+. mat vcmat=e(V)
+
+.   
+. scalar myb=betamat[1,1]
+
+. 
+. scalar varbeta1=vcmat[1,1]
+
+. 
+. scalar sebeta1=sqrt(varbeta1)
+
+. 
+. /*Another way to get results back*/
+. 
+. scalar beta0=_b[_cons]
+
+. 
+. scalar li beta0
+     beta0 =  12815.633
+
+. 
+. scalar li 
+      test = Significant
+     req_t =  1.9626151
+   my_pval =        .05
+  stat_sig =  9.044e-26
+       myt =  10.829852
+     my_df =        896
+adj_rsquare =  .11476102
+   rsquare =  .11574791
+     fstat =   117.2857
+       myf =   117.2857
+residss_std =  6.425e+08
+ modss_std =  7.536e+10
+      df_m =          1
+  df_resid =        896
+    my_mss =  7.536e+10
+      ybar =   21186.17
+     modss =  7.536e+10
+    my_rss =  5.757e+11
+   residss =  5.757e+11
+       myk =          2
+       myN =        898
+  se_beta1 =  27.998234
+     beta1 =  303.21674
+  se_beta0 =  1145.8177
+     beta0 =  12815.633
+   sebeta1 =  27.998234
+  varbeta1 =  783.90109
+       myb =  303.21674
+
+. 
+. scalar se_beta0=_se[_cons]
+
+. 
+. scalar beta1=_b[`x']
+
+. 
+. scalar se_beta1=_se[`x']
+
+. 
+. scalar li beta1
+     beta1 =  303.21674
+
+. 
+. /*Use different confidence intervals */
+. reg `y' `x', level(90)
+
+      Source |       SS       df       MS              Number of obs =     898
+-------------+------------------------------           F(  1,   896) =  117.29
+       Model |  7.5359e+10     1  7.5359e+10           Prob > F      =  0.0000
+    Residual |  5.7570e+11   896   642521746           R-squared     =  0.1157
+-------------+------------------------------           Adj R-squared =  0.1148
+       Total |  6.5106e+11   897   725817279           Root MSE      =   25348
+
+------------------------------------------------------------------------------
+        yinc |      Coef.   Std. Err.      t    P>|t|     [90% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |   303.2167   27.99823    10.83   0.000     257.1161    349.3174
+       _cons |   12815.63   1145.818    11.18   0.000     10928.98    14702.29
+------------------------------------------------------------------------------
+
+. 
+. /*How to get residual */
+. predict uhat, residuals
+
+. 
+. /*Residuals sum to 0 by definition */
+. tabstat uhat, stat(sum)
+
+    variable |       sum
+-------------+----------
+        uhat | -.0592957
+------------------------
+
+. 
+. /*Plot residuals by x*/
+. graph twoway scatter uhat `x',yline(0) msize(tiny)
+
+. graph export "residplot.`gtype'",replace
+(file residplot.eps written in EPS format)
+
+. 
+. 
+. /*More complex graph*/
+. graph twoway scatter uhat `x', ///
+>       msize(tiny) ///
+>       msymbol(circle) ///
+>           || ///
+>      scatter `y' `x', ///
+>      msize(tiny) ///
+>      msymbol(triangle) 
+
+. 
+. 
+. /*Putting the pieces together*/
+. graph twoway scatter uhat `x', ///
+>       msize(tiny) ///
+>       msymbol(circle) ///
+>           || ///
+>        scatter `y' `x', ///
+>        msize(tiny) ///
+>        msymbol(triangle) ///
+>            || ///
+>       lfit `y' `x', ///
+>       lwidth(thin) ///
+>       yline(0, lpattern(dash) lwidth(thin)) ///
+>       legend(order(1 2 "Actual `ytitle'" 3))
+
+. 
+. 
+. graph export "residplot_fancy.`gtype'",replace
+(file residplot_fancy.eps written in EPS format)
+
+. 
+. /*Predictions */
+. predict yhat 
+(option xb assumed; fitted values)
+
+. 
+. /*Actual vs. predicted plot*/
+. graph twoway scatter yhat `x', ///
+>       msize(tiny) ///
+>       msymbol(circle) ///
+>       || ///
+>       scatter `y' `x', ///
+>       msize(tiny) ///
+>       msymbol(triangle) 
+
+. 
+. 
+. graph export "predict.`gtype'",replace
+(file predict.eps written in EPS format)
+
+. 
+. /*Do the same for another regressor */
+. 
+. /*Measures of fit */
+. 
+. ereturn list
+
+scalars:
+               e(rank) =  2
+               e(ll_0) =  -10434.56770208699
+                 e(ll) =  -10379.33482507662
+               e(r2_a) =  .1147610230962075
+                e(rss) =  575699484014.6326
+                e(mss) =  75358615320.30139
+               e(rmse) =  25348.01265488175
+                 e(r2) =  .1157479115877391
+                  e(F) =  117.2857040901462
+               e(df_r) =  896
+               e(df_m) =  1
+                  e(N) =  898
+
+macros:
+            e(cmdline) : "regress yinc ccol, level(90)"
+              e(title) : "Linear regression"
+          e(marginsok) : "XB default"
+                e(vce) : "ols"
+             e(depvar) : "yinc"
+                e(cmd) : "regress"
+         e(properties) : "b V"
+            e(predict) : "regres_p"
+              e(model) : "ols"
+          e(estat_cmd) : "regress_estat"
+
+matrices:
+                  e(b) :  1 x 2
+                  e(V) :  2 x 2
+
+functions:
+             e(sample)   
+
+. 
+. // Sample size
+. scalar myN=e(N)
+
+. 
+. // Number of estimated parameters
+. scalar myk=colsof(betamat)
+
+. 
+. /// What's the residual sum of squares? 
+> 
+. scalar residss=e(rss)
+
+. 
+. gen diff=`y'-yhat
+
+. 
+. gen diff_sq=diff*diff
+
+. 
+. tabstat diff_sq,stat(sum) save
+
+    variable |       sum
+-------------+----------
+     diff_sq |  5.76e+11
+------------------------
+
+. 
+. mat mymat=r(StatTotal)
+
+. 
+. scalar my_rss=mymat[1,1]
+
+. 
+. scalar li residss my_rss
+   residss =  5.757e+11
+    my_rss =  5.757e+11
+
+. 
+. ///What's the model sum of squares?
+> 
+. scalar modss=e(mss)
+
+. 
+. tabstat `y', stat(mean) save
+
+    variable |      mean
+-------------+----------
+        yinc |  21186.17
+------------------------
+
+. 
+. mat mymat=r(StatTotal)
+
+. 
+. scalar ybar=mymat[1,1]
+
+. 
+. gen diff2=yhat-ybar
+
+. 
+. gen diff2_sq=diff2*diff2
+
+. 
+. tabstat diff2_sq, stat(sum) save
+
+    variable |       sum
+-------------+----------
+    diff2_sq |  7.54e+10
+------------------------
+
+. 
+. mat mymat=r(StatTotal)
+
+. 
+. scalar my_mss=mymat[1,1]
+
+. 
+. scalar li modss my_mss
+     modss =  7.536e+10
+    my_mss =  7.536e+10
+
+. 
+. /*Calculate F */
+. 
+. scalar df_resid=myN-myk
+
+. 
+. scalar df_m=myk-1
+
+. 
+. scalar modss_std=my_mss/df_m
+
+. 
+. scalar residss_std=my_rss/df_resid
+
+. 
+. scalar myf=modss_std/residss_std
+
+. 
+. scalar fstat=e(F)
+
+. 
+. scalar li myf fstat
+       myf =   117.2857
+     fstat =   117.2857
+
+. 
+. /*What is R squared?*/
+. 
+. corr yhat `y'
+(obs=898)
+
+             |     yhat     yinc
+-------------+------------------
+        yhat |   1.0000
+        yinc |   0.3402   1.0000
+
+
+. 
+. scalar rsquare= e(r2)
+
+. 
+. /*What is adjusted r squared? */
+. 
+. scalar adj_rsquare= 1-((1-rsquare)*((myN-1)/(myN-myk)))
+
+.            
+. /*Tests of statistical significance */
+. 
+. scalar my_df=myN-myk
+
+. 
+. scalar myt=beta1/sebeta1
+
+. 
+. scalar stat_sig=(2*ttail(my_df,myt))
+
+. 
+. scalar my_pval=.05
+
+. 
+. scalar req_t=invttail(my_df,(my_pval/2))
+
+. 
+. scalar test=cond(myt>=req_t,"Significant","Not significant")
+
+. 
+. exit
+
+end of do-file
+
+
