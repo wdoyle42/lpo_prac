@@ -154,3 +154,25 @@ writeLines(logparse(lf, start = start,end=end))
 ```{r, results = 'asis'}
 writeLines(alignfigure('all_models.png', 'center'))
 ```
+
+## Do’s and Don’ts
+
+Here’s a list of things NOT to do with your results.
+
+- Don’t report only the specification that makes your “pet” independent variable significant. Report multiple specifications of each analysis.
+
+- Don’t eliminate variables because they’re not significant. You included them in the analysis for a reason, unless the reason went away, they stay in.
+
+- Don’t only report variables that are significant in a model that included other variables. The exception to this is when you have a group of variables that you identify a priori as control variables. In that case, you may simply note that they were included as controls, but not reported. The key is not to use statistical significance as the only guide for what gets reported or not. 
+
+Here are some things you should definitely do:
+
+- Do include enough information so that the reader can subject your results to an alternative test of significance.
+
+- Do include enough auxiliary information so that the reader has a sense of model fit.
+
+- Do select among the results what makes most sense to report,but don’t discuss substantively important results without a table or graphic to back them up.
+
+- Do design your tables to be read "alone", they will be.
+
+This is of course, only a start.
