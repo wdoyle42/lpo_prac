@@ -1,6 +1,6 @@
 capture log close
 
-log using "reporting_results.log",replace
+log using "ols_regression_stata.log",replace
 
 /* PhD Practicum, Spring 2017 */
 /* Outputting regression results*/
@@ -10,13 +10,15 @@ log using "reporting_results.log",replace
 
 clear
 
-/*Locals*/
+ssc install plotbeta
+
+/*Locals for system */
 
 local tab_type rtf  /*I use tex, word=rtf */
 
-local graph_type pdf /*Png or bmp for windows */
+local gtype eps /*Png or bmp for windows */
 
-/* Check to see if file exists, if not then download it. */
+/* Check to see if file exists if not then download it. */
 capture confirm file caschool.dta
 
 if _rc==601{
@@ -24,9 +26,9 @@ use http://fmwww.bc.edu/ec-p/data/stockwatson/caschool.dta
 save caschool, replace
 } /* End Download Section */
 
-else use caschool
+use caschool, clear
 
-/*Transformations of key independent variabls*/
+/// Transformations of key independent variables
 
 gen expn_stu_k=expn_stu/1000
 
@@ -55,7 +57,7 @@ label variable comp_stu "Computers/Student"
 label variable comp_stu_h "Computers/100 Students"
 
 
-/*Locals*/
+/*Locals for groups of variables*/
 
 local y testscr
 
@@ -76,7 +78,6 @@ eststo descriptives: estpost tabstat `y' `students' `teacher' `finance', ///
     columns(statistics) ///
     listwise 
     
-
 esttab descriptives using esttab_means.`tab_type' , ///
     main(mean) ///
     aux(sd) ///
@@ -85,9 +86,8 @@ esttab descriptives using esttab_means.`tab_type' , ///
     label ///
     nonumber ///
     replace 
-
 	
-/* Conditional Means, etc. */
+/* Describing conditional mean of outcome as a function of covariates*/
 
 /* Three groups: small class size, middle, and large */
 sum str, detail 
@@ -153,6 +153,9 @@ esttab *_model using `y'_models.`tab_type',          /* estout command: * indica
                ;
 
 #delimit cr
+
+
+/// Plotting regression results
 
 estimates restore teach_model
 
@@ -232,10 +235,12 @@ graph combine teach_model.gph //
          ;
 
 #delimit cr
-graph set ps orientation(landscape) pagewidth(8) pageheight(11)
 
-graph export all_models.ps, replace 
+
+graph export all_models.`gtype', replace 
 
 exit
+
+
 
 
