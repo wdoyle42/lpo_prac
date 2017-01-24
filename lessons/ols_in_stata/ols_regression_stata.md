@@ -219,7 +219,31 @@ Creating Tables of Regression Results
 
 The code below estimates four models, with each additional model adding in additional parameter estimates for different groups of variables. This code uses `esttab` to generate a table the way I usually do things (with the exception of significance stars)
 
-Here are some of the guidelines I use when reporting results: - The title of the table should specify the type of analysis (OLS in this case) and the dependent variable. The dependent variable is a must-have. - All results should be reported at two significant digits.More digits=more confusion. - All of the coefficient estimates should be between .01 and 100, in absolute values. Anything lower or higher, the analyst should transform the variable. This also helps to simplify the table. - Never report a 0 anywhere in a table. There are no 0's in applied stats. - Variable names should NEVER be Stata variable names. Most good journals these days would reject such a paper on sight. - Variable names should be (a) descriptive and (b) directional. For instance, I could have named the expenditures variable “Finance.” Such a name would not tell me what the variable measured, nor would it say what direction it was headed in. - For categorical variables,always include the reference category as a blank line. - You should always included a numerical estimate of uncertainty(standard error or t-statistic). Don’t just put stars on coefficients. - In terms of auxiliary stats, you must ALWAYS report the number of observations. This is observations in the sample, not weighted observations. - Other auxiliary stats: you should report at least one measure of model fit. This could be R2, adjusted R2 or the F statistic. You’ll have space limitations, but include at least one of these, two is preferable. - Your notes should clarify anything that isn’t immediately obvious from the table.
+Here are some of the guidelines I use when reporting results:
+
+-   The title of the table should specify the type of analysis (OLS in this case) and the dependent variable. The dependent variable is a must-have.
+
+-   All results should be reported at two significant digits.More digits=more confusion.
+
+-   All of the coefficient estimates should be between .01 and 100, in absolute values. Anything lower or higher, the analyst should transform the variable. This also helps to simplify the table.
+
+-   Never report a 0 anywhere in a table. There are no 0's in applied stats.
+
+-   Variable names should NEVER be Stata variable names. Most good journals these days would reject such a paper on sight.
+
+-   Variable names should be (a) descriptive and (b) directional. For instance, I could have named the expenditures variable “Finance.” Such a name would not tell me what the variable measured, nor would it say what direction it was headed in.
+
+-   For categorical variables,always include the reference category as a blank line.
+
+-   You should always included a numerical estimate of uncertainty(standard error or t-statistic). Don’t just put stars on coefficients.
+
+-   In terms of auxiliary stats, you must ALWAYS report the number of observations. This is observations in the sample, not weighted observations.
+
+-   Other auxiliary stats: you should report at least one measure of model fit. This could be R2, adjusted R2 or the F statistic. You’ll have space limitations, but include at least one of these, two is preferable.
+
+-   Your notes should clarify anything that isn’t immediately obvious from the table.
+
+<!-- -->
 
     .         
     . quietly reg `y' `teacher'
@@ -240,16 +264,18 @@ Here are some of the guidelines I use when reporting results: - The title of the
 
     . #delimit;
     delimiter now ;
-    . esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates 
-    > in memory. rtf specifies rich text, best for word */
-    >                label                          /*Use labels for models and variables */
+    . esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates 
+    > all estimates in memory. rtf specifies rich text, best for word */
+    >                label                          /*Use labels for models and variables 
+    > */
     >                nodepvars                      /* Use my model titles */
-    >                b(2)                           /* b= coefficients , this gives two sig digits */
+    >                b(2)                           /* b= coefficients , this gives two si
+    > g digits */
     >                se(2)                         /* I do want standard errors */
     >                r2 (2)                      /* R squared */
     >                ar2 (2)                     /* Adj R squared */
-    >                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn
-    >  (list) */
+    >                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats fr
+    > om the ereturn (list) */
     >                sfmt (2 0 0 0)                /* format for scalar stats*/
     >                replace                   /* replace existing file */
     >                ;
@@ -262,13 +288,15 @@ Here are some of the guidelines I use when reporting results: - The title of the
 
 *Quick Exercise*
 
-Let’s do several: 1. Re-Create the above table, but this time report t-statistics instead of standard errors.
+Let’s do several:
 
-1.  Re-Create the above table, but this time with no stars for significant variables.
+1.  Re-Create the above table, but this time report t-statistics instead of standard errors.
 
-2.  Re-create the above table, but this time display confidence intervals. Exapnd the results to four significant digits.
+2.  Re-Create the above table, but this time with no stars for significant variables.
 
-3.  Respecify the models to include computers(as an additional block,and in the final model) run esttab to get the right results.
+3.  Re-create the above table, but this time display confidence intervals. Exapnd the results to four significant digits.
+
+4.  Create a new variable called str20, defined as 1 if str&gt;20 and 0 otherwise. Label the variable properly, add it to the teacher block, and run the table again.
 
 Plotting Regression Results
 ---------------------------
@@ -281,7 +309,8 @@ Plotting regression results can work really well. Stata has several ways to do t
 
     . #delimit;
     delimiter now ;
-    . plotbeta  avginc|el_pct|calw_pct|meal_pct|str, /*Variables in regression to report */
+    . plotbeta  avginc|el_pct|calw_pct|meal_pct|str, /*Variables in regression to report *
+    > /
     >           labels                              /*Use Variable Labels*/
     >           xtitle (Parameters)                 /*Label of x axis*/
     >           title ("Model w/ No Covariates")    /*Title */ 

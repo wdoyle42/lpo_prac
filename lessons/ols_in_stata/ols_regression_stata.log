@@ -1,9 +1,9 @@
-----------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/ols_in_stata/ols_regression
-> _stata.log
+       log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/ols_in_stata/
+> ols_regression_stata.log
   log type:  text
- opened on:  24 Jan 2017, 10:10:14
+ opened on:  24 Jan 2017, 15:41:25
 
 . 
 . /* PhD Practicum, Spring 2017 */
@@ -265,16 +265,18 @@ Total        |
 . 
 . #delimit;
 delimiter now ;
-. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates 
-> in memory. rtf specifies rich text, best for word */
->                label                          /*Use labels for models and variables */
+. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates 
+> all estimates in memory. rtf specifies rich text, best for word */
+>                label                          /*Use labels for models and variables 
+> */
 >                nodepvars                      /* Use my model titles */
->                b(2)                           /* b= coefficients , this gives two sig digits */
+>                b(2)                           /* b= coefficients , this gives two si
+> g digits */
 >                se(2)                         /* I do want standard errors */
 >                r2 (2)                      /* R squared */
 >                ar2 (2)                     /* Adj R squared */
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn
->  (list) */
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats fr
+> om the ereturn (list) */
 >                sfmt (2 0 0 0)                /* format for scalar stats*/
 >                replace                   /* replace existing file */
 >                ;
@@ -292,7 +294,8 @@ delimiter now cr
 . 
 . #delimit;
 delimiter now ;
-. plotbeta  avginc|el_pct|calw_pct|meal_pct|str, /*Variables in regression to report */
+. plotbeta  avginc|el_pct|calw_pct|meal_pct|str, /*Variables in regression to report *
+> /
 >           labels                              /*Use Variable Labels*/
 >           xtitle (Parameters)                 /*Label of x axis*/
 >           title ("Model w/ No Covariates")    /*Title */ 
@@ -407,4 +410,3 @@ delimiter now cr
 end of do-file
 
 
-. exit, clear
