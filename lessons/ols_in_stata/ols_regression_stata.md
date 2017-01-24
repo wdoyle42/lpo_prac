@@ -212,6 +212,8 @@ As we've discussed, regression is just a fancy way of doing conditional means. M
 
 It looks as though school districts with smaller class sizes have higher test scores. The next step is to estimate models to see if that relaitonship holds up even when controlling for other relevant variables.
 
+*Quick Exercise * Repeat the above exercise, but this time show means separately for reading in high spending, moderate spending and low- spending districts.
+
 Creating Tables of Regression Results
 -------------------------------------
 
@@ -257,6 +259,16 @@ Here are some of the guidelines I use when reporting results: - The title of the
     delimiter now cr
 
 <img src = "testscr_results.png" />
+
+*Quick Exercise*
+
+Let’s do several: 1. Re-Create the above table, but this time report t-statistics instead of standard errors.
+
+1.  Re-Create the above table, but this time with no stars for significant variables.
+
+2.  Re-create the above table, but this time display confidence intervals. Exapnd the results to four significant digits.
+
+3.  Respecify the models to include computers(as an additional block,and in the final model) run esttab to get the right results.
 
 Plotting Regression Results
 ---------------------------
@@ -375,6 +387,8 @@ Plotting regression results can work really well. Stata has several ways to do t
     end of do-file
 
 <img src = "all_models.png" />
+
+*Quick Exercise* Create a coefficient plot for the model including computers. Create a graphic that combines this with an alternative specification. Make sure to deal with any issues of scale. What do you observe?
 
 Do’s and Don’ts
 ---------------

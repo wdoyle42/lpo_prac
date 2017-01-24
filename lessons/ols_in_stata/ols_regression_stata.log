@@ -407,3 +407,4 @@ delimiter now cr
 end of do-file
 
 
+. exit, clear
