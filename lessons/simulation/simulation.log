@@ -1,0 +1,316 @@
+--------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/simulation/si
+> mulation.log
+  log type:  text
+ opened on:  31 Jan 2017, 13:25:44
+
+. 
+. /* PhD Practicum, Spring 2017 */
+. /* Getting Started with */
+. /* Will Doyle*/
+. /* 1/31/17 */
+. /* Saved on Blackboard */
+. 
+.  /*Graph type postscript */
+. // local gtype ps
+. 
+. /* Graph type: pdf */
+. //local gtype pdf
+. 
+. /* Graph type: eps */
+. local gtype eps
+
+. 
+. clear 
+
+. 
+. // TOC
+. 
+. //1: Run CLT example
+. local xbar_example=1
+
+. 
+. //2: Run basic regression example
+. local reg_example_1=1
+
+. 
+. //3: Run multiple regression example
+. local reg_example_2=1
+
+. 
+. // Create a hypothetical situation
+. 
+. local mymean 5
+
+. local mysd 1
+
+. local pop_size 10000
+
+. local sample_size 100
+
+. local nreps 1000
+
+. 
+. // Create variable x based on values above
+. drawnorm x, means(`mymean') sds(`mysd') n(`pop_size')
+(obs 10000)
+
+. 
+. save x, replace
+file x.dta saved
+
+. 
+. // Population mean
+. mean x
+
+Mean estimation                     Number of obs    =   10000
+
+--------------------------------------------------------------
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+           x |   5.010874   .0099769      4.991317    5.030431
+--------------------------------------------------------------
+
+. 
+. scalar pop_mean=_b[x]
+
+. 
+. // Popoluation standard deviation
+. tabstat x, stat(sd) save
+
+    variable |        sd
+-------------+----------
+           x |   .997691
+------------------------
+
+. 
+. mat M=r(StatTotal)
+
+. 
+. scalar pop_sd=M[1,1]
+
+. 
+. preserve // Set return state
+
+. sample `sample_size', count // Take a sample 
+(9900 observations deleted)
+
+. mean x // Calculate mean 
+
+Mean estimation                     Number of obs    =     100
+
+--------------------------------------------------------------
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+           x |   4.952783   .0950083      4.764266      5.1413
+--------------------------------------------------------------
+
+. tabstat x, stat(sd) // Calculate sds
+
+    variable |        sd
+-------------+----------
+           x |  .9500833
+------------------------
+
+. restore //
+
+. 
+. // Is CLT a real thing?
+. 
+. if `xbar_example'==1{
+. // create a place in memory called buffer which will store a variable called xbar in
+>  a file called means.dta
+. postfile buffer xbar using means, replace 
+. 
+. forvalues i=1/`nreps'{
+  2.         preserve // Set return state
+  3.         quietly sample `sample_size', count // Keep only certain observations
+  4.         quietly mean x // get mean
+  5.         post buffer (_b[x]) // post the estimate to the buffer
+  6.         restore // Go back to full dataset
+  7. }
+. 
+. postclose buffer // Buffer can stop recording
+. }
+
+. 
+. use means, clear
+
+. 
+. kdensity xbar,xline (`mymean')
+
+. 
+. mean xbar
+
+Mean estimation                     Number of obs    =    1000
+
+--------------------------------------------------------------
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+        xbar |   5.012012   .0031816      5.005769    5.018256
+--------------------------------------------------------------
+
+. 
+. scalar simulate_mean=_b[xbar]
+
+. 
+. //Here's whate SE should be:
+. scalar hypo_se=`mysd'/sqrt(`sample_size')
+
+. 
+. //Here's what SE is: 
+. tabstat xbar,stat(sd) save
+
+    variable |        sd
+-------------+----------
+        xbar |  .1006103
+------------------------
+
+. 
+. mat M=r(StatTotal)
+
+. 
+. scalar simulate_se=M[1,1]
+
+. 
+. // ************************* //
+. // Regression simulation: first example
+. // ************************* //
+. 
+. use x, clear
+
+. 
+. // Generate error term
+. local error_sd 10
+
+. 
+. drawnorm e, means(0) sds(`error_sd')
+
+. 
+. // Set values for parameters
+. local beta_0=10
+
+. 
+. local beta_1=2
+
+. 
+. // Generate outcome
+. gen y=`beta_0'+`beta_1'*x+e
+
+. 
+. // Run MC study for basic regression
+. if `reg_example_1'==1{
+. // create a place in memory called buffer which will store a variable called xbar in
+>  a file called means.dta
+. postfile buffer beta_0 beta_1 using reg_1, replace 
+. 
+. forvalues i=1/`nreps'{
+  2.         preserve // Set return state
+  3.         quietly sample `sample_size', count // Keep only certain observations
+  4.         quietly reg y  x // get parameter estimates
+  5.         post buffer (_b[_cons]) (_b[x]) // post the estimate to the buffer
+  6.         restore // Go back to full dataset
+  7. }
+. 
+. postclose buffer // Buffer can stop recording
+. 
+. // Open up results of MC study for basic regression
+. use reg_1, clear
+. 
+. kdensity beta_0, xline(`beta_0')
+. 
+. graph export beta_0.`gtype'
+(file beta_0.eps written in EPS format)
+. 
+. kdensity beta_1, xline(`beta_1')
+. 
+. graph export beta_1.`gtype'
+(file beta_1.eps written in EPS format)
+. 
+. mean beta_0
+
+Mean estimation                     Number of obs    =    1000
+
+--------------------------------------------------------------
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+      beta_0 |   10.08038    .161016      9.764411    10.39635
+--------------------------------------------------------------
+. 
+. mean beta_1
+
+Mean estimation                     Number of obs    =    1000
+
+--------------------------------------------------------------
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+      beta_1 |   1.973939   .0315641      1.911999    2.035878
+--------------------------------------------------------------
+. 
+. }
+
+. 
+. // Multiple regression example
+. 
+. local my_corr=.02
+
+. 
+. local my_means 10 20 
+
+. 
+. local my_sds 5 10
+
+. 
+. // Create variable x based on values above
+. drawnorm x1 x2, means(`my_means') sds(`my sds') corr(1,`my_corr'\`my_corr',1) n(`pop
+> _size') cstorage(lower)
+(obs 10000)
+
+. 
+. drawnorm e, mean(0) sd(`error_sd')
+
+. 
+. local beta_0=10
+
+. 
+. local beta_1=2
+
+. 
+. local beta_2=4
+
+. 
+. gen y= `beta_0'+`beta_1'*x1 +`beta_2'*x2 + e
+
+. 
+. if `reg_example_2'==1{
+. // create a place in memory called buffer which will store a variable called xbar in
+>  a file called means.dta
+. postfile buffer beta_0 beta_1 using reg_2, replace 
+. 
+. forvalues i=1/`nreps'{
+  2.         preserve // Set return state
+  3.         quietly sample `sample_size', count // Keep only certain observations
+  4.         quietly reg y  x1  // get parameter estimates
+  5.         post buffer (_b[_cons]) (_b[x]) // post the estimate to the buffer
+  6.         restore // Go back to full dataset
+  7. }
+. 
+. postclose buffer // Buffer can stop recording
+. 
+. use reg_2, clear
+. 
+. kdensity beta_1, xline(`beta_1')
+. 
+. graph export ovb.`gtype'
+(file ovb.eps written in EPS format)
+. }
+
+. 
+. 
+. 
+. exit 
+
+end of do-file
+
+

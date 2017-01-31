@@ -1,0 +1,117 @@
+---
+title: Simulation in Stata
+author: LPO 9952 | Spring 2017
+output: github_document
+---
+  
+```{r, echo = FALSE, message = FALSE}
+require(knitr)
+source('../../r/stataknitrhelper.r')
+opts_chunk$set(echo = FALSE, message = FALSE, comment = NA)
+```
+
+
+```{r}
+## save log file in object
+lf <- 'simulation.log'
+```
+
+
+```{r, engine = 'bash'}
+## run accompanying .do file to get log file for parsing
+#stata -b -q do ../do/lecture11_descriptives.do
+## convert plots used in this file to png
+#pdir=/
+glist=(
+clt
+beta_0
+beta_1
+ovb
+)
+
+for i in ${glist[@]};
+do
+convert -density 150 -flatten $pdir$i.eps $pdir$i.png;
+done
+```
+
+
+## Simulation for Understanding
+
+In most intro regression classes, the emphasis is on learning proofs, either directly or through
+the instructor providing intuition around proofs. However, there is another way to learn the topics: simulation. 
+When using simulation, you create the population of interest, apply an estimator, then learn about the properties of that 
+estimator through repeatedly sampling from the population and calculating estimates. This is known as the Monte Carlo method,
+in that the analyst uses repeated random sampling. The term comes from Stanislaw Ulam, who came up with the idea to solve 
+computational problems as part of the Manhattan project. Today, we'll use simulation to understand some basic properties of regression. 
+
+## Proving the Central Limit Theoreom
+
+We begin with a much sinmpler example. The central limit theorem says that if we repeatedly sample from a larger population, 
+the sampling distribution of means will be normal, and will have a mean equal to the population parameter. The code below checks if that's actually the case. 
+
+
+```{r}
+start <-'Create a hypothetical situation' 
+end <- 'Regression simulation: first example'
+writeLines(logparse(lf, start = start,end=end))
+``` 
+
+We can compare our estimate of $$\bar{x}$$ with the value we specified to see if the value in repeated samples does
+indeed converge on the true population parameter. 
+
+
+```{r, results = 'asis'}
+writeLines(alignfigure('clt.png', 'center'))
+```
+
+
+*Quick Exercise* Does our estimate of the standard deviation follow the same pattern as our estimate of the mean?
+
+## Basic Regression
+
+In regression, the central finding is the same, but as applied to coefficients. That is, in repeated samples, the sampling distribution of 
+coefficients will be distributed normal, with a standard error equivalent to the standard deviation of the sampling distribution. Below
+we generate a population where `y` is a linear function of `x1` plus an error term. We then repeatedly sample from that population,
+calculate our estimate of the parameter of interest, and accumulate results over multiple iterations. We can then show an empirical
+representation of the sampling distritbuion.
+
+
+```{r}
+start <-'Regression simulation: first example'
+end <- 'Multiple regression example'
+writeLines(logparse(lf, start = start,end=end))
+``` 
+
+As with the above example, we can compare our estimates of $$\beta_0$$ and $$\beta_1$$ to the values we set. 
+
+
+```{r, results = 'asis'}
+writeLines(alignfigure('beta_0.png', 'center'))
+```
+
+
+```{r, results = 'asis'}
+writeLines(alignfigure('beta_1.png', 'center'))
+```
+
+*Quick Exercise* What if `y` is not normally distributed? Does regression still work then?
+
+*Quick Exercise* What if the error term is not normally distributed? Does regression still work then? 
+
+## Multiple Regression
+
+One key question for regression is omitted variables bias. The idea here is that there is an additional variable `x2` that is related
+to `y` and to `x1` that may affect our estimates of the coefficient for `x1`. Again, below we simulate this problem, starting with a variable
+`x2` that is related to `x1` and to `y`, and estimating a regression with only `x1` included. We can see what this does to our sampling distrbution under different circumstances. 
+
+
+```{r}
+start <-'Multiple regression example'
+end <- NULL
+writeLines(logparse(lf, start = start,end=end))
+``` 
+
+*Quick exercise* What happens to our estimate of `x1` as the correlation between `x1` and `x2` grows stronger? 
+
+*Quick Exercise* What happens if the error term is correlated with `x1`? Does regression still work then? 
