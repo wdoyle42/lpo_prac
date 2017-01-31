@@ -22,10 +22,14 @@ clear
 // TOC
 
 //1: Run CLT example
-local xbar_example=1
+local xbar_example=0
 
 //2: Run basic regression example
-local reg_example_1=1
+local reg_example_1=0
+
+//2a: 
+
+local inclass_1=1
 
 //3: Run multiple regression example
 local reg_example_2=1
@@ -108,7 +112,7 @@ mean sd
 
 }
 
-exit 
+ 
 
 // Regression simulation: first example
 
@@ -125,7 +129,7 @@ local beta_0=10
 local beta_1=2
 
 // Generate outcome
-gen y=`beta_0'+`beta_1'*x+e
+gen y=`beta_0'+(`beta_1'*x)+e
 
 // Run MC study for basic regression
 if `reg_example_1'==1{
@@ -158,6 +162,69 @@ mean beta_0
 mean beta_1
 
 }
+
+
+if `inclass_1'==1{
+// In class Exercise 1
+
+clear
+
+set obs 10000
+
+gen x=runiform() // Uniform from 0 to 1
+
+// Generate error term
+
+local a -10
+
+local b 10
+
+gen e=((`b'-`a')*runiform())+`a'
+
+mean e
+
+// Set values for parameters
+local beta_0=10
+
+local beta_1=2
+
+// Generate outcome
+gen y=`beta_0'+(`beta_1'*x)+e
+
+kdensity y
+ 
+// create a place in memory called buffer which will store a variable called xbar in a file called means.dta
+postfile buffer beta_0 beta_1 using reg_1a, replace 
+
+forvalues i=1/`nreps'{
+	preserve // Set return state
+	quietly sample `sample_size', count // Keep only certain observations
+	quietly reg y  x // get parameter estimates
+	post buffer (_b[_cons]) (_b[x]) // post the estimate to the buffer
+	restore // Go back to full dataset
+}
+
+postclose buffer // Buffer can stop recording
+
+// Open up results of MC study for basic regression
+use reg_1a, clear
+
+kdensity beta_0, xline(`beta_0')
+
+graph export beta_0.`gtype', replace
+
+kdensity beta_1, xline(`beta_1')
+
+graph export beta_1.`gtype', replace
+
+mean beta_0
+
+mean beta_1
+
+}
+
+
+exit 
 
 // Multiple regression example
 
