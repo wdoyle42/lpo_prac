@@ -2,16 +2,13 @@ Simulation in Stata
 ================
 LPO 9952 | Spring 2017
 
-    convert: unable to open image `clt.eps': No such file or directory @ error/blob.c/OpenBlob/2705.
-    convert: no images defined `clt.png' @ error/convert.c/ConvertImageCommand/3257.
-
 Simulation for Understanding
 ----------------------------
 
 In most intro regression classes, the emphasis is on learning proofs, either directly or through the instructor providing intuition around proofs. However, there is another way to learn the topics: simulation. When using simulation, you create the population of interest, apply an estimator, then learn about the properties of that estimator through repeatedly sampling from the population and calculating estimates. This is known as the Monte Carlo method, in that the analyst uses repeated random sampling. The term comes from Stanislaw Ulam, who came up with the idea to solve computational problems as part of the Manhattan project. Today, we'll use simulation to understand some basic properties of regression.
 
-Proving the Central Limit Theoreom
-----------------------------------
+Simulating the Central Limit Theoreom
+-------------------------------------
 
 We begin with a much sinmpler example. The central limit theorem says that if we repeatedly sample from a larger population, the sampling distribution of means will be normal, and will have a mean equal to the population parameter. The code below checks if that's actually the case.
 
@@ -40,7 +37,7 @@ We begin with a much sinmpler example. The central limit theorem says that if we
     --------------------------------------------------------------
                  |       Mean   Std. Err.     [95% Conf. Interval]
     -------------+------------------------------------------------
-               x |   5.010874   .0099769      4.991317    5.030431
+               x |   4.997567   .0098891      4.978182    5.016952
     --------------------------------------------------------------
 
     . scalar pop_mean=_b[x]
@@ -50,7 +47,7 @@ We begin with a much sinmpler example. The central limit theorem says that if we
 
         variable |        sd
     -------------+----------
-               x |   .997691
+               x |  .9889123
     ------------------------
 
     . mat M=r(StatTotal)
@@ -69,14 +66,14 @@ We begin with a much sinmpler example. The central limit theorem says that if we
     --------------------------------------------------------------
                  |       Mean   Std. Err.     [95% Conf. Interval]
     -------------+------------------------------------------------
-               x |   4.952783   .0950083      4.764266      5.1413
+               x |   5.099092   .1085449      4.883715    5.314468
     --------------------------------------------------------------
 
     . tabstat x, stat(sd) // Calculate sds
 
         variable |        sd
     -------------+----------
-               x |  .9500833
+               x |  1.085449
     ------------------------
 
     . restore //
@@ -94,12 +91,10 @@ We begin with a much sinmpler example. The central limit theorem says that if we
       6.         restore // Go back to full dataset
       7. }
     . postclose buffer // Buffer can stop recording
-    . }
-
     . use means, clear
-
     . kdensity xbar,xline (`mymean')
-
+    . graph export clt.`gtype', replace
+    (file clt.eps written in EPS format)
     . mean xbar
 
     Mean estimation                     Number of obs    =    1000
@@ -107,31 +102,23 @@ We begin with a much sinmpler example. The central limit theorem says that if we
     --------------------------------------------------------------
                  |       Mean   Std. Err.     [95% Conf. Interval]
     -------------+------------------------------------------------
-            xbar |   5.012012   .0031816      5.005769    5.018256
+            xbar |   4.999501   .0030579        4.9935    5.005502
     --------------------------------------------------------------
-
     . scalar simulate_mean=_b[xbar]
-
     . //Here's whate SE should be:
     . scalar hypo_se=`mysd'/sqrt(`sample_size')
-
     . //Here's what SE is: 
     . tabstat xbar,stat(sd) save
 
         variable |        sd
     -------------+----------
-            xbar |  .1006103
+            xbar |  .0966992
     ------------------------
-
     . mat M=r(StatTotal)
-
     . scalar simulate_se=M[1,1]
+    . }
 
-    . // ************************* //
-
-We can compare our estimate of
-$$\\bar{x}$$
- with the value we specified to see if the value in repeated samples does indeed converge on the true population parameter.
+We can compare our estimate of $\\bar{x}$ with the value we specified to see if the value in repeated samples does indeed converge on the true population parameter.
 
 <img src = "clt.png" />
 
@@ -142,7 +129,6 @@ Basic Regression
 
 In regression, the central finding is the same, but as applied to coefficients. That is, in repeated samples, the sampling distribution of coefficients will be distributed normal, with a standard error equivalent to the standard deviation of the sampling distribution. Below we generate a population where `y` is a linear function of `x1` plus an error term. We then repeatedly sample from that population, calculate our estimate of the parameter of interest, and accumulate results over multiple iterations. We can then show an empirical representation of the sampling distritbuion.
 
-    . // ************************* //
     . use x, clear
 
     . // Generate error term
@@ -174,10 +160,10 @@ In regression, the central finding is the same, but as applied to coefficients. 
     . // Open up results of MC study for basic regression
     . use reg_1, clear
     . kdensity beta_0, xline(`beta_0')
-    . graph export beta_0.`gtype'
+    . graph export beta_0.`gtype', replace
     (file beta_0.eps written in EPS format)
     . kdensity beta_1, xline(`beta_1')
-    . graph export beta_1.`gtype'
+    . graph export beta_1.`gtype', replace
     (file beta_1.eps written in EPS format)
     . mean beta_0
 
@@ -186,7 +172,7 @@ In regression, the central finding is the same, but as applied to coefficients. 
     --------------------------------------------------------------
                  |       Mean   Std. Err.     [95% Conf. Interval]
     -------------+------------------------------------------------
-          beta_0 |   10.08038    .161016      9.764411    10.39635
+          beta_0 |   9.692618   .1630616      9.372635     10.0126
     --------------------------------------------------------------
     . mean beta_1
 
@@ -195,15 +181,11 @@ In regression, the central finding is the same, but as applied to coefficients. 
     --------------------------------------------------------------
                  |       Mean   Std. Err.     [95% Conf. Interval]
     -------------+------------------------------------------------
-          beta_1 |   1.973939   .0315641      1.911999    2.035878
+          beta_1 |   2.048219   .0317356      1.985943    2.110495
     --------------------------------------------------------------
     . }
 
-As with the above example, we can compare our estimates of
-*β*<sub>0</sub>
- and
-*β*<sub>1</sub>
- to the values we set.
+As with the above example, we can compare our estimates of *β*<sub>0</sub> and *β*<sub>1</sub> to the values we set.
 
 <img src = "beta_0.png" />
 
@@ -253,7 +235,7 @@ One key question for regression is omitted variables bias. The idea here is that
     . postclose buffer // Buffer can stop recording
     . use reg_2, clear
     . kdensity beta_1, xline(`beta_1')
-    . graph export ovb.`gtype'
+    . graph export ovb.`gtype', replace
     (file ovb.eps written in EPS format)
     . }
 

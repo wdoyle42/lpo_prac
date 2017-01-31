@@ -3,7 +3,7 @@
        log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/simulation/si
 > mulation.log
   log type:  text
- opened on:  31 Jan 2017, 13:25:44
+ opened on:  31 Jan 2017, 13:48:07
 
 . 
 . /* PhD Practicum, Spring 2017 */
@@ -69,7 +69,7 @@ Mean estimation                     Number of obs    =   10000
 --------------------------------------------------------------
              |       Mean   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
-           x |   5.010874   .0099769      4.991317    5.030431
+           x |   4.997567   .0098891      4.978182    5.016952
 --------------------------------------------------------------
 
 . 
@@ -81,7 +81,7 @@ Mean estimation                     Number of obs    =   10000
 
     variable |        sd
 -------------+----------
-           x |   .997691
+           x |  .9889123
 ------------------------
 
 . 
@@ -103,14 +103,14 @@ Mean estimation                     Number of obs    =     100
 --------------------------------------------------------------
              |       Mean   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
-           x |   4.952783   .0950083      4.764266      5.1413
+           x |   5.099092   .1085449      4.883715    5.314468
 --------------------------------------------------------------
 
 . tabstat x, stat(sd) // Calculate sds
 
     variable |        sd
 -------------+----------
-           x |  .9500833
+           x |  1.085449
 ------------------------
 
 . restore //
@@ -132,14 +132,13 @@ Mean estimation                     Number of obs    =     100
   7. }
 . 
 . postclose buffer // Buffer can stop recording
-. }
-
 . 
 . use means, clear
-
 . 
 . kdensity xbar,xline (`mymean')
-
+. 
+. graph export clt.`gtype', replace
+(file clt.eps written in EPS format)
 . 
 . mean xbar
 
@@ -148,35 +147,30 @@ Mean estimation                     Number of obs    =    1000
 --------------------------------------------------------------
              |       Mean   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
-        xbar |   5.012012   .0031816      5.005769    5.018256
+        xbar |   4.999501   .0030579        4.9935    5.005502
 --------------------------------------------------------------
-
 . 
 . scalar simulate_mean=_b[xbar]
-
 . 
 . //Here's whate SE should be:
 . scalar hypo_se=`mysd'/sqrt(`sample_size')
-
 . 
 . //Here's what SE is: 
 . tabstat xbar,stat(sd) save
 
     variable |        sd
 -------------+----------
-        xbar |  .1006103
+        xbar |  .0966992
 ------------------------
-
 . 
 . mat M=r(StatTotal)
-
 . 
 . scalar simulate_se=M[1,1]
+. }
 
 . 
-. // ************************* //
+. 
 . // Regression simulation: first example
-. // ************************* //
 . 
 . use x, clear
 
@@ -220,12 +214,12 @@ Mean estimation                     Number of obs    =    1000
 . 
 . kdensity beta_0, xline(`beta_0')
 . 
-. graph export beta_0.`gtype'
+. graph export beta_0.`gtype', replace
 (file beta_0.eps written in EPS format)
 . 
 . kdensity beta_1, xline(`beta_1')
 . 
-. graph export beta_1.`gtype'
+. graph export beta_1.`gtype', replace
 (file beta_1.eps written in EPS format)
 . 
 . mean beta_0
@@ -235,7 +229,7 @@ Mean estimation                     Number of obs    =    1000
 --------------------------------------------------------------
              |       Mean   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
-      beta_0 |   10.08038    .161016      9.764411    10.39635
+      beta_0 |   9.692618   .1630616      9.372635     10.0126
 --------------------------------------------------------------
 . 
 . mean beta_1
@@ -245,7 +239,7 @@ Mean estimation                     Number of obs    =    1000
 --------------------------------------------------------------
              |       Mean   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
-      beta_1 |   1.973939   .0315641      1.911999    2.035878
+      beta_1 |   2.048219   .0317356      1.985943    2.110495
 --------------------------------------------------------------
 . 
 . }
@@ -302,7 +296,7 @@ Mean estimation                     Number of obs    =    1000
 . 
 . kdensity beta_1, xline(`beta_1')
 . 
-. graph export ovb.`gtype'
+. graph export ovb.`gtype', replace
 (file ovb.eps written in EPS format)
 . }
 

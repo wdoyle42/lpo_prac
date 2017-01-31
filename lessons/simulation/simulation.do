@@ -77,10 +77,11 @@ forvalues i=1/`nreps'{
 
 postclose buffer // Buffer can stop recording
 
-
 use means, clear
 
 kdensity xbar,xline (`mymean')
+
+graph export clt.`gtype', replace
 
 mean xbar
 
@@ -97,9 +98,8 @@ mat M=r(StatTotal)
 scalar simulate_se=M[1,1]
 }
 
-// ************************* //
+
 // Regression simulation: first example
-// ************************* //
 
 use x, clear
 
@@ -136,11 +136,11 @@ use reg_1, clear
 
 kdensity beta_0, xline(`beta_0')
 
-graph export beta_0.`gtype'
+graph export beta_0.`gtype', replace
 
 kdensity beta_1, xline(`beta_1')
 
-graph export beta_1.`gtype'
+graph export beta_1.`gtype', replace
 
 mean beta_0
 
@@ -187,7 +187,7 @@ use reg_2, clear
 
 kdensity beta_1, xline(`beta_1')
 
-graph export ovb.`gtype'
+graph export ovb.`gtype', replace
 }
 
 

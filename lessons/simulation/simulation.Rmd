@@ -45,7 +45,7 @@ estimator through repeatedly sampling from the population and calculating estima
 in that the analyst uses repeated random sampling. The term comes from Stanislaw Ulam, who came up with the idea to solve 
 computational problems as part of the Manhattan project. Today, we'll use simulation to understand some basic properties of regression. 
 
-## Proving the Central Limit Theoreom
+## Simulating the Central Limit Theoreom
 
 We begin with a much sinmpler example. The central limit theorem says that if we repeatedly sample from a larger population, 
 the sampling distribution of means will be normal, and will have a mean equal to the population parameter. The code below checks if that's actually the case. 
@@ -57,14 +57,13 @@ end <- 'Regression simulation: first example'
 writeLines(logparse(lf, start = start,end=end))
 ``` 
 
-We can compare our estimate of $$\bar{x}$$ with the value we specified to see if the value in repeated samples does
+We can compare our estimate of $\bar{x}$ with the value we specified to see if the value in repeated samples does
 indeed converge on the true population parameter. 
 
 
 ```{r, results = 'asis'}
 writeLines(alignfigure('clt.png', 'center'))
 ```
-
 
 *Quick Exercise* Does our estimate of the standard deviation follow the same pattern as our estimate of the mean?
 
@@ -83,7 +82,7 @@ end <- 'Multiple regression example'
 writeLines(logparse(lf, start = start,end=end))
 ``` 
 
-As with the above example, we can compare our estimates of $$\beta_0$$ and $$\beta_1$$ to the values we set. 
+As with the above example, we can compare our estimates of $\beta_0$ and $\beta_1$ to the values we set. 
 
 
 ```{r, results = 'asis'}
