@@ -8,9 +8,9 @@ one another.
 
 3. In each sample calculate the value of the regression coefficients. 
 
-4. Report the empirical sampling distribution generated. 
+4. Report the empirical sampling distribution generated for the constant and both variables. 
 
-5. Now, allow the correlation between the two independent variables to vary from .05 to .95 in steps of .05. Report what happens to
-the empirical sampling distribution in terms of both the mean and the standard deviation. Interpret the results.
+5. Now, create a correlation between the error term and one of the coefficients. Discuss what happens to your parameter estimates 
+when there is a correlation between one of the coefficients and the error term. Increase the strength of the correlation between the independent variable and the error term and discuss what happens then. 
 
 You should supply a do file that does all of the above, with comments in the do file answering part 5. 
