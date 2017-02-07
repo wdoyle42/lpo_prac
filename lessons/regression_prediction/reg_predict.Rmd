@@ -1,0 +1,14 @@
+---
+title: Regression Prediction
+author: LPO 9952 | Spring 2017
+output: github_document
+---
+
+
+  
+```{r, echo = FALSE, message = FALSE}
+require(knitr)
+source('../../r/stataknitrhelper.r')
+opts_chunk$set(echo = FALSE, message = FALSE, comment = NA)
+```
+
