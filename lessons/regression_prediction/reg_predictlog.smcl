@@ -7529,4 +7529,29 @@ end of do-file
 
 {text}{p 2 6 2}Variables that uniquely identify margins: str{p_end}
 {res}
-{com}. 
+{com}.  sjlatex install using ~/Documents/sjtemp
+{err}unrecognized command:  sjlatex
+{txt}{search r(199):r(199);}
+
+{com}. ssc install sjlatex
+{txt}{err}ssc install: "sjlatex" not found at SSC, type -{cmd:findit sjlatex}-
+(To find all packages at SSC that start with s, type -{cmd:ssc describe s}-)
+{txt}{search r(601):r(601);}
+
+{com}. findit sjlatex
+
+.  sjlatex install using ~/Documents/sjtemp
+{err}unrecognized command:  sjlatex
+{txt}{search r(199):r(199);}
+
+{com}. search sjlatex
+
+. sjlatex
+{err}unrecognized command:  sjlatex
+{txt}{search r(199):r(199);}
+
+{com}. exit, clear
+{err}{hline 2}Break{hline 2}
+{txt}{search r(1):r(1);}
+
+{com}. exit, clear
