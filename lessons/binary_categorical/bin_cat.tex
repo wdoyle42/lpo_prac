@@ -1,0 +1,79 @@
+\usepackage[margin= 1in]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsmath}
+\usepackage{bibentry}
+\usepackage{ccaption}
+\usepackage{fourier}
+\usepackage{stata}
+\usepackage[colorlinks=true,
+                      pdfstartview=FitV,
+                      urlcolor=blue,
+]{hyperref}
+
+\usepackage{natbib}
+
+\begin{document}
+
+\thispagestyle{empty}%
+
+
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+\setcounter{secnumdepth}{-2}
+
+
+
+\begin{flushleft}
+Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9952\\ Spring 2017
+\end{flushleft}
+
+\begin{center}
+\textbf{Binary and Cateogrical Variables}
+\end{center}
+
+
+Binary and categorical variables can be a headache to work with. It's worth taking some time to think about each step 
+with these kinds of variables in order to make sure that they are being reported effectively. 
+
+\section{Coding}
+
+First, it's worth thinking pretty carefully about how these variables
+will be coded. Are you sure that they are mutually exclusive and
+exhaustive? How about the numbers of categories? Are these appropriate
+for the task at hand? Are they really categorical or can they be
+thought of as ordered? How would you figure this out? 
+
+In general, it's better to favor fewer categories, but you need to
+make sure that your decisions reflect the important questions in your
+theoeritcal framework. 
+
+Below, I recode the race variables as they're constructed by NCES to
+be more useful in our analysis. 
+
+\begin{stlog}
+  
+\end{stlog}
+
+\section{Binary Variables}
+
+Binary variables must always be constructed to be directional. Never
+have a binary variable for ``sex,'' always construct this kind of
+binary variable as either ``male'' or ``female'' 
+
+
+
+\section{Categorical Variables}
+
+When running a model with categorical variables, Stata won't always
+know what you're talking about. If the underlying variable is numeric,
+it will simply include that variable as numeric. This is not
+good. Instead, we need to use the \texttt{i.} formulation, which
+specifies not only that a given variable is to be understood as a
+factor variable, but also alows the user some fine-grained control
+over how this will be constructed. 
+
+
+\section{Reference Categories for Categorical Variables}
+
+
+\end{document}

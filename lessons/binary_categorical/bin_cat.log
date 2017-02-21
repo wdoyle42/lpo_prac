@@ -1,0 +1,662 @@
+-----------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/wdoyle_work/practicum/lpo_prac_2016-17/central/lessons/binary_c
+> ategorical/bin_cat.log
+  log type:  text
+ opened on:  21 Feb 2017, 13:51:20
+
+. // Working with binary and cateogrical independent variables
+. // Will Doyle
+. // 2/21/2017
+. // Practicum repo on github
+. 
+. // TOC
+. 
+. local coding=1
+
+. 
+. local regression=1
+
+. 
+. local margins=1
+
+. 
+. 
+. //locals
+. 
+. global ddir "../../data/"
+
+. 
+. local y bynels2m 
+
+. 
+. local controls byses1 
+
+. 
+. 
+.    
+. /**************************************************/
+. /* Coding */
+. /**************************************************/
+.     
+. if `coding'==1{
+. 
+. use ${ddir}plans.dta, clear
+. 
+. foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
+  2.               foreach i of numlist -4 -8 -9 { /* Start inner loop */
+  3.                      replace `myvar'=. if `myvar'== `i'
+  4.                                             }  /* End inner loop */
+  5.                                           } /* End outer loop */
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(3782 real changes made, 3782 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(53 real changes made, 53 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(37 real changes made, 37 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(40 real changes made, 40 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(57 real changes made, 57 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1131 real changes made, 1131 to missing)
+(781 real changes made, 781 to missing)
+(46 real changes made, 46 to missing)
+. 
+. local race_names amind asian black hispanic_no hispanic_race multiracial white
+. 
+. tab(byrace), gen(race_)
+
+     student^s race/ethnicity-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+amer. indian/alaska native, non-hispani |        130        0.85        0.85
+asian, hawaii/pac. islander,non-hispani |      1,460        9.58       10.44
+black or african american, non-hispanic |      2,019       13.25       23.69
+            hispanic, no race specified |        994        6.52       30.21
+               hispanic, race specified |      1,220        8.01       38.22
+              multiracial, non-hispanic |        735        4.82       43.04
+                    white, non-hispanic |      8,678       56.96      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,236      100.00
+. 
+. local i=1
+. 
+. foreach val of local race_names{
+  2.   rename race_`i' `val'
+  3.   local i=`i'+1
+  4. }
+. 
+. label variable byincome "Income"
+. label variable amind "American Indian/AK Native"
+. label variable asian "Asian/ PI"
+. label variable black "African American"
+. label variable white "White"
+. label variable multiracial "Multiracial"
+. 
+. 
+. gen hispanic=0
+. replace hispanic=1 if hispanic_no==1|hispanic_race==1
+(2214 real changes made)
+. replace hispanic=. if byrace==.
+(924 real changes made, 924 to missing)
+. 
+. label variable hispanic "Hispanic"
+. 
+. local plan_names noplan dontknow votech cc fouryr earlygrad
+. 
+. recode byrace (4/5=4) (6=5) (7=6) (.=.), gen(byrace2)
+(10633 differences between byrace and byrace2)
+. 
+. label define byrace2 1 "Am.Ind." 2 "Asian/PI" 3 "Black" 4 "Hispanic" 5 "Multiraci
+> al" 6 "White"
+. 
+. label values byrace2 byrace2
+. 
+. gen urm=.
+(16160 missing values generated)
+. replace urm=0 if byrace2==4 | byrace2==6
+(10892 real changes made)
+. replace urm=1 if byrace2==1 | byrace2==2 | byrace2==3 | byrace2==5
+(4344 real changes made)
+.   
+. tab(f1psepln), gen(plan_)
+
+   f1 post-secondary plans right after |
+                           high school |      Freq.     Percent        Cum.
+---------------------------------------+-----------------------------------
+                don^t plan to continue |        207        1.46        1.46
+don^t know or planning but unspecified |        834        5.87        7.33
+vocational, technical, or trade school |        986        6.94       14.27
+            two-year community college |      2,894       20.38       34.65
+       four-year college or university |      8,955       63.05       97.70
+early hs grad attending postsec school |        326        2.30      100.00
+---------------------------------------+-----------------------------------
+                                 Total |     14,202      100.00
+. 
+. local i=1
+. 
+. foreach val of local plan_names{
+  2.   rename plan_`i' `val'
+  3.   local i=`i'+1
+  4. }
+. 
+. 
+. label variable noplan "Plans: No plans"
+. label variable dontknow "Plans: Don't know"
+. label variable votech "Plans: Voc/Tech School"
+. label variable cc "Plans: Comm Coll"
+. label variable fouryr "Four Year"
+. label variable earlygrad "Early Graduation"
+. 
+. /* Plans for those who have them */
+. 
+. gen order_plan=.
+(16160 missing values generated)
+. replace order_plan=1 if noplan==1| dontknow==1
+(1041 real changes made)
+.   replace order_plan=2 if votech==1|cc==1
+(3880 real changes made)
+.   replace order_plan=3 if fouryr==1
+(8955 real changes made)
+. 
+. label define orderplan 1 "No Plans/DK" 2 "Votech/CC" 3 "Four Year"
+. 
+. label values order_plan orderplan
+.   
+. local pareds bymothed byfathed bypared
+. 
+. local ed_names nohs hs 2yrnodeg 2yr some4  4yrgrad masters phd
+. 
+. foreach pared of local pareds{
+  2. 
+. tab(`pared'), gen(`pared'_)
+  3. 
+. local i=1
+  4. 
+. foreach val of local ed_names{
+  5.   rename `pared'_`i' `pared'_`val'
+  6.   local i=`i'+1
+  7. }
+  8. 
+. label variable `pared'_nohs "Less than HS"
+  9. label variable `pared'_hs "HS/GED"
+ 10. label variable `pared'_2yr "CC" 
+ 11. label variable `pared'_some4 "Four year attend"
+ 12. label variable `pared'_4yrgrad "Bachelor's"
+ 13. label variable `pared'_masters "Master's"
+ 14. label variable `pared'_phd "PhD"
+ 15. }
+
+              mother^s highest level of |
+                    education-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |      1,935       12.65       12.65
+      graduated from high school or ged |      4,117       26.91       39.55
+      attended 2-year school, no degree |      1,849       12.08       51.64
+           graduated from 2-year school |      1,620       10.59       62.22
+     attended college, no 4-year degree |      1,589       10.38       72.61
+                 graduated from college |      2,820       18.43       91.04
+completed master^s degree or equivalent |      1,060        6.93       97.97
+completed phd, md, other advanced degre |        311        2.03      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,301      100.00
+
+              father^s highest level of |
+                    education-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |      2,039       13.34       13.34
+      graduated from high school or ged |      4,314       28.23       41.57
+      attended 2-year school, no degree |      1,438        9.41       50.97
+           graduated from 2-year school |      1,194        7.81       58.79
+     attended college, no 4-year degree |      1,417        9.27       68.06
+                 graduated from college |      2,735       17.89       85.95
+completed master^s degree or equivalent |      1,282        8.39       94.34
+completed phd, md, other advanced degre |        865        5.66      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,284      100.00
+
+    parents^ highest level of education |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |        942        6.16        6.16
+      graduated from high school or ged |      3,044       19.89       26.05
+      attended 2-year school, no degree |      1,663       10.87       36.91
+           graduated from 2-year school |      1,597       10.44       47.35
+     attended college, no 4-year degree |      1,758       11.49       58.83
+                 graduated from college |      3,466       22.65       81.48
+completed master^s degree or equivalent |      1,785       11.66       93.15
+completed phd, md, other advanced degre |      1,049        6.85      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,304      100.00
+. 
+. label define expect -1 "Don't Know" 1 "Less than HS" 2 "HS" 3 "2 yr" 4 "4 yr No D
+> eg" ///
+>     5 "Bachelors" 6 "Masters" 7 "Advanced"
+. 
+. label values bystexp expect
+.   
+. tab bystexp,gen(exp_)
+
+  how far in |
+      school |
+     student |
+ thinks will |
+get-composit |
+           e |      Freq.     Percent        Cum.
+-------------+-----------------------------------
+  Don't Know |      1,450        9.52        9.52
+Less than HS |        128        0.84       10.36
+          HS |        983        6.45       16.81
+        2 yr |        879        5.77       22.58
+ 4 yr No Deg |        561        3.68       26.26
+   Bachelors |      5,416       35.55       61.81
+     Masters |      3,153       20.69       82.50
+    Advanced |      2,666       17.50      100.00
+-------------+-----------------------------------
+       Total |     15,236      100.00
+. 
+. gen female=bysex==2
+. replace female=. if bysex==.
+(819 real changes made, 819 to missing)
+. 
+. lab var female "Female"
+. 
+. replace bynels2m=bynels2m/100
+(15884 real changes made)
+. 
+. replace bynels2r=bynels2r/100  
+(15884 real changes made)
+.   
+. recode f2ps1sec (1=1) (2=2) (4=3) (3=4) (5/9=4), gen(first_inst)
+(4167 differences between f2ps1sec and first_inst)
+. 
+. label define sector 1 "Public 4 Year" 2 "Private 4 Year" 3 "Public 2 Year"  4 "Ot
+> her"
+. 
+. label values first_inst sector
+. 
+.    
+. lab var bynels2m "10th Grade Math Scores"
+. lab var bynels2r "10th Grade Reading Scores"
+. lab var byses1 "SES"
+. lab var byses2 "SES v2"
+. 
+. save ${ddir}plans2.dta, replace
+file ../../data/plans2.dta saved
+. 
+. }/*End coding section */
+
+. 
+. else use ${ddir}plans2.dta, clear
+
+. 
+. 
+. // use svyset to account for survey design
+. svyset psu [pw = f1pnlwt], strat(strat_id) singleunit(scaled)
+
+      pweight: f1pnlwt
+          VCE: linearized
+  Single unit: scaled
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. 
+. tab order_plan
+
+ order_plan |      Freq.     Percent        Cum.
+------------+-----------------------------------
+No Plans/DK |      1,041        7.50        7.50
+  Votech/CC |      3,880       27.96       35.46
+  Four Year |      8,955       64.54      100.00
+------------+-----------------------------------
+      Total |     13,876      100.00
+
+. 
+. // NOPE!
+. eststo order1: svy: reg `y' order_plan
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata   =       361                  Number of obs      =     15129
+Number of PSUs     =       751                  Population size    = 3055917.9
+                                                Design df          =       390
+                                                F(   1,    390)    =   1025.42
+                                                Prob > F           =    0.0000
+                                                R-squared          =    0.1261
+
+------------------------------------------------------------------------------
+             |             Linearized
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  order_plan |     .07355   .0022968    32.02   0.000     .0690342    .0780657
+       _cons |   .2704247   .0059146    45.72   0.000     .2587962    .2820531
+------------------------------------------------------------------------------
+
+. 
+. 
+. //Proper factor notation
+. eststo order1: svy: reg `y' i.order_plan byses1 female
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata   =       361                  Number of obs      =     14561
+Number of PSUs     =       751                  Population size    =   2908622
+                                                Design df          =       390
+                                                F(   4,    387)    =    647.17
+                                                Prob > F           =    0.0000
+                                                R-squared          =    0.2507
+
+------------------------------------------------------------------------------
+             |             Linearized
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  order_plan |
+  Votech/CC  |   .0174877   .0053254     3.28   0.001     .0070176    .0279577
+  Four Year  |   .0899849   .0054533    16.50   0.000     .0792633    .1007065
+             |
+      byses1 |   .0629814   .0020981    30.02   0.000     .0588565    .0671064
+      female |  -.0208619   .0026488    -7.88   0.000    -.0260696   -.0156542
+       _cons |   .4048229   .0051525    78.57   0.000     .3946927     .414953
+------------------------------------------------------------------------------
+
+. 
+. esttab order1 using order1.rtf,  varwidth(50) label  ///
+>                nodepvars              ///
+>                    b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                   
+(output written to order1.rtf)
+
+. 
+. 
+. esttab order1 using order1.rtf,  varwidth(50) label  ///
+>     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know",nolabel) ///
+>         nobaselevels ///
+>                nomtitles ///
+>                nodepvars              ///
+>                 b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                   
+(output written to order1.rtf)
+
+. 
+. 
+. 
+. //Proper factor notation: setting base levels
+. eststo order2: svy: reg `y' ib(freq).order_plan byses1 female
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata   =       361                  Number of obs      =     14561
+Number of PSUs     =       751                  Population size    =   2908622
+                                                Design df          =       390
+                                                F(   4,    387)    =    647.17
+                                                Prob > F           =    0.0000
+                                                R-squared          =    0.2507
+
+------------------------------------------------------------------------------
+             |             Linearized
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  order_plan |
+No Plans/DK  |  -.0899849   .0054533   -16.50   0.000    -.1007065   -.0792633
+  Votech/CC  |  -.0724972   .0028019   -25.87   0.000    -.0780059   -.0669885
+             |
+      byses1 |   .0629814   .0020981    30.02   0.000     .0588565    .0671064
+      female |  -.0208619   .0026488    -7.88   0.000    -.0260696   -.0156542
+       _cons |   .4948077   .0028725   172.25   0.000     .4891601    .5004553
+------------------------------------------------------------------------------
+
+. 
+. esttab order2 using order2.rtf,  varwidth(50) label  ///
+>                nodepvars              ///
+>                    b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                   
+(output written to order2.rtf)
+
+. 
+. 
+. esttab order2 using order2.rtf,  varwidth(50)   ///
+>     refcat(1.order_plan "College Plans, Reference=Plans to go to College",nolabel
+> ) ///
+>         label ///
+>                    nomtitles ///
+>                        nobaselevels ///
+>                nodepvars              ///
+>                 b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                   
+(output written to order2.rtf)
+
+. 
+. margins, predict(xb) at((mean) byses1 order_plan=(1 2 3)) post
+
+Predictive margins                              Number of obs      =     13055
+Model VCE    : Linearized
+
+Expression   : Linear prediction, predict(xb)
+
+1._at        : order_plan      =           1
+               byses1          =    .0400221 (mean)
+
+2._at        : order_plan      =           2
+               byses1          =    .0400221 (mean)
+
+3._at        : order_plan      =           3
+               byses1          =    .0400221 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .3968796   .0050373    78.79   0.000      .386976    .4067832
+          2  |   .4143673   .0026121   158.64   0.000     .4092318    .4195027
+          3  |   .4868645   .0022766   213.86   0.000     .4823886    .4913404
+------------------------------------------------------------------------------
+
+. 
+. // Factor notation, interaction
+. 
+. //Proper factor notation: setting base levels
+. eststo order3: svy: reg `y' b3.order_plan##i.female byses1
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata   =       361                  Number of obs      =     14561
+Number of PSUs     =       751                  Population size    =   2908622
+                                                Design df          =       390
+                                                F(   6,    385)    =    436.30
+                                                Prob > F           =    0.0000
+                                                R-squared          =    0.2508
+
+--------------------------------------------------------------------------------
+               |             Linearized
+      bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+    order_plan |
+  No Plans/DK  |  -.0852546   .0068928   -12.37   0.000    -.0988062   -.0717029
+    Votech/CC  |  -.0712396   .0038389   -18.56   0.000    -.0787872   -.0636921
+               |
+      1.female |  -.0190811   .0031363    -6.08   0.000    -.0252473   -.0129149
+               |
+    order_plan#|
+        female |
+No Plans/DK#1  |  -.0140878   .0101094    -1.39   0.164    -.0339636     .005788
+  Votech/CC#1  |   -.002454   .0051646    -0.48   0.635    -.0126079    .0076999
+               |
+        byses1 |   .0629263   .0020983    29.99   0.000      .058801    .0670516
+         _cons |   .4938647   .0029628   166.69   0.000     .4880397    .4996898
+--------------------------------------------------------------------------------
+
+. 
+. esttab order3 using order3.rtf, varwidth(50) ///
+>     refcat(1.order_plan "College Plans, Reference=Plans to go to College:" 1.orde
+> r_plan#1.female "Interaction of Plans with Female:", nolabel) ///
+>  interaction(" X ") ///
+>    label ///
+>                    nomtitles ///
+>                        nobaselevels ///
+>                nodepvars              ///
+>                 b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                 
+(output written to order3.rtf)
+
+. 
+. 
+. // Margins to figure out what's going on
+. margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1)) post
+
+Adjusted predictions                            Number of obs      =     13055
+Model VCE    : Linearized
+
+Expression   : Linear prediction, predict(xb)
+
+1._at        : order_plan      =           1
+               female          =           0
+               byses1          =    .0400221 (mean)
+
+2._at        : order_plan      =           1
+               female          =           1
+               byses1          =    .0400221 (mean)
+
+3._at        : order_plan      =           2
+               female          =           0
+               byses1          =    .0400221 (mean)
+
+4._at        : order_plan      =           2
+               female          =           1
+               byses1          =    .0400221 (mean)
+
+5._at        : order_plan      =           3
+               female          =           0
+               byses1          =    .0400221 (mean)
+
+6._at        : order_plan      =           3
+               female          =           1
+               byses1          =    .0400221 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .4111286   .0063766    64.47   0.000     .3985917    .4236655
+          2  |   .3779598    .007331    51.56   0.000     .3635465     .392373
+          3  |   .4251435   .0034677   122.60   0.000     .4183258    .4319613
+          4  |   .4036084   .0034357   117.47   0.000     .3968536    .4103633
+          5  |   .4963832   .0029395   168.86   0.000     .4906039    .5021625
+          6  |   .4773021   .0025748   185.38   0.000     .4722399    .4823643
+------------------------------------------------------------------------------
+
+. 
+. esttab . using margins.rtf , margin label nostar ci ///
+>     varlabels(1._at "No College Plans, Male" ///
+>                   2._at "No College Plans, Female" ///
+>                       3._at "Vo-Tech/Community College, Male" ///
+>                           4._at "Vo-Tech/Community College, Female" ///
+>                               5._at "Four-Year College Plans, Male" ///
+>                                   6._at "Four-Year College Plans, Female" ) ///
+>         replace
+(output written to margins.rtf)
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/wdoyle_work/practicum/lpo_prac_2016-17/central/lessons/binary_c
+> ategorical/bin_cat.log
+  log type:  text
+ closed on:  21 Feb 2017, 13:51:22
+-----------------------------------------------------------------------------------
