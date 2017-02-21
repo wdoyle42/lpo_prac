@@ -1,3 +1,4 @@
+\documentclass[12 pt]{article}
 \usepackage[margin= 1in]{geometry}
 \usepackage[pdftex]{graphicx}
 \usepackage{amsmath}
@@ -45,21 +46,39 @@ thought of as ordered? How would you figure this out?
 
 In general, it's better to favor fewer categories, but you need to
 make sure that your decisions reflect the important questions in your
-theoeritcal framework. 
+theoretical framework. 
 
 Below, I recode the race variables as they're constructed by NCES to
 be more useful in our analysis. 
 
 \begin{stlog}
-  
+
+. recode byrace (4/5=4) (6=5) (7=6) (.=.), gen(byrace2)
+(10633 differences between byrace and byrace2)
+. 
+. label define byrace2 1 "Am.Ind." 2 "Asian/PI" 3 "Black" 4 "Hispanic" 5 "Multiraci
+> al" 6 "White"
+. 
+. label values byrace2 byrace  
 \end{stlog}
 
 \section{Binary Variables}
 
 Binary variables must always be constructed to be directional. Never
 have a binary variable for ``sex,'' always construct this kind of
-binary variable as either ``male'' or ``female'' 
+binary variable as either ``male'' or ``female.'' Binary variables in
+a regression represent an intercept shift-- for the group in question,
+they increase or decrease the intercept by that amount.  
 
+\begin{stlog}
+
+. gen female=bysex==2
+. replace female=. if bysex==.
+(819 real changes made, 819 to missing)
+. 
+. lab var female "Female"
+
+\end{stlog}
 
 
 \section{Categorical Variables}
@@ -69,11 +88,299 @@ know what you're talking about. If the underlying variable is numeric,
 it will simply include that variable as numeric. This is not
 good. Instead, we need to use the \texttt{i.} formulation, which
 specifies not only that a given variable is to be understood as a
-factor variable, but also alows the user some fine-grained control
+factor variable, but also allows the user some fine-grained control
 over how this will be constructed. 
+
+Remember that categorical variables must always be interpreted
+relative to their reference category. We cover how to think about that
+next. 
+
+\begin{stlog}
+
+. // NOPE!
+. eststo order1: svy: reg `y' order_plan
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata   =       361                  Number of obs      =     15129
+Number of PSUs     =       751                  Population size    = 3055917.9
+                                                Design df          =       390
+                                                F(   1,    390)    =   1025.42
+                                                Prob > F           =    0.0000
+                                                R-squared          =    0.1261
+
+------------------------------------------------------------------------------
+             |             Linearized
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  order_plan |     .07355   .0022968    32.02   0.000     .0690342    .0780657
+       _cons |   .2704247   .0059146    45.72   0.000     .2587962    .2820531
+------------------------------------------------------------------------------
+
+. 
+. 
+. //Proper factor notation
+. eststo order1: svy: reg `y' i.order_plan byses1 female
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata   =       361                  Number of obs      =     14561
+Number of PSUs     =       751                  Population size    =   2908622
+                                                Design df          =       390
+                                                F(   4,    387)    =    647.17
+                                                Prob > F           =    0.0000
+                                                R-squared          =    0.2507
+
+------------------------------------------------------------------------------
+             |             Linearized
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  order_plan |
+  Votech/CC  |   .0174877   .0053254     3.28   0.001     .0070176    .0279577
+  Four Year  |   .0899849   .0054533    16.50   0.000     .0792633    .1007065
+             |
+      byses1 |   .0629814   .0020981    30.02   0.000     .0588565    .0671064
+      female |  -.0208619   .0026488    -7.88   0.000    -.0260696   -.0156542
+       _cons |   .4048229   .0051525    78.57   0.000     .3946927     .414953
+------------------------------------------------------------------------------
+
+. 
+. esttab order1 using order1.rtf,  varwidth(50) label  ///
+>                nodepvars              ///
+>                    b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                   
+(output written to order1.rtf)
+
+. 
+. 
+. esttab order1 using order1.rtf,  varwidth(50) label  ///
+>     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know",nolabel) ///
+>         nobaselevels ///
+>                nomtitles ///
+>                nodepvars              ///
+>                 b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                   
+(output written to order1.rtf)
+
+. 
+
+\end{stlog}
+
 
 
 \section{Reference Categories for Categorical Variables}
 
+It's important to put some thought into reference categories for
+category variables. If you have no other preference, then use the
+largest group. You can accomplish this via the \texttt{ib(freq).}
+command. You should put some careful thought into the contrasts you'd
+like to draw--which groups do you want to compare and why? 
+
+
+\begin{stlog}
+
+
+. 
+. //Proper factor notation: setting base levels
+. eststo order2: svy: reg `y' ib(freq).order_plan byses1 female
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata   =       361                  Number of obs      =     14561
+Number of PSUs     =       751                  Population size    =   2908622
+                                                Design df          =       390
+                                                F(   4,    387)    =    647.17
+                                                Prob > F           =    0.0000
+                                                R-squared          =    0.2507
+
+------------------------------------------------------------------------------
+             |             Linearized
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  order_plan |
+No Plans/DK  |  -.0899849   .0054533   -16.50   0.000    -.1007065   -.0792633
+  Votech/CC  |  -.0724972   .0028019   -25.87   0.000    -.0780059   -.0669885
+             |
+      byses1 |   .0629814   .0020981    30.02   0.000     .0588565    .0671064
+      female |  -.0208619   .0026488    -7.88   0.000    -.0260696   -.0156542
+       _cons |   .4948077   .0028725   172.25   0.000     .4891601    .5004553
+------------------------------------------------------------------------------
+
+. 
+. esttab order2 using order2.rtf,  varwidth(50) label  ///
+>                nodepvars              ///
+>                    b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                   
+(output written to order2.rtf)
+
+. 
+. 
+. esttab order2 using order2.rtf,  varwidth(50)   ///
+>     refcat(1.order_plan "College Plans, Reference=Plans to go to College",nolabel
+> ) ///
+>         label ///
+>                    nomtitles ///
+>                        nobaselevels ///
+>                nodepvars              ///
+>                 b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                   
+(output written to order2.rtf)
+
+. 
+\end{stlog}
+
+\section{Interactions}
+
+When interacting a binary variable with a categorical variable, you
+must do the FULL interaction-- you can't just interact with one
+level. Same thing applies to continuous variables. 
+
+
+\section{Using Margins}
+
+Once you're undertaking interactions with categorical variables, it's
+generally a good idea to interpret them using the margins command. In
+the below code I use margins to interpret the interaction between a
+categorical and a binary variable and to make a table with confidence
+intervals from the output. 
+
+
+\begin{stlog}
+
+. // Factor notation, interaction
+. 
+. //Proper factor notation: setting base levels
+. eststo order3: svy: reg `y' b3.order_plan##i.female byses1
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata   =       361                  Number of obs      =     14561
+Number of PSUs     =       751                  Population size    =   2908622
+                                                Design df          =       390
+                                                F(   6,    385)    =    436.30
+                                                Prob > F           =    0.0000
+                                                R-squared          =    0.2508
+
+--------------------------------------------------------------------------------
+               |             Linearized
+      bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+    order_plan |
+  No Plans/DK  |  -.0852546   .0068928   -12.37   0.000    -.0988062   -.0717029
+    Votech/CC  |  -.0712396   .0038389   -18.56   0.000    -.0787872   -.0636921
+               |
+      1.female |  -.0190811   .0031363    -6.08   0.000    -.0252473   -.0129149
+               |
+    order_plan#|
+        female |
+No Plans/DK#1  |  -.0140878   .0101094    -1.39   0.164    -.0339636     .005788
+  Votech/CC#1  |   -.002454   .0051646    -0.48   0.635    -.0126079    .0076999
+               |
+        byses1 |   .0629263   .0020983    29.99   0.000      .058801    .0670516
+         _cons |   .4938647   .0029628   166.69   0.000     .4880397    .4996898
+--------------------------------------------------------------------------------
+
+. 
+. esttab order3 using order3.rtf, varwidth(50) ///
+>     refcat(1.order_plan "College Plans, Reference=Plans to go to College:" 1.orde
+> r_plan#1.female "Interaction of Plans with Female:", nolabel) ///
+>  interaction(" X ") ///
+>    label ///
+>                    nomtitles ///
+>                        nobaselevels ///
+>                nodepvars              ///
+>                 b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                 
+(output written to order3.rtf)
+
+. 
+. 
+. // Margins to figure out what's going on
+. margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1)) post
+
+Adjusted predictions                            Number of obs      =     13055
+Model VCE    : Linearized
+
+Expression   : Linear prediction, predict(xb)
+
+1._at        : order_plan      =           1
+               female          =           0
+               byses1          =    .0400221 (mean)
+
+2._at        : order_plan      =           1
+               female          =           1
+               byses1          =    .0400221 (mean)
+
+3._at        : order_plan      =           2
+               female          =           0
+               byses1          =    .0400221 (mean)
+
+4._at        : order_plan      =           2
+               female          =           1
+               byses1          =    .0400221 (mean)
+
+5._at        : order_plan      =           3
+               female          =           0
+               byses1          =    .0400221 (mean)
+
+6._at        : order_plan      =           3
+               female          =           1
+               byses1          =    .0400221 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .4111286   .0063766    64.47   0.000     .3985917    .4236655
+          2  |   .3779598    .007331    51.56   0.000     .3635465     .392373
+          3  |   .4251435   .0034677   122.60   0.000     .4183258    .4319613
+          4  |   .4036084   .0034357   117.47   0.000     .3968536    .4103633
+          5  |   .4963832   .0029395   168.86   0.000     .4906039    .5021625
+          6  |   .4773021   .0025748   185.38   0.000     .4722399    .4823643
+------------------------------------------------------------------------------
+
+. 
+. esttab . using margins.rtf , margin label nostar ci ///
+>     varlabels(1._at "No College Plans, Male" ///
+>                   2._at "No College Plans, Female" ///
+>                       3._at "Vo-Tech/Community College, Male" ///
+>                           4._at "Vo-Tech/Community College, Female" ///
+>                               5._at "Four-Year College Plans, Male" ///
+>                                   6._at "Four-Year College Plans, Female" ) ///
+>         replace
+(output written to margins.rtf)
+
+
+\end{stlog}
 
 \end{document}
