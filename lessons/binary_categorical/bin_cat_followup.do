@@ -257,7 +257,6 @@ esttab order2 using order2a.rtf,  varwidth(50)   ///
                replace                   
 			   
 			   
-exit 
 			   
 margins, predict(xb) at((mean) byses1 order_plan=(1 2 3)) post
 
@@ -268,7 +267,7 @@ eststo order3: svy: reg `y' ib(3).order_plan##i.female byses1
 
 esttab order3 using order3.rtf, varwidth(50) ///
     refcat(1.order_plan "College Plans, Reference=Plans to go to College:" 1.order_plan#1.female "Interaction of Plans with Female:", nolabel) ///
- interaction(" X ") ///
+	interaction(" X ") ///
    label ///
                    nomtitles ///
                        nobaselevels ///
@@ -281,7 +280,51 @@ esttab order3 using order3.rtf, varwidth(50) ///
                sfmt (2 0 0 0)               ///
                replace                 
 
+eststo order3a: svy: reg `y' ib(3).order_plan##ib(freq).bymothed2##i.female byses1
 
+esttab order3a using order3a.rtf, varwidth(50) ///
+    refcat(1.order_plan "College Plans, Reference=Plans to go to College:"  ///
+			1.order_plan#1.female "Interaction of Plans with Female:" ///
+			1.bymothed2 "Mother's Education, Ref= Some College" ///
+			1.bymothed2#1.female "Interaction of Mother's Education with Female"	///
+			1.order_plan#1.bymothed2#1.female   "Interaction of Plans, Mother's Education, and Female" ///
+			, nolabel) ///
+		interaction(" X ") ///
+   label ///
+                   nomtitles ///
+                       nobaselevels ///
+               nodepvars              ///
+                b(3)                   ///
+                se(3)                     ///       
+               r2 (2)                    ///
+               ar2 (2)                   ///
+               scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+               sfmt (2 0 0 0)               ///
+               replace 
+
+			   
+esttab order3a using order3b.rtf, varwidth(50) ///
+    refcat(1.order_plan "College Plans, Reference=Plans to go to College:"  ///
+			1.order_plan#1.female "Interaction of Plans with Female:" ///			
+			, nolabel) ///
+	interaction(" X ") ///
+	indicate("Mother's Education & Interactions"=*.bymothed*) ///
+   label ///
+                   nomtitles ///
+                       nobaselevels ///
+               nodepvars              ///
+                b(3)                   ///
+                se(3)                     ///       
+               r2 (2)                    ///
+               ar2 (2)                   ///
+               scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+               sfmt (2 0 0 0)               ///
+               replace     
+			   
+		
+
+estimates restore order3
+			   
 // Margins to figure out what's going on
 margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1)) post
 
@@ -294,6 +337,26 @@ esttab . using margins.rtf , margin label nostar ci ///
                                   6._at "Four-Year College Plans, Female" ) ///
         replace
 
+
+
+eststo order3a: svy: reg `y' ib(3).order_plan##ib(freq).bymothed2##i.female byses1
+
+eststo marg1:margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1) bymothed=2 ) post		
+
+estimates restore order3a
+
+eststo marg2:margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1) bymothed=4 ) post		
+		
+esttab marg1 marg2 using margins.rtf , margin label nostar ci ///
+    varlabels(1._at "No College Plans, Male" ///
+                  2._at "No College Plans, Female" ///
+                      3._at "Vo-Tech/Community College, Male" ///
+                          4._at "Vo-Tech/Community College, Female" ///
+                              5._at "Four-Year College Plans, Male" ///
+                                  6._at "Four-Year College Plans, Female" ) ///
+        replace		
+		
+marginsplot, recast(bar) by(female) xtitle("") subtitle("Male") subtitle("Female")
 
 log close
 exit
