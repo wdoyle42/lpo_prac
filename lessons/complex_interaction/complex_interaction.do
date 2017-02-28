@@ -5,7 +5,7 @@ log using "complex_interaction.log",replace
 /* PhD Practicum, Spring 2017 */
 /* Complex Interactions */
 /* Will Doyle*/
-/* 1/2817*/
+/* 2/28/17*/
 
 clear
     
@@ -56,6 +56,9 @@ reg  `z' `x', robust
 
 reg `y' `z' , robust
 
+reg `y' `x' `z', robust
+
+
 /* Controlling for intermediate outcomes*/
 
 reg `y' `x' `z' , robust
@@ -93,9 +96,8 @@ estimates restore fullmod
 quietly margins, predict(xb) at( ///
     asvab=(`asvablo'(`step')`asvabhi') ///
         ccol=`myeduc' ///
-            female=1 ///
+            female=0 ///
                 race=2 ///
-                    female=1 ///
                         (mean) jobtenure agem ///
                  ) ///
                 nose post
@@ -106,7 +108,7 @@ svmat pred_ed`myeduc'
 
 estimates restore fullmod
 
-quietly margins, predict(stdp) at((mean) _all age=(`asvablo'(`step')`asvabhi') ccol=`myeduc') nose post
+quietly margins, predict(stdp) at(asvab=(`asvablo'(`step')`asvabhi') ccol=`myeduc' female=0 race=2 (mean) jobtenure agem ) nose post
 mat pred_se_ed`myeduc'=e(b)'
 mat li pred_se_ed`myeduc'
 svmat pred_se_ed`myeduc'
