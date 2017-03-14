@@ -71,6 +71,6 @@ Contents of a Replication Archive
     comprehensive databases such as [dataverse](http://thedata.org/).
 
 Today in class we’ll use a [replication
-file](http://dvn.iq.harvard.edu/dvn/dv/JAngrist/faces/study/StudyPage.xhtml?studyId=23329&studyListingIndex=3_3c63cc35f4b84ab6961d972ebda5)
+file](https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/11284)
 from Josh Angrist to get a sense of what’s most helpful in a replication
 file.
