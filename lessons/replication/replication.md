@@ -1,9 +1,9 @@
-Vanderbilt University\
-Leadership, Policy and Organizations\
-Class Number 9952\
-Spring 2017\
+## Vanderbilt University
+## Leadership, Policy and Organizations
+## Class Number 9952
+## Spring 2017
 
-****
+# Replication in Social Science Research
 
 There is no single commonly accepted standard for creating a replication
 file in the social sciences , although there are a variety of efforts
