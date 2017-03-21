@@ -1,11 +1,9 @@
-Vanderbilt University\
-Leadership, Policy and Organizations\
-Class Number 9952\
-Spring 2015\
+## Vanderbilt University
+## Leadership, Policy and Organizations
+## Class Number 9952
+## Spring 2017
 
-**Assignment 8**
-
-as
+# Assignment 7
 
 Replication is a key part of research that is often overlooked. In this
 assignment, you’ll be asked to replicate a famous study comparing
