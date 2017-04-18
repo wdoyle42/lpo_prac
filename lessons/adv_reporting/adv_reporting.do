@@ -195,44 +195,47 @@ egen quant_levels=cut(bynels2m), group(4)
 
 levelsof quant_levels, local(quant_levels) 
 
-foreach level of mylevels{
 
-foreach quant_level of local quant_levels{
 
-    reg `y' `x' `controls' if quant_levels=`quant_level' & `level_var'=`mylevel'
-} // End loop over quant levels
+foreach level of local mylevels{
+local i=1
+    foreach quant_level of local quant_levels{
+
+        quietly ///
+        eststo results_`level': ///
+            reg `y' `x' `controls' ///
+                if quant_levels==`quant_level' & `level_var'==`level'
+
+        scalar my_beta=_b[`x']
+        scalar my_se=_se[`x']
+        scalar my_N=e(N)
+
+        if `i'==1{
+            mat betas=my_beta
+            mat stderrs=my_se
+            mat samples=my_N
+        }
+        
+        else{
+            mat betas=(betas,my_beta)
+            mat stderrs=(stderrs,my_se)
+            mat samples=(samples,my_N)
+        }
+        
+        estadd matrix betas
+        estadd matrix stderrs
+        estadd matrix samples
+
+        local i=`i'+1
+    
+    } // End loop over quant levels
+
+
 } // End loop over level variable
 
-exit 
-
-if `bw'==27{
-    mat beta_line=round(_b[tsaa_eli],`my_sig')
-    mat se_line=round(_se[tsaa_eli],`my_sig')
-    mat n_line=e(N)
-}
-else{
-    mat beta_line=(beta_line,round(_b[tsaa_eli],`my_sig'))
-    mat se_line=(se_line,round(_se[tsaa_eli],`my_sig'))
-    mat n_line=(n_line,e(N))
-}
+esttab using reg_results.rtf, ///
+    cells(betas(fmt(2)) stderrs(par fmt(2)) samples(fmt(0))) ///
+    noobs ///
+    replace
 
 
-}
-
-
-mat M_out=(beta_line \ se_line \n_line)
-
-if `systemno'==1{
-mat loc_results=M_out
-}
-else{
-mat loc_results=(loc_results \M_out)
-}
-}
-
-
-// Complex Graphics
-
-// Combine three sectors
-
-grc1leg2 persist_1.gph persist_2.gph persist_3.gph, legendfrom(persist_1.gph) rows(1) name(persist,replace)
