@@ -1,0 +1,292 @@
+--------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/assignments/semester_
+> 2_assignment_2/ols_regression_stata.log
+  log type:  text
+ opened on:  24 Jan 2017, 14:16:52
+
+. 
+. clear
+
+. 
+. estimates drop _all
+
+. 
+. /* Set locals */
+. 
+. local tab_type rtf
+
+. 
+. /*Please complete the following steps, using the mroz dataset available on
+> our website. The Moz datasets comes from the Panel Study of Income
+> Dynamics, and was used as part of a famous study on womenÕs labor force
+> participation. For this assignment, you will model the correlates of
+> womenÕs labor force outcomes.*/
+. 
+. use mroz, clear
+
+. 
+. /*1.  Create a macro called y, and assign its value to the variable hours*/
+. 
+. local y hours
+
+. 
+. /*2.  Create three other macros, named family, husband, and qualifcations.
+>     Place in each macro a set of variables related to family
+>     characteristics, husbandÕs labor force characteristics, and the
+>     womanÕs labor force qualifications.*/
+. 
+.         local family kidslt6 kidsge6 
+
+.         
+.         local husband huseduc huswage
+
+.         
+.         local qualifications educ exper
+
+.         
+. /*3.  Create a summary table of all of the variables from above, including
+>     both means and standard deviations.*/
+. 
+. eststo descriptives: estpost tabstat `y' `family' `husband' `qualifications', ///
+>     statistics(mean sd) ///
+>     columns(statistics) ///
+>     listwise 
+
+Summary statistics: mean sd
+     for variables: hours kidslt6 kidsge6 huseduc huswage educ exper
+
+             |   e(mean)      e(sd) 
+-------------+----------------------
+       hours |  740.5764   871.3142 
+     kidslt6 |  .2377158    .523959 
+     kidsge6 |  1.353254   1.319874 
+     huseduc |  12.49137   3.020804 
+     huswage |  7.482179   4.230559 
+        educ |  12.28685   2.280246 
+       exper |  10.63081    8.06913 
+
+.     
+. esttab descriptives using esttab_means.`tab_type' , ///
+>     main(mean) ///
+>     aux(sd) ///
+>     nostar ///
+>     nonote ///
+>     label ///
+>     nonumber ///
+>     replace 
+(output written to esttab_means.rtf)
+
+.                 
+. 
+. /*4.  Run a total of four regressions. The first three should have y as
+>     the dependent variable and each ÒclusterÓ of variables represented
+>     by a macro as the sole set of independent variables. The last should
+>     have all of the independent variables on the right hand side.*/
+. 
+. local depvars hours wage
+
+. 
+. foreach y of local depvars{
+  2.         
+. reg `y' `family'
+  3. 
+. reg `y' `husband'
+  4. 
+. reg `y' `qualifications'
+  5.         
+. reg `y' `family' `husband' `qualifications'
+  6. }
+
+      Source |       SS       df       MS              Number of obs =     753
+-------------+------------------------------           F(  2,   750) =   21.63
+       Model |  31128772.9     2  15564386.5           Prob > F      =  0.0000
+    Residual |   539780951   750  719707.935           R-squared     =  0.0545
+-------------+------------------------------           Adj R-squared =  0.0520
+       Total |   570909724   752  759188.463           Root MSE      =  848.36
+
+------------------------------------------------------------------------------
+       hours |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     kidslt6 |  -359.1382   59.25369    -6.06   0.000     -475.461   -242.8154
+     kidsge6 |   -47.8321   23.52233    -2.03   0.042    -94.00953   -1.654663
+       _cons |   890.6781   45.73813    19.47   0.000     800.8882    980.4681
+------------------------------------------------------------------------------
+
+      Source |       SS       df       MS              Number of obs =     753
+-------------+------------------------------           F(  2,   750) =    4.07
+       Model |  6129326.99     2  3064663.49           Prob > F      =  0.0175
+    Residual |   564780397   750  753040.529           R-squared     =  0.0107
+-------------+------------------------------           Adj R-squared =  0.0081
+       Total |   570909724   752  759188.463           Root MSE      =  867.78
+
+------------------------------------------------------------------------------
+       hours |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     huseduc |   9.997854   11.40105     0.88   0.381    -12.38391    32.37962
+     huswage |  -23.12464   8.140848    -2.84   0.005     -39.1062   -7.143081
+       _cons |   788.7122   134.7034     5.86   0.000     524.2716    1053.153
+------------------------------------------------------------------------------
+
+      Source |       SS       df       MS              Number of obs =     753
+-------------+------------------------------           F(  2,   750) =   76.96
+       Model |  97214891.3     2  48607445.6           Prob > F      =  0.0000
+    Residual |   473694833   750   631593.11           R-squared     =  0.1703
+-------------+------------------------------           Adj R-squared =  0.1681
+       Total |   570909724   752  759188.463           Root MSE      =  794.73
+
+------------------------------------------------------------------------------
+       hours |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        educ |   30.36988   12.73748     2.38   0.017     5.364527    55.37523
+       exper |    43.1593   3.599469    11.99   0.000     36.09307    50.22554
+       _cons |  -91.39221   161.2538    -0.57   0.571    -407.9547    225.1703
+------------------------------------------------------------------------------
+
+      Source |       SS       df       MS              Number of obs =     753
+-------------+------------------------------           F(  6,   746) =   31.98
+       Model |   116808429     6  19468071.5           Prob > F      =  0.0000
+    Residual |   454101295   746  608714.873           R-squared     =  0.2046
+-------------+------------------------------           Adj R-squared =  0.1982
+       Total |   570909724   752  759188.463           Root MSE      =   780.2
+
+------------------------------------------------------------------------------
+       hours |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     kidslt6 |  -271.5799   55.99264    -4.85   0.000    -381.5018    -161.658
+     kidsge6 |   25.69022   22.68019     1.13   0.258    -18.83438    70.21482
+     huseduc |   -8.66901    12.5212    -0.69   0.489    -33.24998    15.91196
+     huswage |  -17.20557   7.395755    -2.33   0.020    -31.72454   -2.686599
+        educ |   55.01349   15.96375     3.45   0.001     23.67427    86.35271
+       exper |   39.48503    3.80457    10.38   0.000     32.01609    46.95396
+       _cons |  -88.30767   168.6296    -0.52   0.601    -419.3527    242.7373
+------------------------------------------------------------------------------
+
+      Source |       SS       df       MS              Number of obs =     753
+-------------+------------------------------           F(  2,   750) =    6.28
+       Model |  130.262699     2  65.1313493           Prob > F      =  0.0020
+    Residual |  7772.84801   750  10.3637974           R-squared     =  0.0165
+-------------+------------------------------           Adj R-squared =  0.0139
+       Total |  7903.11071   752  10.5094557           Root MSE      =  3.2193
+
+------------------------------------------------------------------------------
+        wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     kidslt6 |  -.7409689    .224852    -3.30   0.001    -1.182383   -.2995547
+     kidsge6 |  -.0915406    .089261    -1.03   0.305    -.2667717    .0836905
+       _cons |   2.674583    .173564    15.41   0.000     2.333854    3.015312
+------------------------------------------------------------------------------
+
+      Source |       SS       df       MS              Number of obs =     753
+-------------+------------------------------           F(  2,   750) =    6.13
+       Model |  127.148118     2  63.5740588           Prob > F      =  0.0023
+    Residual |   7775.9626   750  10.3679501           R-squared     =  0.0161
+-------------+------------------------------           Adj R-squared =  0.0135
+       Total |  7903.11071   752  10.5094557           Root MSE      =  3.2199
+
+------------------------------------------------------------------------------
+        wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     huseduc |   .1297031   .0423041     3.07   0.002     .0466546    .2127515
+     huswage |   .0104142    .030207     0.34   0.730     -.048886    .0697145
+       _cons |   .6764752   .4998227     1.35   0.176    -.3047427    1.657693
+------------------------------------------------------------------------------
+
+      Source |       SS       df       MS              Number of obs =     753
+-------------+------------------------------           F(  2,   750) =   68.40
+       Model |  1219.13793     2  609.568963           Prob > F      =  0.0000
+    Residual |  6683.97279   750  8.91196372           R-squared     =  0.1543
+-------------+------------------------------           Adj R-squared =  0.1520
+       Total |  7903.11071   752  10.5094557           Root MSE      =  2.9853
+
+------------------------------------------------------------------------------
+        wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        educ |   .4309267   .0478466     9.01   0.000     .3369975     .524856
+       exper |    .092604   .0135209     6.85   0.000     .0660607    .1191474
+       _cons |  -3.904624   .6057284    -6.45   0.000    -5.093749   -2.715499
+------------------------------------------------------------------------------
+
+      Source |       SS       df       MS              Number of obs =     753
+-------------+------------------------------           F(  6,   746) =   26.01
+       Model |  1367.20559     6  227.867598           Prob > F      =  0.0000
+    Residual |  6535.90513   746  8.76126693           R-squared     =  0.1730
+-------------+------------------------------           Adj R-squared =  0.1663
+       Total |  7903.11071   752  10.5094557           Root MSE      =  2.9599
+
+------------------------------------------------------------------------------
+        wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     kidslt6 |  -.7060385   .2124259    -3.32   0.001    -1.123062   -.2890148
+     kidsge6 |   .1235727   .0860445     1.44   0.151    -.0453455     .292491
+     huseduc |   -.086197   .0475031    -1.81   0.070    -.1794527    .0070588
+     huswage |   .0131339   .0280581     0.47   0.640    -.0419484    .0682162
+        educ |   .5168609   .0605636     8.53   0.000     .3979656    .6357562
+       exper |   .0876933   .0144338     6.08   0.000     .0593575    .1160291
+       _cons |  -3.929221     .63975    -6.14   0.000    -5.185145   -2.673296
+------------------------------------------------------------------------------
+
+.         
+. /*5.  Repeat the above step, but reassign the macro y to an alternative
+>     labor force outcome for the woman (your choice).*/
+. 
+.         
+. /*6.  In a single paragraph (no more than 150 words), comment on the
+>     results of your estimation. This should be a comment in the do file.
+> 
+>         Women who have children under 6 work considerably fewer hours and have 
+>         lower wages than women who do not have any children under 6. As the estimate
+> s show, women
+>         with children under 6 work 271 fewer hours than women who do not have childr
+> en under 6, 
+>         even after controlling for relevant characteristics. This estimate is bounde
+> d by a 95% 
+>         confidence interval that runs from 382 fewer hours to 162 fewer hours.  Wome
+> n with higher 
+>         levels of education and experience work more hours and earn higher wages. Wo
+> men 
+>         whose husbands are more educated work fewer hours, but do not have measurabl
+> y different 
+>         wages. 
+>         
+>         */
+. 
+end of do-file
+
+. tab kidslt6
+
+ # kids < 6 |
+      years |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |        606       80.48       80.48
+          1 |        118       15.67       96.15
+          2 |         26        3.45       99.60
+          3 |          3        0.40      100.00
+------------+-----------------------------------
+      Total |        753      100.00
+
+. tab kidsge6
+
+# kids 6-18 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |        258       34.26       34.26
+          1 |        185       24.57       58.83
+          2 |        162       21.51       80.35
+          3 |        103       13.68       94.02
+          4 |         30        3.98       98.01
+          5 |         12        1.59       99.60
+          6 |          1        0.13       99.73
+          7 |          1        0.13       99.87
+          8 |          1        0.13      100.00
+------------+-----------------------------------
+      Total |        753      100.00
+
+. cd "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/ols_in_stata"
+/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/ols_in_stata
+
+. use caschool
+
+. do "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/ols_in_stata/ols_reg
+> ression_stata_followup.do"
+
+. capture log close
