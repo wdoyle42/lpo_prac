@@ -21,8 +21,8 @@ set more off /*Get rid of annoying "more" feature */
 
 /*Controls*/
 
-local coding=1
-local imputation=1
+local coding=0
+local imputation=0
 local analysis=1
 
 /*Locals for analysis*/
@@ -141,7 +141,7 @@ else{
 
 /* Regression without multiple imputation */
 
-  svyset psu [weight=f1pnlwt], strata(strat_id) singleunit(scaled)
+svyset psu [weight=f1pnlwt], strata(strat_id) singleunit(scaled)
 
 svy: logit fouryr `test' `race' `pared' `income'
 eststo full
@@ -172,6 +172,7 @@ if `imputation'==1 {
 
 
 local mice=0
+
 local mvn=1
 
 mvpatterns `test'
@@ -185,6 +186,12 @@ mvpatterns `income'
 mvpatterns `y' `test' `race'
 
 mi set mlong
+
+drop if fouryr==.
+
+gen four_yr_flag=fouryr==.
+
+kdensity byses1 if four_yr_flag==0 , addplot(kdensity byses1 if four_yr_flag==1)
 
 
 #delimit;
@@ -242,6 +249,7 @@ tsline byses1_sd, name(gr4) nodraw
 graph combine gr1 gr2 gr3 gr4
 
 } /*End mice sub loop */
+
 
 
 if `mvn'==1{
@@ -313,13 +321,15 @@ use plans_impute_mvn, clear
 /********************************/
 
 
-else{
-use plans_impute_mvn, clear
+ else{
+ use plans_impute_mvn, clear
 }
 
 
 
 if `analysis'==1{
+
+//use mi_impute_mice, clear
 
 mi svyset psu [weight=f1pnlwt], strata(strat_id) singleunit(scaled)
 
@@ -327,7 +337,9 @@ drop if fouryr==.
 
 /* Table of Descriptive Statistics */
 
-eststo descriptives: mi estimate, nosmall imputations(1/5) : svy: mean `y' `test' `race' `pared' `income'
+eststo descriptives: mi estimate, nosmall imputations(1/5) : svy: mean `y' `test' `race' 
+
+//`pared' `income'
 
 
 /*The following lines of code are needed to get estout to get along with mi/svy */
@@ -362,11 +374,13 @@ estout descriptives  using "descriptives.rtf",
 
 #delimit cr
 
+
 /*Logistic Regression*/
 
   
 /*The following lines of code are needed to get estout to get along with mi/svy */    
 mi estimate, nosmall: svy: logit fouryr `test' `race' `pared' `income'
+
 local vars  :rownames e(V_mi)
 
 mat myvar=e(V_mi)

@@ -61,6 +61,7 @@ mean x // Calculate mean
 tabstat x, stat(sd) // Calculate sds
 restore //
 
+
 // Is CLT a real thing?
 
 if `xbar_example'==1{
@@ -98,6 +99,7 @@ mat M=r(StatTotal)
 scalar simulate_se=M[1,1]
 }
 
+exit 
 
 // Regression simulation: first example
 

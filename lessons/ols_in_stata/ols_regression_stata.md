@@ -290,9 +290,9 @@ Here are some of the guidelines I use when reporting results:
 
 Let’s do several:
 
-1.  Re-Create the above table, but this time report t-statistics instead of standard errors.
+1.  Re-create the above table, but this time report t-statistics instead of standard errors.
 
-2.  Re-Create the above table, but this time with no stars for significant variables.
+2.  Re-create the above table, but this time with no stars for significant variables.
 
 3.  Re-create the above table, but this time display confidence intervals. Exapnd the results to four significant digits.
 
@@ -414,6 +414,40 @@ Plotting regression results can work really well. Stata has several ways to do t
     . exit
 
     end of do-file
+
+
+    . estimates dir
+
+    -------------------------------------------------------
+            name | command      depvar       npar  title 
+    -------------+-----------------------------------------
+    descriptives | estpost      no depvar       0  
+    descriptiv~e | estpost      no depvar       0  
+     teach_model | regress      testscr         2  Model 1
+    st_tch_model | regress      testscr         6  Model 2
+    st_tch_fin~l | regress      testscr         7  Model 3
+    st_tch_fin~l | regress      testscr         8  Model 4
+    -------------------------------------------------------
+
+    . estimates replay teach_model
+
+    --------------------------------------------------------------------------------------
+    Model teach_model (Model 1)
+    --------------------------------------------------------------------------------------
+
+          Source |       SS       df       MS              Number of obs =     420
+    -------------+------------------------------           F(  1,   418) =   22.58
+           Model |  7794.11004     1  7794.11004           Prob > F      =  0.0000
+        Residual |  144315.484   418  345.252353           R-squared     =  0.0512
+    -------------+------------------------------           Adj R-squared =  0.0490
+           Total |  152109.594   419  363.030056           Root MSE      =  18.581
+
+    ------------------------------------------------------------------------------
+         testscr |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+    -------------+----------------------------------------------------------------
+             str |  -2.279808   .4798256    -4.75   0.000     -3.22298   -1.336637
+           _cons |    698.933   9.467491    73.82   0.000     680.3231    717.5428
+    ------------------------------------------------------------------------------
 
 <img src = "all_models.png" />
 

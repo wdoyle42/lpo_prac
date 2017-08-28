@@ -156,9 +156,9 @@ writeLines(alignfigure('testscr_results.png', 'center'))
 
 Let’s do several:
 
-1. Re-Create the above table, but this time report t-statistics instead of standard errors.
+1. Re-create the above table, but this time report t-statistics instead of standard errors.
 
-2. Re-Create the above table, but this time with no stars for significant variables.
+2. Re-create the above table, but this time with no stars for significant variables.
 
 3. Re-create the above table, but this time display confidence intervals. Exapnd the results to four significant digits.
 

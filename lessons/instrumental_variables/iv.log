@@ -1,673 +1,671 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  15 MAY 2017 12:07
-entering extended mode
- restricted \write18 enabled.
- %&-line parsing enabled.
-**\input iv.tex
-(./iv.tex (/usr/local/texlive/2015/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/size12.clo
-File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
-)
-\c@part=\count79
-\c@section=\count80
-\c@subsection=\count81
-\c@subsubsection=\count82
-\c@paragraph=\count83
-\c@subparagraph=\count84
-\c@figure=\count85
-\c@table=\count86
-\abovecaptionskip=\skip41
-\belowcaptionskip=\skip42
-\bibindent=\dimen102
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+-----------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.log
+  log type:  text
+ opened on:  15 May 2017, 14:39:05
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks14
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
+. 
+. /* Instrumental Variables */
+. /* Will Doyle */
+. /* 170515 */
+. /* Practicum Folder */
+. 
+. clear 
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/trig.sty
-Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/graphics.cfg
-File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
-)
-Package graphics Info: Driver file: pdftex.def on input line 94.
+. 
+. global ddir "../../data/"
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
-File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+. 
+. use "${ddir}nlsy_2010.dta", clear
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty
-Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
-Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
-)
-\Gread@gobject=\count87
-))
-\Gin@req@height=\dimen103
-\Gin@req@width=\dimen104
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2013/01/14 v2.14 AMS math features
-\@mathmargin=\skip43
+. 
+. 
+. // Interaction variable
+. gen moth_prox= mothed*prox
+(974 missing values generated)
 
-For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
-Package: amstext 2000/06/29 v2.01
+. 
+. local y lyinc
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks15
-\ex@=\dimen105
-))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen106
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty
-Package: amsopn 1999/12/14 v2.01 operator names
-)
-\inf@bad=\count88
-LaTeX Info: Redefining \frac on input line 210.
-\uproot@=\count89
-\leftroot@=\count90
-LaTeX Info: Redefining \overline on input line 306.
-\classnum@=\count91
-\DOTSCASE@=\count92
-LaTeX Info: Redefining \ldots on input line 378.
-LaTeX Info: Redefining \dots on input line 381.
-LaTeX Info: Redefining \cdots on input line 466.
-\Mathstrutbox@=\box26
-\strutbox@=\box27
-\big@size=\dimen107
-LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
-\macc@depth=\count93
-\c@MaxMatrixCols=\count94
-\dotsspace@=\muskip10
-\c@parentequation=\count95
-\dspbrk@lvl=\count96
-\tag@help=\toks16
-\row@=\count97
-\column@=\count98
-\maxfields@=\count99
-\andhelp@=\toks17
-\eqnshift@=\dimen108
-\alignsep@=\dimen109
-\tagshift@=\dimen110
-\tagwidth@=\dimen111
-\totwidth@=\dimen112
-\lineht@=\dimen113
-\@envbody=\toks18
-\multlinegap=\skip44
-\multlinetaggap=\skip45
-\mathdisplay@stack=\toks19
-LaTeX Info: Redefining \[ on input line 2665.
-LaTeX Info: Redefining \] on input line 2666.
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/natbib/bibentry.sty
-Package: bibentry 2007/10/30 1.5 (PWD)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/ccaption/ccaption.sty
-Package: ccaption 2011/08/07 v3.2c Extended captioning and new floats
-\@contcwidth=\skip46
-\@contindw=\skip47
-\abovelegendskip=\skip48
-\belowlegendskip=\skip49
-\c@newflo@tctr=\count100
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fourier.sty
-Package: fourier 2005/01/01 1.4 fourier-GUTenberg package
+. local x ccol
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+. local controls female black multiracial hispanic asvab i.quarter
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.def
-File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
-LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
-))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/textcomp.sty
-Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
-Package textcomp Info: Sub-encoding information:
-(textcomp)               5 = only ISO-Adobe without \textcurrency
-(textcomp)               4 = 5 + \texteuro
-(textcomp)               3 = 4 + \textohm
-(textcomp)               2 = 3 + \textestimated + \textcurrency
-(textcomp)               1 = TS1 - \textcircled - \t
-(textcomp)               0 = TS1 (full)
-(textcomp)             Font families with sub-encoding setting implement
-(textcomp)             only a restricted character set as indicated.
-(textcomp)             Family '?' is the default used for unknown fonts.
-(textcomp)             See the documentation for details.
-Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
+. local z prox
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1enc.def
-File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
-)
-LaTeX Info: Redefining \oldstylenums on input line 334.
-Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
-Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
-Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
-Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
-Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
-Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
-Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
-Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
-Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
-Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
-Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
-Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
-Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
-Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
-Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
-Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
-Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
-Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
-Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
-Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
-Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
-Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
-Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
-Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
+. local z1 prox moth_prox
 
-Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
-Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
-Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
-Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
-Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
-Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
-Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
-Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
-Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
-Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
-Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
-Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
-Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
-Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
-Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
-Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
-Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
-Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
-Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
-Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
-Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
-Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
-Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
-Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
-Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
-Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
-Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
-Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
-Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
-Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
-Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
-Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
-Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
-Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
-Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
-Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
-Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fourier-orns.sty
-Package: fourier-orns 2004/01/30 1.1 fourier-ornaments package
-)
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 50.
-LaTeX Font Info:    Encoding `OT1' has changed to `T1' for symbol font
-(Font)              `operators' in the math version `normal' on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> T1/futs/m/n on input line 50.
-LaTeX Font Info:    Encoding `OT1' has changed to `T1' for symbol font
-(Font)              `operators' in the math version `bold' on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> T1/futs/m/n on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  T1/futs/m/n --> T1/futs/b/n on input line 51.
-LaTeX Font Info:    Redeclaring symbol font `letters' on input line 59.
-LaTeX Font Info:    Encoding `OML' has changed to `FML' for symbol font
-(Font)              `letters' in the math version `normal' on input line 59.
-LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
-(Font)                  OML/cmm/m/it --> FML/futmi/m/it on input line 59.
-LaTeX Font Info:    Encoding `OML' has changed to `FML' for symbol font
-(Font)              `letters' in the math version `bold' on input line 59.
-LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
-(Font)                  OML/cmm/b/it --> FML/futmi/m/it on input line 59.
-\symotherletters=\mathgroup4
-LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
-(Font)                  FML/futmi/m/it --> FML/futmi/b/it on input line 61.
-LaTeX Font Info:    Overwriting symbol font `otherletters' in version `bold'
-(Font)                  FML/futm/m/it --> FML/futm/b/it on input line 62.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 64.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 65.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 66.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 67.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 68.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 69.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 70.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 71.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 72.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 73.
-LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 113.
-LaTeX Font Info:    Encoding `OMS' has changed to `FMS' for symbol font
-(Font)              `symbols' in the math version `normal' on input line 113.
-LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
-(Font)                  OMS/cmsy/m/n --> FMS/futm/m/n on input line 113.
-LaTeX Font Info:    Encoding `OMS' has changed to `FMS' for symbol font
-(Font)              `symbols' in the math version `bold' on input line 113.
-LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
-(Font)                  OMS/cmsy/b/n --> FMS/futm/m/n on input line 113.
-LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 114.
-LaTeX Font Info:    Encoding `OMX' has changed to `FMX' for symbol font
-(Font)              `largesymbols' in the math version `normal' on input line 1
-14.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
-(Font)                  OMX/cmex/m/n --> FMX/futm/m/n on input line 114.
-LaTeX Font Info:    Encoding `OMX' has changed to `FMX' for symbol font
-(Font)              `largesymbols' in the math version `bold' on input line 114
-.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
-(Font)                  OMX/cmex/m/n --> FMX/futm/m/n on input line 114.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 115.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> T1/futs/bx/n on input line 115.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> T1/futs/bx/n on input line 115.
-LaTeX Font Info:    Redeclaring math alphabet \mathrm on input line 116.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 117.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> T1/futs/m/it on input line 117.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> T1/futs/m/it on input line 117.
-LaTeX Font Info:    Redeclaring math alphabet \mathcal on input line 118.
-LaTeX Font Info:    Redeclaring math symbol \parallel on input line 134.
-LaTeX Font Info:    Redeclaring math symbol \hbar on input line 148.
-LaTeX Font Info:    Redeclaring math symbol \varkappa on input line 186.
-LaTeX Font Info:    Redeclaring math symbol \varvarrho on input line 187.
-LaTeX Font Info:    Redeclaring math delimiter \Vert on input line 210.
-LaTeX Font Info:    Redeclaring math delimiter \vert on input line 215.
-LaTeX Font Info:    Redeclaring math delimiter \lvert on input line 217.
-LaTeX Font Info:    Redeclaring math delimiter \rvert on input line 219.
-LaTeX Font Info:    Redeclaring math delimiter \lVert on input line 221.
-LaTeX Font Info:    Redeclaring math delimiter \rVert on input line 223.
-LaTeX Font Info:    Redeclaring math delimiter \Downarrow on input line 225.
-LaTeX Font Info:    Redeclaring math delimiter \backslash on input line 227.
-LaTeX Font Info:    Redeclaring math delimiter \rangle on input line 229.
-LaTeX Font Info:    Redeclaring math delimiter \langle on input line 231.
-LaTeX Font Info:    Redeclaring math delimiter \rbrace on input line 233.
-LaTeX Font Info:    Redeclaring math delimiter \lbrace on input line 235.
-LaTeX Font Info:    Redeclaring math delimiter \rceil on input line 237.
-LaTeX Font Info:    Redeclaring math delimiter \lceil on input line 239.
-LaTeX Font Info:    Redeclaring math delimiter \rfloor on input line 241.
-LaTeX Font Info:    Redeclaring math delimiter \lfloor on input line 243.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 247.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 248.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 249.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 250.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 251.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 252.
-LaTeX Font Info:    Redeclaring math accent \check on input line 253.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 254.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 255.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 256.
-\symUfutm=\mathgroup5
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/stata.sty
-Package: stata 2013/10/23 v1.34 LaTeX package for Stata code
+. 
+. // gen z= 1 + 2*ccol + rnorm(10)
+. 
+. // Basic regression with endog regressor
+. 
+. reg `y' `x'
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/alltt.sty
-Package: alltt 1997/06/16 v2.0g defines alltt environment
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/calc.sty
-Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count101
-\calc@Bcount=\count102
-\calc@Adimen=\dimen114
-\calc@Bdimen=\dimen115
-\calc@Askip=\skip50
-\calc@Bskip=\skip51
-LaTeX Info: Redefining \setlength on input line 80.
-LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count103
-\calc@Cskip=\skip52
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ifthen.sty
-Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
-)
-\st@box=\box28
-\st@box@wd=\dimen116
-\st@box@ht=\dimen117
-\st@box@dp=\dimen118
-\stsyndent=\skip53
-\streswidth=\skip54
-\st@parindent=\skip55
-\stexamplehskip=\skip56
-\sttechhskip=\skip57
-\st@ttbox@box=\box29
-\st@ttbox@framesep=\dimen119
-\ttboxIndent=\dimen120
-\ttboxWd=\dimen121
-\st@ttbox@boxwd=\dimen122
-\st@box=\box30
-\st@emptywidth=\skip58
-\st@linesize=\skip59
-\st@maxdepth=\skip60
-\st@maxheight=\skip61
-\st@mbdepth=\skip62
-\st@mtdepth=\skip63
-\st@xheight=\skip64
-\st@xwidth=\skip65
-\st@N=\count104
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/vmargin/vmargin.sty
-Package: vmargin 2004/07/15 V2.5 set document margins (VK)
+      Source |       SS       df       MS              Number of obs =    5302
+-------------+------------------------------           F(  1,  5300) =  245.79
+       Model |  339.270927     1  339.270927           Prob > F      =  0.0000
+    Residual |  7315.73074  5300  1.38032655           R-squared     =  0.0443
+-------------+------------------------------           Adj R-squared =  0.0441
+       Total |  7655.00167  5301  1.44406747           Root MSE      =  1.1749
 
-Package: vmargin 2004/07/15 V2.5 set document margins (VK)
-\PaperWidth=\dimen123
-\PaperHeight=\dimen124
-) (/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
+------------------------------------------------------------------------------
+       lyinc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |   .0975965   .0062252    15.68   0.000     .0853926    .1098004
+       _cons |   9.808505   .0232423   422.01   0.000      9.76294    9.854069
+------------------------------------------------------------------------------
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-Package: hobsub-hyperref 2012/05/28 v1.13 Bundle oberdiek, subset hyperref (HO)
+. reg `y' `x' `controls'
+
+      Source |       SS       df       MS              Number of obs =    4368
+-------------+------------------------------           F( 25,  4342) =   17.99
+       Model |   606.42834    25  24.2571336           Prob > F      =  0.0000
+    Residual |  5855.79058  4342  1.34863901           R-squared     =  0.0938
+-------------+------------------------------           Adj R-squared =  0.0886
+       Total |  6462.21892  4367   1.4797845           Root MSE      =  1.1613
+
+------------------------------------------------------------------------------
+       lyinc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |   .0701574   .0080185     8.75   0.000      .054437    .0858778
+      female |  -.3100471   .0358142    -8.66   0.000    -.3802613   -.2398329
+       black |  -.2091958    .047897    -4.37   0.000    -.3030984   -.1152932
+ multiracial |   .1220832    .181033     0.67   0.500    -.2328338    .4770003
+    hispanic |   .0237899   .0483232     0.49   0.623    -.0709484    .1185281
+       asvab |   .5774314   .0773854     7.46   0.000     .4257165    .7291464
+             |
+     quarter |
+          2  |      .0052   .1176955     0.04   0.965    -.2255432    .2359433
+          3  |  -.1704338   .1170825    -1.46   0.146    -.3999752    .0591076
+          4  |  -.1056638   .1168133    -0.90   0.366    -.3346776      .12335
+          5  |  -.1765472   .1148719    -1.54   0.124    -.4017547    .0486603
+          6  |  -.0438619    .114912    -0.38   0.703    -.2691482    .1814243
+          7  |  -.1404778   .1093725    -1.28   0.199    -.3549037    .0739481
+          8  |  -.2294765   .1128513    -2.03   0.042    -.4507227   -.0082302
+          9  |  -.1883844   .1145721    -1.64   0.100    -.4130042    .0362354
+         10  |  -.0512959   .1147415    -0.45   0.655    -.2762478    .1736559
+         11  |  -.1201981   .1114782    -1.08   0.281    -.3387523    .0983562
+         12  |  -.2666132   .1147002    -2.32   0.020    -.4914841   -.0417422
+         13  |  -.1146033   .1135978    -1.01   0.313    -.3373131    .1081064
+         14  |  -.2548109   .1151355    -2.21   0.027    -.4805353   -.0290865
+         15  |  -.3752216   .1117929    -3.36   0.001    -.5943928   -.1560505
+         16  |  -.1237362   .1120099    -1.10   0.269    -.3433328    .0958604
+         17  |  -.2951264   .1116064    -2.64   0.008    -.5139318    -.076321
+         18  |  -.3133218   .1148571    -2.73   0.006    -.5385003   -.0881432
+         19  |   -.191894   .1131301    -1.70   0.090    -.4136868    .0298987
+         20  |  -.5237935   .1161868    -4.51   0.000    -.7515789   -.2960081
+             |
+       _cons |   9.978806    .094987   105.05   0.000     9.792583    10.16503
+------------------------------------------------------------------------------
+
+. 
+. // "First Stage": does instrument predict endog regressor?
+. 
+. reg `x' `z' if `y' !=.
+
+      Source |       SS       df       MS              Number of obs =    5302
+-------------+------------------------------           F(  1,  5300) =  643.03
+       Model |  3853.90856     1  3853.90856           Prob > F      =  0.0000
+    Residual |  31764.7918  5300  5.99335695           R-squared     =  0.1082
+-------------+------------------------------           Adj R-squared =  0.1080
+       Total |  35618.7004  5301  6.71924172           Root MSE      =  2.4481
+
+------------------------------------------------------------------------------
+        ccol |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        prox |   .0536081    .002114    25.36   0.000     .0494637    .0577525
+       _cons |   1.808385   .0482889    37.45   0.000     1.713719    1.903051
+------------------------------------------------------------------------------
+
+. reg `x' `z' `controls' if `y' !=.
+
+      Source |       SS       df       MS              Number of obs =    4368
+-------------+------------------------------           F( 25,  4342) =   93.08
+       Model |  10239.4868    25  409.579473           Prob > F      =  0.0000
+    Residual |  19106.0826  4342  4.40029538           R-squared     =  0.3489
+-------------+------------------------------           Adj R-squared =  0.3452
+       Total |  29345.5694  4367  6.71984644           Root MSE      =  2.0977
+
+------------------------------------------------------------------------------
+        ccol |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        prox |   .0418766   .0020319    20.61   0.000      .037893    .0458601
+      female |   .6184683   .0640156     9.66   0.000      .492965    .7439716
+       black |   .5959402   .0860471     6.93   0.000     .4272439    .7646364
+ multiracial |  -.0831667   .3271235    -0.25   0.799    -.7244958    .5581624
+    hispanic |   .2678116   .0872083     3.07   0.002     .0968388    .4387845
+       asvab |   4.429018   .1225854    36.13   0.000     4.188688    4.669348
+             |
+     quarter |
+          2  |   .0178432   .2125992     0.08   0.933    -.3989597    .4346462
+          3  |   .2675146   .2114487     1.27   0.206    -.1470328    .6820621
+          4  |   .0691132   .2110147     0.33   0.743    -.3445834    .4828099
+          5  |  -.0273442   .2075606    -0.13   0.895     -.434269    .3795805
+          6  |   .2248106   .2075408     1.08   0.279    -.1820753    .6316966
+          7  |  -.1431568   .1975603    -0.72   0.469    -.5304758    .2441621
+          8  |   .2249495   .2038264     1.10   0.270    -.1746543    .6245533
+          9  |   .0361397   .2069525     0.17   0.861    -.3695927    .4418722
+         10  |   .3352572   .2071976     1.62   0.106    -.0709559    .7414702
+         11  |    .010482   .2013652     0.05   0.958    -.3842965    .4052606
+         12  |   -.101571   .2071796    -0.49   0.624    -.5077488    .3046068
+         13  |   .0143475   .2052088     0.07   0.944    -.3879666    .4166616
+         14  |  -.0598266   .2079963    -0.29   0.774    -.4676056    .3479524
+         15  |  -.2190259   .2019103    -1.08   0.278     -.614873    .1768213
+         16  |  -.0115415   .2023363    -0.06   0.955    -.4082239    .3851408
+         17  |  -.1869136   .2015808    -0.93   0.354    -.5821149    .2082877
+         18  |  -.1549728   .2074546    -0.75   0.455    -.5616897    .2517441
+         19  |  -.3654002   .2043022    -1.79   0.074    -.7659368    .0351364
+         20  |   .0219913   .2099407     0.10   0.917    -.3895996    .4335822
+             |
+       _cons |  -.5532096   .1731542    -3.19   0.001    -.8926802    -.213739
+------------------------------------------------------------------------------
+
+. 
+. // "Reduced form": does instrument predict outcome (omitting endog regressor)
+. 
+. reg `y' `z'
+
+      Source |       SS       df       MS              Number of obs =    5302
+-------------+------------------------------           F(  1,  5300) =   33.20
+       Model |  47.6531825     1  47.6531825           Prob > F      =  0.0000
+    Residual |  7607.34848  5300  1.43534877           R-squared     =  0.0062
+-------------+------------------------------           Adj R-squared =  0.0060
+       Total |  7655.00167  5301  1.44406747           Root MSE      =  1.1981
+
+------------------------------------------------------------------------------
+       lyinc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        prox |   .0059611   .0010346     5.76   0.000     .0039329    .0079893
+       _cons |   9.973042   .0236315   422.02   0.000     9.926715    10.01937
+------------------------------------------------------------------------------
+
+. reg `y' `z' `controls'
+
+      Source |       SS       df       MS              Number of obs =    4368
+-------------+------------------------------           F( 25,  4342) =   15.09
+       Model |  516.681988    25  20.6672795           Prob > F      =  0.0000
+    Residual |  5945.53693  4342  1.36930837           R-squared     =  0.0800
+-------------+------------------------------           Adj R-squared =  0.0747
+       Total |  6462.21892  4367   1.4797845           Root MSE      =  1.1702
+
+------------------------------------------------------------------------------
+       lyinc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        prox |   .0035583   .0011335     3.14   0.002     .0013361    .0057804
+      female |  -.2672218   .0357105    -7.48   0.000    -.3372325    -.197211
+       black |  -.1685182   .0480005    -3.51   0.000    -.2626238   -.0744127
+ multiracial |   .1134922   .1824826     0.62   0.534    -.2442668    .4712513
+    hispanic |   .0427266   .0486483     0.88   0.380    -.0526489    .1381021
+       asvab |    .882516    .068383    12.91   0.000     .7484503    1.016582
+             |
+     quarter |
+          2  |   .0068663   .1185964     0.06   0.954    -.2256431    .2393757
+          3  |   -.151991   .1179546    -1.29   0.198    -.3832422    .0792601
+          4  |  -.1017429   .1177125    -0.86   0.387    -.3325194    .1290337
+          5  |   -.176746   .1157856    -1.53   0.127    -.4037449    .0502529
+          6  |  -.0286873   .1157746    -0.25   0.804    -.2556646      .19829
+          7  |  -.1496393    .110207    -1.36   0.175    -.3657013    .0664227
+          8  |   -.213371   .1137025    -1.88   0.061     -.436286     .009544
+          9  |  -.1859684   .1154464    -1.61   0.107    -.4123022    .0403654
+         10  |  -.0280492   .1155831    -0.24   0.808    -.2546511    .1985528
+         11  |  -.1196401   .1123296    -1.07   0.287    -.3398634    .1005832
+         12  |  -.2734059   .1155731    -2.37   0.018    -.4999881   -.0468236
+         13  |   -.112806   .1144737    -0.99   0.324    -.3372329     .111621
+         14  |  -.2600038   .1160287    -2.24   0.025    -.4874793   -.0325284
+         15  |  -.3907083   .1126336    -3.47   0.001    -.6115278   -.1698889
+         16  |  -.1238433   .1128713    -1.10   0.273    -.3451286     .097442
+         17  |  -.3075271   .1124499    -2.73   0.006    -.5279862    -.087068
+         18  |   -.323989   .1157265    -2.80   0.005     -.550872    -.097106
+         19  |  -.2181022   .1139679    -1.91   0.056    -.4415376    .0053331
+         20  |  -.5205332   .1171133    -4.44   0.000    -.7501351   -.2909313
+             |
+       _cons |   9.932867   .0965924   102.83   0.000     9.743497    10.12224
+------------------------------------------------------------------------------
+
+. 
+. 
+. // Basic IV estimate
+. 
+. eststo basic_iv:ivregress 2sls `y' (`x'=`z'), first
+
+First-stage regressions
+-----------------------
+
+                                                  Number of obs   =       5302
+                                                  F(   1,   5300) =     643.03
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1082
+                                                  Adj R-squared   =     0.1080
+                                                  Root MSE        =     2.4481
+
+------------------------------------------------------------------------------
+        ccol |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        prox |   .0536081    .002114    25.36   0.000     .0494637    .0577525
+       _cons |   1.808385   .0482889    37.45   0.000     1.713719    1.903051
+------------------------------------------------------------------------------
 
 
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-Package: hobsub-generic 2012/05/28 v1.13 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2012/05/28 v1.13 Construct package bundles (HO)
-Package hobsub Info: Skipping package `infwarerr' (already loaded).
-Package hobsub Info: Skipping package `ltxcmds' (already loaded).
-Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
-Package ifvtex Info: VTeX not detected.
-Package: intcalc 2007/09/27 v1.1 Expandable calculations with integers (HO)
-Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is detected.
-Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
-Package etexcmds Info: Could not find \expanded.
-(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
-(etexcmds)             that some package has redefined \expanded.
-(etexcmds)             In the latter case, load this package earlier.
-Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
-Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
-Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
-)
-Package pdftexcmds Info: LuaTeX not detected.
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-Package: pdfescape 2011/11/25 v1.13 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2012/04/08 v1.3 Expandable calculations on big integers (HO
-)
-Package: bitset 2011/01/30 v1.1 Handle bit-vector datatype (HO)
-Package: uniquecounter 2011/01/30 v1.2 Provide unlimited unique counter (HO)
-)
-Package hobsub Info: Skipping package `hobsub' (already loaded).
-Package: letltxmacro 2010/09/02 v1.4 Let assignment for LaTeX macros (HO)
-Package: hopatch 2012/05/28 v1.2 Wrapper for package hooks (HO)
-Package: xcolor-patch 2011/01/30 xcolor patch
-Package: atveryend 2011/06/30 v1.8 Hooks at the very end of document (HO)
-Package atveryend Info: \enddocument detected (standard20110627).
-Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
-Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
-Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/auxhook.sty
-Package: auxhook 2011/03/04 v1.3 Hooks for auxiliary files (HO)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
-)
-\@linkdim=\dimen125
-\Hy@linkcounter=\count105
-\Hy@pagecounter=\count106
+Instrumental variables (2SLS) regression               Number of obs =    5302
+                                                       Wald chi2(1)  =   34.51
+                                                       Prob > chi2   =  0.0000
+                                                       R-squared     =  0.0435
+                                                       Root MSE      =  1.1752
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2012/11/06 v6.83m Hyperref: PDFDocEncoding definition (HO)
-)
-\Hy@SavedSpaceFactor=\count107
+------------------------------------------------------------------------------
+       lyinc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |   .1111976   .0189301     5.87   0.000     .0740952    .1482999
+       _cons |   9.771954   .0533704   183.10   0.000      9.66735    9.876558
+------------------------------------------------------------------------------
+Instrumented:  ccol
+Instruments:   prox
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/hyperref.cfg
-File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
-)
-Package hyperref Info: Option `colorlinks' set `true' on input line 4319.
-Package hyperref Info: Hyper figures OFF on input line 4443.
-Package hyperref Info: Link nesting OFF on input line 4448.
-Package hyperref Info: Hyper index ON on input line 4451.
-Package hyperref Info: Plain pages OFF on input line 4458.
-Package hyperref Info: Backreferencing OFF on input line 4463.
-Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4688.
-\c@Hy@tempcnt=\count108
+. 
+. eststo basic_iv_controls:ivregress 2sls `y' `controls' (`x'=`z'), first
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip11
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
-LaTeX Info: Redefining \url on input line 5041.
-\XeTeXLinkMargin=\dimen126
-\Fld@menulength=\count109
-\Field@Width=\dimen127
-\Fld@charsize=\dimen128
-Package hyperref Info: Hyper figures OFF on input line 6295.
-Package hyperref Info: Link nesting OFF on input line 6300.
-Package hyperref Info: Hyper index ON on input line 6303.
-Package hyperref Info: backreferencing OFF on input line 6310.
-Package hyperref Info: Link coloring ON on input line 6313.
-Package hyperref Info: Link coloring with OCG OFF on input line 6320.
-Package hyperref Info: PDF/A mode OFF on input line 6325.
-LaTeX Info: Redefining \ref on input line 6365.
-LaTeX Info: Redefining \pageref on input line 6369.
-\Hy@abspage=\count110
-\c@Item=\count111
-\c@Hfootnote=\count112
-)
+First-stage regressions
+-----------------------
 
-Package hyperref Message: Driver (autodetected): hpdftex.
+                                                  Number of obs   =       4368
+                                                  F(  25,   4342) =      93.08
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.3489
+                                                  Adj R-squared   =     0.3452
+                                                  Root MSE        =     2.0977
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2012/11/06 v6.83m Hyperref driver for pdfTeX
-\Fld@listcount=\count113
-\c@bookmark@seq@number=\count114
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
-82.
-)
-\Hy@SectionHShift=\skip66
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/natbib/natbib.sty
-Package: natbib 2010/09/13 8.31b (PWD, AO)
-\bibhang=\skip67
-\bibsep=\skip68
-LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count115
-) (./iv.aux
-
-LaTeX Warning: Label `eq:1' multiply defined.
-
-)
-\openout1 = `iv.aux'.
-
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for FML/futm/m/it on input line 27.
-LaTeX Font Info:    Try loading font information for FML+futm on input line 27.
-
- (/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fmlfutm.fd
-File: fmlfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futm.
-)
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for FMS/futm/m/n on input line 27.
-LaTeX Font Info:    Try loading font information for FMS+futm on input line 27.
+------------------------------------------------------------------------------
+        ccol |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      female |   .6184683   .0640156     9.66   0.000      .492965    .7439716
+       black |   .5959402   .0860471     6.93   0.000     .4272439    .7646364
+ multiracial |  -.0831667   .3271235    -0.25   0.799    -.7244958    .5581624
+    hispanic |   .2678116   .0872083     3.07   0.002     .0968388    .4387845
+       asvab |   4.429018   .1225854    36.13   0.000     4.188688    4.669348
+             |
+     quarter |
+          2  |   .0178432   .2125992     0.08   0.933    -.3989597    .4346462
+          3  |   .2675146   .2114487     1.27   0.206    -.1470328    .6820621
+          4  |   .0691132   .2110147     0.33   0.743    -.3445834    .4828099
+          5  |  -.0273442   .2075606    -0.13   0.895     -.434269    .3795805
+          6  |   .2248106   .2075408     1.08   0.279    -.1820753    .6316966
+          7  |  -.1431568   .1975603    -0.72   0.469    -.5304758    .2441621
+          8  |   .2249495   .2038264     1.10   0.270    -.1746543    .6245533
+          9  |   .0361397   .2069525     0.17   0.861    -.3695927    .4418722
+         10  |   .3352572   .2071976     1.62   0.106    -.0709559    .7414702
+         11  |    .010482   .2013652     0.05   0.958    -.3842965    .4052606
+         12  |   -.101571   .2071796    -0.49   0.624    -.5077488    .3046068
+         13  |   .0143475   .2052088     0.07   0.944    -.3879666    .4166616
+         14  |  -.0598266   .2079963    -0.29   0.774    -.4676056    .3479524
+         15  |  -.2190259   .2019103    -1.08   0.278     -.614873    .1768213
+         16  |  -.0115415   .2023363    -0.06   0.955    -.4082239    .3851408
+         17  |  -.1869136   .2015808    -0.93   0.354    -.5821149    .2082877
+         18  |  -.1549728   .2074546    -0.75   0.455    -.5616897    .2517441
+         19  |  -.3654002   .2043022    -1.79   0.074    -.7659368    .0351364
+         20  |   .0219913   .2099407     0.10   0.917    -.3895996    .4335822
+             |
+        prox |   .0418766   .0020319    20.61   0.000      .037893    .0458601
+       _cons |  -.5532096   .1731542    -3.19   0.001    -.8926802    -.213739
+------------------------------------------------------------------------------
 
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fmsfutm.fd
-File: fmsfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FMS/futm.
-)
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for FMX/futm/m/n on input line 27.
-LaTeX Font Info:    Try loading font information for FMX+futm on input line 27.
+Instrumental variables (2SLS) regression               Number of obs =    4368
+                                                       Wald chi2(25) =  385.11
+                                                       Prob > chi2   =  0.0000
+                                                       R-squared     =  0.0931
+                                                       Root MSE      =  1.1583
+
+------------------------------------------------------------------------------
+       lyinc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |   .0849703   .0267921     3.17   0.002     .0324587     .137482
+      female |  -.3197732   .0394704    -8.10   0.000    -.3971339   -.2424126
+       black |  -.2191555   .0507725    -4.32   0.000    -.3186678   -.1196431
+ multiracial |   .1205589   .1805835     0.67   0.504    -.2333782    .4744961
+    hispanic |   .0199706    .048647     0.41   0.681    -.0753758    .1153169
+       asvab |   .5061808   .1452079     3.49   0.000     .2215785    .7907831
+             |
+     quarter |
+          2  |   .0053501   .1173911     0.05   0.964    -.2247321    .2354324
+          3  |  -.1747219   .1170137    -1.49   0.135    -.4040645    .0546208
+          4  |  -.1076154   .1165596    -0.92   0.356    -.3360681    .1208372
+          5  |  -.1744225   .1146332    -1.52   0.128    -.3990994    .0502543
+          6  |  -.0477895   .1148149    -0.42   0.677    -.2728226    .1772435
+          7  |  -.1374752   .1092124    -1.26   0.208    -.3515275    .0765771
+          8  |  -.2324851   .1126789    -2.06   0.039    -.4533317   -.0116384
+          9  |  -.1890392   .1142811    -1.65   0.098     -.413026    .0349475
+         10  |  -.0565361   .1148013    -0.49   0.622    -.2815426    .1684704
+         11  |  -.1205308   .1111911    -1.08   0.278    -.3384613    .0973998
+         12  |  -.2647754   .1144472    -2.31   0.021    -.4890878   -.0404629
+         13  |  -.1140251   .1133081    -1.01   0.314     -.336105    .1080548
+         14  |  -.2549204   .1148376    -2.22   0.026    -.4799979   -.0298428
+         15  |  -.3720976   .1116338    -3.33   0.001    -.5908959   -.1532994
+         16  |  -.1228626   .1117301    -1.10   0.271    -.3418496    .0961243
+         17  |   -.291645   .1114795    -2.62   0.009    -.5101408   -.0731491
+         18  |  -.3108209   .1146411    -2.71   0.007    -.5355132   -.0861285
+         19  |  -.1870541   .1131461    -1.65   0.098    -.4088163    .0347082
+         20  |  -.5224018   .1159109    -4.51   0.000    -.7495829   -.2952206
+             |
+       _cons |   9.979873   .0947591   105.32   0.000     9.794149     10.1656
+------------------------------------------------------------------------------
+Instrumented:  ccol
+Instruments:   female black multiracial hispanic asvab 2.quarter 3.quarter
+               4.quarter 5.quarter 6.quarter 7.quarter 8.quarter 9.quarter
+               10.quarter 11.quarter 12.quarter 13.quarter 14.quarter
+               15.quarter 16.quarter 17.quarter 18.quarter 19.quarter
+               20.quarter prox
+
+. 
+. estat endogenous
+
+  Tests of endogeneity
+  Ho: variables are exogenous
+
+  Durbin (score) chi2(1)          =  .335848  (p = 0.5622)
+  Wu-Hausman F(1,4341)            =  .333798  (p = 0.5635)
+
+. 
+. estat first
+
+  First-stage regression summary statistics
+  --------------------------------------------------------------------------
+               |            Adjusted      Partial
+      Variable |   R-sq.       R-sq.        R-sq.     F(1,4342)   Prob > F
+  -------------+------------------------------------------------------------
+          ccol |  0.3489      0.3452       0.0891       424.764    0.0000
+  --------------------------------------------------------------------------
 
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fmxfutm.fd
-File: fmxfutm.fd futm-extension
-)
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 27.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 27.
+  Minimum eigenvalue statistic = 424.764     
 
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd
-File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Try loading font information for T1+futs on input line 27.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/t1futs.fd
-File: t1futs.fd 2004/03/02 Fontinst v1.926 font definitions for T1/futs.
-)
-(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count116
-\scratchdimen=\dimen129
-\scratchbox=\box31
-\nofMPsegments=\count117
-\nofMParguments=\count118
-\everyMPshowfont=\toks20
-\MPscratchCnt=\count119
-\MPscratchDim=\dimen130
-\MPnumerator=\count120
-\makeMPintoPDFobject=\count121
-\everyMPtoPDFconversion=\toks21
-) (/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
-)
-Package grfext Info: Graphics extension search list:
-(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 452.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
-))
-\AtBeginShipoutBox=\box32
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/color.sty
-Package: color 2014/10/28 v1.1a Standard LaTeX Color (DPC)
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/color.cfg
-File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
-)
-Package color Info: Driver file: pdftex.def on input line 142.
-)
-Package hyperref Info: Link coloring ON on input line 27.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
-)
-\c@section@level=\count122
-)
-LaTeX Info: Redefining \ref on input line 27.
-LaTeX Info: Redefining \pageref on input line 27.
-LaTeX Info: Redefining \nameref on input line 27.
-
-(./iv.out) (./iv.out)
-\@outlinefile=\write3
-\openout3 = `iv.out'.
-
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <12> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 46.
-LaTeX Font Info:    Try loading font information for FML+futmi on input line 51
-.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fmlfutmi.fd
-File: fmlfutmi.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futmi.
-)
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 11.03998pt on input line 51.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 8.27998pt on input line 51.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 6.43999pt on input line 51.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 11.03998pt on input line 51.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 8.27998pt on input line 51.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 6.43999pt on input line 51.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 71.
- [1
-
-{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (0.56879pt too wide) in paragraph at lines 110--116
-[]\T1/futs/m/n/12 In a the-o-ret-i-cal sense, what you need is an in-stru-ment 
-that's truly exogenous-- some-
- []
-
-[2]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 186.
- [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 186.
- (./iv.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 186.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 186.
-Package rerunfilecheck Info: File `iv.out' has not changed.
-(rerunfilecheck)             Checksum: 3CD575556F2F8FC657A39EE28FF1A7E1;337.
+  Critical Values                      # of endogenous regressors:    1
+  Ho: Instruments are weak             # of excluded instruments:     1
+  ---------------------------------------------------------------------
+                                     |    5%     10%     20%     30%
+  2SLS relative bias                 |         (not available)
+  -----------------------------------+---------------------------------
+                                     |   10%     15%     20%     25%
+  2SLS Size of nominal 5% Wald test  |  16.38    8.96    6.66    5.53
+  LIML Size of nominal 5% Wald test  |  16.38    8.96    6.66    5.53
+  ---------------------------------------------------------------------
 
 
-LaTeX Warning: There were multiply-defined labels.
+. 
+. // Overidentification
+. 
+. eststo overid:ivregress 2sls `y' (`x'=`z1'), first
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 186.
- ) 
-Here is how much of TeX's memory you used:
- 7561 strings out of 493089
- 106340 string characters out of 6134842
- 194120 words of memory out of 5000000
- 10911 multiletter control sequences out of 15000+600000
- 63027 words of font info for 68 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 29i,6n,28p,241b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2015/texmf-dist/fonts/type1/public/fourier/fourier-mlit.pfb></usr/local/
-texlive/2015/texmf-dist/fonts/type1/public/fourier/fourier-mlitb.pfb></usr/loca
-l/texlive/2015/texmf-dist/fonts/type1/public/fourier/fourier-ms.pfb></usr/local
-/texlive/2015/texmf-dist/fonts/type1/adobe/utopia/putb8a.pfb></usr/local/texliv
-e/2015/texmf-dist/fonts/type1/adobe/utopia/putbi8a.pfb></usr/local/texlive/2015
-/texmf-dist/fonts/type1/adobe/utopia/putr8a.pfb></usr/local/texlive/2015/texmf-
-dist/fonts/type1/adobe/utopia/putri8a.pfb>
-Output written on iv.pdf (3 pages, 70948 bytes).
-PDF statistics:
- 80 PDF objects out of 1000 (max. 8388607)
- 67 compressed objects within 1 object stream
- 15 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+First-stage regressions
+-----------------------
 
+                                                  Number of obs   =       4789
+                                                  F(   2,   4786) =     445.48
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.1569
+                                                  Adj R-squared   =     0.1566
+                                                  Root MSE        =     2.3795
+
+------------------------------------------------------------------------------
+        ccol |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        prox |  -.0494803   .0065432    -7.56   0.000    -.0623079   -.0366526
+   moth_prox |   .0079572   .0004765    16.70   0.000     .0070231    .0088912
+       _cons |   1.859573   .0496796    37.43   0.000     1.762178    1.956968
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression               Number of obs =    4789
+                                                       Wald chi2(1)  =   48.63
+                                                       Prob > chi2   =  0.0000
+                                                       R-squared     =  0.0398
+                                                       Root MSE      =  1.1661
+
+------------------------------------------------------------------------------
+       lyinc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |   .1144925   .0164186     6.97   0.000     .0823126    .1466724
+       _cons |   9.773615   .0481815   202.85   0.000     9.679181    9.868049
+------------------------------------------------------------------------------
+Instrumented:  ccol
+Instruments:   prox moth_prox
+
+. 
+. eststo overid_controls:ivregress 2sls `y'  `controls' (`x'=`z1'), first
+
+First-stage regressions
+-----------------------
+
+                                                  Number of obs   =       3977
+                                                  F(  26,   3950) =      84.93
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.3586
+                                                  Adj R-squared   =     0.3543
+                                                  Root MSE        =     2.0826
+
+------------------------------------------------------------------------------
+        ccol |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      female |   .6278349   .0666627     9.42   0.000     .4971384    .7585314
+       black |   .6170494   .0905516     6.81   0.000     .4395171    .7945817
+ multiracial |  -.0867883   .3606037    -0.24   0.810    -.7937753    .6201986
+    hispanic |   .3959606   .0933629     4.24   0.000     .2129166    .5790047
+       asvab |   4.209758   .1308307    32.18   0.000     3.953256     4.46626
+             |
+     quarter |
+          2  |   .1052764   .2214406     0.48   0.635    -.3288722     .539425
+          3  |   .4275488    .223523     1.91   0.056    -.0106825    .8657801
+          4  |   .0003151    .221997     0.00   0.999    -.4349243    .4355546
+          5  |  -.0076427   .2162824    -0.04   0.972    -.4316783     .416393
+          6  |   .2769082   .2187824     1.27   0.206    -.1520289    .7058452
+          7  |   -.079424   .2059264    -0.39   0.700     -.483156    .3243081
+          8  |   .2273353   .2124547     1.07   0.285    -.1891959    .6438666
+          9  |  -.0100769   .2178055    -0.05   0.963    -.4370986    .4169448
+         10  |   .4494235    .215411     2.09   0.037     .0270963    .8717508
+         11  |   -.011158    .211635    -0.05   0.958    -.4260822    .4037662
+         12  |  -.0130642   .2169377    -0.06   0.952    -.4383846    .4122561
+         13  |   .0357306    .215076     0.17   0.868    -.3859399    .4574011
+         14  |  -.0333124   .2178602    -0.15   0.878    -.4604415    .3938166
+         15  |  -.2832282   .2115872    -1.34   0.181    -.6980585    .1316022
+         16  |   .0332363   .2112449     0.16   0.875    -.3809231    .4473957
+         17  |  -.1622147   .2096774    -0.77   0.439    -.5733008    .2488715
+         18  |  -.0778598   .2160064    -0.36   0.719    -.5013544    .3456348
+         19  |  -.3711379   .2132859    -1.74   0.082    -.7892987    .0470229
+         20  |   .0609638   .2191592     0.28   0.781     -.368712    .4906396
+             |
+        prox |  -.0059497   .0067027    -0.89   0.375    -.0190908    .0071915
+   moth_prox |   .0036571   .0004921     7.43   0.000     .0026924    .0046219
+       _cons |  -.4920204    .181558    -2.71   0.007    -.8479767   -.1360642
+------------------------------------------------------------------------------
+
+
+Instrumental variables (2SLS) regression               Number of obs =    3977
+                                                       Wald chi2(25) =  337.22
+                                                       Prob > chi2   =  0.0000
+                                                       R-squared     =  0.0906
+                                                       Root MSE      =  1.1499
+
+------------------------------------------------------------------------------
+       lyinc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |    .074745   .0264997     2.82   0.005     .0228065    .1266835
+      female |  -.3230529   .0406657    -7.94   0.000    -.4027561   -.2433496
+       black |  -.2033485   .0534269    -3.81   0.000    -.3080633   -.0986336
+ multiracial |   .0931275   .1990473     0.47   0.640     -.296998     .483253
+    hispanic |   .0141471   .0508615     0.28   0.781    -.0855395    .1138337
+       asvab |   .5182655   .1451781     3.57   0.000     .2337216    .8028094
+             |
+     quarter |
+          2  |  -.0128465   .1221979    -0.11   0.916      -.25235     .226657
+          3  |  -.2312774   .1238245    -1.87   0.062     -.473969    .0114142
+          4  |  -.1333097   .1225418    -1.09   0.277    -.3734872    .1068678
+          5  |  -.2265301   .1194051    -1.90   0.058    -.4605598    .0074996
+          6  |  -.0606426   .1210396    -0.50   0.616    -.2978758    .1765907
+          7  |   -.202304   .1136908    -1.78   0.075    -.4251338    .0205258
+          8  |  -.2669459   .1173705    -2.27   0.023    -.4969878    -.036904
+          9  |  -.2070863   .1201973    -1.72   0.085    -.4426686    .0284961
+         10  |  -.1068851    .119483    -0.89   0.371    -.3410674    .1272973
+         11  |  -.1392318   .1168447    -1.19   0.233    -.3682432    .0897795
+         12  |  -.3068547   .1197177    -2.56   0.010     -.541497   -.0722124
+         13  |  -.1689369   .1187445    -1.42   0.155    -.4016718    .0637981
+         14  |  -.2860186   .1202675    -2.38   0.017    -.5217387   -.0502986
+         15  |  -.4669383   .1170515    -3.99   0.000     -.696355   -.2375215
+         16  |  -.1720196   .1166141    -1.48   0.140    -.4005791    .0565399
+         17  |  -.3432307   .1158985    -2.96   0.003    -.5703877   -.1160738
+         18  |   -.350335    .119213    -2.94   0.003    -.5839882   -.1166818
+         19  |  -.2016756   .1181323    -1.71   0.088    -.4332108    .0298595
+         20  |  -.5051611   .1209867    -4.18   0.000    -.7422907   -.2680315
+             |
+       _cons |   10.04195   .0994224   101.00   0.000      9.84709    10.23682
+------------------------------------------------------------------------------
+Instrumented:  ccol
+Instruments:   female black multiracial hispanic asvab 2.quarter 3.quarter
+               4.quarter 5.quarter 6.quarter 7.quarter 8.quarter 9.quarter
+               10.quarter 11.quarter 12.quarter 13.quarter 14.quarter
+               15.quarter 16.quarter 17.quarter 18.quarter 19.quarter
+               20.quarter prox moth_prox
+
+. 
+. estat endogenous
+
+  Tests of endogeneity
+  Ho: variables are exogenous
+
+  Durbin (score) chi2(1)          =  .060516  (p = 0.8057)
+  Wu-Hausman F(1,3950)            =  .060106  (p = 0.8063)
+
+. 
+. estat first
+
+  First-stage regression summary statistics
+  --------------------------------------------------------------------------
+               |            Adjusted      Partial
+      Variable |   R-sq.       R-sq.        R-sq.     F(2,3950)   Prob > F
+  -------------+------------------------------------------------------------
+          ccol |  0.3586      0.3543       0.0990       217.058    0.0000
+  --------------------------------------------------------------------------
+
+
+  Minimum eigenvalue statistic = 217.058     
+
+  Critical Values                      # of endogenous regressors:    1
+  Ho: Instruments are weak             # of excluded instruments:     2
+  ---------------------------------------------------------------------
+                                     |    5%     10%     20%     30%
+  2SLS relative bias                 |         (not available)
+  -----------------------------------+---------------------------------
+                                     |   10%     15%     20%     25%
+  2SLS Size of nominal 5% Wald test  |  19.93   11.59    8.75    7.25
+  LIML Size of nominal 5% Wald test  |   8.68    5.33    4.42    3.92
+  ---------------------------------------------------------------------
+
+
+. 
+. estat overid
+
+  Tests of overidentifying restrictions:
+
+  Sargan (score) chi2(1) =   .00003  (p = 0.9956)
+  Basmann chi2(1)        =   .00003  (p = 0.9957)
+
+. 
+. // Check against LIML
+. eststo overid_controls_liml:ivregress liml `y'  `controls' (`x'=`z1'), first
+
+First-stage regressions
+-----------------------
+
+                                                  Number of obs   =       3977
+                                                  F(  26,   3950) =      84.93
+                                                  Prob > F        =     0.0000
+                                                  R-squared       =     0.3586
+                                                  Adj R-squared   =     0.3543
+                                                  Root MSE        =     2.0826
+
+------------------------------------------------------------------------------
+        ccol |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      female |   .6278349   .0666627     9.42   0.000     .4971384    .7585314
+       black |   .6170494   .0905516     6.81   0.000     .4395171    .7945817
+ multiracial |  -.0867883   .3606037    -0.24   0.810    -.7937753    .6201986
+    hispanic |   .3959606   .0933629     4.24   0.000     .2129166    .5790047
+       asvab |   4.209758   .1308307    32.18   0.000     3.953256     4.46626
+             |
+     quarter |
+          2  |   .1052764   .2214406     0.48   0.635    -.3288722     .539425
+          3  |   .4275488    .223523     1.91   0.056    -.0106825    .8657801
+          4  |   .0003151    .221997     0.00   0.999    -.4349243    .4355546
+          5  |  -.0076427   .2162824    -0.04   0.972    -.4316783     .416393
+          6  |   .2769082   .2187824     1.27   0.206    -.1520289    .7058452
+          7  |   -.079424   .2059264    -0.39   0.700     -.483156    .3243081
+          8  |   .2273353   .2124547     1.07   0.285    -.1891959    .6438666
+          9  |  -.0100769   .2178055    -0.05   0.963    -.4370986    .4169448
+         10  |   .4494235    .215411     2.09   0.037     .0270963    .8717508
+         11  |   -.011158    .211635    -0.05   0.958    -.4260822    .4037662
+         12  |  -.0130642   .2169377    -0.06   0.952    -.4383846    .4122561
+         13  |   .0357306    .215076     0.17   0.868    -.3859399    .4574011
+         14  |  -.0333124   .2178602    -0.15   0.878    -.4604415    .3938166
+         15  |  -.2832282   .2115872    -1.34   0.181    -.6980585    .1316022
+         16  |   .0332363   .2112449     0.16   0.875    -.3809231    .4473957
+         17  |  -.1622147   .2096774    -0.77   0.439    -.5733008    .2488715
+         18  |  -.0778598   .2160064    -0.36   0.719    -.5013544    .3456348
+         19  |  -.3711379   .2132859    -1.74   0.082    -.7892987    .0470229
+         20  |   .0609638   .2191592     0.28   0.781     -.368712    .4906396
+             |
+        prox |  -.0059497   .0067027    -0.89   0.375    -.0190908    .0071915
+   moth_prox |   .0036571   .0004921     7.43   0.000     .0026924    .0046219
+       _cons |  -.4920204    .181558    -2.71   0.007    -.8479767   -.1360642
+------------------------------------------------------------------------------
+
+
+Instrumental variables (LIML) regression               Number of obs =    3977
+                                                       Wald chi2(25) =  337.22
+                                                       Prob > chi2   =  0.0000
+                                                       R-squared     =  0.0906
+                                                       Root MSE      =  1.1499
+
+------------------------------------------------------------------------------
+       lyinc |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |    .074745   .0264997     2.82   0.005     .0228065    .1266835
+      female |  -.3230529   .0406657    -7.94   0.000    -.4027561   -.2433496
+       black |  -.2033485   .0534269    -3.81   0.000    -.3080633   -.0986336
+ multiracial |   .0931275   .1990473     0.47   0.640     -.296998     .483253
+    hispanic |   .0141471   .0508615     0.28   0.781    -.0855395    .1138337
+       asvab |   .5182655   .1451781     3.57   0.000     .2337216    .8028094
+             |
+     quarter |
+          2  |  -.0128465   .1221979    -0.11   0.916      -.25235     .226657
+          3  |  -.2312774   .1238245    -1.87   0.062     -.473969    .0114142
+          4  |  -.1333097   .1225418    -1.09   0.277    -.3734872    .1068678
+          5  |  -.2265301   .1194051    -1.90   0.058    -.4605598    .0074996
+          6  |  -.0606426   .1210396    -0.50   0.616    -.2978758    .1765907
+          7  |   -.202304   .1136908    -1.78   0.075    -.4251338    .0205258
+          8  |  -.2669459   .1173705    -2.27   0.023    -.4969878    -.036904
+          9  |  -.2070863   .1201973    -1.72   0.085    -.4426686    .0284961
+         10  |  -.1068851    .119483    -0.89   0.371    -.3410674    .1272973
+         11  |  -.1392318   .1168447    -1.19   0.233    -.3682432    .0897795
+         12  |  -.3068547   .1197177    -2.56   0.010     -.541497   -.0722124
+         13  |  -.1689369   .1187445    -1.42   0.155    -.4016718    .0637981
+         14  |  -.2860186   .1202675    -2.38   0.017    -.5217387   -.0502986
+         15  |  -.4669383   .1170515    -3.99   0.000     -.696355   -.2375215
+         16  |  -.1720196   .1166141    -1.48   0.140    -.4005791    .0565399
+         17  |  -.3432307   .1158985    -2.96   0.003    -.5703877   -.1160738
+         18  |   -.350335    .119213    -2.94   0.003    -.5839882   -.1166818
+         19  |  -.2016756   .1181323    -1.71   0.088    -.4332108    .0298595
+         20  |  -.5051611   .1209867    -4.18   0.000    -.7422907   -.2680315
+             |
+       _cons |   10.04195   .0994224   101.00   0.000      9.84709    10.23682
+------------------------------------------------------------------------------
+Instrumented:  ccol
+Instruments:   female black multiracial hispanic asvab 2.quarter 3.quarter
+               4.quarter 5.quarter 6.quarter 7.quarter 8.quarter 9.quarter
+               10.quarter 11.quarter 12.quarter 13.quarter 14.quarter
+               15.quarter 16.quarter 17.quarter 18.quarter 19.quarter
+               20.quarter prox moth_prox
+
+. 
+. 
+end of do-file
+
+. exit, clear

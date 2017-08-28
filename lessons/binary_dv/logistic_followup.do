@@ -145,6 +145,7 @@ gen mysample=e(sample)
 
 margins, dydx(*) /*for all coefficients, default is to hold others at mean */
 
+
 /*Margins for range of ses */
 
 estimates restore full_model
@@ -156,6 +157,7 @@ margins , predict(pr) ///
        ) ///
       post
 
+marginsplot, recastci(rarea) recast(line)		  
     
 mat yhat=e(b)
 
@@ -169,7 +171,7 @@ graph twoway line yhat_lpm yhat_logit myx1, ///
     xtitle("SES") ///
     legend(order(1 "LPM" 2 "Logit") )
 
-
+	
 estimates restore full_model
     
     
@@ -203,7 +205,6 @@ margins , predict(pr) ///
 
 marginsplot, recastci(rarea) recast(line)	  
 
-exit 
 	  
 mat yhat=e(b)
 
@@ -221,9 +222,7 @@ svmat yhat, names("yhat_math")
 
 svmat myx,names("myx_math") 
 
-graph twoway line yhat_math myx_math,  ytitle("Pr(Attend)") xtitle("NELS Math Score") 
-	  
-exit
+graph twoway line yhat_math myx_math,  ytitle("Pr(Attend)") xtitle("NELS Math Score") 	  
 	  
 graph export logit_basic.pdf, replace name("Logistic")
 
@@ -264,7 +263,25 @@ svmat yhat, names("yhat_`myrace'")
     
 }
 
-graph twoway line yhat_* myx, ///
+estimates restore full_model
+
+margins , predict(pr) ///
+    at((mean) _continuous ///
+        (min) `demog' ///
+        `x'=(`mymin'(`step')`mymax') ///
+       ) ///
+      post
+
+    
+mat yhat=e(b)
+
+mat yhat=yhat'
+
+svmat yhat, names("yhat_white")
+
+
+
+graph twoway line yhat_* myx1, ///
     name("All_Races") ///
     ytitle("Pr(Attend)") ///
     xtitle("SES") ///
@@ -272,7 +289,9 @@ graph twoway line yhat_* myx, ///
     2 "Asian" ///
     3 "Black" ///
     4 "Hispanic" ///
-    5 "Multiracial") )
+    5 "Multiracial" ///
+	6 "White") )
+
     
 graph export logit_race.pdf, replace name("All_Races")
 
@@ -283,7 +302,7 @@ listcoef /*Display odds ratios from model in memory */
 listcoef, reverse /* Reveres interpretation, helps with negative coefs */
 
 logistic `y' `ses' `demog' `tests'  /*Works too */
-  
+     
 estimates restore full_model
 
 /* Measures of model fit: all imperfect */

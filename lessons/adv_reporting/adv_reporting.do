@@ -4,8 +4,6 @@ capture log close
 // Spring 2017
 // Advanced Reporting: complex tables and graphics
 
-
-
 clear
 
 set more off
@@ -52,7 +50,6 @@ label variable multiracial "Multiracial"
 
 local race amind asian black hispanic multiracial 
 
-
 gen expect_college=.
 
 replace expect_college=1 if bystexp>=5 & bystexp <.
@@ -74,7 +71,7 @@ local sex  bysex
 
 local tests bynels2m bynels2r
 
-local controls "`ses' `race' `sex' `tests'" 
+local controls "`ses' `race' `sex'  `pared' `tests'" 
 
 local rownames "SES" ///
     "Native American" ///       
@@ -125,15 +122,19 @@ if `i'==1{
     mat tstats=my_t
 }
 
+
 else{
     mat diffs=(diffs,my_diff)
     mat tstats=(tstats,my_t)
 }
 
+mat li diffs
+mat li tstats
 
 local i=`i'+1
 
 } // End loop over variables 
+
 
 
 // Now full table
@@ -179,9 +180,9 @@ local i=`i'+1
 local j= `j'+1
 } // End loop over parental education levels
 
+
 // Use estout to report 
 esttab results_* using balance.rtf,cells(diffs(fmt(2)) tstats(par fmt(2)))  replace
-
 
 // Regression results
 
@@ -195,47 +196,114 @@ egen quant_levels=cut(bynels2m), group(4)
 
 levelsof quant_levels, local(quant_levels) 
 
-
+local j=1
 
 foreach level of local mylevels{
+
 local i=1
     foreach quant_level of local quant_levels{
 
         quietly ///
-        eststo results_`level': ///
+        eststo reg_results_`level': ///
             reg `y' `x' `controls' ///
                 if quant_levels==`quant_level' & `level_var'==`level'
 
         scalar my_beta=_b[`x']
         scalar my_se=_se[`x']
         scalar my_N=e(N)
+		scalar my_rsq=e(r2)
 
         if `i'==1{
             mat betas=my_beta
             mat stderrs=my_se
             mat samples=my_N
+			mat rsquares=my_rsq
         }
         
         else{
             mat betas=(betas,my_beta)
             mat stderrs=(stderrs,my_se)
             mat samples=(samples,my_N)
+			mat rsquares=(rsquares,my_rsq)
         }
         
-        estadd matrix betas
+    local i=`i'+1
+   
+   if `i'==5{
+	 eststo reg_results_`level': ///
+            reg `y' `x' `controls' ///
+                if `level_var'==`level'
+		
+		scalar my_beta=_b[`x']
+        scalar my_se=_se[`x']
+        scalar my_N=e(N)
+		scalar my_rsq=e(r2)
+		
+		mat betas=(betas,my_beta)
+		mat stderrs=(stderrs,my_se)
+        mat samples=(samples,my_N)
+		mat rsquares=(rsquares,my_rsq)
+								
+	} 
+	
+	    estadd matrix betas
         estadd matrix stderrs
         estadd matrix samples
-
-        local i=`i'+1
-    
+		estadd matrix rsquares
+	
     } // End loop over quant levels
+local j=`j'+1
 
+if `j'==4{
+reg `y' `x' `controls' 
 
+		scalar my_beta=_b[`x']
+        scalar my_se=_se[`x']
+        scalar my_N=e(N)
+		scalar my_rsq=e(r2)
+		
+		mat betas=(betas,my_beta)
+		mat stderrs=(stderrs,my_se)
+        mat samples=(samples,my_N)
+		mat rsquares=(rsquares,my_rsq)
+       
+	    estadd matrix betas, replace
+        estadd matrix stderrs, replace
+        estadd matrix samples, replace
+		estadd matrix rsquares, replace
+}
+	
 } // End loop over level variable
 
-esttab using reg_results.rtf, ///
-    cells(betas(fmt(2)) stderrs(par fmt(2)) samples(fmt(0))) ///
+
+esttab reg_results_* using reg_results.rtf, ///
+    cells(betas(fmt(2)) stderrs(par fmt(2)) rsquares(fmt(2)) samples(fmt(0))) ///
     noobs ///
     replace
+	
+exit 
+	
+  quietly ///
+        eststo reg_results_test: ///
+            reg `y' `x' `controls' 
+         
+		 
+        scalar my_beta=_b[`x']
+        scalar my_se=_se[`x']
+        scalar my_N=e(N)
+		scalar my_rsq=e(r2)
+		
+		
+		mat betas=my_beta
+        mat stderrs=my_se
+        mat samples=my_N
+		mat rsquares=my_rsq
 
-
+		estadd matrix betas
+        estadd matrix stderrs
+        estadd matrix samples
+		estadd matrix rsquares
+		
+	esttab reg_results_test, cells("stderrs rsquares samples")
+	
+exit 

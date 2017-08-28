@@ -3,7 +3,7 @@
        log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/ols_in_stata/
 > ols_regression_stata.log
   log type:  text
- opened on:  24 Jan 2017, 15:41:25
+ opened on:  24 Jan 2017, 16:23:27
 
 . 
 . /* PhD Practicum, Spring 2017 */
@@ -49,6 +49,9 @@ all files already exist and are up to date.
 . gen comp_stu_h=comp_stu*100
 
 . 
+. gen str_20=str>=20
+
+. 
 . /*Label variables*/
 . 
 . label variable testsc "Combined test scores"
@@ -81,16 +84,24 @@ all files already exist and are up to date.
 . label variable comp_stu_h "Computers/100 Students"
 
 . 
+. label variable str_20 "Avg Class Size>20"
+
+. 
+. label variable read_scr "Reading Score"
+
 . 
 . /*Locals for groups of variables*/
 . 
-. local y testscr
+. local y read_scr
+
+. 
+. local ytitle "Reading Score"
 
 . 
 . local students avginc el_pct calw_pct meal_pct
 
 . 
-. local teacher str
+. local teacher str str_20
 
 . 
 . local finance expn_stu_k
@@ -110,16 +121,17 @@ all files already exist and are up to date.
 >     listwise 
 
 Summary statistics: mean sd
-     for variables: testscr avginc el_pct calw_pct meal_pct str expn_stu_k
+     for variables: read_scr avginc el_pct calw_pct meal_pct str str_20 expn_stu_k
 
              |   e(mean)      e(sd) 
 -------------+----------------------
-     testscr |  654.1565   19.05335 
+    read_scr |  654.9705   20.10798 
       avginc |  15.31659    7.22589 
       el_pct |  15.76816   18.28593 
     calw_pct |  13.24604   11.45482 
     meal_pct |  44.70524   27.12338 
          str |  19.64043   1.891812 
+      str_20 |  .4333333   .4961266 
   expn_stu_k |  5.312408   .6339371 
 
 .     
@@ -185,45 +197,49 @@ Summary statistics: mean sd
 >     listwise 
 
 Summary statistics: mean sd
-     for variables: testscr avginc el_pct calw_pct meal_pct str expn_stu_k
+     for variables: read_scr avginc el_pct calw_pct meal_pct str str_20 expn_stu_k
   by categories of: class_size
 
   class_size |   e(mean)      e(sd) 
 -------------+----------------------
 Small Clas~e |                      
-     testscr |  659.9914   21.30227 
+    read_scr |  661.6181   21.84814 
       avginc |  17.80907   10.78676 
       el_pct |  11.23263   16.98024 
     calw_pct |  13.19018   12.09932 
     meal_pct |  40.20112   29.78182 
          str |  17.22926   1.069095 
+      str_20 |         0          0 
   expn_stu_k |  5.844176   .7127741 
 -------------+----------------------
 Medium Cla~e |                      
-     testscr |  654.1148   17.86415 
+    read_scr |  655.0952   19.03064 
       avginc |  14.85916   5.688771 
       el_pct |  15.42214   17.61338 
     calw_pct |  13.20786   11.57226 
     meal_pct |  44.02096   25.93847 
          str |  19.68908   .6305783 
+      str_20 |  .3666667   .4830459 
   expn_stu_k |  5.247282   .4960094 
 -------------+----------------------
 Large Clas~e |                      
-     testscr |  648.4052   17.31211 
+    read_scr |  648.0733   18.19773 
       avginc |  13.73897   4.445559 
       el_pct |   20.9957   19.66651 
     calw_pct |  13.37827   10.63472 
     meal_pct |  50.57791   25.85828 
          str |  21.95428   1.094183 
+      str_20 |         1          0 
   expn_stu_k |  4.910889   .3997575 
 -------------+----------------------
 Total        |                      
-     testscr |  654.1565   19.05335 
+    read_scr |  654.9705   20.10798 
       avginc |  15.31659    7.22589 
       el_pct |  15.76816   18.28593 
     calw_pct |  13.24604   11.45482 
     meal_pct |  44.70524   27.12338 
          str |  19.64043   1.891812 
+      str_20 |  .4333333   .4961266 
   expn_stu_k |  5.312408   .6339371 
 
 . 
@@ -280,11 +296,81 @@ delimiter now ;
 >                sfmt (2 0 0 0)                /* format for scalar stats*/
 >                replace                   /* replace existing file */
 >                ;
-(output written to testscr_models.rtf)
+(output written to read_scr_models.rtf)
 
 . #delimit cr
 delimiter now cr
 . 
+. 
+. #delimit;
+delimiter now ;
+. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates 
+> all estimates in memory. rtf specifies rich text, best for word */
+>                label                          /*Use labels for models and variables 
+> */
+>                nodepvars                      /* Use my model titles */
+>                b(2)                           /* b= coefficients , this gives two si
+> g digits */
+>                t(2)                         /* I do want t stats */
+>                r2 (2)                      /* R squared */
+>                ar2 (2)                     /* Adj R squared */
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats fr
+> om the ereturn (list) */
+>                sfmt (2 0 0 0)                /* format for scalar stats*/
+>                replace                   /* replace existing file */
+>                ;
+(output written to read_scr_models.rtf)
+
+. #delimit cr
+delimiter now cr
+. 
+. #delimit;
+delimiter now ;
+. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates 
+> all estimates in memory. rtf specifies rich text, best for word */
+>                label                          /*Use labels for models and variables 
+> */
+>                nodepvars                      /* Use my model titles */
+>                b(2)                           /* b= coefficients , this gives two si
+> g digits */
+>                se(2)                         /* I do want t stats */
+>                            nostar 
+>                r2 (2)                      /* R squared */
+>                ar2 (2)                     /* Adj R squared */
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats fr
+> om the ereturn (list) */
+>                sfmt (2 0 0 0)                /* format for scalar stats*/
+>                replace                   /* replace existing file */
+>                ;
+(output written to read_scr_models.rtf)
+
+. #delimit cr
+delimiter now cr
+. 
+. 
+. #delimit;
+delimiter now ;
+. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates 
+> all estimates in memory. rtf specifies rich text, best for word */
+>                label                          /*Use labels for models and variables 
+> */
+>                nodepvars                      /* Use my model titles */
+>                b(4)                           /* b= coefficients , this gives two si
+> g digits */
+>                ci(4)                         /* I do want confidence interval */    
+>                       
+>                            nostar
+>                r2 (4)                      /* R squared */
+>                ar2 (4)                     /* Adj R squared */
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats fr
+> om the ereturn (list) */
+>                sfmt (4 0 0 0)                /* format for scalar stats*/
+>                replace                   /* replace existing file */
+>                ;
+(output written to read_scr_models.rtf)
+
+. #delimit cr
+delimiter now cr
 . 
 . /// Plotting regression results
 > 
@@ -294,13 +380,13 @@ delimiter now cr
 . 
 . #delimit;
 delimiter now ;
-. plotbeta  avginc|el_pct|calw_pct|meal_pct|str, /*Variables in regression to report *
-> /
+. plotbeta  avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to r
+> eport */
 >           labels                              /*Use Variable Labels*/
 >           xtitle (Parameters)                 /*Label of x axis*/
 >           title ("Model w/ No Covariates")    /*Title */ 
->           subtitle ("From OLS regression. Dep Var= Test Scores") /*Description */
->           xline(0,lp(dash)) /* Line at 0: if95% ci crosses, not stat sig */
+>           subtitle ("From OLS regression. Dep Var= `ytitle'") /*Description */
+>           xline(0,lp(dash)) /* Line at 0: if 95% ci crosses, not stat sig */
 >           xscale(range(-1.5 4)) /* Range of X axis*/
 >                   xlabel(-4(.5)4)
 >                   scale(.5)
@@ -328,11 +414,12 @@ delimiter now cr
 . 
 . #delimit;
 delimiter now ;
-. plotbeta avginc|el_pct|calw_pct|meal_pct|str, /*Variables in regression to report */
+. plotbeta avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to re
+> port */
 >           labels                              /*Use Variable Labels*/
 >           xtitle (Parameters)                 /*Label of x axis*/
 >           title ("Model w/ Student Chars")    /*Title */ 
->           subtitle ("From OLS regression. Dep Var= Test Scores") /*Description */
+>           subtitle ("From OLS regression. Dep Var= `ytitle'") /*Description */
 >           xline(0,lp(dash)) /* Line at 0: if95% ci crosses, not stat sig */
 >           xscale(range(-1.5 4)) /* Range of X axis*/
 >                   xlabel(-4(.5)4)
@@ -353,11 +440,11 @@ delimiter now cr
 . 
 . #delimit;
 delimiter now ;
-. plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|str,
+. plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|str_20|str,
 >           labels
 >           xtitle (Parameters)
 >           title ("Model w/ Spending")
->           subtitle ("From OLS regression. Dep Var= Test Scores")
+>           subtitle ("From OLS regression. Dep Var= `ytitle'")
 >           xline(0,lp(dash))
 >           xscale(range(-1.4 4))
 >           xlabel(-4(.5)4)
@@ -373,11 +460,11 @@ NOTE: Make sure there are no options in the lincom expressions
 
 .  #delimit;
 delimiter now ;
-. plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str,
+. plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str_20|str,
 >           labels
 >           xtitle (Parameters)
 >           title ("Full Model")
->           subtitle ("From OLS regression. Dep Var= Test Scores")
+>           subtitle ("From OLS regression. Dep Var= `ytitle'")
 >           xline(0,lp(dash))
 >           xscale(range(-1.4 4))
 >           xlabel(-4(.5)4)
@@ -410,3 +497,4 @@ delimiter now cr
 end of do-file
 
 
+. exit, clear

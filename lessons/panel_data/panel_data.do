@@ -13,6 +13,8 @@ clear mata /* Clears any fluff that might be in mata */
 estimates clear /* Clears any estimates hanging around */
 set more off /*Get rid of annoying "more" feature */ 
 
+graph drop _all
+
 use diss, clear
 
 order state year
@@ -35,6 +37,7 @@ drop if state == 1 /* The Alaska problem */
 /* Set up data as panel data */
 xtset state year, yearly
 
+
 // help tsvarlist
 
 // what is the correlation between appropriations in the current year and appropriations in the prior year?
@@ -52,13 +55,13 @@ sum D.pub4tuit_i if year>=1990
 sum approps_i L.F.approps_i
 
 /* Some plots */
-xtline approps_i
+// xtline approps_i
 
-graph export app_line.pdf, replace
+// graph export app_line.pdf, replace
 
-xtline pub4tuit_i
+// xtline pub4tuit_i
 
-graph export tuit_line.pdf, replace
+// graph export tuit_line.pdf, replace
 
 egen pub4_med= median(pub4tuit_i), by(state)
 
@@ -66,20 +69,20 @@ sort pub4_med
 
 #delimit ;
 graph hbox pub4tuit_i,
-over(state, sort(1) descending label(labsize(tiny) )) /*This was a giant pain*/
+over(state, sort(1) descending label(labsize(tiny) )) name(tuit) /*This was a giant pain*/
 ;
 
 graph export tuit_box.pdf, replace;
 
 #delimit ;
 graph hbox approps,
-over(state, sort(1) descending label(labsize(tiny) )) 
+over(state, sort(1) descending label(labsize(tiny) ))  name(approps)
 ;
 
 
 #delimit ;
 graph hbox approps,
-over(year, sort(1) descending label(labsize(tiny) )) 
+over(year, sort(1) descending label(labsize(tiny) )) name(approps_2)
 ;
 
 graph export approps_box.pdf, replace;
@@ -98,37 +101,40 @@ reg `y'  legideo `controls'
 
 predict e, resid
 
-graph box e, over(state, sort(1) descending label(labsize(tiny))) /*Horrible*/
+graph box e, over(state, sort(1) descending label(labsize(tiny))) name(unit_error) /*Horrible*/
 
 graph export resid_state.pdf, replace
 
-graph box e, over(year, sort(1) descending label(labsize(tiny))) /* Not too bad */
+graph box e, over(year, sort(1) descending label(labsize(tiny))) name(time_error)/* Not too bad */
 
 graph export resid_year.pdf, replace
 
+
 /* Fixed Effects for Units (states) */
 
-xi: xtreg `y'  legideo `controls', fe
+xtreg `y'  legideo `controls', fe
 
 estimates store fe1
 
-xi: reg `y' legideo `controls' i.state
+reg `y' legideo `controls' i.state
+
 
 /* Fixed Effects for Units and Time (state and year) */
 
-xi: xtreg `y' legideo   `controls' i.year , fe
+ xtreg `y' legideo  `controls'  i.year , fe
 
-xi: reg `y' legideo `controls' i.state i.year
+ reg `y' legideo `controls' i.state i.year
 
+ 
 /* Fixed effects with AR1 error terms */
 
-xi: xtregar `y' legideo `controls', fe rhotype (tsc) twostep lbi
+ xtregar `y' legideo `controls', fe rhotype (tsc) twostep lbi
 
-xi: xtpcse `y' legideo `controls' i.state, correlation (ar1) independent
-
+ xtpcse `y' legideo `controls' i.state, correlation (psar1) independent
+ 
 /*Random effects */
 
-xi: xtreg `y' legideo `controls', re
+xtreg `y' legideo `controls', re
 
 estimates store re1
 
@@ -140,7 +146,7 @@ hausman fe1 re1,  sigmamore
 
 sort state year 
 
-xtreg D.approps D.legideo D.perc1824 D.incpcp_i D.percpriv D.taxcpc_i  D.legcomp_i   
+xtreg D.approps D.legideo D.perc1824 D.incpcp_i D.percpriv D.taxcpc_i  D.legcomp_i 
 
 xtpcse D.approps D.legideo D.perc1824 D.incpcp_i D.percpriv D.taxcpc_i  D.legcomp_i, correlation (ar1) independent
 

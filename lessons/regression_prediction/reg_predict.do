@@ -73,9 +73,13 @@ local controls expn_stu_t avginc el_pct meal_pct comp_stu
 
 local alpha=.05
 
+local alpha_a=.1
+
 //How many tails? TWO!
 
 local alpha_2=`alpha'/2
+
+local alpha_2a=`alpha_a'/2
 
 /*******************************/  
 /* Analysis */
@@ -106,12 +110,15 @@ quietly esttab * using my_models.tex,          /* estout command: * indicates al
                ;
 #delimit cr
 
-
 local df_r=e(df_r)
 
 //Get correct t value
 local myt=invttail(`df_r',`alpha_2')
+
 scalar myt=`myt'
+
+local myt2=invttail(`df_r',`alpha_2a')
+scalar myt2=`myt2'
 
 if `first_part'==1{
 
@@ -123,9 +130,14 @@ predict yhat, xb
 //Get SE of prediction
 predict yhat_se,stdp
 
+
 // Generate Prediction interval 
 gen low_ci=yhat-(`myt'*yhat_se)
 gen hi_ci=yhat+(`myt'*yhat_se)
+
+gen low_ci_90=yhat-(`myt2'*yhat_se)
+gen hi_ci_90=yhat+(`myt2'*yhat_se)
+
 
 sort `x'
 
@@ -133,7 +145,9 @@ graph twoway scatter `y' `x',msize(small) mcolor(blue)  ///
   || line yhat `x',lcolor(red) ///
   || line low_ci `x', lcolor(red) lpattern(dash) ///
   || line hi_ci `x', lcolor(red) lpattern(dash) ///
-      legend( order(1 "Math score" 2 "Prediction" 3 "95% Confidence Interval")) ///
+  || line low_ci_90 `x', lcolor(yellow) lpattern(dash) ///
+  || line hi_ci_90 `x', lcolor(yellow) lpattern(dash) ///
+      legend( order(1 "Math score" 2 "Prediction" 3 "95% Confidence Interval" 5 "90% COnfidence Interval")) ///
       name(basic_predict)
 
 graph export basic_predict.`gtype', replace
@@ -210,6 +224,84 @@ graph twoway line pred12 pred13 || ///
 
 graph export ci_predict95.`gtype', replace 
 
+drop pred11 pred12 pred13
+
+// Expenditures per student
+
+local x expn_stu_t
+
+// Use summary to get min and max of key IV    
+sum `x', detail
+
+local mymin=r(min)
+local mymax=r(max)
+
+
+estimates restore basic_controls
+
+local dfr=e(df_r)
+
+#delimit ;
+margins , /* init margins */
+    predict(xb) /* Type of prediction */
+    nose /* Don't give SE */
+    at( (mean) /* Precition at mean of all variables */
+    `controls' /* Set controls at mean */
+    `x'=(`mymin'(.1)`mymax'))  /*range from min to max of x in steps of .1 */
+     post  /* Post results in matrix form */
+         ;
+#delimit cr
+
+// Pull results
+mat xb=e(b)
+
+// store x values used to generate predictions
+mat allx=e(at)
+
+// store just x values from that matrix
+matrix myx=allx[1...,1]'
+
+// Bring back in regression results
+estimates restore basic_controls
+
+// Run margins again, but this time get standard error of prediction as output
+margins , predict(stdp) nose at(`x'=(`mymin'(.1)`mymax') (mean) `controls') post
+
+//Grab standard error of prediction
+mat stdp=e(b)
+
+//Put three matrices together: standard error, prediction, and values of x: transpose 
+mat pred1=[stdp \ xb\ myx]'
+
+//Put matrix in data 
+svmat pred1
+
+//Generate
+generate lb = pred12 - (`myt' * pred11) /*Prediction minus t value times SE */
+generate ub = pred12 + (`myt'* pred11) /*Prediction plus t value times SE */
+
+/*Plot Simple Prediction */
+
+graph twoway line pred12 pred13, ///
+    xtitle("Hypothetical Values of Student-Teacher Ratio") ///
+    ytitle("Predicted Values of Math Test Scores") ///
+    name(basic_predict_margins)
+
+graph export basic_predict.`gtype', replace 
+
+/*Plot Prediction with CI*/
+
+graph twoway line pred12 pred13 || ///
+    line lb pred13,lcolor(red) || ///
+    line ub pred13,lcolor(red) ///
+    xtitle("Hypothetical Values of Student Teacher Ratio ") ///
+    ytitle("Predicted Values of Math Test Scores") ///
+    legend(order(1 "Predicted Value" 2 "Lower/Upper Bound 95% CI" )) ///
+    name(ci_predict95) 
+
+graph export ci_predict95_exp.`gtype', replace 
+
+exit 
 /*Or: Marginsplaot */
 
 estimates restore basic_controls

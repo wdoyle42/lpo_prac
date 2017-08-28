@@ -86,13 +86,19 @@ reg lwage hours educ age meduc
 
 reg lwage hours educ age feduc
 
-reg lwage hours educ age feduc meduc
+reg lwage hours educ age feduc meduc 
 
-reg lwage hours educ age if e(sample)==1
+gen analytic_sample_flag=e(sample)
 
-reg lwage hours educ age meduc if e(sample)==1
+reg lwage hours educ age if analytic_sample_flag==1 
+
+reg lwage hours educ age meduc if analytic_sample_flag==1 
 
 gen meduc_flag=meduc==.
+
+gen feduc_flag=feduc==.
+
+tab meduc_flag feduc_flag
   
 /*NOOOOOOOO!!! Stepwise regression*/
 
@@ -108,10 +114,10 @@ stepwise, pr(.2) : reg lwage south brthord  kww sibs feduc tenure  married black
 
 stepwise, pr(.05): reg lwage south brthord  kww sibs feduc tenure  married black  hours educ age meduc
 
-
 /*Functional Form */
-  
-/*RESET test */
+
+
+ /*RESET test */
 
 reg lwage hours age educ
 
@@ -159,6 +165,7 @@ graph twoway (scatter wage educ if black==0, msize(small) mcolor(red)) ///
             (lfit wage educ if black==1, lcolor(blue)), ///
                 legend(order(1 "White" 2 "Black")) 
 
+								
 /*Binary-binary interaction*/
 
 gen black_marry=black*married
@@ -172,6 +179,7 @@ eststo black_educ: reg lwage hours age i.black##c.educ married  iq meduc south u
 /*Continuous-Continuous interaction*/
 
 eststo age_educ : reg lwage hours age educ c.age#c.educ black married iq meduc south urban 
+ 
 
 /// Margins after interactions
 
@@ -228,8 +236,62 @@ graph twoway (bar mypred1 mycount if mycount==1, barw(.6) base(0) ytick(100(100)
 drop mypred*
 drop mystdp*
 drop ub*
-drop lb*    
+drop lb*
+drop mycount    
 
+eststo urban_south: reg lwage hours age educ black married iq meduc i.south##i.urban 
+
+local mydf=e(df_r)
+
+margins , predict(xb) at(urban=(1 0) south=(0 1) black=1 married=1 (mean) hours age educ iq meduc ) post
+
+mat mypred=e(b)'
+
+mata: st_matrix("mypred", exp(st_matrix("mypred")))
+
+svmat mypred
+
+mat mypred1=e(b)'
+
+svmat mypred1
+
+local no_predict=rowsof(mypred)
+
+di "no of preds is `no_predict'"
+
+egen mycount=fill(1(1)`no_predict')
+
+graph twoway bar mypred1 mycount in 1/4, barw(.6) base(0) ytick(100(100)1000) ylabel(0(100)1000) 
+      
+estimates restore black_marry
+
+margins , predict(stdp) at((mean) _all urban=(1 0) south=(0 1) black=1 married=1) post nose
+
+mat mystdp=e(b)'
+
+svmat mystdp
+
+gen ub_log=mypred11+ (invttail(`mydf',`sigtail')*mystdp)
+gen lb_log=mypred11- (invttail(`mydf',`sigtail')*mystdp)
+
+gen ub=exp(ub_log)
+gen lb=exp(lb_log)
+
+
+graph twoway (bar mypred1 mycount if mycount==1, barw(.6) base(0) ytick(100(100)1000) ylabel(0(100)1000)) ///
+              (bar mypred1 mycount if mycount==2, barw(.6) base(0) ytick(100(100)1000) ylabel(0(100)1000)) ///
+               (bar mypred1 mycount if mycount==3, barw(.6) base(0) ytick(100(100)1000) ylabel(0(100)1000)) ///
+                (bar mypred1 mycount if mycount==4, barw(.6) base(0) ytick(100(100)1000) ylabel(0(100)1000)) ///
+                    (rcap ub lb mycount in 1/`no_predict'), ///
+                        xlabel(1 "Urban, Non-South" 2 "Urban, South" 3 "Non-Urban, Non-South" 4 "Non-Urban, South") ytitle("Predicted Wages")   xtitle("") legend(off)
+
+/* Clear out prediction variables */    
+drop mypred*
+drop mystdp*
+drop ub*
+drop lb*    
+						
+						
 /* Working with continuous vs. Continuous interactions */
 sum age, detail
 
@@ -268,6 +330,7 @@ egen age_levels=fill(`mymin'(1)`mymax')
 twoway line exp_pred10 exp_pred12 exp_pred14 exp_pred16 age_levels in 1/11, ///
        legend(order(1 "10 Years" 2 "12 Years" 3 "14 Years" 4 "16 Years"))  ytitle("Wages") xtitle("Age") name(educ_mult)
 
+	   
 /* Plot at different levels with confidence intervals */
 twoway (rarea ub10 lb10 age_levels in 1/11, color(gs14)) ///
     (rarea ub16 lb16 age_levels in 1/11, color(gs14)) ///
@@ -279,6 +342,62 @@ twoway (rarea ub10 lb10 age_levels in 1/11, color(gs14)) ///
                             (line lb16 age_levels in 1/11, lcolor(red) lwidth(thin) lpattern(dash)) , ///
                                 legend(order( 3 "Less than HS" 6 "College Grad")) name(educ_ci)
 
+
+drop lb* ub* exp_pred* pred* pred_ed* pred_se_ed*
+
+eststo ten_educ: reg lwage hours age black married iq meduc c.tenure##c.educ 
+						
+/* Working with continuous vs. Continuous interactions */
+sum educ, detail
+
+local mymin=r(min)
+local mymax=r(max)
+
+/*Step through tenure in 5 year intervals */
+
+foreach mytenure of numlist 0(5)20{
+
+estimates restore ten_educ
+    
+margins, predict(xb) at((mean) _all educ=(`mymin'(1)`mymax') tenure=`mytenure') post
+mat pred_ed`mytenure'=e(b)'
+mat li pred_ed`mytenure'
+svmat pred_ed`mytenure'
+
+estimates restore ten_educ
+
+margins, predict(stdp) at((mean) _all educ=(`mymin'(1)`mymax') tenure=`mytenure') nose post
+mat pred_se_ed`mytenure'=e(b)'
+mat li pred_se_ed`mytenure'
+svmat pred_se_ed`mytenure'
+}
+
+foreach mytenure of numlist 0(5)20{
+    gen exp_pred`mytenure'=exp(pred_ed`mytenure'1)
+    gen ub`mytenure'=exp(pred_ed`mytenure'+(invttail(`mydf',`sigtail')*pred_se_ed`mytenure'1))
+    gen lb`mytenure'=exp(pred_ed`mytenure'-(invttail(`mydf',`sigtail')*pred_se_ed`mytenure'1))
+}
+
+/* Need my at values */
+
+egen educ_levels=fill(`mymin'(1)`mymax')    
+
+twoway line exp_pred0 exp_pred5 exp_pred10 exp_pred15 exp_pred15 educ_levels in 1/10, ///
+       legend(order(1 "0 Years" 2 "5 Years" 3 "10 Years" 4 "15 Years" 5 "20 Years"))  ytitle("Wages") xtitle("Education") name(tenure_mult)
+exit 
+	   
+/* Plot at different levels with confidence intervals */
+twoway (rarea ub10 lb10 age_levels in 1/11, color(gs14)) ///
+    (rarea ub16 lb16 age_levels in 1/11, color(gs14)) ///
+        (line exp_pred10 age_levels in 1/11, lcolor(blue) ) ///
+            (line lb10 age_levels in 1/11, lcolor(blue) lwidth(thin) lpattern(dash)) ///
+                (line ub10 age_levels in 1/11, lcolor(blue) lwidth(thin) lpattern(dash)) ///
+                    (line exp_pred16 age_levels in 1/11, lcolor(red) ) ///
+                        (line ub16 age_levels in 1/11, lcolor(red) lwidth(thin) lpattern(dash)) ///
+                            (line lb16 age_levels in 1/11, lcolor(red) lwidth(thin) lpattern(dash)) , ///
+                                legend(order( 3 "Less than HS" 6 "College Grad")) name(educ_ci)
+
+exit 
 
 
 /*Another Continuous-Continuous interaction*/

@@ -1,12 +1,12 @@
 
-version 12 /* Can set version here, use the most recent as default */
+version 13 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 
-log using "categorical.log",replace /*Open up new log */
+log using "limited.log",replace /*Open up new log */
 
-/* Models for Polychotomous Dependent Variables*/
+/* Models for Limited and Count Variables*/
 /* Will Doyle */
-/* 170510 */
+/* 170511 */
 
 
 clear
@@ -143,7 +143,9 @@ replace bynels2r=bynels2r/100
   
 merge 1:1 stu_id using "${ddir}attend_type.dta"
 
+//limited outcomes: number of applications and credits earned 
 
+marge 1:1 stu_id using "${ddir}limited.dta"
 
 foreach myvar of varlist f2ps1sec{ /* Start outer loop */
               foreach i of numlist -3 -4 -8 -9 { /* Start inner loop */
@@ -163,12 +165,12 @@ replace first_inst=. if first_inst<0
   
  tab first_inst f2ps1sec
   
-save plans2, replace
+save using "${ddir}apps_credits.dta", replace
   
 }
 
 else{
-  use "${ddir}plans2.dta", clear
+  use "${ddir}apps_credits.dta", clear
 }
 
 
@@ -199,14 +201,14 @@ local cut2=_b[cut2:_cons]
 margins, predict(xb)  at(female=(0/1)) atmeans post /* Z in wooldridge*/
 
 mat linpred=e(b)
-scalar female_pred=linpred[1,1]
-scalar male_pred=linpred[1,2]
+scalar male_pred=linpred[1,1]
+scalar female_pred=linpred[1,2]
         
 graph twoway (function y=normalden(x,female_pred,1),range(-3 6)) ///
              (function y=normalden(x,male_pred,1), range(-3 6)), ///
              xline(`cut1',lpattern(dash)) /// 
              xline(`cut2',lpattern(dash)) ///
-             legend(order(1 "LP for Men" 2 "LP for Women")) ///
+             legend(order(1 "LP for Women" 2 "LP for Men")) ///
              note("") title("") ///
              xtitle("Linear Prediction") ///
              text(.3 -2 "No Plans", size(vsmall)) ///
@@ -216,13 +218,13 @@ graph twoway (function y=normalden(x,female_pred,1),range(-3 6)) ///
               
 graph export "linear.pdf", replace
 
-
 estimates restore oprob_3
 
     margins ,at(female=(0/1)) predict(outcome(1)) atmeans
     margins ,at(female=(0/1)) predict(outcome(2)) atmeans
     margins ,at(female=(0/1)) predict(outcome(3)) atmeans
-
+ 	
+	
 /*Marginal Effects*/
 
  estimates restore oprob_3
@@ -239,11 +241,14 @@ esttab marg?_ord using marg_ord.tex, ///
     b(2) ///
     replace    
 
-
 forvalues j= 1/3{
 
 estimates restore oprob_3
+
 margins,  predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7) (min) `race' `pared'  (mean) bynels2r byses1  )  post
+
+// If you want to use marginsplot: 
+//marginsplot, recastci(rarea) recast(line) name("outcome_`j'")
 
 mat t=J(7,3,.) /* Empty matrix */
 
@@ -289,10 +294,12 @@ drop prob ll ul at
 
 graph combine order_plan_1.gph order_plan_2.gph order_plan_3.gph, ///
   rows(1)
-
+  
 graph export  "order.pdf", replace
 
 /* Class exercise: work with student expectations */
+
+
 
 
 /********************************************************************************/

@@ -8,8 +8,9 @@ log using "iv.log",replace /*Open up new log */
 /* 170515 */
 /* Practicum Folder */
 
+clear 
 
-    global ddir "../../data/"
+global ddir "../../data/"
 
 use "${ddir}nlsy_2010.dta", clear
 
@@ -19,10 +20,11 @@ gen moth_prox= mothed*prox
 
 local y lyinc
 local x ccol
-local controls female black multiracial hispanic i.quarter
+local controls female black multiracial hispanic asvab i.quarter
 local z prox
 local z1 prox moth_prox
 
+// gen z= 1 + 2*ccol + rnorm(10)
 
 // Basic regression with endog regressor
 
@@ -31,19 +33,20 @@ reg `y' `x' `controls'
 
 // "First Stage": does instrument predict endog regressor?
 
-reg `x' `z'
-reg `x' `z' `controls'
+reg `x' `z' if `y' !=.
+reg `x' `z' `controls' if `y' !=.
 
 // "Reduced form": does instrument predict outcome (omitting endog regressor)
 
 reg `y' `z'
 reg `y' `z' `controls'
 
-// Basic IV estiomate
+
+// Basic IV estimate
 
 eststo basic_iv:ivregress 2sls `y' (`x'=`z'), first
 
-eststo basic_iv_controls:ivregress 2sls `y'  `controls' (`x'=`z'), first
+eststo basic_iv_controls:ivregress 2sls `y' `controls' (`x'=`z'), first
 
 estat endogenous
 
@@ -60,3 +63,7 @@ estat endogenous
 estat first
 
 estat overid
+
+// Check against LIML
+eststo overid_controls_liml:ivregress liml `y'  `controls' (`x'=`z1'), first
+

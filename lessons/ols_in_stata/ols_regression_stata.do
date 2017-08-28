@@ -34,6 +34,8 @@ gen expn_stu_k=expn_stu/1000
 
 gen comp_stu_h=comp_stu*100
 
+gen str_20=str>=20
+
 /*Label variables*/
 
 label variable testsc "Combined test scores"
@@ -56,14 +58,19 @@ label variable comp_stu "Computers/Student"
 
 label variable comp_stu_h "Computers/100 Students"
 
+label variable str_20 "Avg Class Size>20"
+
+label variable read_scr "Reading Score"
 
 /*Locals for groups of variables*/
 
-local y testscr
+local y read_scr
+
+local ytitle "Reading Score"
 
 local students avginc el_pct calw_pct meal_pct
 
-local teacher str
+local teacher str str_20
 
 local finance expn_stu_k
 
@@ -155,17 +162,68 @@ esttab *_model using `y'_models.`tab_type',          /* estout command: * indica
 #delimit cr
 
 
+#delimit;
+
+esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
+               label                          /*Use labels for models and variables */
+               nodepvars                      /* Use my model titles */
+               b(2)                           /* b= coefficients , this gives two sig digits */
+               t(2)                         /* I do want t stats */
+               r2 (2)                      /* R squared */
+               ar2 (2)                     /* Adj R squared */
+               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
+               sfmt (2 0 0 0)                /* format for scalar stats*/
+               replace                   /* replace existing file */
+               ;
+
+#delimit cr
+
+#delimit;
+
+esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
+               label                          /*Use labels for models and variables */
+               nodepvars                      /* Use my model titles */
+               b(2)                           /* b= coefficients , this gives two sig digits */
+               se(2)                         /* I do want t stats */
+			   nostar 
+               r2 (2)                      /* R squared */
+               ar2 (2)                     /* Adj R squared */
+               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
+               sfmt (2 0 0 0)                /* format for scalar stats*/
+               replace                   /* replace existing file */
+               ;
+
+#delimit cr
+
+
+#delimit;
+
+esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
+               label                          /*Use labels for models and variables */
+               nodepvars                      /* Use my model titles */
+               b(4)                           /* b= coefficients , this gives two sig digits */
+               ci(4)                         /* I do want confidence interval */			  
+			   nostar
+               r2 (4)                      /* R squared */
+               ar2 (4)                     /* Adj R squared */
+               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
+               sfmt (4 0 0 0)                /* format for scalar stats*/
+               replace                   /* replace existing file */
+               ;
+
+#delimit cr
+
 /// Plotting regression results
 
 estimates restore teach_model
 
 #delimit;
-plotbeta  avginc|el_pct|calw_pct|meal_pct|str, /*Variables in regression to report */
+plotbeta  avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to report */
           labels                              /*Use Variable Labels*/
           xtitle (Parameters)                 /*Label of x axis*/
           title ("Model w/ No Covariates")    /*Title */ 
-          subtitle ("From OLS regression. Dep Var= Test Scores") /*Description */
-          xline(0,lp(dash)) /* Line at 0: if95% ci crosses, not stat sig */
+          subtitle ("From OLS regression. Dep Var= `ytitle'") /*Description */
+          xline(0,lp(dash)) /* Line at 0: if 95% ci crosses, not stat sig */
           xscale(range(-1.5 4)) /* Range of X axis*/
 		  xlabel(-4(.5)4)
 		  scale(.5)
@@ -178,11 +236,11 @@ graph save teach_model, replace
 estimates restore st_tch_model
 
 #delimit;
-plotbeta avginc|el_pct|calw_pct|meal_pct|str, /*Variables in regression to report */
+plotbeta avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to report */
           labels                              /*Use Variable Labels*/
           xtitle (Parameters)                 /*Label of x axis*/
           title ("Model w/ Student Chars")    /*Title */ 
-          subtitle ("From OLS regression. Dep Var= Test Scores") /*Description */
+          subtitle ("From OLS regression. Dep Var= `ytitle'") /*Description */
           xline(0,lp(dash)) /* Line at 0: if95% ci crosses, not stat sig */
           xscale(range(-1.5 4)) /* Range of X axis*/
 		  xlabel(-4(.5)4)
@@ -196,11 +254,11 @@ graph save st_teach_model, replace
 estimates restore st_tch_fin_model
 
 #delimit;
-plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|str,
+plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|str_20|str,
           labels
           xtitle (Parameters)
           title ("Model w/ Spending")
-          subtitle ("From OLS regression. Dep Var= Test Scores")
+          subtitle ("From OLS regression. Dep Var= `ytitle'")
           xline(0,lp(dash))
           xscale(range(-1.4 4))
           xlabel(-4(.5)4)
@@ -212,11 +270,11 @@ graph save st_teach_fin_model,replace;
 estimates restore st_tch_fin_comp_model; 
 
 #delimit;
-plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str,
+plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str_20|str,
           labels
           xtitle (Parameters)
           title ("Full Model")
-          subtitle ("From OLS regression. Dep Var= Test Scores")
+          subtitle ("From OLS regression. Dep Var= `ytitle'")
           xline(0,lp(dash))
           xscale(range(-1.4 4))
           xlabel(-4(.5)4)

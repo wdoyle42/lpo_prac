@@ -130,10 +130,13 @@ eststo full_model_a, title("Model 2:No Test 3")
 
 estat vif
 
+
+
 /**************************************************/
 /*Heteroskedasticity*/
 /**************************************************/
   
+
 reg lw_het  `x' `controls'
 
 estimates store het_model
@@ -165,15 +168,18 @@ estat imtest, white
 reg lw_het `x' `controls', robust
 eststo full_model_robust, title("Model 2: Robust SE")
 
+
 /*Clustered se.'s*/
 reg `y' `x' `controls', cluster(med)
 eststo full_model_cluster, title("Model 2: Cluster SE")
+
   
 /*Data Scaling*/
 
 reg `y' `x' `controls'
   
 reg `y' `x' `controls', beta
+
 eststo full_model_beta, title("Model 2: Standardized Coefficients")
 
 gen expr_new=1+2*s
@@ -183,6 +189,7 @@ local x expr_new
 reg `y' `x' `controls', beta
 
 local x s
+
 /**************************************************/
 /*Functional Form */
 /**************************************************/
@@ -230,6 +237,7 @@ reg lw s expr expr2
 
 test expr expr2
 
+
 /**************************************************/
 /* Influential Observiations*/
 /**************************************************/  
@@ -254,16 +262,18 @@ gen  resid2=resid^2
 
 gsort -lev
 
-list w_influence s lev resid2 in 1/10
+list w_influence s lev resid2 in 1/20
 
 /* Dfits measure */
+
 predict  dfits if e(sample), dfits
 
 gsort -dfits
 
 generate cutoff =abs(dfits)> 2*sqrt((e(df_m)+1)/e(N)) & e(sample)
 
-list w_influence if cutoff
+list w_influence s dfits if cutoff
+
 
 /* Cook's D */
 
@@ -274,6 +284,7 @@ generate cutoff2=4/reg_n
 gsort -cooksd1
 
 li w_influence resid2 lev cooksd if cooksd1>cutoff2
+
   
 /*DfBeta*/
 dfbeta

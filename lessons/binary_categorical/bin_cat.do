@@ -1,6 +1,7 @@
 capture log close
 
-log using "bin_cat.log"
+log using "bin_cat.log", replace
+
 // Working with binary and cateogrical independent variables
 // Will Doyle
 // 2/21/2017
@@ -23,8 +24,6 @@ local y bynels2m
 
 local controls byses1 
 
-
-   
 /**************************************************/
 /* Coding */
 /**************************************************/
@@ -50,12 +49,13 @@ foreach val of local race_names{
   local i=`i'+1
 }
 
-label variable byincome "Income"
 label variable amind "American Indian/AK Native"
 label variable asian "Asian/ PI"
 label variable black "African American"
 label variable white "White"
 label variable multiracial "Multiracial"
+
+label variable byincome "Income"
 
 
 gen hispanic=0
@@ -100,7 +100,7 @@ replace order_plan=1 if noplan==1| dontknow==1
   replace order_plan=2 if votech==1|cc==1
   replace order_plan=3 if fouryr==1
 
-label define orderplan 1 "No Plans/DK" 2 "Votech/CC" 3 "Four Year"
+label define orderplan 1 "---No Plans/DK" 2 "---Votech/CC" 3 "---Four Year"
 
 label values order_plan orderplan
   
@@ -128,6 +128,15 @@ label variable `pared'_masters "Master's"
 label variable `pared'_phd "PhD"
 }
 
+
+// Recode Mother Education
+
+recode bymothed (1=1) (2=2) (3/5=3) (6/8=4) (.=.), gen(bymothed2)
+
+label define pared2 1 "---Less than HS" 2 "---HS" 3 "---Some College" 4 "---College or More"
+
+label values bymothed2 pared2
+
 label define expect -1 "Don't Know" 1 "Less than HS" 2 "HS" 3 "2 yr" 4 "4 yr No Deg" ///
     5 "Bachelors" 6 "Masters" 7 "Advanced"
 
@@ -140,9 +149,11 @@ replace female=. if bysex==.
 
 lab var female "Female"
 
-replace bynels2m=bynels2m/100
+// Recode test scores 
 
-replace bynels2r=bynels2r/100  
+//replace bynels2m=bynels2m/100
+
+//replace bynels2r=bynels2r/100  
   
 recode f2ps1sec (1=1) (2=2) (4=3) (3=4) (5/9=4), gen(first_inst)
 
@@ -162,21 +173,20 @@ save ${ddir}plans2.dta, replace
 
 else use ${ddir}plans2.dta, clear
 
-
 // use svyset to account for survey design
 svyset psu [pw = f1pnlwt], strat(strat_id) singleunit(scaled)
-
 
 tab order_plan
 
 // NOPE!
 eststo order1: svy: reg `y' order_plan
 
-
 //Proper factor notation
 eststo order1: svy: reg `y' i.order_plan byses1 female
 
+
 esttab order1 using order1.rtf,  varwidth(50) label  ///
+				nobaselevels ///
                nodepvars              ///
                    b(3)                   ///
                 se(3)                     ///       
@@ -185,8 +195,8 @@ esttab order1 using order1.rtf,  varwidth(50) label  ///
                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
                sfmt (2 0 0 0)               ///
                replace                   
-
-
+			   
+			   
 esttab order1 using order1.rtf,  varwidth(50) label  ///
     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know",nolabel) ///
         nobaselevels ///
@@ -201,6 +211,25 @@ esttab order1 using order1.rtf,  varwidth(50) label  ///
                replace                   
 
 
+//Proper factor notation
+eststo order1: svy: reg `y' i.order_plan i.bymothed2 byses1 female
+
+esttab order1 using order1a.rtf,  varwidth(50) label  ///
+    refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know" 2.bymothed2 "Mother's Education, Ref= Less than HS"  ,nolabel) ///
+        nobaselevels ///
+               nomtitles ///
+               nodepvars              ///
+                b(3)                   ///
+                se(3)                     ///       
+               r2 (2)                    ///
+               ar2 (2)                   ///
+               scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+               sfmt (2 0 0 0)               ///
+               replace                   
+			   
+			   
+exit 
+			   
 
 //Proper factor notation: setting base levels
 eststo order2: svy: reg `y' ib(freq).order_plan byses1 female

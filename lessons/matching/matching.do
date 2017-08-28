@@ -46,6 +46,8 @@ gen bach_plus=.
 replace bach_plus=1 if f3attainment>=6 & f3attainment<.
 replace bach_plus=0 if f3attainment<6
     
+drop if bach_plus==.	
+	
 /*recode treatment */
 drop cc
 gen cc=.
@@ -65,15 +67,13 @@ local controls  byses1  bynels2m bynels2r amind asian black hispanic white  byse
 tab  `t' `y' ,row 
 
 
-
-
-
 /*Examining possible selection bias */
 
  kdensity byses1 if `t'==1, ///
- addplot(kdensity byses1 if `t'==0, lpattern(dash)) ///
+ addplot(kdensity byses1 if `t'==0, lpattern(dash))  ///
  legend(order(1 "Treated"  2 "Untreated")) 
 
+ 
 /* Balance on various covariates */
 
 ttest byses1, by(`t')
@@ -84,7 +84,8 @@ ttest bynels2m, by(`t')
 
 ttest `y' ,by(`t')
 
-reg `y' `t' `controls'
+reg `y' `t' `controls', vce(robust)
+
 
 
 /* Propensity Score Matching: 1 to 1 */
@@ -101,42 +102,42 @@ pstest `controls', treated(`t')  both
 psgraph
 
 
-
 /* Teffects -- PS matching, 1 to 1 */
     teffects psmatch (`y') (`t' `controls'), ///
         nn(1) ///
             atet 
-            
-
-/* Teffects -- Nearest Neighbor matching, 4 neighboring units */
-    teffects nnmatch (`y' `controls')  ///
-    (`t'), ///
-    nn(4) 
-
+         
 
 /*Replciate psmatch2*/
 
 teffects psmatch (`y') (`t' `controls', probit), atet
 
-/*Ties? */
+		 
+/* Teffects -- Nearest Neighbor matching, 4 neighboring units */
+    teffects nnmatch (`y' `controls')  ///
+    (`t'), ///
+    nn(4) 
 
-/* Propensity Score Matching: 1 to 1 */
+ 	
+
+
+/* Propensity Score Matching: 1 to 4 */
   psmatch2 `t'   ///
          `controls', ///
          outcome(`y') ///
-         neighbor(1) ///
-         caliper(.25) ///
-         noreplacement /// /* This gives 1 to 1 */
-         ties ///
+         neighbor(4) ///
+         caliper(.25) 
+
 
 
 /*How this gets results */
 
-reg `y' `t' [fweight=_weight]
-    
+reg `y' `t' [iweight=_weight]
+ 
+ 
 /*Regression on balanced sample */
     
-reg `y' `t' `controls' [fweight=_weight] 
+reg `y' `t' `controls' [iweight=_weight] 
 
 
 /*Regression with ps as control */
@@ -171,7 +172,7 @@ scalar n1=e(N)
 
 /*Second Quartile */
 
-reg `y' `t' `controls' if _pscore<=pscore25  & _pscore<pscore50
+reg `y' `t' `controls' if _pscore>=pscore25  & _pscore<pscore50
 
 scalar e2=_b[`t']
 
@@ -183,7 +184,7 @@ scalar n2=e(N)
 
 /*Third Quartile */
 
-reg `y' `t' `controls'   if _pscore<=pscore50  & _pscore<pscore75
+reg `y' `t' `controls'   if _pscore>=pscore50  & _pscore<pscore75
 
 scalar e3=_b[`t']
 
@@ -195,7 +196,7 @@ scalar n3=e(N)
 
 /*Fourth Quartile */
   
-reg `y' `t' `controls'   if _pscore<pscore75
+reg `y' `t' `controls'   if _pscore>pscore75
 
 scalar e4=_b[`t']
 
@@ -209,13 +210,14 @@ scalar n4=e(N)
 
 scalar myest=(e1*(n1/n_full))+(e2*(n2/n_full))+(e3*(n3/n_full))+(e4*(n4/n_full)) /*Weighted average of estimates, based on sample size*/
 
-scalar myvar=(var1*(n1/n_full))+(e2*(n2/n_full))+(var3*(n3/n_full))+(var4*(n4/n_full)) /*Weighted average of variances */
+scalar myvar=(var1*(n1/n_full))+(var2*(n2/n_full))+(var3*(n3/n_full))+(var4*(n4/n_full)) /*Weighted average of variances */
 
 scalar myse=sqrt(myvar)
 
 di "Estimate is " myest
 
 di "SE is " myse
+
 
 /* Propensity Score Matching: Calipers, multiple matches */
   
@@ -240,6 +242,7 @@ pstest _pscore `controls', treated(`t') both
          `controls' , ///
          outcome(`y') ///
          caliper(.25) ///
+		 neighbor(4) /// 
          common ///
          mahal(bysex byses1)
          
@@ -247,7 +250,6 @@ pstest _pscore `controls', treated(`t') both
 pstest _pscore `controls' , both
 
 /*Using sensatt */
-
 
 /* Teffects -- Nearest Neighbor matching, 4 neighboring units */
     teffects nnmatch (`y' `controls')  ///
@@ -259,20 +261,26 @@ pstest _pscore `controls' , both
    teffects aipw (`y' `controls') ///
     (`t' `controls') 
 
+
+	
 predict pscore, ps
 
 gen pscore_weight=.
 replace pscore_weight=1/pscore if `t'==1
 replace pscore_weight=pscore/(1-pscore) if `t'==0
 
+
+preserve
 sample 1000, count
 
 graph twoway (scatter pscore bynels2m [w=pscore_weight] if `t'==1, msize(vtiny) msymbol(circle_hollow)) ///
     (scatter pscore bynels2m [w=pscore_weight] if `t'==0,msize(vtiny) msymbol(circle_hollow) ), ///
 legend (order(1 "PS, CC Attend" 2 "PS, 4yr Attend")) ytitle("Propensity Score")
 
+restore
 
 /*Similar confounders */
+
   
 sensatt `y' /// /*Outcome*/
         `t' /// /*Treatment */
@@ -281,7 +289,7 @@ sensatt `y' /// /*Outcome*/
        p(black) ///
        reps(100)
 
-
+	   
 /*"Killer" confounders */
 
 local probs .25 .5 .75
@@ -323,6 +331,7 @@ matrix colnames results="p0=25" "50" "75"
 
 mat li results
 
+exit 
 
    
 

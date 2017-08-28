@@ -69,11 +69,15 @@ local gtype pdf
 
 reg `y' `ses' `demog' `tests'
 
+graph twoway scatter `y' `ses' , msize(tiny) 
+
 predict e, resid
 
-*graph twoway scatter  `ses' e, msize(tiny)
+graph twoway scatter  `ses' e, msize(tiny)
 
-reg `y' `ses' `demog' `tests', robust
+reg `y' `ses' `demog' `tests', vce(robust)
+
+estimates store lpm
 
 /* Generate predicted probabilites over range of ses*/
 
@@ -87,7 +91,6 @@ local mymin=r(min)
 local mymax=r(max)
 local diff=`mymax'-`mymin'
 local step=`diff'/`no_steps'
-
     
 margins , predict(xb) ///
     at((mean) _continuous ///
@@ -116,14 +119,16 @@ svmat myx
 graph twoway line yhat_lpm myx1, name("LPM") ytitle("Pr(Attend)") xtitle("SES") 
 
 graph export lpm.pdf, replace name("LPM")
-
+ 
 /*Logistic Function*/
 
-local k=1 /*Scale*/
+graph drop _all
+
+local k=.25 /*Scale*/
 local x0=0 /*Location*/
 
 graph twoway function y=1/(1+exp((-`k')*(x-`x0'))),range(-2 2) name("Logit")
-
+ 
 /*Logistic Regression */
 
 glm `y' `ses' `demog' `tests', family(binomial) link(logit) /*Logit model */
@@ -134,14 +139,15 @@ logit `y' `ses' `demog' `tests' /*Simpler version of logit model */
 
 est store full_model
 
-
 gen mysample=e(sample)
 
 /* Generating marginal effects */
+
 margins, dydx(*) /*for all coefficients, default is to hold others at mean */
 
 /*Margins for range of ses */
 
+estimates restore full_model
     
 margins , predict(pr) ///
     at((mean) _continuous ///
@@ -155,9 +161,7 @@ mat yhat=e(b)
 
 mat yhat=yhat'
 
-
 svmat yhat, names(yhat_logit)
-
 
 graph twoway line yhat_lpm yhat_logit myx1, ///
     name("Logistic") ///
@@ -165,6 +169,19 @@ graph twoway line yhat_lpm yhat_logit myx1, ///
     xtitle("SES") ///
     legend(order(1 "LPM" 2 "Logit") )
 
+
+
+estimates restore full_model
+    
+    
+margins , predict(pr) ///
+    at((mean) _continuous ///
+        (min) `demog' ///
+        `x'=(-1(1)1) ///          
+       ) ///
+      post
+exit
+	  
 graph export logit_basic.pdf, replace name("Logistic")
 
 drop yhat_*

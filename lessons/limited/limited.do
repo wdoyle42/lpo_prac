@@ -205,15 +205,16 @@ else{
   
 eststo ols_full_count:  reg n_apps female `race' `pared' `test' `income', vce(robust)
   
-  
   //Poisson: assumption is that variance=mean
   
-eststo poisson_full:  poisson n_apps female `race' `pared' `test'
-  
+eststo poisson_full:  poisson n_apps female `race' `pared' `test' `income'
+ 
+ 
   // Negative binomial: more flexible, generally better
   
 eststo nbreg_full:  nbreg n_apps female `race' `pared' `test' `income'
   
+ 
   // Marginal effects
   
 
@@ -221,8 +222,9 @@ eststo nbreg_full:  nbreg n_apps female `race' `pared' `test' `income'
 
   estimates replay ols_full_count
 
+  
   /*
-       n                number of events; the default
+       n               number of events; the default
       ir               incidence rate (equivalent to predict ..., n nooffset)
       pr(n)            probability Pr(y = n)
       pr(a,b)          probability Pr(a < y < b)
@@ -244,27 +246,32 @@ local step=`diff'/`no_steps'
   
   // Margins: n
   estimates restore nbreg_full
+  
   margins, predict(n) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
  
  marginsplot, recastci(rarea) recast(line) name(nbreg_n)
-  
+ 
+ 
+ 
   // Margins: pr y=n
   
   
-  estimates restore nbreg_full
+ estimates restore nbreg_full
+  
 margins, predict(pr(1)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
  
  marginsplot, recastci(rarea) recast(line) name(pry_n)
-  
+   
   
   //Margins: pr a<y<b
  
   estimates restore nbreg_full
   
-margins, predict(pr(1,5)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
+margins, predict(pr(5,100)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
  
 marginsplot, recastci(rarea) recast(line) name(prymoren)
 
+exit 
  
  // Truncated Outcome: number of credits
  

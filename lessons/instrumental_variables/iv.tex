@@ -66,12 +66,12 @@ If we had an experiment where some people were assigned to get more
 education, then we could use the experimental assignment variable to
 predict years of education, and there would be no reason that
 experimental assignment predicted earnings, except through the
-mechanism of 
+mechanism of education. 
 
 \section{Two-Stage Least Squares}
 \label{sec:two-stage-least}
 
-The primary estimator for instrumental variables is Two Stage Lest
+The primary estimator for instrumental variables is Two Stage Least
 Squares, often shattered to 2SLS. It works this way. Let's say we have
 an endogenous regressor $x$ (years of education), an instrument $z$ and a
 set of controls $\boldsymbol{c}$.
@@ -182,6 +182,20 @@ What's important to remember in practice is that the external validity
 of any IV estimate is limited to the group of people who could have
 been induced by the instrument into treatment. 
 
+
+\section{Angrist \& Pischke's Pragmatic Rules}
+\label{sec:angrist--pischkes}
+
+\begin{enumerate}
+\item Report the first stage and think about whether it makes sense. 
+\item REport the F Statistic on the excluded instruments. 
+\item Pick your ingle best instrument and report just-identified
+  estiumates using this one only. 
+\item Check overidentified 2SLS estimates witrh LIML estimates. 
+\item Look at the reduced form and make sure it makes sense,
+  remembering that these are proportional to the causal effect of
+  interest. 
+\end{enumerate}
 
 \end{document}
 

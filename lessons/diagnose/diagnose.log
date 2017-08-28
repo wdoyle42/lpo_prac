@@ -1,925 +1,929 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  21 MAR 2017 11:31
-entering extended mode
- restricted \write18 enabled.
- %&-line parsing enabled.
-**\input diagnose.tex
-(./diagnose.tex (/usr/local/texlive/2016/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/size12.clo
-File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
-)
-\c@part=\count79
-\c@section=\count80
-\c@subsection=\count81
-\c@subsubsection=\count82
-\c@paragraph=\count83
-\c@subparagraph=\count84
-\c@figure=\count85
-\c@table=\count86
-\abovecaptionskip=\skip41
-\belowcaptionskip=\skip42
-\bibindent=\dimen102
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/geometry/geometry.sty
-Package: geometry 2010/09/12 v5.6 Page Geometry
+--------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/diagnose/diagnose.log
+  log type:  text
+ opened on:  21 Mar 2017, 16:09:22
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks14
-)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2016/05/14 v3.1 Provides the ifpdf switch
-)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ifvtex.sty
-Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
-Package ifvtex Info: VTeX not detected.
-)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-)
-\Gm@cnth=\count87
-\Gm@cntv=\count88
-\c@Gm@tempcnt=\count89
-\Gm@bindingoffset=\dimen103
-\Gm@wd@mp=\dimen104
-\Gm@odd@mp=\dimen105
-\Gm@even@mp=\dimen106
-\Gm@layoutwidth=\dimen107
-\Gm@layoutheight=\dimen108
-\Gm@layouthoffset=\dimen109
-\Gm@layoutvoffset=\dimen110
-\Gm@dimlist=\toks15
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/natbib/bibentry.sty
-Package: bibentry 2007/10/30 1.5 (PWD)
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/fourier/fourier.sty
-Package: fourier 2005/01/01 1.4 fourier-GUTenberg package
+. 
+. /* PhD Practicum, Spring 2017 */
+. /* Diagnosing Problems with Regression */
+. /* Will Doyle*/
+. /* 3/21/2017 */
+. /* Saved on Blackboard */
+. 
+. clear
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+. 
+. graph drop _all
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/t1enc.def
-File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
-LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
-))
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/textcomp.sty
-Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
-Package textcomp Info: Sub-encoding information:
-(textcomp)               5 = only ISO-Adobe without \textcurrency
-(textcomp)               4 = 5 + \texteuro
-(textcomp)               3 = 4 + \textohm
-(textcomp)               2 = 3 + \textestimated + \textcurrency
-(textcomp)               1 = TS1 - \textcircled - \t
-(textcomp)               0 = TS1 (full)
-(textcomp)             Font families with sub-encoding setting implement
-(textcomp)             only a restricted character set as indicated.
-(textcomp)             Family '?' is the default used for unknown fonts.
-(textcomp)             See the documentation for details.
-Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
+. 
+. set scheme s1color
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/ts1enc.def
-File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
-)
-LaTeX Info: Redefining \oldstylenums on input line 334.
-Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
-Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
-Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
-Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
-Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
-Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
-Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
-Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
-Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
-Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
-Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
-Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
-Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
-Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
-Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
-Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
-Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
-Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
-Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
-Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
-Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
-Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
-Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
-Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
+. 
+. use griliches76
+(Wages of Very Young Men, Zvi Griliches, J.Pol.Ec. 1976)
 
-Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
-Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
-Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
-Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
-Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
-Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
-Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
-Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
-Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
-Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
-Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
-Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
-Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
-Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
-Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
-Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
-Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
-Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
-Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
-Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
-Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
-Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
-Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
-Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
-Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
-Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
-Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
-Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
-Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
-Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
-Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
-Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
-Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
-Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
-Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
-Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
-Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/fourier/fourier-orns.sty
-Package: fourier-orns 2004/01/30 1.1 fourier-ornaments package
-)
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 50.
-LaTeX Font Info:    Encoding `OT1' has changed to `T1' for symbol font
-(Font)              `operators' in the math version `normal' on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> T1/futs/m/n on input line 50.
-LaTeX Font Info:    Encoding `OT1' has changed to `T1' for symbol font
-(Font)              `operators' in the math version `bold' on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> T1/futs/m/n on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  T1/futs/m/n --> T1/futs/b/n on input line 51.
-LaTeX Font Info:    Redeclaring symbol font `letters' on input line 59.
-LaTeX Font Info:    Encoding `OML' has changed to `FML' for symbol font
-(Font)              `letters' in the math version `normal' on input line 59.
-LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
-(Font)                  OML/cmm/m/it --> FML/futmi/m/it on input line 59.
-LaTeX Font Info:    Encoding `OML' has changed to `FML' for symbol font
-(Font)              `letters' in the math version `bold' on input line 59.
-LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
-(Font)                  OML/cmm/b/it --> FML/futmi/m/it on input line 59.
-\symotherletters=\mathgroup4
-LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
-(Font)                  FML/futmi/m/it --> FML/futmi/b/it on input line 61.
-LaTeX Font Info:    Overwriting symbol font `otherletters' in version `bold'
-(Font)                  FML/futm/m/it --> FML/futm/b/it on input line 62.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 64.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 65.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 66.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 67.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 68.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 69.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 70.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 71.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 72.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 73.
-LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 113.
-LaTeX Font Info:    Encoding `OMS' has changed to `FMS' for symbol font
-(Font)              `symbols' in the math version `normal' on input line 113.
-LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
-(Font)                  OMS/cmsy/m/n --> FMS/futm/m/n on input line 113.
-LaTeX Font Info:    Encoding `OMS' has changed to `FMS' for symbol font
-(Font)              `symbols' in the math version `bold' on input line 113.
-LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
-(Font)                  OMS/cmsy/b/n --> FMS/futm/m/n on input line 113.
-LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 114.
-LaTeX Font Info:    Encoding `OMX' has changed to `FMX' for symbol font
-(Font)              `largesymbols' in the math version `normal' on input line 1
-14.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
-(Font)                  OMX/cmex/m/n --> FMX/futm/m/n on input line 114.
-LaTeX Font Info:    Encoding `OMX' has changed to `FMX' for symbol font
-(Font)              `largesymbols' in the math version `bold' on input line 114
-.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
-(Font)                  OMX/cmex/m/n --> FMX/futm/m/n on input line 114.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 115.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> T1/futs/bx/n on input line 115.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> T1/futs/bx/n on input line 115.
-LaTeX Font Info:    Redeclaring math alphabet \mathrm on input line 116.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 117.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> T1/futs/m/it on input line 117.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> T1/futs/m/it on input line 117.
-LaTeX Font Info:    Redeclaring math alphabet \mathcal on input line 118.
-LaTeX Font Info:    Redeclaring math symbol \parallel on input line 134.
-LaTeX Font Info:    Redeclaring math symbol \hbar on input line 148.
-LaTeX Font Info:    Redeclaring math symbol \varkappa on input line 186.
-LaTeX Font Info:    Redeclaring math symbol \varvarrho on input line 187.
-LaTeX Font Info:    Redeclaring math delimiter \Vert on input line 210.
-LaTeX Font Info:    Redeclaring math delimiter \vert on input line 215.
-LaTeX Font Info:    Redeclaring math delimiter \Downarrow on input line 225.
-LaTeX Font Info:    Redeclaring math delimiter \backslash on input line 227.
-LaTeX Font Info:    Redeclaring math delimiter \rangle on input line 229.
-LaTeX Font Info:    Redeclaring math delimiter \langle on input line 231.
-LaTeX Font Info:    Redeclaring math delimiter \rbrace on input line 233.
-LaTeX Font Info:    Redeclaring math delimiter \lbrace on input line 235.
-LaTeX Font Info:    Redeclaring math delimiter \rceil on input line 237.
-LaTeX Font Info:    Redeclaring math delimiter \lceil on input line 239.
-LaTeX Font Info:    Redeclaring math delimiter \rfloor on input line 241.
-LaTeX Font Info:    Redeclaring math delimiter \lfloor on input line 243.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 247.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 248.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 249.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 250.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 251.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 252.
-LaTeX Font Info:    Redeclaring math accent \check on input line 253.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 254.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 255.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 256.
-\symUfutm=\mathgroup5
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/ccaption/ccaption.sty
-Package: ccaption 2011/08/07 v3.2c Extended captioning and new floats
-\@contcwidth=\skip43
-\@contindw=\skip44
-\abovelegendskip=\skip45
-\belowlegendskip=\skip46
-\c@newflo@tctr=\count90
-)
-(/Users/wdoyle_work/Library/texmf/tex/latex/stata.sty
-Package: stata 2007/10/29 v1.33 LaTeX package for Stata code
+. 
+. *local filetype rtf
+. 
+. local filetype tex
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/alltt.sty
-Package: alltt 1997/06/16 v2.0g defines alltt environment
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/tools/calc.sty
-Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count91
-\calc@Bcount=\count92
-\calc@Adimen=\dimen111
-\calc@Bdimen=\dimen112
-\calc@Askip=\skip47
-\calc@Bskip=\skip48
-LaTeX Info: Redefining \setlength on input line 80.
-LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count93
-\calc@Cskip=\skip49
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/ifthen.sty
-Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/pstricks/pstricks.sty
-Package: pstricks 2015/11/14 v0.62 LaTeX wrapper for `PSTricks' (RN,HV)
+. 
+. *local gtype png
+. 
+. local gtype pdf
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/xcolor/xcolor.sty
-Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+. 
+. /**************************************************/
+. /*Recode  Data*/
+. /* NB: doing this just to "screw things up" in interesting ways */
+. /**************************************************/  
+. 
+. gen w=exp(lw)
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/color.cfg
-File: color.cfg 2016/01/02 v1.6 sample color configuration
-)
-Package xcolor Info: Driver file: pdftex.def on input line 225.
+. 
+. gen expr2=expr*expr
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/pdftex-def/pdftex.def
-File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+. 
+. drawnorm noise2,means(10) sds(2)
 
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/infwarerr.sty
-Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
-)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
-Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
-)
-\Gread@gobject=\count94
-)
-Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
-Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
-Package xcolor Info: Model `RGB' extended on input line 1364.
-Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
-Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
-Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
-Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
-Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
-Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
-)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pstricks/pstricks.tex
-(/usr/local/texlive/2016/texmf-dist/tex/generic/xkeyval/pst-xkey.tex
-File: pst-xkey.tex 2005/11/25 v1.6 PSTricks specialization of xkeyval (HA)
+. 
+. gen lw_het=lw
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/xkeyval/xkeyval.sty
-Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+. 
+. sum lw
 
-(/usr/local/texlive/2016/texmf-dist/tex/generic/xkeyval/xkeyval.tex
-(/usr/local/texlive/2016/texmf-dist/tex/generic/xkeyval/xkvutils.tex
-\XKV@toks=\toks16
-\XKV@tempa@toks=\toks17
-)
-\XKV@depth=\count95
-File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
-)))
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pstricks/pst-fp.tex
-`pst-fp' v0.05, 2010/01/17 (hv)
-\pstFP@xs=\count96
-\pstFP@xia=\count97
-\pstFP@xib=\count98
-\pstFP@xfa=\count99
-\pstFP@xfb=\count100
-\pstFP@rega=\count101
-\pstFP@regb=\count102
-\pstFP@regs=\count103
-\pstFP@times=\count104
-)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.te
-x
-\pgfutil@everybye=\toks18
-\pgfutil@tempdima=\dimen113
-\pgfutil@tempdimb=\dimen114
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+          lw |       758    5.686739    .4289494      4.605      7.051
 
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-li
-sts.tex))
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
-\pgfkeys@pathtoks=\toks19
-\pgfkeys@temptoks=\toks20
+. 
+. drawnorm mynoise3, mean(0) sd(3)
 
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.c
-ode.tex
-\pgfkeys@tmptoks=\toks21
-))
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex
-\pgf@x=\dimen115
-\pgf@xa=\dimen116
-\pgf@xb=\dimen117
-\pgf@xc=\dimen118
-\pgf@y=\dimen119
-\pgf@ya=\dimen120
-\pgf@yb=\dimen121
-\pgf@yc=\dimen122
-\c@pgf@counta=\count105
-\c@pgf@countb=\count106
-\c@pgf@countc=\count107
-\c@pgf@countd=\count108
-\pgfutil@tempcnta=\count109
-\pgfutil@tempcntb=\count110
-)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
-\pgfmath@dimen=\dimen123
-\pgfmath@count=\count111
-\pgfmath@box=\box26
-\pgfmath@toks=\toks22
-\pgfmath@stack@operand=\toks23
-\pgfmath@stack@operation=\toks24
-)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.
-tex
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic
-.code.tex)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigo
-nometric.code.tex)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.rando
-m.code.tex)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.compa
-rison.code.tex)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.
-code.tex)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round
-.code.tex)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.
-code.tex)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integ
-erarithmetics.code.tex)))
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count112
-))
-\pgffor@iter=\dimen124
-\pgffor@skip=\dimen125
-\pgffor@stack=\toks25
-\pgffor@toks=\toks26
-)
-\psLoopIndex=\count113
+. 
+. drawnorm mynoise4, mean(0) sd(4)
 
-`PSTricks' v2.66  <2016/05/18> (tvz)
-\pst@dima=\dimen126
-\pst@dimb=\dimen127
-\pst@dimc=\dimen128
-\pst@dimd=\dimen129
-\pst@dimg=\dimen130
-\pst@dimh=\dimen131
-\pst@dimm=\dimen132
-\pst@dimn=\dimen133
-\pst@dimo=\dimen134
-\pst@dimp=\dimen135
-\pst@hbox=\box27
-\pst@ibox=\box28
-\pst@boxg=\box29
-\pst@cnta=\count114
-\pst@cntb=\count115
-\pst@cntc=\count116
-\pst@cntd=\count117
-\pst@cntg=\count118
-\pst@cnth=\count119
-\pst@cntm=\count120
-\pst@cntn=\count121
-\pst@cnto=\count122
-\pst@cntp=\count123
-\@zero=\count124
-\pst@toks=\toks27
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pstricks/pstricks.con)
-\psunit=\dimen136
-\psxunit=\dimen137
-\psyunit=\dimen138
-\pst@C@@rType=\count125
-\pslinewidth=\dimen139
-\psk@startLW=\dimen140
-\psk@endLW=\dimen141
-\pst@customdefs=\toks28
-\pslinearc=\dimen142
-\pst@symbolStep=\dimen143
-\pst@symbolWidth=\dimen144
-\pst@symbolLinewidth=\dimen145
-\everypsbox=\toks29
-\psframesep=\dimen146
-\pslabelsep=\dimen147
-\sh@wgridXunit=\dimen148
-\sh@wgridYunit=\dimen149
-\pst@shift=\dimen150
-)
-File: pstricks.tex 2016/05/18 v2.66 `PSTricks' (tvz,hv)
+. 
+. drawnorm mynoise5, mean(0) sd(5)
 
-(/usr/local/texlive/2016/texmf-dist/tex/generic/pstricks/pst-fp.tex)
-File: pst-fp.tex 2016/05/18 v2.66 `PST-fp' (hv)
-)
-\st@box=\box30
-\st@box@wd=\dimen151
-\st@box@ht=\dimen152
-\st@box@dp=\dimen153
-\stsyndent=\skip50
-\streswidth=\skip51
-\st@parindent=\skip52
-\stexamplehskip=\skip53
-\sttechhskip=\skip54
-\st@ttbox@box=\box31
-\st@ttbox@framesep=\dimen154
-\ttboxIndent=\dimen155
-\ttboxWd=\dimen156
-\st@ttbox@boxwd=\dimen157
-\st@box=\box32
-\st@emptywidth=\skip55
-\st@linesize=\skip56
-\st@maxdepth=\skip57
-\st@maxheight=\skip58
-\st@mbdepth=\skip59
-\st@mtdepth=\skip60
-\st@xheight=\skip61
-\st@xwidth=\skip62
-\st@N=\count126
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2016/03/10 v2.15b AMS math features
-\@mathmargin=\skip63
+. 
+. drawnorm mynoise6, mean(0) sd(6)
 
-For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amstext.sty
-Package: amstext 2000/06/29 v2.01 AMS text
+. 
+. replace lw_het=4.4+.09*s+mynoise3 if s==10
+(29 real changes made)
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks30
-\ex@=\dimen158
-))
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen159
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsopn.sty
-Package: amsopn 2016/03/08 v2.02 operator names
-)
-\inf@bad=\count127
-LaTeX Info: Redefining \frac on input line 199.
-\uproot@=\count128
-\leftroot@=\count129
-LaTeX Info: Redefining \overline on input line 297.
-\classnum@=\count130
-\DOTSCASE@=\count131
-LaTeX Info: Redefining \ldots on input line 394.
-LaTeX Info: Redefining \dots on input line 397.
-LaTeX Info: Redefining \cdots on input line 518.
-\Mathstrutbox@=\box33
-\strutbox@=\box34
-\big@size=\dimen160
-LaTeX Font Info:    Redeclaring font encoding OML on input line 634.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 635.
-\macc@depth=\count132
-\c@MaxMatrixCols=\count133
-\dotsspace@=\muskip10
-\c@parentequation=\count134
-\dspbrk@lvl=\count135
-\tag@help=\toks31
-\row@=\count136
-\column@=\count137
-\maxfields@=\count138
-\andhelp@=\toks32
-\eqnshift@=\dimen161
-\alignsep@=\dimen162
-\tagshift@=\dimen163
-\tagwidth@=\dimen164
-\totwidth@=\dimen165
-\lineht@=\dimen166
-\@envbody=\toks33
-\multlinegap=\skip64
-\multlinetaggap=\skip65
-\mathdisplay@stack=\toks34
-LaTeX Info: Redefining \[ on input line 2739.
-LaTeX Info: Redefining \] on input line 2740.
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+. 
+. replace lw_het=4.4+.09*s+mynoise4 if s==12
+(330 real changes made)
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2016/05/09 v1.0r Standard LaTeX Graphics (DPC,SPQR)
+. 
+. replace lw_het=4.4+.09*s+mynoise5 if s==14
+(42 real changes made)
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/trig.sty
-Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
-File: graphics.cfg 2016/01/02 v1.10 sample graphics configuration
-)
-Package graphics Info: Driver file: pdftex.def on input line 96.
-)
-\Gin@req@height=\dimen167
-\Gin@req@width=\dimen168
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2016/05/05 v6.83n Hypertext links for LaTeX
+. 
+. replace lw_het=4.4+.09*s+mynoise6 if s==16
+(151 real changes made)
 
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
+. 
+. gen test3=iq+noise2
 
+. 
+. gen w_influence=w
 
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
-Package hobsub Info: Skipping package `infwarerr' (already loaded).
-Package hobsub Info: Skipping package `ltxcmds' (already loaded).
-Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-Package hobsub Info: Skipping package `ifvtex' (already loaded).
-Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
-Package hobsub Info: Skipping package `ifpdf' (already loaded).
-Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
-Package etexcmds Info: Could not find \expanded.
-(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
-(etexcmds)             that some package has redefined \expanded.
-(etexcmds)             In the latter case, load this package earlier.
-Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
-Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-Package: pdftexcmds 2016/05/10 v0.21 Utility functions of pdfTeX for LuaTeX (HO
-)
-Package pdftexcmds Info: LuaTeX not detected.
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
-)
-Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
-Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
-)
-Package hobsub Info: Skipping package `hobsub' (already loaded).
-Package: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
-Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
-Package: xcolor-patch 2016/05/16 xcolor patch
-Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
-Package atveryend Info: \enddocument detected (standard20110627).
-Package: atbegshi 2016/05/16 v1.17 At begin shipout hook (HO)
-Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
-Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/auxhook.sty
-Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
-)
-\@linkdim=\dimen169
-\Hy@linkcounter=\count139
-\Hy@pagecounter=\count140
+. 
+. replace w_influence=2000 if s==18& w>750 
+(4 real changes made)
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2016/05/05 v6.83n Hyperref: PDFDocEncoding definition (HO)
-)
-\Hy@SavedSpaceFactor=\count141
+. 
+. local y lw 
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/latexconfig/hyperref.cfg
-File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
-)
-Package hyperref Info: Option `colorlinks' set `true' on input line 4322.
-Package hyperref Info: Hyper figures OFF on input line 4446.
-Package hyperref Info: Link nesting OFF on input line 4451.
-Package hyperref Info: Hyper index ON on input line 4454.
-Package hyperref Info: Plain pages OFF on input line 4461.
-Package hyperref Info: Backreferencing OFF on input line 4466.
-Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4691.
-\c@Hy@tempcnt=\count142
+. 
+. local x s
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip11
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
-LaTeX Info: Redefining \url on input line 5044.
-\XeTeXLinkMargin=\dimen170
-\Fld@menulength=\count143
-\Field@Width=\dimen171
-\Fld@charsize=\dimen172
-Package hyperref Info: Hyper figures OFF on input line 6298.
-Package hyperref Info: Link nesting OFF on input line 6303.
-Package hyperref Info: Hyper index ON on input line 6306.
-Package hyperref Info: backreferencing OFF on input line 6313.
-Package hyperref Info: Link coloring ON on input line 6316.
-Package hyperref Info: Link coloring with OCG OFF on input line 6323.
-Package hyperref Info: PDF/A mode OFF on input line 6328.
-LaTeX Info: Redefining \ref on input line 6368.
-LaTeX Info: Redefining \pageref on input line 6372.
-\Hy@abspage=\count144
-\c@Item=\count145
-\c@Hfootnote=\count146
-)
+. 
+. local controls kww iq expr tenure rns smsa med test3
 
-Package hyperref Message: Driver (autodetected): hpdftex.
+. 
+. /**************************************************/
+. /* Basic descriptives and regression results */
+. /**************************************************/
+.   
+. eststo descriptives: mean `y' `x' `controls'
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2016/05/05 v6.83n Hyperref driver for pdfTeX
-\Fld@listcount=\count147
-\c@bookmark@seq@number=\count148
+Mean estimation                     Number of obs    =     758
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
-82.
-)
-\Hy@SectionHShift=\skip66
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/natbib/natbib.sty
-Package: natbib 2010/09/13 8.31b (PWD, AO)
-\bibhang=\skip67
-\bibsep=\skip68
-LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count149
-)
-(./diagnose.aux)
-\openout1 = `diagnose.aux'.
+--------------------------------------------------------------
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+          lw |   5.686739   .0155801      5.656153    5.717324
+           s |   13.40501   .0810637      13.24588    13.56415
+         kww |   36.57388   .2652295      36.05321    37.09455
+          iq |   103.8562   .4946522      102.8851    104.8273
+        expr |   1.735429   .0764767      1.585297     1.88556
+      tenure |   1.831135    .060789        1.7118     1.95047
+         rns |   .2691293   .0161195       .237485    .3007736
+        smsa |   .7044855   .0165835      .6719303    .7370407
+         med |   10.91029    .099562      10.71484    11.10574
+       test3 |   113.8138   .5029683      112.8265    114.8012
+--------------------------------------------------------------
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for FML/futm/m/it on input line 16.
-LaTeX Font Info:    Try loading font information for FML+futm on input line 16.
+. 
+. #delimit;
+delimiter now ;
+. esttab descriptives using  "esttab_means.`filetype'",
+>         label /* Use variable labels */
+>         replace /*Replace file if it exists */
+>         nostar /* No sig tests */
+>         cells(b(fmt(2) label("Mean")) se(fmt(2) label("S.E.") ))
+>         title("Descriptive Statistics for Variables in Analysis")
+>         nonumbers
+>         nomtitles
+>         ;
+(output written to esttab_means.tex)
 
+. #delimit cr
+delimiter now cr
+. 
+. estimates clear
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/fourier/fmlfutm.fd
-File: fmlfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futm.
-)
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for FMS/futm/m/n on input line 16.
-LaTeX Font Info:    Try loading font information for FMS+futm on input line 16.
+. 
+. /* Run the basic regression */
+. reg `y' `x'
 
+      Source |       SS       df       MS              Number of obs =     758
+-------------+------------------------------           F(  1,   756) =  255.70
+       Model |  35.2039946     1  35.2039946           Prob > F      =  0.0000
+    Residual |  104.082155   756  .137674809           R-squared     =  0.2527
+-------------+------------------------------           Adj R-squared =  0.2518
+       Total |   139.28615   757  .183997556           Root MSE      =  .37105
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/fourier/fmsfutm.fd
-File: fmsfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FMS/futm.
-)
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for FMX/futm/m/n on input line 16.
-LaTeX Font Info:    Try loading font information for FMX+futm on input line 16.
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .0966245   .0060425    15.99   0.000     .0847624    .1084866
+       _cons |   4.391486   .0821136    53.48   0.000     4.230288    4.552684
+------------------------------------------------------------------------------
 
+. eststo basic_model, title("Model 1")
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/fourier/fmxfutm.fd
-File: fmxfutm.fd futm-extension
-)
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 16.
+. 
+. reg `y' `x' `controls'
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/ts1cmr.fd
-File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Try loading font information for T1+futs on input line 16.
+      Source |       SS       df       MS              Number of obs =     758
+-------------+------------------------------           F(  9,   748) =   47.87
+       Model |   50.902211     9  5.65580123           Prob > F      =  0.0000
+    Residual |  88.3839388   748  .118160346           R-squared     =  0.3655
+-------------+------------------------------           Adj R-squared =  0.3578
+       Total |   139.28615   757  .183997556           Root MSE      =  .34374
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/fourier/t1futs.fd
-File: t1futs.fd 2004/03/02 Fontinst v1.926 font definitions for T1/futs.
-)
-*geometry* driver: auto-detecting
-*geometry* detected driver: pdftex
-*geometry* verbose mode - [ preamble ] result:
-* driver: pdftex
-* paper: <default>
-* layout: <same size as paper>
-* layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: 
-* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
-* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
-* \paperwidth=614.295pt
-* \paperheight=794.96999pt
-* \textwidth=469.75502pt
-* \textheight=650.43001pt
-* \oddsidemargin=0.0pt
-* \evensidemargin=0.0pt
-* \topmargin=-37.0pt
-* \headheight=12.0pt
-* \headsep=25.0pt
-* \topskip=12.0pt
-* \footskip=30.0pt
-* \marginparwidth=44.0pt
-* \marginparsep=10.0pt
-* \columnsep=10.0pt
-* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
-* \hoffset=0.0pt
-* \voffset=0.0pt
-* \mag=1000
-* \@twocolumnfalse
-* \@twosidefalse
-* \@mparswitchfalse
-* \@reversemarginfalse
-* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .0874834     .00709    12.34   0.000     .0735648    .1014021
+         kww |    .003179    .001959     1.62   0.105    -.0006668    .0070247
+          iq |   .0131465   .0066343     1.98   0.048     .0001224    .0261706
+        expr |   .0389122   .0063629     6.12   0.000     .0264209    .0514035
+      tenure |    .032076   .0078302     4.10   0.000     .0167042    .0474477
+         rns |   -.072066   .0289568    -2.49   0.013    -.1289122   -.0152197
+        smsa |   .1285249   .0281083     4.57   0.000     .0733444    .1837054
+         med |   .0058976   .0049513     1.19   0.234    -.0038225    .0156177
+       test3 |  -.0102099   .0064909    -1.57   0.116    -.0229524    .0025326
+       _cons |    3.93268   .1269571    30.98   0.000     3.683445    4.181914
+------------------------------------------------------------------------------
 
-(/usr/local/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count150
-\scratchdimen=\dimen173
-\scratchbox=\box35
-\nofMPsegments=\count151
-\nofMParguments=\count152
-\everyMPshowfont=\toks35
-\MPscratchCnt=\count153
-\MPscratchDim=\dimen174
-\MPnumerator=\count154
-\makeMPintoPDFobject=\count155
-\everyMPtoPDFconversion=\toks36
-) (/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+. eststo full_model, title("Model 2")
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
-)
-Package grfext Info: Graphics extension search list:
-(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 456.
+. 
+. #delimit ;
+delimiter now ;
+. quietly esttab * using `y'_models.`filetype',          /* estout command: * indicates all estima
+> tes in memory */
+>                label                          /*Use labels for models and variables */
+>                nodepvars                      /* Use my model titles */
+>                b(2)                           /* b= coefficients , this gives two sig digits */
+>                not                            /* I don't want t statistics */
+>                se(2)                         /* I do want standard errors */
+>                nostar                       /* No stars */
+>                r2 (2)                      /* R squared */
+>                ar2 (2)                     /* Adj R squared */
+>                scalar(F  "df_m D.F. Model" "df_r D.F. Residual" N)   /* select stats from the er
+> eturn (list) */
+>                sfmt (2 0 0 0)               /* format for stats*/
+>                replace                   /* replace existing file */
+>                mtitles ("No Controls" "Student Controls" "Students and Finance" "Full Model")  /
+> *  Model titles */
+>                ;
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
-))
-\AtBeginShipoutBox=\box36
-Package hyperref Info: Link coloring ON on input line 16.
+. #delimit cr
+delimiter now cr
+. 
+. /**************************************************/
+. /*Collinearity*/
+. /**************************************************/  
+. estimates restore full_model
+(results full_model are active now)
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
+. 
+. estat vif
 
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
-)
-\c@section@level=\count156
-)
-LaTeX Info: Redefining \ref on input line 16.
-LaTeX Info: Redefining \pageref on input line 16.
-LaTeX Info: Redefining \nameref on input line 16.
+    Variable |       VIF       1/VIF  
+-------------+----------------------
+          iq |     52.30    0.019121
+       test3 |     51.76    0.019321
+           s |      1.60    0.623393
+         kww |      1.31    0.762775
+         med |      1.18    0.847380
+        expr |      1.15    0.869634
+      tenure |      1.10    0.908892
+         rns |      1.06    0.945149
+        smsa |      1.06    0.947727
+-------------+----------------------
+    Mean VIF |     12.50
 
-(./diagnose.out) (./diagnose.out)
-\@outlinefile=\write3
-\openout3 = `diagnose.out'.
+. 
+. test test3 iq /* Combined these two need to be in the model */
 
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <12> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 32.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 35.
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 53.
+ ( 1)  test3 = 0
+ ( 2)  iq = 0
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-) [1
-Non-PDF special ignored!
-Non-PDF special ignored!
-Non-PDF special ignored!
-Non-PDF special ignored!
+       F(  2,   748) =    4.60
+            Prob > F =    0.0104
+
+. 
+. local controls kww iq expr tenure rns smsa med 
+
+. 
+. reg `y' `x' `controls'
+
+      Source |       SS       df       MS              Number of obs =     758
+-------------+------------------------------           F(  8,   749) =   53.43
+       Model |  50.6098566     8  6.32623207           Prob > F      =  0.0000
+    Residual |  88.6762933   749  .118392915           R-squared     =  0.3634
+-------------+------------------------------           Adj R-squared =  0.3566
+       Total |   139.28615   757  .183997556           Root MSE      =  .34408
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .0878976   .0070921    12.39   0.000     .0739749    .1018203
+         kww |   .0030669   .0019596     1.57   0.118    -.0007801    .0069139
+          iq |   .0028559   .0011028     2.59   0.010      .000691    .0050208
+        expr |   .0386396   .0063668     6.07   0.000     .0261407    .0511385
+      tenure |   .0322462   .0078371     4.11   0.000     .0168608    .0476315
+         rns |  -.0720075   .0289852    -2.48   0.013    -.1289095   -.0151055
+        smsa |   .1302547   .0281144     4.63   0.000     .0750623    .1854471
+         med |   .0055788    .004952     1.13   0.260    -.0041427    .0153004
+       _cons |   3.840349   .1126832    34.08   0.000     3.619136    4.061561
+------------------------------------------------------------------------------
+
+. 
+. eststo full_model_a, title("Model 2:No Test 3")
+
+. 
+. estat vif
+
+    Variable |       VIF       1/VIF  
+-------------+----------------------
+           s |      1.60    0.624254
+          iq |      1.44    0.693400
+         kww |      1.31    0.763785
+         med |      1.18    0.848802
+        expr |      1.15    0.870279
+      tenure |      1.10    0.909065
+         rns |      1.06    0.945150
+        smsa |      1.05    0.949180
+-------------+----------------------
+    Mean VIF |      1.24
+
+. 
+. 
+. 
+. /**************************************************/
+. /*Heteroskedasticity*/
+. /**************************************************/
+.   
+. 
+. reg lw_het  `x' `controls'
+
+      Source |       SS       df       MS              Number of obs =     758
+-------------+------------------------------           F(  8,   749) =    1.78
+       Model |  246.321772     8  30.7902214           Prob > F      =  0.0767
+    Residual |  12920.0966   749  17.2497953           R-squared     =  0.0187
+-------------+------------------------------           Adj R-squared =  0.0082
+       Total |  13166.4184   757  17.3928909           Root MSE      =  4.1533
+
+------------------------------------------------------------------------------
+      lw_het |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1101308   .0856057     1.29   0.199    -.0579249    .2781864
+         kww |   .0301567   .0236539     1.27   0.203     -.016279    .0765924
+          iq |  -.0074044   .0133112    -0.56   0.578    -.0335361    .0187273
+        expr |  -.0617517   .0768512    -0.80   0.422    -.2126211    .0891177
+      tenure |   -.063156   .0945991    -0.67   0.505     -.248867    .1225549
+         rns |  -.4993664   .3498695    -1.43   0.154    -1.186208    .1874751
+        smsa |  -.6310567   .3393576    -1.86   0.063    -1.297262    .0351486
+         med |   .0667451   .0597741     1.12   0.265    -.0505996    .1840897
+       _cons |   3.961471   1.360155     2.91   0.004     1.291301     6.63164
+------------------------------------------------------------------------------
+
+. 
+. estimates store het_model
+
+. 
+. predict e, resid
+
+. 
+. graph twoway scatter e s, yline(0) name(residplot1)
+
+. 
+. graph export het_results.`gtype', replace
+(file /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/diagnose/het_results.pdf written
+>  in PDF format)
+
+. 
+. /*Breusch-Pagen Test */
+. est restore het_model
+(results het_model are active now)
+
+. 
+. //No options, yhat is used as the covariate
+. 
+. estat hettest , iid 
+
+Breusch-Pagan / Cook-Weisberg test for heteroskedasticity 
+         Ho: Constant variance
+         Variables: fitted values of lw_het
+
+         chi2(1)      =     7.08
+         Prob > chi2  =   0.0078
+
+. 
+. //BP with subsets of covariates
+. 
+. estat hettest `controls', iid
+
+Breusch-Pagan / Cook-Weisberg test for heteroskedasticity 
+         Ho: Constant variance
+         Variables: kww iq expr tenure rns smsa med
+
+         chi2(7)      =     6.36
+         Prob > chi2  =   0.4985
+
+. 
+. estat hettest s expr
+
+Breusch-Pagan / Cook-Weisberg test for heteroskedasticity 
+         Ho: Constant variance
+         Variables: s expr
+
+         chi2(2)      =    20.53
+         Prob > chi2  =   0.0000
+
+. 
+. /*White Test */
+.   
+. estat imtest, white
+
+White's test for Ho: homoskedasticity
+         against Ha: unrestricted heteroskedasticity
+
+         chi2(42)     =     71.18
+         Prob > chi2  =    0.0033
+
+Cameron & Trivedi's decomposition of IM-test
+
+---------------------------------------------------
+              Source |       chi2     df      p
+---------------------+-----------------------------
+  Heteroskedasticity |      71.18     42    0.0033
+            Skewness |       6.15      8    0.6305
+            Kurtosis |      14.35      1    0.0002
+---------------------+-----------------------------
+               Total |      91.68     51    0.0004
+---------------------------------------------------
+
+. 
+. /*Robust s.e.'s*/
+. reg lw_het `x' `controls', robust
+
+Linear regression                                      Number of obs =     758
+                                                       F(  8,   749) =    2.08
+                                                       Prob > F      =  0.0354
+                                                       R-squared     =  0.0187
+                                                       Root MSE      =  4.1533
+
+------------------------------------------------------------------------------
+             |               Robust
+      lw_het |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1101308   .0841732     1.31   0.191    -.0551126    .2753742
+         kww |   .0301567   .0253353     1.19   0.234    -.0195799    .0798933
+          iq |  -.0074044   .0120285    -0.62   0.538    -.0310181    .0162093
+        expr |  -.0617517   .0766726    -0.81   0.421    -.2122704    .0887671
+      tenure |   -.063156   .1075666    -0.59   0.557    -.2743239    .1480118
+         rns |  -.4993664   .3218263    -1.55   0.121    -1.131155    .1324224
+        smsa |  -.6310567   .3423779    -1.84   0.066    -1.303191    .0410778
+         med |   .0667451   .0559967     1.19   0.234    -.0431841    .1766743
+       _cons |   3.961471   1.168143     3.39   0.001     1.668247    6.254694
+------------------------------------------------------------------------------
+
+. eststo full_model_robust, title("Model 2: Robust SE")
+
+. 
+. 
+. /*Clustered se.'s*/
+. reg `y' `x' `controls', cluster(med)
+
+Linear regression                                      Number of obs =     758
+                                                       F(  8,    18) =  126.22
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.3634
+                                                       Root MSE      =  .34408
+
+                                   (Std. Err. adjusted for 19 clusters in med)
+------------------------------------------------------------------------------
+             |               Robust
+          lw |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .0878976   .0090694     9.69   0.000     .0688436    .1069516
+         kww |   .0030669   .0017164     1.79   0.091    -.0005391    .0066729
+          iq |   .0028559   .0008181     3.49   0.003      .001137    .0045747
+        expr |   .0386396   .0068981     5.60   0.000     .0241472     .053132
+      tenure |   .0322462   .0049196     6.55   0.000     .0219105    .0425818
+         rns |  -.0720075   .0236252    -3.05   0.007    -.1216422   -.0223729
+        smsa |   .1302547    .014499     8.98   0.000     .0997935    .1607159
+         med |   .0055788    .003547     1.57   0.133    -.0018732    .0130309
+       _cons |   3.840349   .1197726    32.06   0.000     3.588716    4.091982
+------------------------------------------------------------------------------
+
+. eststo full_model_cluster, title("Model 2: Cluster SE")
+
+. 
+.   
+. /*Data Scaling*/
+. 
+. reg `y' `x' `controls'
+
+      Source |       SS       df       MS              Number of obs =     758
+-------------+------------------------------           F(  8,   749) =   53.43
+       Model |  50.6098566     8  6.32623207           Prob > F      =  0.0000
+    Residual |  88.6762933   749  .118392915           R-squared     =  0.3634
+-------------+------------------------------           Adj R-squared =  0.3566
+       Total |   139.28615   757  .183997556           Root MSE      =  .34408
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .0878976   .0070921    12.39   0.000     .0739749    .1018203
+         kww |   .0030669   .0019596     1.57   0.118    -.0007801    .0069139
+          iq |   .0028559   .0011028     2.59   0.010      .000691    .0050208
+        expr |   .0386396   .0063668     6.07   0.000     .0261407    .0511385
+      tenure |   .0322462   .0078371     4.11   0.000     .0168608    .0476315
+         rns |  -.0720075   .0289852    -2.48   0.013    -.1289095   -.0151055
+        smsa |   .1302547   .0281144     4.63   0.000     .0750623    .1854471
+         med |   .0055788    .004952     1.13   0.260    -.0041427    .0153004
+       _cons |   3.840349   .1126832    34.08   0.000     3.619136    4.061561
+------------------------------------------------------------------------------
+
+.   
+. reg `y' `x' `controls', beta
+
+      Source |       SS       df       MS              Number of obs =     758
+-------------+------------------------------           F(  8,   749) =   53.43
+       Model |  50.6098566     8  6.32623207           Prob > F      =  0.0000
+    Residual |  88.6762933   749  .118392915           R-squared     =  0.3634
+-------------+------------------------------           Adj R-squared =  0.3566
+       Total |   139.28615   757  .183997556           Root MSE      =  .34408
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|                     Beta
+-------------+----------------------------------------------------------------
+           s |   .0878976   .0070921    12.39   0.000                 .4573323
+         kww |   .0030669   .0019596     1.57   0.118                 .0522099
+          iq |   .0028559   .0011028     2.59   0.010                 .0906704
+        expr |   .0386396   .0063668     6.07   0.000                 .1896665
+      tenure |   .0322462   .0078371     4.11   0.000                 .1258147
+         rns |  -.0720075   .0289852    -2.48   0.013                -.0745005
+        smsa |   .1302547   .0281144     4.63   0.000                 .1386435
+         med |   .0055788    .004952     1.13   0.260                 .0356506
+       _cons |   3.840349   .1126832    34.08   0.000                        .
+------------------------------------------------------------------------------
+
+. 
+. eststo full_model_beta, title("Model 2: Standardized Coefficients")
+
+. 
+. gen expr_new=1+2*s
+
+. 
+. local x expr_new
+
+. 
+. reg `y' `x' `controls', beta
+
+      Source |       SS       df       MS              Number of obs =     758
+-------------+------------------------------           F(  8,   749) =   53.43
+       Model |  50.6098566     8  6.32623207           Prob > F      =  0.0000
+    Residual |  88.6762933   749  .118392915           R-squared     =  0.3634
+-------------+------------------------------           Adj R-squared =  0.3566
+       Total |   139.28615   757  .183997556           Root MSE      =  .34408
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|                     Beta
+-------------+----------------------------------------------------------------
+    expr_new |   .0439488    .003546    12.39   0.000                 .4573323
+         kww |   .0030669   .0019596     1.57   0.118                 .0522099
+          iq |   .0028559   .0011028     2.59   0.010                 .0906704
+        expr |   .0386396   .0063668     6.07   0.000                 .1896665
+      tenure |   .0322462   .0078371     4.11   0.000                 .1258147
+         rns |  -.0720075   .0289852    -2.48   0.013                -.0745005
+        smsa |   .1302547   .0281144     4.63   0.000                 .1386435
+         med |   .0055788    .004952     1.13   0.260                 .0356506
+       _cons |     3.7964   .1134835    33.45   0.000                        .
+------------------------------------------------------------------------------
+
+. 
+. local x s
+
+. 
+. /**************************************************/
+. /*Functional Form */
+. /**************************************************/
+. 
+. graph twoway scatter w s, msize(tiny)||lowess w s ,name(lowess_plot)
+
+. 
+. graph export lowess1.`gtype', replace
+(file /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/diagnose/lowess1.pdf written in 
+> PDF format)
+
+. 
+. graph twoway scatter w s, msize(tiny)||lowess w s ||lfit w s ,name(lfit_plot)
+
+. 
+. graph export lfit1.`gtype', replace
+(file /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/diagnose/lfit1.pdf written in PD
+> F format)
+
+. 
+. /* Basic scatterplot */
+. graph twoway scatter lw expr, msize(tiny)
+
+. 
+. graph save basic_scatter, replace
+(file basic_scatter.gph saved)
+
+. 
+. /* Add lowess */
+. graph twoway scatter lw expr, msize(tiny)  ///
+>   ||lowess lw expr ||, legend (order(2 "Lowess"))
+
+. graph save lowess_add, replace
+(file lowess_add.gph saved)
+
+. 
+. /* Add linear fit */
+. graph twoway scatter lw expr, msize(tiny) ///
+>   ||lowess lw expr ///
+>   || lfit lw expr, ///
+>   legend(order(2 "Lowess" 3 "Linear Fit"))
+
+.    
+. graph save lfit_add, replace
+(file lfit_add.gph saved)
+
+. 
+. /* Add quadratic fit */
+. graph twoway scatter lw expr, msize(tiny) ///
+>   ||lowess lw expr ///
+>   || lfit lw expr ///
+>   || qfit lw expr, ///
+>   legend(order(2 "Lowess" 3 "Linear Fit" 4 "Quadratic Fit"))
+
+. 
+. graph save qfit_add, replace 
+(file qfit_add.gph saved)
+
+. 
+. graph combine basic_scatter.gph lowess_add.gph lfit_add.gph qfit_add.gph, rows(2)
+
+. 
+. graph export logfit.`gtype', replace
+(file /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/diagnose/logfit.pdf written in P
+> DF format)
+
+. 
+. reg lw s expr expr2
+
+      Source |       SS       df       MS              Number of obs =     758
+-------------+------------------------------           F(  3,   754) =  108.26
+       Model |   41.934855     3   13.978285           Prob > F      =  0.0000
+    Residual |  97.3512949   754  .129113123           R-squared     =  0.3011
+-------------+------------------------------           Adj R-squared =  0.2983
+       Total |   139.28615   757  .183997556           Root MSE      =  .35932
+
+------------------------------------------------------------------------------
+          lw |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   .1071039   .0060328    17.75   0.000     .0952609    .1189469
+        expr |    .017041   .0161983     1.05   0.293    -.0147582    .0488401
+       expr2 |   .0039664   .0021414     1.85   0.064    -.0002375    .0081703
+       _cons |    4.19193   .0855647    48.99   0.000     4.023956    4.359903
+------------------------------------------------------------------------------
+
+. 
+. test expr expr2
+
+ ( 1)  expr = 0
+ ( 2)  expr2 = 0
+
+       F(  2,   754) =   26.07
+            Prob > F =    0.0000
+
+. 
+. 
+. /**************************************************/
+. /* Influential Observiations*/
+. /**************************************************/  
+. 
+. reg  w_influence s expr expr2
+
+      Source |       SS       df       MS              Number of obs =     758
+-------------+------------------------------           F(  3,   754) =   85.42
+       Model |  6746651.02     3  2248883.67           Prob > F      =  0.0000
+    Residual |  19851657.7   754  26328.4585           R-squared     =  0.2536
+-------------+------------------------------           Adj R-squared =  0.2507
+       Total |  26598308.8   757  35136.4713           Root MSE      =  162.26
+
+------------------------------------------------------------------------------
+ w_influence |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   43.08757   2.724237    15.82   0.000     37.73958    48.43557
+        expr |   14.87053   7.314709     2.03   0.042      .510917    29.23015
+       expr2 |    .442536   .9670089     0.46   0.647    -1.455814    2.340886
+       _cons |  -276.8727   38.63867    -7.17   0.000    -352.7249   -201.0206
+------------------------------------------------------------------------------
+
+. 
+. scalar reg_n=e(N)
+
+. 
+. /* leverage plot */
+. 
+. lvr2plot, msize(tiny) name(leverage_plot)
+
+. 
+. graph export levplot.`gtype', replace
+(file /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/diagnose/levplot.pdf written in 
+> PDF format)
+
+. 
+. /* Leverage and outliers  */
+.   
+. predict lev if e(sample), leverage
+
+. 
+. predict resid if e(sample), resid
+
+. 
+. gen  resid2=resid^2
+
+. 
+. gsort -lev
+
+. 
+. list w_influence s lev resid2 in 1/10
+
+     +-------------------------------------+
+     | w_infl~e    s        lev     resid2 |
+     |-------------------------------------|
+  1. | 555.0176   11   .1402453   16845.92 |
+  2. | 401.0154   12   .1191845   3480.702 |
+  3. | 430.0924    9   .0920351   12456.28 |
+  4. | 454.8647   12   .0682902    395.947 |
+  5. | 204.9979   10   .0488069   16943.56 |
+     |-------------------------------------|
+  6. | 288.0114   12    .045244   17041.28 |
+  7. | 367.9695   12    .037804   1923.356 |
+  8. | 375.0278    9   .0375033   8861.435 |
+  9. | 600.0421   12   .0371506   35667.26 |
+ 10. | 332.9526   11   .0312744   839.5032 |
+     +-------------------------------------+
+
+. 
+. exit 
+
+end of do-file
 
 
-Non-PDF special ignored!
-Non-PDF special ignored!
-Non-PDF special ignored!{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/upd
-map/pdftex.map}]
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 109.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 159.
- [2] <het_results.pdf, id=69, 397.485pt x 289.08pt>
-File: het_results.pdf Graphic file (type pdf)
+. sum w_influence
 
-<use het_results.pdf>
-Package pdftex.def Info: het_results.pdf used on input line 181.
-(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
-LaTeX Font Info:    Try loading font information for FML+futmi on input line 19
-0.
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+ w_influence |       758    329.8156    187.4472   99.98299       2000
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/fourier/fmlfutmi.fd
-File: fmlfutmi.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futmi.
-)
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 11.03998pt on input line 190.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 8.27998pt on input line 190.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 6.43999pt on input line 190.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 11.03998pt on input line 190.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 8.27998pt on input line 190.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 6.43999pt on input line 190.
- [3 <./het_results.pdf>] [4] [5] [6] <lowess1.pdf, id=102, 397.485pt x 289.08pt
->
-File: lowess1.pdf Graphic file (type pdf)
+. 
+. list w_influence s lev resid2 in 1/20
 
-<use lowess1.pdf>
-Package pdftex.def Info: lowess1.pdf used on input line 450.
-(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
- <lfit1.pdf, id=103, 397.485pt x 289.08pt>
-File: lfit1.pdf Graphic file (type pdf)
- <use lfit1.pdf>
-Package pdftex.def Info: lfit1.pdf used on input line 460.
-(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
+     +-------------------------------------+
+     | w_infl~e    s        lev     resid2 |
+     |-------------------------------------|
+  1. | 555.0176   11   .1402453   16845.92 |
+  2. | 401.0154   12   .1191845   3480.702 |
+  3. | 430.0924    9   .0920351   12456.28 |
+  4. | 454.8647   12   .0682902    395.947 |
+  5. | 204.9979   10   .0488069   16943.56 |
+     |-------------------------------------|
+  6. | 288.0114   12    .045244   17041.28 |
+  7. | 367.9695   12    .037804   1923.356 |
+  8. | 375.0278    9   .0375033   8861.435 |
+  9. | 600.0421   12   .0371506   35667.26 |
+ 10. | 332.9526   11   .0312744   839.5032 |
+     |-------------------------------------|
+ 11. | 961.9861   16   .0290767   155736.2 |
+ 12. | 244.9367   12   .0251759   23214.04 |
+ 13. | 254.9328    9   .0219757   27.08536 |
+ 14. | 300.0653   12   .0202071   8031.927 |
+ 15. | 462.2011   14   .0196361   99.83777 |
+     |-------------------------------------|
+ 16. | 362.8538   12   .0192746   635.2373 |
+ 17. | 433.1136   12   .0188376   2101.894 |
+ 18. | 244.9367   12   .0165479   19002.82 |
+ 19. | 199.9365   10   .0151909   8364.369 |
+ 20. |     2000   18   .0135664    2006301 |
+     +-------------------------------------+
 
-<logfit.pdf, id=104, 397.485pt x 289.08pt>
-File: logfit.pdf Graphic file (type pdf)
- <use logfit.pdf>
-Package pdftex.def Info: logfit.pdf used on input line 468.
-(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
-LaTeX Font Info:    Try loading font information for TS1+futs on input line 490
-.
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04386.000000"
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/fourier/ts1futs.fd
-File: ts1futs.fd 2004/03/26 Fontinst v1.926 font definitions for TS1/futs.
-) [7]
+. 
+. predict  dfits if e(sample), dfits
 
-LaTeX Warning: Text page 8 contains only floats.
+. 
+. gsort -dfits
 
-[8 <./lowess1.pdf> <./lfit1.pdf>] <levplot.pdf, id=140, 397.485pt x 289.08pt>
-File: levplot.pdf Graphic file (type pdf)
+. 
+. generate cutoff =abs(dfits)> 2*sqrt((e(df_m)+1)/e(N)) & e(sample)
 
-<use levplot.pdf>
-Package pdftex.def Info: levplot.pdf used on input line 512.
-(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
- [9 <./logfit.pdf>] [10 <./levplot.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 599.
- [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 599.
- (./diagnose.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 599.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 599.
-Package rerunfilecheck Info: File `diagnose.out' has not changed.
-(rerunfilecheck)             Checksum: 7F804F01429C257D470DB9E95477798C;684.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 599.
- ) 
-Here is how much of TeX's memory you used:
- 14905 strings out of 493014
- 242588 string characters out of 6133351
- 347458 words of memory out of 5000000
- 18180 multiletter control sequences out of 15000+600000
- 62369 words of font info for 68 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 43i,6n,42p,417b,566s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/t
-exlive/2016/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/local/tex
-live/2016/texmf-dist/fonts/type1/public/fourier/fourier-mex.pfb></usr/local/tex
-live/2016/texmf-dist/fonts/type1/public/fourier/fourier-mlit.pfb></usr/local/te
-xlive/2016/texmf-dist/fonts/type1/public/fourier/fourier-ms.pfb></usr/local/tex
-live/2016/texmf-dist/fonts/type1/adobe/utopia/putb8a.pfb></usr/local/texlive/20
-16/texmf-dist/fonts/type1/adobe/utopia/putr8a.pfb></usr/local/texlive/2016/texm
-f-dist/fonts/type1/adobe/utopia/putri8a.pfb></usr/local/texlive/2016/texmf-dist
-/fonts/type1/public/cm-super/sftt0800.pfb></usr/local/texlive/2016/texmf-dist/f
-onts/type1/public/cm-super/sftt1200.pfb>
-Output written on diagnose.pdf (11 pages, 1128249 bytes).
-PDF statistics:
- 219 PDF objects out of 1000 (max. 8388607)
- 181 compressed objects within 2 object streams
- 32 named destinations out of 1000 (max. 500000)
- 122 words of extra memory for PDF output out of 10000 (max. 10000000)
+. 
+. list w_influence s dfits if cutoff
 
+     +---------------------------+
+     | w_infl~e    s       dfits |
+     |---------------------------|
+  1. |     2000   18    1.087261 |
+  2. |     2000   18    .9948739 |
+  3. |     2000   18    .9187664 |
+  4. |     2000   18    .8395817 |
+  5. | 961.9861   16    .4285912 |
+     |---------------------------|
+  6. | 555.0176   11    .3483618 |
+  7. | 600.0421   12    .2330579 |
+  8. | 430.0924    9    .2297477 |
+  9. | 938.2344   14    .2089124 |
+ 10. | 625.1553   11    .2080431 |
+     |---------------------------|
+ 11. |  749.945   12    .1982541 |
+ 12. |  749.945   12    .1964909 |
+ 13. | 837.9848   13    .1944492 |
+ 14. |  865.234   17    .1892176 |
+ 15. | 724.8755   12     .188384 |
+     |---------------------------|
+ 16. | 470.1256   10    .1652541 |
+ 17. | 665.1417   12    .1649384 |
+ 18. | 885.3648   16    .1599936 |
+ 19. | 817.2948   17    .1490838 |
+750. | 244.9367   12   -.1528273 |
+     |---------------------------|
+751. | 224.0793   18   -.1536943 |
+752. | 209.9774   17   -.1620944 |
+753. | 288.0114   12   -.1791981 |
+754. | 204.9979   10    -.186281 |
+755. | 150.0547   18   -.1867089 |
+     |---------------------------|
+756. | 244.9367   16   -.1897722 |
+757. | 199.9365   16   -.2014552 |
+758. | 132.9536   18   -.2031146 |
+     +---------------------------+
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04386.000000"
+
+. 
+. predict cooksd1 if e(sample), cooksd
+
+. 
+. generate cutoff2=4/reg_n
+
+. 
+. gsort -cooksd1
+
+. 
+. li w_influence resid2 lev cooksd if cooksd1>cutoff2
+
+     +-------------------------------------------+
+     | w_infl~e     resid2        lev    cooksd1 |
+     |-------------------------------------------|
+  1. |     2000    2006301   .0135664   .2656075 |
+  2. |     2000    2093949   .0108914   .2213494 |
+  3. |     2000    2140688   .0090967   .1883172 |
+  4. |     2000    2186048   .0074457   .1568812 |
+  5. | 961.9861   155736.2   .0290767    .045612 |
+     |-------------------------------------------|
+  6. | 555.0176   16845.92   .1402453   .0303493 |
+  7. | 600.0421   35667.26   .0371506   .0135717 |
+  8. | 430.0924   12456.28   .0920351   .0132044 |
+  9. | 625.1553   87345.66   .0126778   .0107866 |
+ 10. | 938.2344   374398.6   .0029971   .0107189 |
+     |-------------------------------------------|
+ 11. | 132.9536   133773.1   .0079474   .0102574 |
+ 12. | 199.9365   100093.9   .0104145   .0101078 |
+ 13. |  749.945   259862.2   .0039044   .0097099 |
+ 14. |  749.945   181743.9   .0054882    .009576 |
+ 15. | 837.9848   307713.2   .0031689    .009318 |
+     |-------------------------------------------|
+ 16. | 244.9367   78472.94   .0117686   .0089793 |
+ 17. |  865.234   138200.6   .0066916   .0088999 |
+ 18. | 724.8755   234931.6   .0039044   .0087784 |
+ 19. | 204.9979   16943.56   .0488069   .0086789 |
+ 20. | 150.0547     125552   .0071694    .008671 |
+     |-------------------------------------------|
+ 21. | 288.0114   17041.28    .045244   .0080314 |
+ 22. | 470.1256   99933.49   .0070669   .0068016 |
+ 23. | 665.1417     180594   .0039044    .006748 |
+ 24. | 209.9774   86583.37   .0078407   .0065485 |
+ 25. | 885.3648   211486.6   .0031371   .0063395 |
+     |-------------------------------------------|
+ 26. | 224.0793   85808.53   .0071233   .0058876 |
+ 27. | 244.9367   23214.04   .0251759   .0058398 |
+ 28. | 817.2948   118385.4   .0048721   .0055305 |
+     +-------------------------------------------+
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04386.000000"
+
+.   
+. /*DfBeta*/
+. dfbeta
+                       _dfbeta_1: dfbeta(s)
+                       _dfbeta_2: dfbeta(expr)
+                       _dfbeta_3: dfbeta(expr2)
+
+. 
+. scalar dfbeta_cutoff=2/sqrt(reg_n)
+
+. 
+. li _dfbeta_1 if _dfbeta_1>dfbeta_cutoff
+
+     +----------+
+     | _dfbet~1 |
+     |----------|
+  1. | .8421012 |
+  2. | .7888865 |
+  3. | .7607225 |
+  4. |  .734001 |
+  5. | .1875062 |
+     |----------|
+ 17. | .1436582 |
+ 25. | .1133176 |
+ 28. | .1227915 |
+ 33. | .1167485 |
+ 35. | .0952898 |
+     |----------|
+ 38. |  .084236 |
+ 42. | .0972999 |
+ 46. | .1012995 |
+ 48. | .0810492 |
+ 64. |  .076148 |
+     |----------|
+ 70. | .0743705 |
+ 73. | .0751916 |
+     +----------+
+
+. 
+end of do-file
+
+. reg  w_influence s expr expr2
+
+      Source |       SS       df       MS              Number of obs =     758
+-------------+------------------------------           F(  3,   754) =   85.42
+       Model |  6746651.02     3  2248883.67           Prob > F      =  0.0000
+    Residual |  19851657.7   754  26328.4585           R-squared     =  0.2536
+-------------+------------------------------           Adj R-squared =  0.2507
+       Total |  26598308.8   757  35136.4713           Root MSE      =  162.26
+
+------------------------------------------------------------------------------
+ w_influence |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+           s |   43.08757   2.724237    15.82   0.000     37.73958    48.43557
+        expr |   14.87053   7.314709     2.03   0.042      .510917    29.23015
+       expr2 |    .442536   .9670089     0.46   0.647    -1.455814    2.340886
+       _cons |  -276.8727   38.63867    -7.17   0.000    -352.7249   -201.0206
+------------------------------------------------------------------------------
+
+. 
+. exit, clear

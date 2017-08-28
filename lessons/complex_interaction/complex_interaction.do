@@ -89,7 +89,7 @@ local step=step
 
 /*Step through education in 2 year intervals, get predictions across range of age*/
 
-foreach myeduc of numlist 12(2)20{
+foreach myeduc of numlist 0(1)8{
 
 estimates restore fullmod
     
@@ -115,7 +115,7 @@ svmat pred_se_ed`myeduc'
 }
 
 // Exponentiatie
-foreach myeduc of numlist 12(2)20{
+foreach myeduc of numlist 0(1)8{
     gen exp_pred`myeduc'=exp(pred_ed`myeduc'1)
     gen ub`myeduc'=exp(pred_ed`myeduc'+(invttail(`mydf',`sigtail')*pred_se_ed`myeduc'1))
     gen lb`myeduc'=exp(pred_ed`myeduc'-(invttail(`mydf',`sigtail')*pred_se_ed`myeduc'1))
@@ -125,7 +125,7 @@ foreach myeduc of numlist 12(2)20{
 
 egen asvab_levels=fill(`asvablo'(`step')`asvabhi')    
 
-twoway line exp_pred12 exp_pred14 exp_pred16 exp_pred18 asvab_levels in 1/101, ///
-       legend(order(1 "12 Years" 2 "14 Years" 3 "16 Years" 4 "18 Years"))  ytitle("Income") xtitle("ASVAB Score") name(educ_mult, replace)
+twoway line exp_pred0 exp_pred2 exp_pred4 exp_pred6 asvab_levels in 1/101, ///
+       legend(order(1 "0 Years" 2 "2 Years" 3 "4 Years" 4 "6 Years"))  ytitle("Income") xtitle("ASVAB Score") name(educ_mult, replace)
 
 exit
