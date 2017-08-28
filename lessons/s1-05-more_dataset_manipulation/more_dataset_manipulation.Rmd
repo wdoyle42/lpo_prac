@@ -1,0 +1,266 @@
+---
+title: More Dataset Manipulation
+author: LPO 9951 | Fall 2016
+output: md_document
+---
+
+# LPO 9951: More Dataset Manipulation
+
+```{r, echo = FALSE, message = FALSE}
+require(knitr)
+source('../../r/stataknitrhelper.r')
+opts_chunk$set(echo = FALSE, message = FALSE, comment = NA, cache = FALSE)
+```
+
+```{r, engine = 'bash'}
+## run accompanying .do file to get log file for parsing
+stata -b -q do more_dataset_manipulation.do
+## convert plots used in this file to png
+
+glist=(api99_ow
+       api99_kdens    
+       xtline_fipsinc    
+       )
+for i in ${glist[@]};
+do
+convert -density 150 -flatten $pdir$i.eps $pdir$i.png;
+done
+```
+
+```{r}
+## save log file in object
+lf <- 'more_dataset_manipulation.log'
+```
+
+<br>
+
+#### PURPOSE
+
+Today we'll continue to work on dataset manipulation. We'll focus on
+more complicated merges as well as reshaping.
+
+<br>
+
+## Downloading `ado` files, setting globals, and loading data
+
+
+
+To start, we need to create some example datasets so that we can use them for
+merging.
+
+```{r}
+start <- 'create example datasets'
+end <- 'many-to-one match merging'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+<br>
+
+## Many-to-one match merging
+
+Many times we'd like to add information about a unit that is the same
+across a grouping of units. For instance, we may want to add some
+county data to our already existing school-level data. This really
+isn't much different than the merging we've done before, except we
+need to make certain that the variables are sorted correctly.
+
+Let's say we have county level data that we'd like to import into our
+school level dataset. Remember that we sorted the county data by the county number
+(its unique id) when we created the dataset. We do the same for the
+district data. Finally we merge the two together:
+
+```{r}
+start <- 'many-to-one match merging'
+end <- 'inspect many-to-one merge'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+Inspecting the merge:
+
+```{r}
+start <- 'inspect many-to-one merge'
+end <- 'one-to-many match merging'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('api99_ow.png', 'center'))
+```
+
+<br>
+
+#### Quick Exercise
+
+> Create a (fake) county level variable for average educational 
+> spending. It should be normally distributed and have a mean of 8000
+> and a standard deviation of 1000. Add this variable to a
+> county-level dataset and merge this new dataset into the api
+> dataset. 
+
+<br>
+
+## One-to-many match merging
+
+One to many match merging is the reverse of many to one, and isn't
+really recommended. If you have to, here's how to do it:
+
+Let's say we have some district data on whether or not the principal
+has an EdD. We can open this up and merge the api data with it,
+matching on district number. It's generally better to have the
+*finer-grained* dataset open in memory, and then to match the
+*coarser* data to that one, doing a many-to-one match merge. But
+should you need to complete a one-to-many match merge, here's an example:
+
+```{r}
+start <- 'one-to-many match merging'
+end <- 'messy merge'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+<br>
+
+#### Quick Exercise
+> Create a (fake) district level variable for average teacher
+> salary. It should have a mean of 40 and a standard deviation
+> of 5. Merge the api data into this dataset.
+
+<br>
+
+## Messy merge
+
+Many merge procedures are quite messy. To simulate this, let's
+eliminate a couple of variables from the `api` dataset and remove 10%
+of the observations. We'll put this into a file we're pretending is
+the `api99` file. Next, we'll drop some data from the `api00`
+file. Finally, we'll merge the resulting two files together.
+
+```{r}
+start <- 'messy merge'
+end <- 'code for looking at missing values, other patterns'
+writeLines(logparse(lf, start = start, end = end))
+```
+These combined files are likely to have lots of missing data. Let's
+take a look at some of the patterns of missing data. The first command
+to use is called `inspect`. The results from the inspect command look
+like this:
+
+```{r}
+start <- 'code for looking at missing values, other patterns'
+end <- 'command: mdesc'
+writeLines(logparse(lf, start = start, end = end))
+```
+This gives you a nice quick glance at the variable in question. You
+can also use the `mdesc` command, the output of which looks like this:
+
+```{r}
+start <- 'command: mdesc'
+end <- 'command: mvpatterns'
+writeLines(logparse(lf, start = start, end = end))
+```
+This is helpful in giving you a sense of how much missing data you
+have. Last, you can also use the `mvpatterns` command, which gives you
+a sense of the patterns of missing data in your dataset:
+
+```{r}
+start <- 'command: mvpatterns'
+end <- 'create flag if missing ell'
+writeLines(logparse(lf, start = start, end = end))
+```
+Why do we care so much about missing values? Because the missingness
+of variable values is unlikely to be random across all
+observations. Instead, observations with missing values for covariate
+*X* may have different average values for covariate *Z* than those who
+don't have missing values. These differences can greatly skew
+inferences we might hope to make with our analyses, so it is important
+that we have an understanding of the missingness of our data.
+
+Here is a graphical example of the differences in `api99` scores
+between students with `ell` data and those without:
+
+```{r}
+start <- 'create flag if missing ell'
+end <- 'reshaping: wide to long'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('api99_kdens.png', 'center'))
+```
+<br>
+
+#### Quick Exercise
+
+> Create a new dataset by dropping the meals and emergency credentials
+> variables. Eliminate half of the data. Next create another dataset,
+> dropping the parental education variables, and again get rid of half
+> of the data. Merge the remaining two datasets together, then
+> describe the patterns of missing data.
+
+<br>
+
+## Reshaping data
+### Wide to long
+
+The last major type of data manipulation is known as
+`reshaping`. Many datasets have multiple observations per
+unit. One way to store this type of data is in a wide format, meaning 
+each additional observation is another variable. Here's some data from
+the Bureau of Economic Analysis on quarterly income growth that's in
+wide format:
+
+```{r}
+start <- 'reshaping: wide to long'
+end <- 'reshape long'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+We want to have this data in long format, meaning that there will be
+multiple lines per unit, each one identifying a year and a
+quarter. The command for this is `reshape long <stub>, i(<index>)
+j(<time var>)`. As you can see after the command, each unit/year now
+has its own line, and income is a single variable.
+
+```{r}
+start <- 'reshape long'
+end <- 'organize data so we can graph it with xtline'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+We can now more easily set the date in a format Stata understands and
+take advantage of graphing commands such as `xtline`:
+
+```{r}
+start <- 'organize data so we can graph it with xtline'
+end <- 'reshaping: long to wide'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('xtline_fipsinc.png', 'center'))
+```
+<br>
+
+### Long to wide
+
+The reverse of the above is reshaping from long to wide. To shift the
+above dataset back, use the same command, but substitute `wide` for
+`long`:
+
+```{r}
+start <- 'reshaping: long to wide'
+end <- 'end file'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+<br>
+
+#### Quick Exercise
+
+> Download data on personal per capita from 1950 to the present for
+> all 50 states from the
+> [Bureau of Economic Analysis](http://www.bea.gov/regional/downloadzip.cfm). Create
+> a plot using the `xtline` command. 
+
+<br>
+<br>
+
+*Init: 16 August 2015; Updated: `r format(Sys.Date(), format = "%d %B %Y")`*
+
+<br>

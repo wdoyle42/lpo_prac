@@ -1,0 +1,206 @@
+---
+title: Reporting Regression in Stata 
+author: LPO 9952 | Spring 2017
+output: github_document
+---
+  
+```{r, echo = FALSE, message = FALSE}
+require(knitr)
+source('../../r/stataknitrhelper.r')
+opts_chunk$set(echo = FALSE, message = FALSE, comment = NA)
+```
+
+
+```{r}
+## save log file in object
+lf <- 'ols_regression_stata.log'
+```
+
+
+```{r, engine = 'bash'}
+## run accompanying .do file to get log file for parsing
+#stata -b -q do ../do/lecture11_descriptives.do
+## convert plots used in this file to png
+#pdir=/
+glist=(
+all_models
+)
+
+for i in ${glist[@]};
+do
+convert -density 150 -flatten $pdir$i.eps $pdir$i.png;
+done
+```
+
+Reporting regression results should be motivated by the questions the reader would ask:
+
+- What steps did the analyst take to specify the models?
+
+- What results led the analyst to come to the conclusions they did regarding the impact of certain variables on the dependent variable?
+
+- What results provided information about model fit?
+
+- Is there reason to doubt some of the conclusions that the analysts draws?
+
+You can’t report everything you do in the course of your analysis—it would be impractical and wouldn’t help to clarify your description of the analysis. However, you should strive to make all of the information you use to describe your conclusions in the text available to the reader.
+It’s of crucial importance that you report not just the analyses that support your pet hypoth- esis, but rather that you provide the reader enough information to judge the level of evidence that supports your conclusions.
+
+Today we'll be using the `caschool.dta` file. The code below checks to see if it's on your computer, and if it's not, downloads it for you. This is a good workflow to use for online data. 
+
+```{r}
+start <- 'Check to see if file exists if not then download it'
+end <- 'Transformations of key independent variables'
+writeLines(logparse(lf, start = start,end=end))
+``` 
+
+Next, I label and format variables appropriately. 
+
+```{r}
+start <- 'Transformations of key independent variables'
+end <- 'Locals for groups of variables'
+writeLines(logparse(lf, start = start,end=end))
+```
+
+Using locals to create conceptual groupings of variables is an important step in improving your workflow. 
+
+```{r}
+start <-'Locals for groups of variables' 
+end <-'Setting up and outputting descriptive stats'
+writeLines(logparse(lf, start = start,end=end))
+```
+
+
+
+
+## Reporting Descriptive Statistics
+
+There are many journals that discourage including tables of descriptive statistics. Others still require them. In either case, you should be quite familiar with your data, and it’s a good idea to have a table of descriptive statistics. Luckily this is very simple using the estpost and esttab commands. The commands below will create a nicely formatted table. 
+
+
+```{r}
+start <- 'Setting up and outputting descriptive stats'
+end <- 'Describing conditional mean of outcome as a function of covariates'
+writeLines(logparse(lf, start = start,end=end))
+```
+
+
+```{r, results = 'asis'}
+writeLines(alignfigure('esttab_means.png', 'center'))
+```
+
+## Reporting Conditional Means
+
+As we've discussed, regression is just a fancy way of doing conditional means. Many times it’s quite helpful 
+to explore the data using conditional means in order to demonstrate that the patterns you’re seeing in the 
+regression results are there even in a simpler format. For instance, let’s take a look at the relationship 
+between math scores and student-teacher ratio in several different district contexts. The first thing we need 
+to do is to generate categorical variables for class size. We’ll do this by using the sum command. Then we will label the 
+generated variable, and summarize the outcome(test scores) and other covariates as a function of class size. 
+
+```{r}
+start <- 'Describing conditional mean of outcome as a function of covariates'
+end <- 'Estimate Models'
+writeLines(logparse(lf, start = start,end=end))
+```
+
+```{r, results = 'asis'}
+writeLines(alignfigure('esttab_means_size.png', 'center'))
+```
+
+It looks as though school districts with smaller class sizes have higher test scores. The next step is to estimate models to see
+if that relaitonship holds up even when controlling for other relevant variables. 
+
+*Quick Exercise * Repeat the above exercise, but this time show means separately for reading in high spending, moderate spending and low- spending districts. 
+
+## Creating Tables of Regression Results 
+
+The code below estimates four models, with each additional model adding in additional parameter estimates 
+for different groups of variables. This code uses `esttab` to generate a table the way I usually do things (with the exception of significance stars)
+
+Here are some of the guidelines I use when reporting results:
+
+- The title of the table should specify the type of analysis (OLS in this case) and the dependent variable. The dependent variable is a must-have.
+
+- All results should be reported at two significant digits.More digits=more confusion.
+
+- All of the coefficient estimates should be between .01 and 100, in absolute values. Anything lower or higher, the analyst should transform the variable. This also helps to simplify the table.
+
+- Never report a 0 anywhere in a table. There are no 0's in applied stats. 
+
+- Variable names should NEVER be Stata variable names. Most good journals these days would reject such a paper on sight.
+
+- Variable names should be (a) descriptive and (b) directional. For instance, I could have named the expenditures variable “Finance.” Such a name would not tell me what the variable measured, nor would it say what direction it was headed in.
+
+- For categorical variables,always include the reference category as a blank line.
+
+- You should always included a numerical estimate of uncertainty(standard error or t-statistic). Don’t just put stars on coefficients.
+
+- In terms of auxiliary stats, you must ALWAYS report the number of observations. This is observations in the sample, not weighted observations.
+
+- Other auxiliary stats: you should report at least one measure of model fit. This could be R2, adjusted R2 or the F statistic. You’ll have space limitations, but include at least one of these, two is preferable.
+
+- Your notes should clarify anything that isn’t immediately obvious from the table.
+
+```{r}
+start <- 'Estimate Models'
+end <- 'Plotting regression results'
+writeLines(logparse(lf, start = start,end=end))
+```
+
+
+```{r, results = 'asis'}
+writeLines(alignfigure('testscr_results.png', 'center'))
+```
+
+*Quick Exercise*
+
+Let’s do several:
+
+1. Re-create the above table, but this time report t-statistics instead of standard errors.
+
+2. Re-create the above table, but this time with no stars for significant variables.
+
+3. Re-create the above table, but this time display confidence intervals. Exapnd the results to four significant digits.
+
+4. Create a new variable called str20, defined as 1 if str>20 and 0 otherwise. Label the variable properly, add it to the 
+teacher block, and run the table again. 
+
+
+## Plotting Regression Results
+
+Plotting regression results can work really well. Stata has several ways to do this. Below I use the `plotbeta` command to output results for each of the four estimated models. These are then combined into a single graph. 
+
+```{r}
+start <- 'Plotting regression results'
+end <- NULL
+writeLines(logparse(lf, start = start,end=end))
+```
+
+
+```{r, results = 'asis'}
+writeLines(alignfigure('all_models.png', 'center'))
+```
+
+*Quick Exercise* Create a coefficient plot for the model including computers. Create a graphic that combines this with an alternative specification. Make sure to deal with any issues of scale. What do you observe?
+
+## Do’s and Don’ts
+
+Here’s a list of things NOT to do with your results.
+
+- Don’t report only the specification that makes your “pet” independent variable significant. Report multiple specifications of each analysis.
+
+- Don’t eliminate variables because they’re not significant. You included them in the analysis for a reason, unless the reason went away, they stay in.
+
+- Don’t only report variables that are significant in a model that included other variables. The exception to this is when you have a group of variables that you identify a priori as control variables. In that case, you may simply note that they were included as controls, but not reported. The key is not to use statistical significance as the only guide for what gets reported or not. 
+
+Here are some things you should definitely do:
+
+- Do include enough information so that the reader can subject your results to an alternative test of significance.
+
+- Do include enough auxiliary information so that the reader has a sense of model fit.
+
+- Do select among the results what makes most sense to report,but don’t discuss substantively important results without a table or graphic to back them up.
+
+- Do design your tables to be read "alone", they will be.
+
+This is of course, only a start.

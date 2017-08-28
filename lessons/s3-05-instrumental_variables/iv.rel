@@ -1,0 +1,54 @@
+;; RefTeX parse info file
+;; File: /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex
+;; User: doylewr (Doyle)
+
+(set reftex-docstruct-symbol '(
+
+
+(xr nil "\\\\\\\\\\\\")
+
+(index-tags)
+
+(is-multi nil)
+
+(bibview-cache)
+
+(master-dir . "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/")
+
+(label-numbers ("eq:" . 2))
+
+(bof "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex")
+
+(toc "toc" "    1 Two-Stage Least Squares" "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil 2 "1" "\\section{Two-Stage Least Squares}" 2158)
+
+("sec:two-stage-least" "s" nil "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil "")
+
+("eq:1" "e" nil "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil "")
+
+("eq:2" "e" nil "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil "")
+
+(toc "toc" "    2 Establishing the Strength of the Instrument(s)" "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil 2 "2" "\\section{Establishing the Strength of the Instrument(s)}" 4164)
+
+("sec:establ-strength-inst" "s" nil "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil "")
+
+(toc "toc" "    3 Establishing Endogeneity" "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil 2 "3" "\\section{Establishing Endogeneity}" 4165)
+
+("sec:establ-endog" "s" nil "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil "")
+
+(toc "toc" "    4 Establishing Overidentification" "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil 2 "4" "\\section{Establishing Overidentification}" 5275)
+
+("sec:establ-over" "s" nil "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil "")
+
+(toc "toc" "    5 Local Average Treatment Effects" "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil 2 "5" "\\section{Local Average Treatment Effects}" 5961)
+
+("sec:local-aver-treatm" "s" nil "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil "")
+
+(toc "toc" "    6 Angrist \\& Pischke's Pragmatic Rules" "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil 2 "6" "\\section{Angrist \\& Pischke's Pragmatic Rules}" 6904)
+
+("sec:angrist--pischkes" "s" nil "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil "")
+
+(toc "toc" "    1 Two-Stage Least Squares" "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex" nil 2 "1" "\\section{Two-Stage Least Squares}" 2158)
+
+(eof "/Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/instrumental_variables/iv.tex")
+))
+

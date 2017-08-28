@@ -1,0 +1,467 @@
+---
+title: Sampling I
+author: LPO 9951 | Fall 2016
+output: pdf_document
+---
+
+```{r, echo = FALSE, message = FALSE}
+require(knitr)
+source('../../r/stataknitrhelper.r')
+opts_chunk$set(echo = FALSE, message = FALSE, comment = NA, cache = FALSE)
+```
+
+```{r, engine = 'bash'}
+## run accompanying .do file to get log file for parsing
+#stata -b -q do ../do/lecture7_sampling_part1.do
+```
+
+```{r}
+## save log file in object
+lf <- 'sampling_part1.log'
+```
+
+<br>
+
+#### PURPOSE
+
+In most stats classes, all samples are assumed to be simple random
+samples from the population, with each unit having exactly the same
+probability of being selected. In practice, this is extremely
+rare. Samples are usually designed with unequal probabilities of
+selection across different groups. Because survey methodology is
+complex, this lecture cannot pretend to be comprehensive. Instead, it
+is meant to expose you to various sampling designs often found in
+education research as well as the formulas for computing means and
+variances of some of the simpler designs.
+
+<br>
+
+## Simple random sampling (SRS)
+
+### Formulas
+
+Where \(y_{i}\) is value of \(y\) for the \(i\)th unit:
+
+#### *sample mean*
+
+\[ \bar{y}=\frac{1}{n}\sum_{i=1}^{n} y_i \tag{1} \]
+
+#### *sample variance*
+
+\[ s^2=\frac{1}{n-1}\sum_{i=1}^n(y_i - \bar{y})^2 \]
+
+#### *standard error of sample mean*
+
+\[ \bar{y}_{se}=\sqrt{\frac{s^2}{n}} \tag{3} \]
+
+<br>
+
+### Compute population means and variances
+
+First, let's compare our hand computations of the population mean and
+variance with Stata's output using `summarize` and `mean`. To do this,
+we'll read in some fake SAT-like score data from a population of 1.5
+million test takers. 
+
+```{r}
+start <- 'read in fake SAT score data'
+end <- 'drop everything but score'
+writeLines(logparse(lf, start = start, end = end))
+```
+*NB:* Even though we're talking about these fake test-takers as the
+population, they can still be thought of as a sample from a
+superpopulation of potential test takers. This is why I still use
+\(n-1\) correction, which is what Stata also uses. With such large
+*N*, however, the adjustment is functionally moot.
+
+<br>
+
+### Compute SRS mean and variances
+
+Now we'll take a simple random sample (SRS) of 10% of our test takers
+and compute our statistics.
+
+```{r}
+start <- 'drop everything but score'
+end <- 'SIMPLE RANDOM SAMPLING WITH FINITE POPULATION CORRECTION'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+As you can see, our sample mean, variance, and standard error of the
+mean are about the same as the population values. \(\bar{y}_{se}\) is
+a little higher, which is to be expected since we are basing our
+estimate off fewer observations. And in both cases, our hand
+calculations are the same as those given by Stata. That is always a
+good sign!
+
+<br>
+
+## SRS with a finite population correction (FPC)
+
+### Description and formula
+
+Consider the normal estimate of the standard error of the mean, show
+in equation 3 above. In cases where the proportion of the population
+that is sampled is quite large, this will in fact be an overestimate
+of the standard error of the mean. This is because in classical
+statistical theory, the sample is conceived as being from an
+infinitely large population. The finite population correction is a way
+of adjusting for the fact that the sample actually may be more
+representative than standard approaches would suggest. The finite
+population correction (FPC) is calculated as:
+
+\[ fpc = \sqrt{\frac{N - n}{N - 1}} \tag{4}\]
+
+where *N* is the population size and *n* is the sample size. As
+you can see, as *n* grows small relative to *N*, the FPC will approach
+1 and the correction will be very small. As *n* becomes a larger
+fraction of *N*, the opposite is true. The FPC is rarely used in
+practice, but it should be used whenever the population size is
+known. Calculating \(\bar{y}_{se}\) using the FPC is done as follows:
+
+\[ \bar{y}_{se} =\sqrt{\frac{s^2}{n}} \times (fpc)
+=\sqrt{\frac{s^2}{n}} \sqrt{\frac{N - n}{N - 1}} \tag{5} \]
+
+### Example
+
+We'll again use some fake data to test our formulas. This time we have
+test score data for 50 students from a single large class. Let's say,
+for some mysterious reason, we only have access to information from 30
+students. Maybe we did an exit poll of grades after class and assume
+that the 30 responses represent a random sample (highly unlikely, but
+we'll go with it for now). This number of students represents a
+sizeable portion of the population so we should adjust our estimate of
+the error the average score to take that into account.
+
+```{r}
+start <- 'read in data for single class test'
+end <- 'SIMPLE RANDOM SAMPLING WITH FREQUENCY WEIGHTS'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+Comparing the 95% confidence intervals, we can see they are a little
+tighter when the FPC is used. This is a reflection of our knowledge
+that our sample respresents a sizeable portion of the population and
+therefore is a better estimate than the standard formula will
+compute.
+
+<br>
+
+## SRS and frequency weights
+
+Sometimes data are reported in what's known as a frequency-weighted
+design. In such a setup, observations that take on the same values are
+reported only once, with a weight that is equal to how many times this
+particular set of observations was reported. This was a very common
+way of formatting data when computer memory was expensive, but less
+common now. You may still run across it from time to time so it's good
+to know about.
+
+To demonstrate, we'll again use the fake SAT data. This time, however,
+the data are in a frequency format. Using the weight option for the
+`mean` command, we can set `[fw = freq]` and get the same estimates
+for mean score as we did with the full dataset.
+
+```{r}
+start <- 'SIMPLE RANDOM SAMPLING WITH FREQUENCY WEIGHTS'
+end <- 'SIMPLE RANDOM SAMPLING WITH \\(INVERSE\\) PROBABILITY WEIGHTS'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+<br>
+
+## SRS with inverse probability weights
+
+For most survey-based social science data, it is unlikely that all
+population members have the same probability of being sampled. This is
+a problem when the probability of selection is correlated with the
+quantities we hope to estimate. Without accounting for the probability
+of selection, our estimates will be biased, perhaps severely.
+
+Going back to our fake SAT data, let's assume that our sample data
+come from voluntary responses and that test takers are more likely to
+report their scores if those scores are high (a not unreasonable
+situation). For purposes of the example, let's assume that we know the
+probability that a test taker will select to report his or her results
+(something that we are generally *very* unlikely to know). We generate
+our 1% sample this time based on the probability of
+reporting and check the unadjusted sample mean.
+
+```{r}
+start <- 'SIMPLE RANDOM SAMPLING WITH \\(INVERSE\\) PROBABILITY WEIGHTS'
+end <- 'generate pweight \\(inverse probability of selection\\)'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+As expected the mean score is much higher than the population average
+(which should be around 500). Since we are omniscient researchers, we can
+generate inverse probability weights using the probability of
+reporting. Thinking it through, these weights will downweight those
+with a high likelihood of reporting and upweight those with a low
+likelihood, hopefully improving our estimate of the population mean
+score in the process.
+
+```{r}
+start <- 'generate pweight \\(inverse probability of selection\\)'
+end <- 'STRATIFIED RANDOM SAMPLING WITH PROBABILITY PROPORTIONAL TO SIZE'      
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+## Stratified random sampling with probability proportional to size
+
+### Description
+
+Stratified sampling is a widely used and broadly applicable way of
+designing a sample. In stratified sampling, a set of strata are
+selected from the population, then samples are taken from within each
+strata. An example would be taking a sample of students from within
+elementary, junior, and high schools, with level of school as the
+strata. The idea is that strata are different in some fundamental way
+from each other but internally similar. Strata should effectively
+partition the population space, that is, not overlap and fully account
+for the population when put together.
+
+### Formulas
+
+The notation for this type of sampling design is as follows:
+
+#### *stratum mean*
+
+\[ \bar{y}_h = \frac{1}{N_h} \sum_{j = 1}^{N_h} y_{hj} \tag{6} \]
+
+#### *stratum variance*
+
+\[ s^2_h = \frac{1}{N_h - 1} \sum_{j = 1}^{N_h} (y_{hj} - \bar{y}_h)^2 \tag{7} \]
+
+#### *population mean*
+
+\[ \bar{y} = \frac{1}{N} \sum_{h = 1}^L N_h\bar{y}_h \tag{8} \]
+
+#### *population mean variance*
+
+\[ s^2 = \sum_{h = 1}^L \Bigg(\frac{N_h}{N}\Bigg)^2
+\Bigg(\frac{N_h - n_h}{N_h - 1}\Bigg) \Bigg(\frac{s^2_h}{n_h}\Bigg) \tag{9} \]
+
+where
+
+* *N* is the population total
+* \(y_{hj}\) is observation *j* within stratum *h*  
+* \(\bar{y}_h\) is the mean within stratum *h*  
+* \(N_h\) is the total number within stratum *h*  
+* \(n_h\) is the number sampled within stratum *h*  
+* \(s_h^2\) is the variance within stratum *h*  
+
+### Example
+
+This time we'll using fake data on a high school with grades
+9-12. A student in this school is considered to be *at risk* if his
+or her test score falls below a certain cut off, commensurate with the
+student's grade. Looking at the administrative data we can see the
+proportion at risk, within each grade and across the school.
+
+```{r}
+start <- 'STRATIFIED RANDOM SAMPLING WITH PROBABILITY PROPORTIONAL TO SIZE'
+end <- 'sample within grades \\(strata\\)'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+Of course, we don't really know these values. Why bother sampling if
+we did? But let's say that we do have a (correct) suspicion that the
+proportion of *at risk* students is different across grades. We
+therefore want to make sure that we first stratify on grade, then
+randomly sample, giving us an equal number of sampled students within
+each grade.
+
+```{r}
+start <- 'sample within grades \\(strata\\)'
+end <- 'compute within grade and overall means and sems'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+To compute the mean within each stratum, we'll just take the simple
+mean of the observations within that stratum. We could weight each
+observation by the inverse of the selection, in this case, the number
+of students in the grade over the number selected and use equation
+(6), but the number of students in the grade would cancel out and we
+would be left with the simple sample average.
+
+To compute the within stratum variance for each stratum, we'll use
+part of equation (9)
+
+\[ s^2_h=\Bigg(\frac{N_h - n_h}{N_h - 1}\Bigg) \Bigg(\frac{s^2_h}{n_h}\Bigg) \]
+
+In this simple stratfication design, the population variance is just
+the weighted sum of the individual strata variances. So to get an
+estimate of the population variance, we'll weight each one by
+
+\[\Big(\frac{N_h}{N}\Big)^2\]
+
+and add them together.
+
+To compute these values, we will use Stata's `preserve` and `restore`
+commands along with `collapse`, which allows us to compute the various
+means and standard deviations that we need.
+
+```{r}
+start <- 'compute within grade and overall means and sems'
+end <- 'compare computed to Stata version'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+Let's compare our estimates to the simple means computed by Stata.
+
+
+```{r}
+start <- 'compare computed to Stata version'
+end <- 'CLUSTER SAMPLING WITH PROBABILITY PROPORTIONAL TO SIZE'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+As expected, the means are all almost exactly the same. Our various
+standard error estimates, however, are a little smaller. We didn't
+improve them much in this case, but we were able to make them smaller
+since were able to incorporate our knowledge about the sample design.
+
+<br>
+
+## Stratified cluster sampling with probability proportional to size
+
+### Description
+
+Cluster sampling involves taking a sample where a group of clusters
+(each of which contains multiple units) is designated, then a random
+sample of these clusters are drawn. Within each cluster, all units may
+be included or, in large-scale surveys, a second sample may be
+drawn. In either case, this last unit is typically the unit of
+analysis. For example, if we decided to conduct a study by taking a
+random sample of classrooms within a school, then taking a sample of
+students within those classrooms, this would be a cluster sampling
+design. In this example, the classrooms would be the primary sampling
+unit (*psu*) and the students would be the secondary sampling unit
+(*ssu*).
+
+### Formulas
+
+#### *population size*
+
+\[ M = \sum_{h=1}^L\sum_{i=1}^{N_h} M_{hi} \tag{10} \]
+
+#### *population total*
+
+\[ Y = \sum_{h=1}^L\sum_{i=1}^{N_h}\sum_{j=1}^{M_{hi}} Y_{hij} \tag{11} \]
+
+#### *sample total*
+
+\[ m = \sum_{h=1}^L\sum_{i=1}^{n_h} m_{hi} \tag{12} \]
+
+#### *estimated population total*
+
+\[ \hat{Y} = \sum_{h=1}^L\sum_{i=1}^{n_h}\sum_{j=1}^{m_{hi}}
+w_{hij}Y_{hij} \tag{13} \]
+
+where $$ w_{hij} = \frac{N_h}{n_h} $$
+
+#### *estimated population size*
+
+\[ \hat{M} = \sum_{h=1}^L\sum_{i=1}^{n_h}\sum_{j=1}^{m_{hi}}w_{hij} \tag{14} \]
+
+#### *estimated population total variance*
+
+\[  \hat{V}(\hat{Y}) = \sum_{h=1}^L (1 - f_h) \frac{n_h}{n_h - 1}
+\sum_{i=1}^{n_h} (y_{hi} - \bar{y}_h)^2  \tag{15}\]
+
+where $$ y_{hi} = \sum_{j=1}^{M_hi} w_{hij}y_{hij} $$
+$$ \bar{y}_h = \frac{1}{n_h} \sum_{i=1}^{n_h} y_{hi} $$
+and
+$$ f_h = \frac{n_h}{N_h} $$
+
+### Example
+
+Using the fake highschool data, let's try to get an estimate of test
+scores. First, let's take a look at the population values (which,
+again, we normally don't know):
+
+```{r}
+start <- 'open full fake highschool data again'
+end <- 'stratified sample'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+<br>
+
+#### Estimated means
+
+This time, rather than simply sampling students within each grade,
+let's sample entire classes. These will be our *PSUs* with students
+being the *SSUs*. After taking only 10 classes in each grade, we'll
+compute the mean score within each grade and overall, taking into
+account the survey design.
+
+
+```{r}
+start <- 'stratified sample'
+end <- 'mean of overall school score'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+#### Estimated standard error of the mean
+
+We can see that our estimate of the population, \(\hat{M}\), is close
+to the true value, but not exact. Our within grade estimates aren't
+that great overall, but the schoolwide estimate is pretty close.
+
+First let's look at an unweighted estimate of the schoolwide sample mean and its
+standard error.
+
+```{r}
+start <- 'mean of overall school score'
+end <- 'get right-ish estimate of standard error of school test mean'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+Next, let's try compute an estimate of the variance. Note that the
+equations above speak to the variance of the total. We don't want
+that. We want the variance of the mean score. Here's what we will do:
+compute the variance of the total, 
+divide it by the square of the estimated number of *SSUs* to standardize it, and
+then divide it again by the number of sampled *SSUs* to get the
+standard error of the estimated mean score. This isn't quite right, as
+we don't really take into account the clustering of students when we
+divide, but it will get us a reasonable approximation without recourse
+to more complicated methods.
+
+```{r}
+start <- 'get right-ish estimate of standard error of school test mean'
+end <- 'end file'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+While our estimate of the schoolwide mean is closer to the true mean
+than the naive estimation, our standard error is much improved. Great!
+We should be cautious, however, of the standard error. Wait, what?
+This is due to the fact that the standard error of complex survey
+designs cannot be directly computed, only estimated. Our estimate
+might be too generous. It likely is. There are better, albeit more
+complicated ways to compute the estimate we want.
+
+## Good news
+
+Now that we've gone through this process, the good news is that with most
+national educational surveys, you won't have to compute weights or
+figure out means and variances by hand. Instead, the data files will
+give you the weights you need. Stata also has prepackaged routines to
+help you in this process. The most important one is `svyset` and its
+suite of commands. We will discuss these in the next lecture.
+
+
+<br>
+<br>
+
+*Init: 23 August 2015; Updated: `r format(Sys.Date(), format = "%d %B %Y")`*
+
+<br>

@@ -1,0 +1,465 @@
+---
+title: Descriptives
+author: LPO 9951 | Fall 2016
+output: html_document
+---
+
+```{r, echo = FALSE, message = FALSE}
+require(knitr)
+source('../../r/stataknitrhelper.r')
+opts_chunk$set(echo = FALSE, message = FALSE, comment = NA)
+```
+
+```{r, engine = 'bash'}
+## run accompanying .do file to get log file for parsing
+#stata -b -q do ../do/lecture11_descriptives.do
+## convert plots used in this file to png
+#pdir=/
+glist=(hist_bynels2m
+       spike_bynels2m
+       kd_bynels2m
+       kd_bynels2m_cond
+       bar_bystexp
+       sc_math_read
+       sc_math_read_10
+       sc_complex
+       sc_cond
+       matrix_plot
+       box1
+       box2
+       dot_both
+       tabplot1
+       tabplot2
+       jitterplot
+       heatmap
+       )
+for i in ${glist[@]};
+do
+convert -density 150 -flatten $pdir$i.eps $pdir$i.png;
+done
+```
+
+```{r}
+## save log file in object
+lf <- 'descriptives.log'
+```
+
+#### PURPOSE
+
+Describing the data in your sample is one of the most important steps
+in reporting on your research. A reader that has a clear
+understanding of the patterns in your data will be able to readily
+understand your more complex analyses.
+
+The key to descriptive statistics turns out to be the humble
+conditional mean: the mean of the dependent variable at various levels
+of the independent variable. Master the conditional mean and how to
+display it, and everyone will always remember your papers and
+presentations.
+
+<br>
+
+#### HEADER
+
+Incidental to the lesson today, but important to set up correctly is
+the header. Notice that the plot and table files types are saved in global
+macros. With a quick switch at the top of the file, you can change the file
+format of the plots and tables that Stata saves. Very handy.
+
+```{r}
+start <- 'set link for data, plot, and table directories'
+end <- 'DESCRIBE THE DEPENDENT VARIABLE'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+## Tables
+
+Every manuscript should include a table of descriptive statistics,
+listing the mean and standard error or standard deviation of every
+variable to be used in the dataset. In addition, tables should be used
+to convey crosstabs of two categorical variables. Most of your
+papers will also eventually include tables for regression
+results. Tables should be used sparingly for describing data: your
+best bet is almost always graphics.
+
+For many categorical variables, however, tables may be your only
+option. In that case you need to think hard about two things:
+
+  1. How can I best show patterns in the conditional mean of my
+     dependent variable at different levels of my independent
+     variables?
+  2. How can I best show relationships among key independent
+     variables?
+
+## Principles for displaying data
+
+Tufte (2001) lists the following principles for describing data using
+graphics. He says they should:  
+
+  * Show the data
+  * Induce the viewer to think about the substance rather than about
+  the methodology, graphic design, the technology production, or
+  something else.
+  * Avoid distorting what the data have to say.
+  * Present many numbers in a small space.
+  * Make large datasets coherent.
+  * Encourage the eye to compare different pieces of data.
+  * Reveal the data at several levels of detail, from a broad overview
+  to fine structure.
+  * Serve a reasonably clear purpose: description, exploration,
+  tabulation, or decoration.
+  * Be closely integrated with the statistical and verbal descriptions
+  of a dataset.
+
+### Tree of Life
+[![](http://evogeneao.s3.amazonaws.com/assets/tree_of_life/tree-of-life_2000.jpg)](https://www.evogeneao.com/learn/tree-of-life)
+*(credit: Leonard Eisenberg)*
+
+<br>
+
+## Describing variation and central tendency in continuous variables
+
+### Plots
+
+The two key tools for describing variation and central tendency in a
+continuous variable are the kernel density plot and the histogram. A
+histogram should be your first choice for most variables: the key
+decisions will be the number of bins or the frequency of the
+plot. Histograms can also be combined across levels using the
+onewayplot command.
+
+The basic histogram is shown here.
+
+```{r}
+start <- 'histogram of base year math score'
+end <- 'spikeplot of base year math score'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('hist_bynels2m.png', 'center'))
+```
+<br>
+
+At the extreme end of the histogram is the "spike" plot, which has a single line
+for every level of the underlying variable.
+
+```{r}
+start <- 'spikeplot of base year math score'
+end <- 'kernel density plot of base year math score'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('spike_bynels2m.png', 'center'))
+```
+<br>
+
+Kernel density plots are a key tool for describing a continuous
+variable. The density of the variable can be compared to standard
+densities for visual comparison, like in the first plot below. Kernel
+density plots can be particularly illuminating when displayed across
+multiple levels of a categorical variable, as in the second plot
+below.  
+
+```{r}
+start <- 'kernel density plot of base year math score'
+end <- 'BASIC DESCRIPTIVE TABLE'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('kd_bynels2m.png', 'center'))
+writeLines(alignfigure('kd_bynels2m_cond.png', 'center'))
+```
+<br>
+
+#### QUICK EXERCISE
+> Display a histogram for byses1. Next show a kernel density plot with
+> `byses1` for students whose father went to postsecondary education and
+> overlay the density of students whose father did not go to
+> postsecondary education.
+
+<br>
+
+### Tables
+
+For tables describing continuous variables, the industry standard is a
+table of means and standard errors or standard deviations. Below is a
+table of means and standard errors, nicely formatted.  
+
+```{r}
+start <- 'BASIC DESCRIPTIVE TABLE'
+end <- 'use tabstat to make table'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+```{r, results = 'asis'}
+#writeLines(includetable('means_se.html', 'center'))
+```
+<br>
+
+You can also use standard deviations, which even in survey data like
+yours are based on the simple sample standard deviation
+calculation. Table 2 shows means and standard deviations.  
+
+```{r}
+start <- 'use tabstat to make table'
+end <- 'CATEGORICAL VARIABLE'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+```{r, results = 'asis'}
+#writeLines(includetable('means_sd.html', 'center'))
+```
+
+#### QUICK EXERCISE
+> Create a table that includes all of the above variables but also sex
+> and race. Choose whether to include standard errors or standard
+> deviations.
+
+<br>
+
+## Describing categorical or binary variables
+
+### Plots
+
+The first question is: do you need to? What can you present in a
+graphic that wouldn’t be in a table or couldn't be described in the text?
+That said, some options include a histogram for categorical variables
+(bar chart) and a table of proportions.  
+
+Below is code for a barchart.
+
+```{r}
+start <- 'barchart of base year student expectations'
+end <- 'proportions table for base year student expectations'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('bar_bystexp.png', 'center'))
+```
+
+<br>
+
+### Tables
+
+A table of proportions is a way to display information regarding a
+single categorical variable. Here is a simple table of
+proportions.
+
+```{r}
+start <- 'proportions table for base year student expectations'
+end <- 'KEY DEPENDENT VARIABLE IN RELATION TO OTHER INDEPENDENT VARIABLES'
+writeLines(logparse(lf, start = start, end = end))
+```
+
+```{r, results = 'asis'}
+#writeLines(includetable('proportions.html', 'center'))
+```
+<br>
+
+#### QUICK EXERCISE
+> Create a nicely formatted bar chart and table showing the
+> proportions of students with different levels of parental
+> education.
+
+<br>
+
+## Describing relationships between two continuous variables
+
+### Plots
+
+The scatterplot is the ultimate tool in describing relationships
+between two continuous variables. All scatterplots should always have
+the dependent variable on the *y* axis and the independent variable on
+the *x* axis. Both axes must be labeled clearly. Limits should be set
+based on the data: there's no need to include a 0 in every graph. This
+can in fact be counterproductive.
+
+The code below produces a simple scatterplot of math and reading scores.
+
+```{r}
+start <- 'math against reading scores in scatterplot'
+end <- 'scatterplot with 10 percent sample of data'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('sc_math_read.png', 'center'))
+```
+<br>
+
+Notice how there are too many dots; just blob reall. You may find it
+useful to plot only a random (representative) subsample of your
+data. Here is a better version of the above scatterplot that only uses
+10% of the data. 
+
+```{r}
+start <- 'scatterplot with 10 percent sample of data'
+end <- 'conditional scatterplot with 25 percent sample of data'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('sc_math_read_10.png', 'center'))
+```
+<br>
+
+Finally, you can condition on another variable in order to add another
+level to your scatter plot. This can be done both with use of `if`
+statements, as in the first plot below, and `by` statements, as in the
+second plot.
+
+```{r}
+start <- 'conditional scatterplot with 25 percent sample of data'
+end <- 'conditional scatterplot with by'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('sc_complex.png', 'center'))
+```
+
+```{r}
+start <- 'conditional scatterplot with by'
+end <- 'matrix plot'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('sc_cond.png', 'center'))
+```
+<br>
+
+You can also run a scatter plot across levels of a categorical
+variable if you suspect the underlying relationship may not be the
+same in each level of the categorical variable. The `matrix` plot
+helpfully with plot each combination of included varibles against each
+other to produe a sort of "small multiples" correlation plot.
+
+```{r}
+start <- 'matrix plot'
+end <- 'boxplot of math score over categories of race/ethnicity'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('matrix_plot.png', 'center'))
+```
+<br>
+
+## Describing relationships between a categorical and a continuous variable
+
+### Plots
+There are multiple options for plotting the relationship between a
+categorical and a continuous variable. A particularly useful option is
+to plot the continuous variable as a series of boxplots, one for each
+level of the categorical variable.
+
+#### Boxplots
+
+For boxplots to be effective, they should be sorted by the median of
+the dependent variable. This contrast is shown in the two figures below.  
+
+```{r}
+start <- 'boxplot of math score over categories of '
+end <- 'dot plots of continuous against categorical'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('box1.png', 'center'))
+writeLines(alignfigure('box2.png', 'center'))
+```
+<br>
+
+#### Dot plots
+
+Dot plots can also be useful for plotting the measure of central
+tendency across groups. In this case, we'll produce two plots, one
+each for reading and math scores, and then combine them into a single
+graphic.  
+
+```{r}
+start <- 'dot plots of continuous against categorical'
+end <- 'TABPLOT'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('dot_both.png', 'center'))
+```
+<br>
+ 
+## Describing relationships between two categorical variables
+
+### Plots
+
+The basic tool for comparing two categorical variables is the
+crosstabulation. In a crosstabulation we take a look at counts of the
+sample that are identified by their presence in cells created by the
+two categorical variables. There are several tools for plotting
+categorical variables, including tabplots, jittered plots, and
+heatmaps.
+
+#### Tabplots
+
+Below are examples of a tabplot, with both two and three dimensions.
+
+```{r}
+start <- 'TABPLOT'
+end <- 'jitter categorical against categorical'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('tabplot1.png', 'center'))
+writeLines(alignfigure('tabplot2.png', 'center'))
+```
+
+<br>
+
+#### Jitter plot
+
+```{r}
+start <- 'jitter categorical against categorical'
+end <- 'heatmap of base year student plans and parental education'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('jitterplot.png', 'center'))
+```
+
+<br>
+
+#### Heatmap
+
+```{r}
+start <- 'heatmap of base year student plans and parental education'
+end <- 'table using weights directly'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+writeLines(alignfigure('heatmap.png', 'center'))
+```
+
+<br>
+
+### Tables
+
+When checking crosstabulations, we can produce two-way tables that
+include survey weights in the command itself.
+
+```{r}
+start <- 'table using weights directly'
+end <- 'cross table of categorical'
+writeLines(logparse(lf, start = start, end = end))
+```
+<br>
+
+Of course, if we want to use a table in a paper, we should use
+`esttab`.
+
+```{r}
+start <- 'cross table of categorical'
+end <- 'end file'
+writeLines(logparse(lf, start = start, end = end))
+```
+```{r, results = 'asis'}
+#writeLines(includetable('race_tab.html', 'center'))
+```
+<br><br>
+
+*Init: 28 August 2015; Updated: `r format(Sys.Date(), format = "%d %B %Y")`*
+
+<br>

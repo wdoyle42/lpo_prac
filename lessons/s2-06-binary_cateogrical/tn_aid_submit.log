@@ -1,0 +1,112 @@
+--------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/complex_interaction/tn_ai
+> d_submit.log
+  log type:  text
+ opened on:   6 Mar 2017, 11:12:46
+
+. 
+. /********************************************************************************/
+. // TN Aid Paper Results
+. // Will Doyle
+. // 1/23/17
+. /********************************************************************************/
+. 
+.     
+. //These clear memories in data and set preferences
+. clear all
+
+. estimates clear
+
+. mat drop _all
+
+. set matsize 10000
+
+. set more off, perm
+(set more preference recorded)
+
+. set scheme s1mono
+
+. graph set print logo off
+
+. graph drop _all
+
+. local gtype pdf
+
+. 
+. 
+. global ddir "../data/"
+
+. global gdir "../graphics/"
+
+. global tdir "../tables/"
+
+. 
+. /******************************************************************************/
+. // TOC
+. /******************************************************************************/
+. // Plot of Depednet Variable of persistence, by running variable
+. local persist_plot=0
+
+. 
+. // Plot of amount of aid received by running variable
+. local compliance_plot=0
+
+. 
+. // Plot of where non compliers are located
+. local compliance_system_plot=0
+
+. 
+. //PLot of timing of application
+. local density_plot=0
+
+. 
+. // RD Density test
+. local mccrary=0
+
+. 
+. //Table of descriptiv statistics
+. local descriptives=0
+
+. 
+. // Balance test, each sector and full sample
+. local balance_test=1
+
+. 
+. // Regression, each sector and full sample
+. // First treatment: eligibility
+.     // Local linear, with and without FE
+.     // Local polynomial with and without FE
+. // Second treatment: receipt of aid
+.     // IV, linear spec, with and without FE
+.     // IV, poly spec, with and without FE
+. 
+. local regression=0
+
+. 
+. // Falsification: all of the above with placebo cutoffs, 7,14, 28 plus/minus
+. 
+. local falsification=0
+
+. 
+. /******************************************************************************/
+. /* Preliminaries*/
+. /******************************************************************************/
+.             
+. // Open Data
+. use ${ddir}tsaa_persist_2004, clear
+file ../data/tsaa_persist_2004.dta not found
+r(601);
+
+end of do-file
+
+r(601);
+
+. cd ~/tn_aid_submit/scripts
+/Users/doylewr/tn_aid_submit/scripts
+
+. do "/Users/doylewr/tn_aid_submit/scripts/170220_tsaa_clean.do"
+
+. clear all
+
+. capture log close

@@ -1,0 +1,17 @@
+\BOOKMARK [1][-]{section*.1}{The Missing Data Problem}{}% 1
+\BOOKMARK [1][-]{section*.2}{Casewise Deletion \(Complete-Case Analysis\)}{}% 2
+\BOOKMARK [1][-]{section*.3}{Weighted Casewise Deletion}{}% 3
+\BOOKMARK [1][-]{section*.4}{Mean Imputation}{}% 4
+\BOOKMARK [1][-]{section*.5}{Mean Imputation with a Dummy}{}% 5
+\BOOKMARK [1][-]{section*.6}{Conditional Mean Imputation}{}% 6
+\BOOKMARK [1][-]{section*.7}{Hotdecking, cold decking}{}% 7
+\BOOKMARK [1][-]{section*.8}{Logical Imputation}{}% 8
+\BOOKMARK [1][-]{section*.9}{Multiple Imputation}{}% 9
+\BOOKMARK [2][-]{section*.10}{Multiple Imputation via Chained Equations \(MICE\)}{section*.9}% 10
+\BOOKMARK [2][-]{section*.11}{Multiple Imputation via Data Augmentation}{section*.9}% 11
+\BOOKMARK [2][-]{section*.12}{Imputation}{section*.9}% 12
+\BOOKMARK [2][-]{section*.13}{Combining Results from Imputed Datasets}{section*.9}% 13
+\BOOKMARK [1][-]{section*.14}{Using Stata's missing data commands}{}% 14
+\BOOKMARK [2][-]{section*.15}{Using mi impute chained}{section*.14}% 15
+\BOOKMARK [2][-]{section*.16}{Using mi impute mvn}{section*.14}% 16
+\BOOKMARK [1][-]{section*.17}{A Final Warning}{}% 17
