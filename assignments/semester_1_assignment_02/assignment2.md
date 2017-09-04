@@ -1,13 +1,6 @@
-##Vanderbilt University
-
-##Leadership, Policy and Organizations
-
-##Class Number 9951
-
-##Fall 2016
-
-#Assignment 2
-
+---
+title: Semester 2, Assignment 1
+---
 
 For this assignment, you'll need to use the California school district
 data (caschools.dta). Complete the following steps:
