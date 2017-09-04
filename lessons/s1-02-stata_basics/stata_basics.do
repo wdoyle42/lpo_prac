@@ -5,8 +5,8 @@ log using "stata_basics.log", replace    // open new log
 // FILE: lecture2_stata_basic.do
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
-// INIT: 4 September 2012
-// LAST: 9/5/2016
+// INIT: 2012-09-04 
+// LAST: 2017-09-4
 
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
