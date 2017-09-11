@@ -1,7 +1,7 @@
 ---
 title: NCES Datasets
-author: LPO 9951 | Fall 2015
-output: md_document
+author: LPO 9951 | Fall 2017
+output: github_document
 ---
 
 ```{r, echo = FALSE, message = FALSE}
@@ -12,7 +12,7 @@ opts_chunk$set(echo = FALSE, message = FALSE, comment = NA, cache = FALSE)
 
 ```{r, engine = 'bash'}
 ## run accompanying .do file to get log file for parsing
-#stata -b -q do ../do/nces_datasets.do	 
+stata-se -b -q do nces_datasets.do	 
 ```
 
 ```{r}
@@ -62,9 +62,8 @@ increasing the reproducibility of your project.
 
 ## Directory structure
 
-First things first, let's add to our directory structure. As you
-remember from the first lecture, data
-files and Stata do files have been stored in their own
+First things first, let's add to our directory structure. Data
+files (particularly large ones) should be stored in their own
 subdirectories. While it's possible to simply dump everything in one
 big directory, you may find that over time, as the folder grows, it
 becomes very difficult to find what you need and almost impossible to
@@ -72,29 +71,6 @@ share your work with others. Yes, your computer can search really
 well. An organized directory structure is for you, the human. Get into
 the habit now, and you'll be thankful later. 
 
-Today we're adding an `./aux` subdirectory. Your directory structure
-should now look like this: 
-
-```
-.
-|-- /aux
-|   |
-|   |-- <auxiliary files>
-|
-|-- /data
-|   |
-|   |-- <data files>
-|
-|-- /do
-|   |
-|   |-- <Stata do files>
-|
-|-- /plots
-|   |
-|   |-- <plot files>
-```
-
-<br>
 
 ## Global variables (macros)
 
@@ -126,11 +102,8 @@ writeLines(logparse(lf, start = start, end = end))
 
 #### NOTE: Most calls of the Stata global macro do not require quotation marks. That is a quirk of Stata's `display` command. 
 
-<br>
 
 ## Educational Longitudinal Study, 2002 (ELS)
-
-<br>
 
 ### Unzip data
 
@@ -160,7 +133,6 @@ end <- 'change delimiter to a semi-colon -1-'
 writeLines(logparse(lf, start = start, end = end))
 ```
 
-<br>
 
 ### Subset data
 
@@ -186,17 +158,12 @@ global), the save dataset goes into the correct subdirectory. The
 option after the comma, `replace`, simply tells Stata to overwrite any
 files with same name.
 
-<br>
 
 #### QUICK EXERCISE
 > Using EDAT, generate an ELS dataset that includes student demographics
 > and whether or not the student attended college.
 
-<br>
-
 ## Early Childhood Longitudinal Study - Kindergarten 98-99 (ECLS-K)
-
-<br>
 
 ### Unzip data
 
@@ -206,10 +173,10 @@ for it (no 2 GB thumbdrives!).
 
 ```{r}
 start <- 'Early Childhood Longitudinal Study - Kindergarten'
-end <- 'download dictionary file that we will need'
+end <- 'read in ECLS file'
 writeLines(logparse(lf, start = start, end = end))
 ```
-<br>
+
 
 ### Subset data
 
@@ -236,8 +203,8 @@ download the file to the auxiliary directory. Note again the use of
 global macros:
 
 ```{r}
-start <- 'download dictionary file that we will need'
-end <- 'read in ECLS file'
+start <- 'read in ECLS file' 
+end <- 'High School Longitudinal Study'
 writeLines(logparse(lf, start = start, end = end))
 ```
 
@@ -248,12 +215,6 @@ dataset to use. There are a couple of other ways to use this command,
 but this is the most transparent. As before, we lower variable names
 and save the working dataset.
 
-```{r}
-start <- 'read in ECLS file'
-end <- 'High School Longitudinal Study'
-writeLines(logparse(lf, start = start, end = end))
-```
-<br>
 
 #### QUICK EXERCISE
 > Using EDAT, generate an ECLS-K dataset that includes student
@@ -273,69 +234,11 @@ reproduced in full below:
 
 ```{r}
 start <- 'High School Longitudinal Study'
-end <- 'Programme for International Student Assessment'
+end <- 'save reduced HSLS dataset'
 writeLines(logparse(lf, start = start, end = end))
 ```
-<br>
-
-## Programme for International Student Assessment (PISA)
-
-<br>
-
-### Unzip data
-
-Not all datasets, of course, come from the NCES. One major dataset,
-PISA, is conducted and hosted by the Organization for Economic
-Co-operation and Development or OECD. To get these data, we'll once
-again use the same process for unzipping files. 
-
-```{r}
-start <- 'Programme for International Student Assessment'
-end <- 'store variables'
-writeLines(logparse(lf, start = start, end = end))
-```
-<br>
-
-### Subset data
-
-PISA uses a fixed-width format for storing data that is common but
-not particularly user friendly. The first 3 lines of text look like this (they
-are long so they wrap in this view):
-
-```
-ALB0080000ALB00060000800000000100001 777777777790100177237002777114393137900772077777777771077777777777772077777709r100777777777777777777777777777777777777777777777777777777777777777777777777773777002277771117773103777777777777232141777777777779797979997979797979997777799941232121121199972222222999712777777777777777777777777777777777777777777771127772117777777777777212121127777777777714028NOV13
-ALB0080000ALB00060000800000000100002 97077777777077737727710270777977773791177777719977777777777777777777777773397777771907777777777777777777777711777111999993311111918877734077103099127777777777777777777777777777777777777777777777777777777777797979797979797979799977777777214312211211 1007777777999777211112777711111199117777777771112211177777777777777777777777777777777777777777777777714028NOV13
-ALB0080000ALB00060000800000000100003 39777777777177717747710470777377773701919777777777233774211777777777777777777777777777777777777777777777710477024777777777777777777711B77710777777771110217771B37777802877777777777777777773127777777771092212197979797979797019799977777777421322111112
-```
-
-To read the data into Stata, we have to use the `infix` command, which
-requires that we know the column of each variable that we need. It
-also helps if we know the data format (e.g., string vs. integer
-vs. float,
-etc.). [Having a codebook like this is absolutely necessary](http://pisa2012.acer.edu.au/downloads/M_stu_codebook.pdf).
-Knowing what is needed, we can finally read in the data and save a
-reduced dataset. Because the string is long, I've stored the entire
-thing in a local variable using the comand `local <name> ...`. Locals work just
-like globals except they only last for as long as the script is
-running. To call a local, surround the local name by left and right
-ticks. Note, that a left tick is different from a right tick. On most
-keyboards, the left tick is above the tab key on the lefthand side of the keyboard.
-
-```{r}
-start <- 'store variables'
-end <- 'end file'      
-writeLines(logparse(lf, start = start, end = end))
-```
-<br>
-
-#### QUICK EXERCISE
-> Following the link above, figure out the column for the variable
-> about the number of computers in the household, add it to the list,
-> and read in the new expanded data.
-
-<br>
 <br>
 
 *Init: 03 August 2015; Updated: `r format(Sys.Date(), format = "%d %B %Y")`*
 
-<br>
+

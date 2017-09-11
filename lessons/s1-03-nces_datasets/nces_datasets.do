@@ -6,7 +6,7 @@ log using "nces_datasets.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 3 September 2014
-// LAST: 12 Sep 2016
+// LAST: 11 Sep 2017
 
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
@@ -89,21 +89,18 @@ renvars *, lower
 // save reduced ECLS-K dataset
 save $datadir$eclsave, replace
 
-// download dictionary file that we will need
-capture log close
 
-exit
 
 // High School Longitudinal Study (HSLS)
 
 // set globals for HSLS files
-global hsls_zip "HSLS_2009_v2_0_Stata_Datasets.zip"
-global hsls_dta "hsls_09_student_v2_0"
+global hsls_zip "HSLS_2009_v3_0_Stata_Datasets.zip"
+global hsls_dta "./HSLS_2009_v3_0_Stata_Datasets/hsls_09_student_v3_0.dta"
 global hslssave "hsls_reduced.dta"
 
 // unzip HSLS file
 cd $datadir
-unzipfile $datadir$hsls_zip, replace
+unzipfile $hsls_zip, replace
 cd $workdir
 
 // change delimiter to a semi-colon -2-
@@ -111,14 +108,15 @@ cd $workdir
 
 // keep only selected variables in HSLS
 use 
-   stu_id
-   sch_id
-   x1ncesid
-   w1student
-   w1parent
-   w1mathtch
-   w1scitch
-   s1avid 
+   STU_ID 
+   SCH_ID
+   X1NCESID
+   X1NCESID
+   W1STUDENT
+   W1PARENT
+   W1MATHTCH
+   W1SCITCH
+   S1AVID
 using $datadir$hsls_dta;
 
 // change delimiter back to carriage return
@@ -132,6 +130,8 @@ save $datadir$hslssave, replace
 
 
 exit
+
+
 
 // Programme for International Student Assessment (PISA)
 

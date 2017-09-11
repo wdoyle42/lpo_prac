@@ -1,0 +1,209 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_new/central/lessons/s1-03-nces_datasets/n
+> ces_datasets.log
+  log type:  text
+ opened on:  11 Sep 2017, 16:04:36
+
+. 
+. // NAME: Working with NCES datasets
+. // FILE: nces_datasets.do
+. // AUTH: Will Doyle
+. // REVS: Benjamin Skinner
+. // INIT: 3 September 2014
+. // LAST: 11 Sep 2017
+. 
+. clear all                               // clear memory
+
+. set more off                            // turn off annoying "__more__" featu
+> re
+
+. 
+. // set globals for entire file
+. global workdir `c(pwd)'
+
+. global datadir "../../data/"
+
+. global auxdir "../../aux/"
+
+. 
+. // display globals
+. di "$workdir"
+/Users/doylewr/practicum_new/central/lessons/s1-03-nces_datasets
+
+. di "$datadir"
+../../data/
+
+. 
+. // Educational Longitudinal Study (ELS)
+. 
+. // set globals for ELS files
+. global els_zip "ELS_2002-12_PETS_v1_0_Student_Stata_Datasets.zip"
+
+. global els_dta "els_02_12_byf3pststu_v1_0.dta"
+
+. global elssave "els_reduced.dta"
+
+. 
+. // unzip ELS file
+. cd $datadir
+/Users/doylewr/practicum_new/central/data
+
+. unzipfile $els_zip, replace
+    inflating: els_02_12_byf3pststu_v1_0.dta
+successfully unzipped ELS_2002-12_PETS_v1_0_Student_Stata_Datasets.zip to curre
+> nt directory
+
+. cd $workdir
+/Users/doylewr/practicum_new/central/lessons/s1-03-nces_datasets
+
+. 
+. // change delimiter to a semi-colon -1-
+. #delimit ;
+delimiter now ;
+. // keep only selected variables in ELS
+> use 
+>    STU_ID
+>    SCH_ID
+>    STRAT_ID
+>    PSU
+>    F1SCH_ID
+>    F1UNIV1
+>    F1UNIV2A
+>    F1UNIV2B
+>    F2UNIV_P
+>    BYSTUWT
+>    F1QWT
+>    F1PNLWT
+>    F1TRSCWT
+>    F2QTSCWT
+>    F2QWT
+>    F2F1WT
+>    F2BYWT
+> using $datadir$els_dta;
+
+. // change delimiter back to carriage return
+> #delimit cr
+delimiter now cr
+. 
+. // lower all variable names using wildcard
+. renvars *, lower
+
+. 
+. // save reduced ELS dataset
+. save $datadir$elssave, replace
+file ../../data/els_reduced.dta saved
+
+. 
+. // Early Childhood Longitudinal Study - Kindergarten (ECLS-K)
+. 
+. cd $workdir
+/Users/doylewr/practicum_new/central/lessons/s1-03-nces_datasets
+
+. 
+. // set globals for ECLS-K files
+. global ecl_zip "ECLSK_1998-99_v1_0_Stata_Datasets.zip"
+
+. global ecl_dat "ECLSK_98_99_K8_CHILD_v1_0.dat"
+
+. global ecl_dct "nces_datasets_ecls.dct"
+
+. global eclsave "eclsk_reduced.dta"
+
+.     
+. // unzip ECLS file
+. cd $datadir
+/Users/doylewr/practicum_new/central/data
+
+. unzipfile $ecl_zip, replace
+    inflating: eclsk_98_99_k8_tch_v1_0.dta
+    inflating: eclsk_98_99_k8_child_v1_0.dat
+    inflating: eclsk_98_99_k8_sch_v1_0.dta
+successfully unzipped ECLSK_1998-99_v1_0_Stata_Datasets.zip to current director
+> y
+
+. cd $workdir
+/Users/doylewr/practicum_new/central/lessons/s1-03-nces_datasets
+
+. 
+. // read in ECLS file
+. infile using $datadir$ecl_dct, using($datadir$ecl_dat) clear
+
+dictionary {
+
+_column(1)     str8 CHILDID   %8s       "CHILD IDENTIFICATION NUMBER"
+_column(1418)  double C3R4RSCL%6.2f     "C3 RC4 READING IRT SCALE SCORE"
+_column(1510)  double C3R4MSCL%6.2f     "C3 RC4 MATH IRT SCALE SCORE"
+
+}
+
+(21409 observations read)
+
+. 
+. // lower all variable names using wildcard
+. renvars *, lower
+
+. 
+. // save reduced ECLS-K dataset
+. save $datadir$eclsave, replace
+file ../../data/eclsk_reduced.dta saved
+
+. 
+. 
+. 
+. // High School Longitudinal Study (HSLS)
+. 
+. // set globals for HSLS files
+. global hsls_zip "HSLS_2009_v3_0_Stata_Datasets.zip"
+
+. global hsls_dta "./HSLS_2009_v3_0_Stata_Datasets/hsls_09_student_v3_0.dta"
+
+. global hslssave "hsls_reduced.dta"
+
+. 
+. // unzip HSLS file
+. cd $datadir
+/Users/doylewr/practicum_new/central/data
+
+. unzipfile $hsls_zip, replace
+    inflating: HSLS_2009_v3_0_Stata_Datasets/HSLS_09_SCHOOL_v1_0.dta
+    inflating: HSLS_2009_v3_0_Stata_Datasets/hsls_09_student_v3_0.dta
+successfully unzipped HSLS_2009_v3_0_Stata_Datasets.zip to current directory
+
+. cd $workdir
+/Users/doylewr/practicum_new/central/lessons/s1-03-nces_datasets
+
+. 
+. // change delimiter to a semi-colon -2-
+. #delimit ;
+delimiter now ;
+. // keep only selected variables in HSLS
+> use 
+>    STU_ID 
+>    SCH_ID
+>    X1NCESID
+>    X1NCESID
+>    W1STUDENT
+>    W1PARENT
+>    W1MATHTCH
+>    W1SCITCH
+>    S1AVID
+> using $datadir$hsls_dta;
+
+. // change delimiter back to carriage return
+> #delimit cr
+delimiter now cr
+. 
+. // lower all variable names using wildcard
+. renvars *, lower
+
+. 
+. // save reduced HSLS dataset
+. save $datadir$hslssave, replace
+file ../../data/hsls_reduced.dta saved
+
+. 
+. 
+. exit
+
+end of do-file
