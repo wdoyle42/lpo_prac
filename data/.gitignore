@@ -1,0 +1,15 @@
+./gitignore
+ELS_2002-12_PETS_v1_0_Other_Stata_Datasets.zip
+ELS_2002-12_PETS_v1_0_Student_BRR_Stata_Datasets.zip
+ELS_2002-12_PETS_v1_0_Student_Stata_Datasets.zip
+els_02_12_byf3pststu_v1_0.dta
+els_reduced.dta
+HSLS_2009_v3_0_Stata_Datasets
+HSLS_2009_v3_0_Stata_Datasets.zip
+hsls_reduced.dta
+ECLSK_1998-99_v1_0_Stata_Datasets.zip
+eclsk_98_99_k8_child_v1_0.dat
+eclsk_98_99_k8_sch_v1_0.dta
+eclsk_98_99_k8_tch_v1_0.dta
+eclsk_reduced.dta
+nces_datasets_ecls.dct
