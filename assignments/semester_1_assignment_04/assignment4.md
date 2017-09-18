@@ -1,3 +1,5 @@
+# Assignment 4
+
 For this asignment, I'd like you to make use of the datafile and do
 files that you generated as part of assignment 3. Using these, complete
 the following steps:
@@ -13,8 +15,7 @@ the following steps:
 4.  Add a new line to each dataset. Alter the id in the new observation
     so that the two files do not match.
 5.  Repeat the `merge` command again, but this time create a result
-    where the two additional (fake) observations are dropped. Do this
-    using the `merge` command itself, not `drop if` or `keep if`.
+    where the two additional (fake) observations are dropped. 
 6.  Repeat the merge, but this time only keep the observations in the
     *master* dataset.
 7.  Repeat the merge, but this time only keep the observations in the
