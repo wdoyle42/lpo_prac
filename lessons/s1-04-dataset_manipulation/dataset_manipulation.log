@@ -1,38 +1,40 @@
---------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum/fall_2016/central/lessons/dataset_manipulation/dataset_manip
-> ulation.log
+       log:  /Users/doylewr/practicum_2017/central/lessons/s1-04-dataset_manipu
+> lation/dataset_manipulation.log
   log type:  text
- opened on:  19 Sep 2016, 14:41:17
+ opened on:  18 Sep 2017, 16:30:48
 
 . 
-. // NAME: Dataset manipulatin
-. // FILE: lecture4_dataset_manipulation.do
+. // NAME: Dataset manipulation
+. // FILE: dataset_manipulation.do
 . // AUTH: Will Doyle
 . // REVS: Benjamin Skinner
 . // INIT: 9 September 2012
-. // LAST: 19 Sep 2016
+. // LAST: 18 Sep 2017
 . 
 . clear all                               // clear memory
 
-. set more off                            // turn off annoying "__more__" feature
+. set more off                            // turn off annoying "__more__" featu
+> re
 
 . 
 . //Data import
 . 
-. import delimited "http://www.ats.ucla.edu/stat/r/modules/hsb2.csv", clear
+. import delimited "https://stats.idre.ucla.edu/wp-content/uploads/2016/02/hsb2
+> -2.csv", clear
 (11 vars, 200 obs)
 
 . 
 . // Excel
 . 
-. import excel "https://nces.ed.gov/programs/digest/d14/tables/xls/tabn304.10.xls", cellrange(A5:L
-> 64) clear
+. import excel "tabn304.10.xls", cellrange(A5:L64) clear
 
 . 
 . 
 . // set globals for url data link and local data path
-. global urldata "http://www.ats.ucla.edu/stat/stata/library/apipop"
+. global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_int
+> ro/apipop"
 
 . 
 . // read web data into memory
@@ -218,8 +220,8 @@ Number of records is  6194
 . // end file
 . log close                               // close log
       name:  <unnamed>
-       log:  /Users/doylewr/practicum/fall_2016/central/lessons/dataset_manipulation/dataset_manip
-> ulation.log
+       log:  /Users/doylewr/practicum_2017/central/lessons/s1-04-dataset_manipu
+> lation/dataset_manipulation.log
   log type:  text
- closed on:  19 Sep 2016, 14:41:21
---------------------------------------------------------------------------------------------------
+ closed on:  18 Sep 2017, 16:30:52
+-------------------------------------------------------------------------------

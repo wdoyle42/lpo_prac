@@ -1,27 +1,27 @@
 capture log close                       // closes any logs, should they be open
 log using "dataset_manipulation.log", replace    // open new log
 
-// NAME: Dataset manipulatin
-// FILE: lecture4_dataset_manipulation.do
+// NAME: Dataset manipulation
+// FILE: dataset_manipulation.do
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 9 September 2012
-// LAST: 19 Sep 2016
+// LAST: 18 Sep 2017
 
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
 
 //Data import
 
-import delimited "http://www.ats.ucla.edu/stat/r/modules/hsb2.csv", clear
+import delimited "https://stats.idre.ucla.edu/wp-content/uploads/2016/02/hsb2-2.csv", clear
 
 // Excel
 
-import excel "https://nces.ed.gov/programs/digest/d14/tables/xls/tabn304.10.xls", cellrange(A5:L64) clear
+import excel "tabn304.10.xls", cellrange(A5:L64) clear
 
 
 // set globals for url data link and local data path
-global urldata "http://www.ats.ucla.edu/stat/stata/library/apipop"
+global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop"
 
 // read web data into memory
 use $urldata, clear
