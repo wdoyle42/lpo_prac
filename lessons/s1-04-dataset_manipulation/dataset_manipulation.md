@@ -258,7 +258,9 @@ Collapsing data refers to summarizing data across a type and creating a new data
 > 2. api99
 > 3. ell
 > 4. meals
-> Do the same thing using just district *medians*.
+> 
+
+Do the same thing using just district *medians*.
 
 <br> <br>
 
