@@ -1,7 +1,7 @@
 ---
 title: More Dataset Manipulation
-author: LPO 9951 | Fall 2016
-output: md_document
+author: LPO 9951 | Fall 2017
+output: pdf_document
 ---
 
 # LPO 9951: More Dataset Manipulation
@@ -14,7 +14,7 @@ opts_chunk$set(echo = FALSE, message = FALSE, comment = NA, cache = FALSE)
 
 ```{r, engine = 'bash'}
 ## run accompanying .do file to get log file for parsing
-stata -b -q do more_dataset_manipulation.do
+stata-se -b -q do more_dataset_manipulation.do
 ## convert plots used in this file to png
 
 glist=(api99_ow
@@ -42,7 +42,6 @@ more complicated merges as well as reshaping.
 <br>
 
 ## Downloading `ado` files, setting globals, and loading data
-
 
 
 To start, we need to create some example datasets so that we can use them for
@@ -138,6 +137,7 @@ start <- 'messy merge'
 end <- 'code for looking at missing values, other patterns'
 writeLines(logparse(lf, start = start, end = end))
 ```
+
 These combined files are likely to have lots of missing data. Let's
 take a look at some of the patterns of missing data. The first command
 to use is called `inspect`. The results from the inspect command look
@@ -255,8 +255,8 @@ writeLines(logparse(lf, start = start, end = end))
 
 > Download data on personal per capita from 1950 to the present for
 > all 50 states from the
-> [Bureau of Economic Analysis](http://www.bea.gov/regional/downloadzip.cfm). Create
-> a plot using the `xtline` command. 
+> [Bureau of Economic Analysis](http://www.bea.gov/regional/downloadzip.cfm). Reshape the dataset and then create
+> a plot using the `xtline` command. You're looking for the "Annual state personal income and employment" under state personal income accounts.
 
 <br>
 <br>

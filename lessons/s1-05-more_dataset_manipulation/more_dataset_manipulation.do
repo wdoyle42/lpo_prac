@@ -6,13 +6,13 @@ log using "more_dataset_manipulation.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 17 September 2014
-// LAST: 25 September 2016
+// LAST: 25 September 2017
 
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
 
 // set globals for url data link and local data path
-global urldata "http://www.ats.ucla.edu/stat/stata/library/apipop"
+global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop"
 
 
 // required Ado Files: onewayplot, mdesc, mvpatterns
@@ -114,7 +114,7 @@ mvpatterns api99 api00 ell mobility
 // create flag if missing ell
 gen ell_flag = ell == .
 
-// plot kernal density of api99 of observations missing ell
+// plot kernel density of api99 of observations missing ell
 kdensity api99 if ell_flag == 1, ///
     name(api99_kdens) ///
     addplot(kdensity api99 if ell_flag == 0) ///
