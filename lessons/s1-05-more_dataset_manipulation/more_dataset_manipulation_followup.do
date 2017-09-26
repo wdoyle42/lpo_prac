@@ -6,40 +6,38 @@ log using "more_dataset_manipulation.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 17 September 2014
-// LAST: 25 September 2016
+// LAST: 25 September 2017
 
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
 
 // set globals for url data link and local data path
-global urldata "http://www.ats.ucla.edu/stat/stata/library/apipop"
+global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop"
 
 
 // required Ado Files: onewayplot, mdesc, mvpatterns
 ssc install mdesc
 ssc install onewayplot
 net install dm91, from ("http://www.stata.com/stb/stb61")
-     
-use $urldata, clear
+   
+   
+    use $urldata, clear
 	
-save api, replace
+	save api, replace
 	
 // create example datasets
 preserve
 collapse (mean) api99, by(cnum)
 drawnorm county_inc, means(30) sds(5)
-// Create another variable for ed spending
-drawnorm ed_spending, means(8000) sds(1000)
+drawnorm educ_spend, means(8000) sds(1000)
 sort cnum
 save county_data, replace
 restore
-
 
 preserve
 collapse (mean) api99, by(dnum)
 rename api99 api99c
 gen edd = rbinomial(1,.3)
-drawnorm teach_sal, mean(40) sd(5)
 save district_data, replace
 restore
 
@@ -52,21 +50,28 @@ sort cnum
 // merge many-to-one
 merge m:1 cnum using county_data
 
+
 // inspect many-to-one merge
 tab _merge
-list cnum api99 county_inc ed_spending if _n < 10
+
+list cnum api99 county_inc if _n < 10
 
 
 // plot and save
 onewayplot api99, by(county_inc) stack ms(oh) msize(*.1) width(1) name(api99_ow)
-graph export api99_ow.eps, name(api99_ow) replace
+graph export ${plotdir}api99_ow.eps, name(api99_ow) replace
+
+
+// plot and save
+//onewayplot api99, by(educ_spend) stack ms(oh) msize(*.1) width(1) name(api99_ow_2)
+
 
 // one-to-many match merging: but why?
 
 use api, clear
 
 // sort to aid in merge
-sort dnum snum 
+sort dnum
 
 // save newly sorted dataset
 save api, replace
@@ -86,8 +91,6 @@ list dnum api99 edd if _n < 10
 
 // messy merge
 
-set seed 040621
-
 use api, clear
 
 preserve
@@ -101,10 +104,11 @@ sample 90
 save api_00, replace
 
 // merge datasets
-merge snum using api_99, sort
+merge 1:1 snum using api_99 
 
 // inspect messy merge
-tab _merge 
+tab _merge
+
 
 // code for looking at missing values, other patterns
 
@@ -113,15 +117,16 @@ inspect api99
 inspect api00
 
 // command: mdesc
-mdesc api99 api00, all
+mdesc api99 api00
 
 // command: mvpatterns
 mvpatterns api99 api00 ell mobility
 
+
 // create flag if missing ell
 gen ell_flag = ell == .
 
-// plot kernal density of api99 of observations missing ell
+// plot kernel density of api99 of observations missing ell
 kdensity api99 if ell_flag == 1, ///
     name(api99_kdens) ///
     addplot(kdensity api99 if ell_flag == 0) ///
@@ -131,51 +136,25 @@ kdensity api99 if ell_flag == 1, ///
 
 graph export api99_kdens.eps, name(api99_kdens) replace
 
-
 use api, clear
 
 preserve
-drop meals emer
+drop meals emer 
 sample 50
-save api_1, replace
+save no_meals, replace
 restore
 
-drop not_hsg hsg some_col col_grad grad_sch avg_ed
+drop some_col col_grad grad_sch avg_ed not_hsg hsg  
 sample 50
-save api_2, replace
+save no_pared, replace
 
-// merge datasets
-merge 1:1 snum using api_1 
+ 
+use no_meals, clear
+merge 1:1 snum using no_pared
 
-// inspect messy merge
-tab _merge 
+tab _merge
 
-
-// code for looking at missing values, other patterns
-
-// command: inspect
-inspect avg_ed
-inspect meals
-
-// command: mdesc
-mdesc meals emer, all
-
-mdesc not_hsg hsg some_col col_grad grad_sch 
-
-// command: mvpatterns
-mvpatterns meals emer avg_ed not_hsg hsg some_col col_grad grad_sch 
-
-// create flag if missing ell
-gen emer_flag = emer == .
-
-// plot kernal density of api99 of observations missing ell
-kdensity api99 if emer_flag == 1, ///
-    name(api99_2_kdens) ///
-    addplot(kdensity api99 if emer_flag == 0) ///
-    legend(label(1 "Not Missing Emer")  label(2 "Missing Emer")) ///
-    note("") ///
-    title("")
-
+mvpatterns meals emer some_col col_grad grad_sch avg_ed not_hsg hsg
 
 // reshaping: wide to long
 
@@ -185,6 +164,7 @@ sort fips
 
 // reshape long
 reshape long inc_, i(fips) j(year_quarter, string)
+
 
 // create date that stata understands
 gen date = quarterly(year_quarter, "YQ")
@@ -202,11 +182,11 @@ xtset fips date, quarterly
 drop if fips < 1 | fips > 56
 
 // graph
-xtline inc_, i(areaname) t(date) name(xtline_fipsinc)
-graph export xtline_fipsinc.eps, name(xtline_fipsinc) replace
+//xtline inc_, i(areaname) t(date) name(xtline_fipsinc)
+//graph export ${plotdir}xtline_fipsinc.eps, name(xtline_fipsinc) replace
+
 
 // reshaping: long to wide
-
 
 // drop date that we added (no longer needed)
 drop date
@@ -217,25 +197,33 @@ reshape wide inc_, i(fips) j(year_quarter, string)
 // list first rows
 list if _n < 4
 
-// Final exercise
 
+//In class exercise: BEA data
+unzipfile spi.zip, replace
 
+insheet using SA1_1929_2016.csv, comma clear
 
-import delimited SA1_1929_2015.csv,   clear numericcols(1 8/94)
+keep if linecode==3
 
-keep if description=="Per capita personal income (dollars) 2/"
+//This will work if you don't want to rename variables
+reshape long v, i(geofips) j(year) 
 
-drop region linecode industry
+// Just so you can see this 
+local i=1929
 
-reshape long v, i(geofips) j(year)
+foreach var of varlist v8-v95{
+destring `var', replace force
+rename `var' percap_inc_`i'
+local i=`i'+1
+}
 
-replace year=year+1921
+reshape long percap_inc_, i(geofips) j(year) 
 
-drop if year<1950
+xtset geofips year, yearly  
 
-xtset geofips year, yearly
+xtline percap_inc_ 
 
-xtline v, i(geoname) t(year)
+exit 
 
 // end file
 log close                               // close log
