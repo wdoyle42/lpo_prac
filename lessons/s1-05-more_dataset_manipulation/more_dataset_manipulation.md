@@ -564,7 +564,7 @@ above dataset back, use the same command, but substitute `wide` for
 
 #### Quick Exercise
 
-> Download data on personal per capita from 1950 to the present for all
+> Download data on personal per capita income from 1950 to the present for all
 > 50 states from the [Bureau of Economic
 > Analysis](http://www.bea.gov/regional/downloadzip.cfm). Create a plot
 > using the `xtline` command.
