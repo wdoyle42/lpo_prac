@@ -1,6 +1,6 @@
 ---
 title: Sampling II
-author: LPO 9951 | Fall 2016
+author: LPO 9951 | Fall 2017
 output: github_document
 ---
 
@@ -12,7 +12,7 @@ opts_chunk$set(echo = FALSE, message = FALSE, comment = NA, cache = FALSE)
 
 ```{r, engine = 'bash'}
 ## run accompanying .do file to get log file for parsing
-#stata -b -q do ../do/lecture8_sampling_part2.do
+stata-se -b -q do ../do/lecture8_sampling_part2.do
 ```
 
 ```{r}

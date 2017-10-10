@@ -7,7 +7,7 @@ log using "sampling_part2.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 18 October 2014
-// LAST: 18 October 2016
+// LAST: 9 October 2017
      
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
@@ -93,6 +93,24 @@ mean birthwgtlbs
 
 // compute mean with svy bootstrap
 svy: mean birthwgtlbs
+
+
+// Using ECLS
+
+// Using ELS
+
+use ../../data/plans.dta, clear
+
+svyset psu [pw=f1pnlwt],strata(strat_id)
+
+mean bynels2m, over(byrace)
+
+svy: mean bynels2m, over(byrace) 
+
+
+// Using HSLS
+
+
 
 // end file     
 log close

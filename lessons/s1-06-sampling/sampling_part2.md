@@ -1,6 +1,6 @@
 Sampling II
 ================
-LPO 9951 | Fall 2016
+LPO 9951 | Fall 2017
 
 <br>
 
@@ -587,6 +587,6 @@ The svyset command includes three possible options for dealing with loney *PSUs*
 
 <br> <br>
 
-*Init: 23 August 2015; Updated: 18 October 2016*
+*Init: 23 August 2015; Updated: 09 October 2017*
 
 <br>

@@ -1,9 +1,9 @@
 ------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum/fall_2016/central/lessons/sampling/sampling_part2.lo
-> g
+       log:  /Users/doylewr/practicum_2017/central/lessons/s1-06-sampling/sampling_part2.l
+> og
   log type:  text
- opened on:  18 Oct 2016, 08:52:02
+ opened on:  10 Oct 2017, 08:50:51
 
 . 
 . // NAME: Sampling: Part 2
@@ -11,7 +11,7 @@
 . // AUTH: Will Doyle
 . // REVS: Benjamin Skinner
 . // INIT: 18 October 2014
-. // LAST: 18 October 2016
+. // LAST: 9 October 2017
 .      
 . clear all                               // clear memory
 
@@ -514,11 +514,100 @@ Survey: Mean estimation            Number of obs    =     9946
 --------------------------------------------------------------
 
 . 
+. 
+. // Using ECLS
+. 
+. // Using ELS
+. 
+. use ../../data/plans.dta, clear
+
+. 
+. svyset psu [pw=f1pnlwt],strata(strat_id)
+
+      pweight: f1pnlwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. mean bynels2m, over(byrace)
+
+Mean estimation                     Number of obs    =   16160
+
+    _subpop_1: byrace = {survey component legitimate ski
+    _subpop_2: byrace = {nonrespondent}
+    _subpop_3: byrace = amer. indian/alaska native, non-
+    _subpop_4: byrace = asian, hawaii/pac. islander,non-
+    _subpop_5: byrace = black or african american, non-h
+    _subpop_6: byrace = hispanic, no race specified
+    _subpop_7: byrace = hispanic, race specified
+    _subpop_8: byrace = multiracial, non-hispanic
+    _subpop_9: byrace = white, non-hispanic
+
+--------------------------------------------------------------
+        Over |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+bynels2m     |
+   _subpop_1 |         -8          0             .           .
+   _subpop_2 |   44.80427   .4417672      43.93836    45.67019
+   _subpop_3 |   38.50031   .9723931      36.59431    40.40631
+   _subpop_4 |   49.51846   .3734691      48.78642     50.2505
+   _subpop_5 |    36.4727   .2537438      35.97533    36.97007
+   _subpop_6 |   38.38982   .3988786      37.60797    39.17167
+   _subpop_7 |     38.626   .3791879      37.88275    39.36925
+   _subpop_8 |   44.92767   .4869373      43.97322    45.88212
+   _subpop_9 |     48.644   .1346947      48.37998    48.90801
+--------------------------------------------------------------
+
+. 
+. svy: mean bynels2m, over(byrace) 
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =     361         Number of obs    =    16160
+Number of PSUs   =     751         Population size  =  3388462
+                                   Design df        =      390
+
+    _subpop_1: byrace = {survey component legitimate ski
+    _subpop_2: byrace = {nonrespondent}
+    _subpop_3: byrace = amer. indian/alaska native, non-
+    _subpop_4: byrace = asian, hawaii/pac. islander,non-
+    _subpop_5: byrace = black or african american, non-h
+    _subpop_6: byrace = hispanic, no race specified
+    _subpop_7: byrace = hispanic, race specified
+    _subpop_8: byrace = multiracial, non-hispanic
+    _subpop_9: byrace = white, non-hispanic
+
+--------------------------------------------------------------
+             |             Linearized
+        Over |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+bynels2m     |
+   _subpop_1 |          .  (sum of weights equals zero)
+   _subpop_2 |   42.73409   .5619385      41.62929     43.8389
+   _subpop_3 |   38.48761   1.361135      35.81153    41.16369
+   _subpop_4 |   49.75732   .8126979      48.15951    51.35514
+   _subpop_5 |   35.80617   .4354775      34.94999    36.66235
+   _subpop_6 |   37.81636   .5967934      36.64302    38.98969
+   _subpop_7 |   37.85814   .5601426      36.75686    38.95941
+   _subpop_8 |   43.50999   .6856923      42.16187     44.8581
+   _subpop_9 |   48.44039    .254996      47.93906    48.94173
+--------------------------------------------------------------
+
+. 
+. 
+. // Using HSLS
+. 
+. 
+. 
 . // end file     
 . log close
       name:  <unnamed>
-       log:  /Users/doylewr/practicum/fall_2016/central/lessons/sampling/sampling_part2.lo
-> g
+       log:  /Users/doylewr/practicum_2017/central/lessons/s1-06-sampling/sampling_part2.l
+> og
   log type:  text
- closed on:  18 Oct 2016, 08:52:41
+ closed on:  10 Oct 2017, 08:51:37
 ------------------------------------------------------------------------------------------

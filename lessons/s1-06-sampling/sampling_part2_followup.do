@@ -7,7 +7,7 @@ log using "sampling_part2.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 18 October 2014
-// LAST: 18 October 2016
+// LAST: 9 October 2017
      
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
@@ -28,7 +28,6 @@ mean age height weight [pw = finalwgt]
 
 // set survey characteristics with svyset
 //svyset psuid [pweight = W2W1STU], strata(stratid) singleunit(certainty)
-
 
 
 // compute mean using svy pre-command and taylor series estimates
@@ -63,7 +62,6 @@ gen brr_flag_4=brr_4~=0
 
 browse finalwgt brr_flag_1 brr_1 brr_flag_2 brr_2 brr_flag_3 brr_3 brr_flag_4 brr_4
 
-exit 
 
 // svyset automagically
 svyset 
