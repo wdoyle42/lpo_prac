@@ -7,7 +7,7 @@ log using "sampling_part1.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 1 October 2014
-// LAST: 10 October 2016
+// LAST: 3 October 2017
      
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
@@ -57,7 +57,6 @@ scalar sampsem = sampsd / sqrt(_N)      // standard error of sample mean
 scalar list sampmean sampsd sampsem
 summarize score
 mean score
-
 
 // SIMPLE RANDOM SAMPLING WITH FINITE POPULATION CORRECTION
 
@@ -130,6 +129,7 @@ gen pweight = 1 / preport
 // check probability-weighted mean 
 mean score [pweight = pweight]
 
+
 // STRATIFIED RANDOM SAMPLING WITH PROBABILITY PROPORTIONAL TO SIZE
 
 // read in fake highschool data; store full student population
@@ -139,12 +139,10 @@ scalar stupop = _N
 // proportion of students at risk
 mean atrisk                             // overall
 mean atrisk, over(grade)                // within each grade
-
+ 
 // sample within grades (strata)                               
 global ss = 50                          // set within grade sample size
 sample $ss, count by(grade)             // sample
-
-
 
 // compute within grade and overall means and sems
 preserve 
@@ -155,6 +153,8 @@ scalar Ybar9 = propatr[1]               // 9th grade average
 scalar Ybar10 = propatr[2]              // 10th grade average
 scalar Ybar11 = propatr[3]              // 11th grade average
 scalar Ybar12 = propatr[4]              // 12th grade average
+
+
 
 // compute ((N_h - n_h) / N_h - 1) * (s_h^2 / n_h)
 gen varatr = ((nstgrade - $ss) / (nstgrade - 1)) * (sdatr^2 / $ss)
@@ -167,7 +167,10 @@ scalar Ybar10_sem = grade_sem[2]        // 10th grade sem
 scalar Ybar11_sem = grade_sem[3]        // 11th grade sem
 scalar Ybar12_sem = grade_sem[4]        // 12th grade sem
 
+
 gen weight = nstgrade / stupop          // (N_h / N)
+gen pweight= 1/weight
+
 
 gen wpropatr = weight * propatr         // weight strata proportions
 gen wvaratr = weight^2 * varatr         // weight strata variances
@@ -197,6 +200,7 @@ mean testscore, over(grade)             // within grade
 global cut = 10                         // number of classes to keep in each grade 
 keep if classid <= $cut                 // keep only sampled classes
 scalar m = _N                           // number of students in sample
+
 
 
 // get estimated population (should be close to 2003)
