@@ -1,7 +1,9 @@
 ---
-title: Data validation
-author: LPO 9951 | Fall 2016
-output: github_document
+title: "Data validation"
+author: "LPO 9951 | Fall 2017"
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r, echo = FALSE, message = FALSE}
@@ -12,12 +14,12 @@ opts_chunk$set(echo = FALSE, message = FALSE, comment = NA)
 
 ```{r, engine = 'bash'}
 ## run accompanying .do file to get log file for parsing
-#stata -b -q do ../do/lecture10_validation.do
+stata-se -b -q do validation.do
 ```
 
 ```{r}
 ## save log file in object
-lf <- 'lecture10_validation.log'
+lf <- 'validation.log'
 ```
 Data validation refers to the process of ensuring that the
 characteristics of your data match the known characteristics of the
@@ -45,14 +47,6 @@ Data validation can be done in several ways:
     elite institutions of higher education, and you calculate an
     average tuition of $2,000, you can rest assured that you have not
     found a hidden bargain but rather a flaw in your data.
-
-## Adding new subdirectory: `./tables/`
-
-First things first, you need to add a new subdirectory `./tables/` to
-your class folder. It should be of the same level as the other
-subdirectories you've already created: `data`, `do`, `plots`, `aux`.
-
-<br>
 
 ## Calculating estimates and comparing them with known results
 

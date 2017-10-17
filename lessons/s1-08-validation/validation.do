@@ -1,13 +1,13 @@
 capture log close                       // closes any logs, should they be open
 set linesize 90
-log using "lecture10_validation.log", replace    // open new log
+log using "validation.log", replace    // open new log
 
 // NAME: Data cleaning
-// FILE: lecture10_validation.do
+// FILE: validation.do
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 22 October 2014
-// LAST: 29 October 2016
+// LAST: 15 October 2017
      
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature

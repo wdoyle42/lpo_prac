@@ -1,6 +1,6 @@
 Data validation
 ================
-LPO 9951 | Fall 2016
+LPO 9951 | Fall 2017
 
 Data validation refers to the process of ensuring that the characteristics of your data match the known characteristics of the population as measured by other analysts. If you have large discrepancies between your estimates and the estimates compiled by others, this is a clear "red flag" that something has gone wrong. Usually this is a problem that can be solved by going back to cleaning the data, but sometimes your sample may diverge in important ways from the samples collected by others. You will need to state why this is the case in your write-up of the data.
 
@@ -10,13 +10,6 @@ Data validation can be done in several ways:
 -   Sometimes you will be the first one to analyze your dataset. In this case, you need to look for others who have collected similar samples and compare with them.
 -   Sometimes you won't have any other samples to work with. In this case, you'll need to see if there are population data that might be useful. Many people use the Census as a "check" on the data they have collected.
 -   Last, you need to use common sense. If you have data on private elite institutions of higher education, and you calculate an average tuition of $2,000, you can rest assured that you have not found a hidden bargain but rather a flaw in your data.
-
-Adding new subdirectory: `./tables/`
-------------------------------------
-
-First things first, you need to add a new subdirectory `./tables/` to your class folder. It should be of the same level as the other subdirectories you've already created: `data`, `do`, `plots`, `aux`.
-
-<br>
 
 Calculating estimates and comparing them with known results
 -----------------------------------------------------------
@@ -139,8 +132,81 @@ We get output in the console, but let's use the `eststo` and `esttab` commands t
     >               _prop_7 "MA/MS" ///
     >               _prop_8 "PhD or Prof") ///
     >     replace
-    (note: file expect_tab.rtf not found)
     (output written to expect_tab.rtf)
+
+    .         
+    . estpost svy: tabulate byrace bystexp, row percent
+    (running tabulate on estimation sample)
+
+    Number of strata   =       361                  Number of obs      =     15236
+    Number of PSUs     =       751                  Population size    = 3408318.6
+                                                    Design df          =       390
+
+    ------------------------------------------------------------------------------------------
+    student^s |
+    race/ethn |
+    icity-com |              how far in school student thinks will get-composite              
+    posite    | {don^t k  less tha  high sch  attend o  attend c  graduate  obtain m  obtain p
+    ----------+-------------------------------------------------------------------------------
+     amer, in |    14.59     .4457      9.99     7.469     2.905      30.2     16.34     18.06
+     asian, h |    10.01     1.104     3.363     3.207     4.165     33.54      21.2     23.42
+     black or |    8.565     1.405      8.16     5.541      5.99     37.35     15.14     17.85
+     hispanic |    12.79      1.26      10.5     6.849     6.581     34.14     15.47     12.42
+     hispanic |    13.23     2.064      9.48     5.459     5.418     35.99      15.5     12.86
+     multirac |    8.286     1.243     7.065     4.854     3.947     35.29     21.42     17.89
+     white, n |    9.393     .6163     6.559      7.07     2.854     35.86     21.74      15.9
+              | 
+        Total |    9.879     .9483     7.247     6.439     3.899     35.79     19.71     16.09
+    ------------------------------------------------------------------------------------------
+
+    --------------------
+              | how far 
+              |in school
+              | student 
+              |  thinks 
+    student^s |   will  
+    race/ethn |get-compo
+    icity-com |   site  
+    posite    |    Total
+    ----------+---------
+     amer, in |      100
+     asian, h |      100
+     black or |      100
+     hispanic |      100
+     hispanic |      100
+     multirac |      100
+     white, n |      100
+              | 
+        Total |      100
+    --------------------
+      Key:  row percentages
+
+      Pearson:
+        Uncorrected   chi2(42)        =  338.2312
+        Design-based  F(32.43, 12648.62)=    5.6934   P = 0.0000
+
+    saved vectors:
+                 e(b) =  row percentages
+                e(se) =  standard errors of row percentages
+                e(lb) =  lower 95% confidence bounds for row percentages
+                e(ub) =  upper 95% confidence bounds for row percentages
+              e(deff) =  deff for variances of row percentages
+              e(deft) =  deft for variances of row percentages
+              e(cell) =  cell percentages
+               e(row) =  row percentages
+               e(col) =  column percentages
+             e(count) =  weighted counts
+               e(obs) =  number of observations
+
+    row labels saved in macro e(labels)
+    column labels saved in macro e(eqlabels)
+
+    . estimates store expect_tab2
+
+    .         
+    . esttab expect_tab2 using expect_tab2.rtf, se  nostar replace unstack ///        
+    >         varlabels(`e(labels)') eqlabels(`e(eqlabels)')
+    (output written to expect_tab2.rtf)
 
     . // post clean table to output window
     . esttab expect_tab, b(3) se(4) ///
@@ -180,6 +246,8 @@ We get output in the console, but let's use the `eststo` and `esttab` commands t
     Standard errors in parentheses
     * p<0.05, ** p<0.01, *** p<0.001
 
+    .                           
+
 *NB:* The `///` at the end of each line in the `esttab` commands tells Stata to move to the next line but that the command isn't yet finished. Without this, the options would stretch far on one line: bad coding practice. I could have also changed the delimiter to `;` like we did when reading in NCES datasets in the earlier lecture.
 
 <br>
@@ -196,6 +264,6 @@ Now that we have a clean table to look at, is this the same as [Table 2 on page 
 
 <br><br>
 
-*Init: 25 August 2015; Updated: 01 November 2016*
+*Init: 25 August 2015; Updated: 17 October 2017*
 
 <br>
