@@ -7,8 +7,8 @@ log using "descriptives.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 6 November 2013
-// LAST: 6 Novemeber 2016
-     
+// LAST: 31 October 2017
+
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
 
@@ -20,6 +20,9 @@ global tabsdir "../tables/"
 // set plot and table types
 global gtype eps
 global ttype html
+
+// theme for graphics
+set scheme s1color
 
 // open up modified plans data
 use plans2, clear
@@ -139,9 +142,12 @@ esttab . using proportions.$ttype, ///
 
 // KEY DEPENDENT VARIABLE IN RELATION TO OTHER INDEPENDENT VARIABLES
 
-// math against reading scores in scatterplot
+
+// math against reading scores in scatterplot: please don't do this
 graph twoway scatter bynels2m bynels2r, name(sc_math_read)
 graph export sc_math_read.$gtype, name(sc_math_read) replace
+
+//solutions
 
 // scatterplot with 10 percent sample of data
 preserve                                // preserve data
@@ -160,12 +166,12 @@ preserve                                // preserve data
 sample 25                               // sample random 25%
 
 graph twoway (scatter bynels2m byses1 if urm == 0, ///
-                  mcolor("orange") ///
-                  msize(vtiny) ///
+                  mcolor(orange*.5) ///
+                  msize(tiny) ///
               ) ///
               || scatter bynels2m byses1 if urm == 1, ///
-                  mcolor("green") ///
-                  msize(vtiny) ///
+                  mcolor(green*.5) ///
+                  msize(tiny) ///
                   msymbol(triangle) ///
                   ytitle("NELS Math Scores") ///
                   xtitle("SES") ///
@@ -186,7 +192,7 @@ graph twoway scatter bynels2m byses1, by(bystexp) ///
 
 graph export sc_cond.$gtype, name(sc_cond) replace
 
-// matrix plot
+// matrix plot:NO
 graph matrix bynels2m bynels2r byses1 byses2, name(matrix_plot) msize(vtiny)
 graph export matrix_plot.$gtype, name(matrix_plot) replace
 
@@ -210,6 +216,28 @@ graph box bynels2m, over(byrace2, ///
                     name(box2)
 
 graph export box2.$gtype, name(box2) replace
+
+// bar plots 
+
+graph hbar bynels2m bynels2r [pw=bystuwt], ///
+		over(bystexp, sort(bynels2m) descending) ///
+		ytitle("Test Scores") ///
+		legend(order(1 "Math Scores" 2 "Reading Scores"))  ///
+		blabel(bar,format(%9.2f)) ///
+		bar(1, color(orange*.5)) bar(2, color(blue*.5))
+
+graph hbar bynels2m bynels2r [pw=bystuwt], ///
+		over(bystexp, sort(bynels2m) descending) ///
+		ytitle("Test Scores") ///
+		legend(order(1 "Math Scores" 2 "Reading Scores"))  ///
+		blabel(bar,format(%9.2f)) ///
+		bar(1, color(orange*.5)) bar(2, color(blue*.5)) ///
+		name(barplot1)
+
+// Statplot: ssc install statplot
+statplot bynels2m bynels2r, over(bystexp,sort(1) descending) over(bysex)  name(statplot)
+		
+		
 
 // dot plots of continuous against categorical
 graph dot bynels2m, over(bypared, ///
@@ -245,6 +273,7 @@ graph combine dot_math.gph dot_read.gph, ///
 
 // export combined graphics
 graph export dot_both.$gtype, name(dot_both) replace
+
 
 // TABPLOT
 

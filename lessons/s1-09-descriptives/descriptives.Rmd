@@ -1,7 +1,7 @@
 ---
 title: Descriptives
-author: LPO 9951 | Fall 2016
-output: html_document
+author: LPO 9951 | Fall 2017
+output: github_document
 ---
 
 ```{r, echo = FALSE, message = FALSE}
@@ -12,7 +12,7 @@ opts_chunk$set(echo = FALSE, message = FALSE, comment = NA)
 
 ```{r, engine = 'bash'}
 ## run accompanying .do file to get log file for parsing
-#stata -b -q do ../do/lecture11_descriptives.do
+stata-se -b -q do descriptives.do
 ## convert plots used in this file to png
 #pdir=/
 glist=(hist_bynels2m
