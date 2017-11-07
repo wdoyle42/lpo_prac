@@ -1,270 +1,164 @@
-capture log close                       // closes any logs, should they be open
-log using "programming.log", replace    // open new log
+version 13
+capture log close
+log using "programming.log",replace
 
-// NAME: Introduction to programming
-// FILE: lecture6_programming.do
-// AUTH: Benjamin Skinner
-// REVS: Will Doyle
-// INIT: 2 October 2013
-// LAST: 1 October 2016
-    
-// h/t to Justin Shepherd
+/* PhD Practicum */
+/* Some simple demonstrations of macros and loops */
+/* Will Doyle*/
+/* LAST: 11/6/2017 */
+/* Saved on OAK */
 
-// TABLE OF CONTENTS
+clear
 
-// 0.0 Set preferences/globals
-// 1.0 Describing
-// 2.0 Scalars
-//   2.1 return
-//   2.2 ereturn
-//   2.3 scalar
-// 3.0 Estimates
-//   3.1 estimates store
-//   3.2 estimates restore
-// 4.0 Shortcuts
-//   4.1 numlists
-//   4.2 varlists
-// 5.0 Macros
-//   5.1 globals
-//   5.2 numerical locals
-//   5.3 varlist locals
-//   5.4 nested locals
-// 6.0 Matrices
-// 7.0 Switches
-// 8.0 Loops
-//   8.1 if / else
-//   8.2 foreach
-//   8.3 forvalues
-//   8.4 while
-// 9.0 Nests
+clear matrix
 
-//  0.0 Set preferences/globals/load data
-   
-clear all                               // clear memory
-set more off                            // turn off annoying "__more__" feature
+use ../../data/plans
 
-use loondata, clear
+svyset psu [pw=bystuwt], strat(strat_id)
 
-//  1.0 Describing
+/*Generating macros*/
 
-// sum with if statement
-sum flock1 if loon == 0
-sum flock1 if loon == 1
+local tests bynels2m bynels2r
 
-// tab loon with summarize
-tab loon, summarize(flock1)
+*summarize tests /* Won't work */
 
-// summarize with bysort
-bysort loon: sum flock1
+summarize `tests' /*Will work */
 
-// summarize multiple variables with bysort
-bysort loon: sum flock1 flock2 flock3
+/* Difference between globals and locals */
 
-//  2.0 Scalars
 
-//  2.1 return command
+foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
+              foreach i of numlist -4 -8 -9 { /* Start inner loop */
+                     replace `myvar'=. if `myvar'== `i'
+                                            }  /* End inner loop */
+                                          } /* End outer loop */
 
-sum shells1
-return list
-di r(mean)
-
-di r(sd)
-
-//  2.2 ereturn command
-
-mean shells1
-ereturn list
-di e(N)
-
-//  2.3 scalar command
-
-sum shells1
-scalar mean_shells1 = r(mean)
-sum feathers1
-di mean_shells1
-
-//  3.0 Estimates
-
-//  3.1 estimates store command
-
-mean ideas1
-estimates store m_ideas1
-   
-//  3.2 estimates restore command
-
-mean eggs1
-estimates store m_eggs1
-estimates restore m_ideas1
-estimates replay
-estimates clear
-
-//  4.0 Shortcuts
-
-//  4.1 numlist commands
-
-sort shells1
-
-list id shells1 loon upper in 1/10
-list id shells1 loon upper in -10/l
-
-gsort -ideas1
-
-list id ideas1 loon upper in 1/10
-list id ideas1 loon upper in -10/l
-    
-//  4.2 varlist commands 
-
-sum shells1-flock3, sep(3)
-
-sum flock*
-
-//  5.0 Macros
-
-//  5.1 global macros
-
-global repstr "Long string I will use a lot and don't want to retype"
-
-macro list
-
-di "$repstr"
-
-macro drop repstr
-
-macro list
-
-//  5.2 numerical local commands
-
-local i 1
-di `i'
-
-local j = 2
-di `j'
-
-local k = `i'+`j'
-di `k'
-
-sum ideas1
-local mean_ideas1 = r(mean)
-di `mean_ideas1'
-    
-//  5.3 varlist local commands
-
-local contributions ideas1 ideas2 ideas3 eggs1 eggs2 eggs3
-sum `contributions', sep(3)
-
-// 5.4 nested local commands
-
-local whoareyou loon upper seasons
-local wholeshebang `contributions' `whoareyou'
-sum `wholeshebang', sep(3)
-
-// 6.0 Matrix
-
-mean ideas1 ideas2 ideas3
-
-// return list to show r(table)
-return list
-matrix list r(table)
-
-// store r(table)
-matrix meanse = r(table)
-matrix list meanse
-
-// subset matrix
-matrix meanse = meanse[1..2,1...]
-matrix list meanse
-
-// transpose matrix
-matrix tmeanse = meanse'
-matrix list tmeanse
-
-// init blank 5 X 2 matrix
-matrix blank = J(5,2,.)
-
-// add to first row and show matrix
-matrix blank[1,1] = 1
-matrix blank[1,2] = 6
-matrix list blank
-
-//  7.0 Switch
-
-// set switch
-local graphs = 0
-
-if `graphs' == 1 {
-    scatter shells1 feathers1 if loon == 1
-}
-
-//  8.0 Loops
-
-//  8.1 if/else command
-
-local switch = 0    
-    
-if `switch' == 0 {
-    sum loon if upper == 0
-}
-else {
-    sum loon if upper == 1
-}
   
-//  8.2 foreach command
+local race_names amind asian black hispanic multiracial white
 
-foreach var of varlist shells1-feathers3 {
-    mean `var'
+tab(byrace), gen(race_)
+
+local i=1
+
+foreach val of local race_names{
+  rename race_`i' `val'
+  local i=`i'+1
 }
 
-local memberships loon upper
+label variable byincome "Income"
+label variable amind "American Indian/AK Native"
+label variable asian "Asian/ PI"
+label variable black "African American"
+label variable hispanic "Hispanic"
+label variable white "White"
+label variable multiracial "Multiracial"
 
-foreach var of local memberships {
-    mean `var'
+
+local y bynels2m
+
+local demog  amind asian black hispanic white  bysex
+
+local pared bypared bymothed
+
+bysort `demog': sum `y' 
+bysort `pared': sum `y'
+
+
+ /* Scalar commands*/
+scalar pi=3.14159
+
+summarize bynels2m
+
+scalar mean_math=r(mean)
+
+scalar sd_math=r(sd)
+
+gen stand_math= (bynels2m-mean_math)/(2*sd_math)
+
+
+/*Varlist  commands*/
+
+local  bydata by*
+
+local first_five=stu_id-f1sch_id
+
+local myses *ses?
+
+svyset psu [pw=bystuwt], strat(strat_id)
+
+*Replace all missing data
+
+ foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
+              foreach i of numlist -4 -8 -9 { /* Start inner loop */
+                     replace `myvar'=. if `myvar'== `i'
+                                            }  /* End inner loop */
+                                          } /* End outer loop */
+
+
+*Simple forvalues command
+
+forvalues i= 1/10{
+ di "This is number `i'"
 }
 
-foreach val in id {
-    list `val' if eggs1 < 3
+*Use nsplit command to separate out birth year and day
+
+nsplit bydob_p, digits (4 2) gen (newdobyr newdobm)
+
+gen myage= 2002-newdobyr
+
+forvalues i = 14/18{
+gen age`i'=0
+replace age`i'=1 if myage==`i'
+replace age`i'=. if myage==.
 }
 
-//  8.3 forvalues command
 
-forvalues x = 1/10 {
-    di `x'
+*Simple foreach command
+
+local mytest *nels*
+
+foreach test of local mytest {
+  sum `test'
 }
 
-forvalues y = 2(2)10 {
-    di `y' 
+  
+forvalues i =1(3)100{
+di "I can count by threes, look! `i' "
 }
 
-forvalues z = 2 4 to 10 {
-    di `z'
+*Standardizing continous variables by 2 sd
+foreach test of varlist *nels*{
+ sum `test'
+ gen stand_`test'=(`test'-r(mean))/(2*r(sd))
 }
 
-//  8.4 while command
 
+local by_select bysex byrace bypared-byincome bystexp
+
+foreach myvar of local by_select{
+tab1 `myvar'
+}
+
+foreach myvar of varlist bysex-byincome{
+tab `myvar'
+}
+
+*The while command
 local i = 1
+while `i' < 10 {
+    di "I have not yet reached 10, instead the counter is now `i' "
+    local i=`i'+1
+  }
 
-while `i' < 11 {
-    di `i'
-    local i = `i' + 1
-}
+*Nested loops
+forvalues i =1/10 { /* Start outer loop */
+  forvalues j = 1/10 { /* Start inner loop */
+    di "This is outer loop `i', inner loop `j'"
+                      } /* End inner loop */
+                    } /* End outer loop */
 
-//  9.0 Nests
-
-// set up locals for nest
-local thoughts ideas1 ideas2 ideas3
-    
-forvalues i = 1/2 {
-    if `i' == 1 {
-        local type "Not a loon"
-    }
-    if `i' == 2 {
-        local type "Loon"
-    }
-    foreach var of local thoughts {
-        di "`i': `type'"
-	sum `var' if loon == `i' - 1
-    }
-}
-
-// end file     
-log close
+  
 exit
+
+
