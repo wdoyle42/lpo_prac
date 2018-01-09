@@ -6,7 +6,7 @@ log using "cond_mean.log",replace /*Open up new log */
 /* Conditional Means*/
 /* Making the link between conditional means and regression */
 /* Will Doyle */
-/* 2017-01-09 */
+/* 2018-01-09 */
 /* Github Repo:  */
 
 clear matrix
