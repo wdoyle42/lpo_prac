@@ -1,7 +1,9 @@
 ---
-title: Regression and Conditional Means
-author: LPO 9952 | Spring 2017
-output: github_document
+title: "Regression and Conditional Means"
+author: "LPO 9952 | Spring 2018"
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r, echo = FALSE, message = FALSE}
@@ -19,6 +21,7 @@ glist=(uncond_mean
 cond_mean2
 cond_mean4
 cond_mean10
+horiz10
 regress
 )
 
@@ -35,7 +38,7 @@ lf <- 'cond_mean.log'
 
 ## Unconditional Means as a Prediction
 
-In most of our day-to-day thinking, we use unconditional means as the basis for making pre- dictions. For instance, if I asked you to predict the temperature on June 1st of this year, you’d most likely simply say it would be the average temperature for that day or that time of year.
+In most of our day-to-day thinking, we use unconditional means as the basis for making predictions. For instance, if I asked you to predict the temperature on June 1st of this year, you’d most likely simply say it would be the average temperature for that day or that time of year.
 
 In the example below, I calculate the mean of math test scores in the plans dataset and use it as a prediction. I calculate the error term, then calculate the mean squared error (which is exactly what it sounds like) as a measure of how good this prediction is. As the graphic shows, the mean is a pretty terrible predictor for most people.
 
@@ -50,7 +53,7 @@ writeLines(logparse(lf, start = start,end=end))
 writeLines(alignfigure('uncond_mean.png', 'center'))
 ```
 
-*Quick Exercise* Calculate the mean of reading scores by ses, then make a prediction and calculate the mean squared error. Plot the result.
+*Quick Exercise* Calculate the mean of reading scores, then make a prediction and calculate the mean squared error. Plot the result.
 
 ## Predictions Using Conditional Means: 2 Groups
 
@@ -97,7 +100,7 @@ This logic can be extended indefinitely. For instance, here's a plot of the cond
 
 ```{r}
 start <- 'Conditional means across Deciles'
-end <- 'Conditional Mean: Regression'
+end <- 'Plotting conditional means for policy audiences'
 
 writeLines(logparse(lf, start = start,end=end))
 ```
@@ -106,10 +109,27 @@ writeLines(logparse(lf, start = start,end=end))
 
 *Quick Exercise* Calculate the mean of reading scores by 20 levels of ses, then make predictions and calculate the mean squared error. Plot the result.
 
-
 ## Regression is the conditional mean for ALL X's
 
-Regression is based on the idea of the expected value of y given, E(Y |X). If X can take on only two values, then regression will give two predictions. If X can take on 4, then it will give that many, based on the existing data. What regression does is calculate an expected value of Y at every level of X. The constraint is that the fit must be linear: it can only summarize the data using a straight line, set by two parameters (intercept and slope). How it does this is the subject of your regression class this semester. 
+Regression is based on the idea of the expected value of y given, E(Y |X). If X can take on only two values, then regression will give two predictions. If X can take on 4, then it will give that many, based on the existing data. What regression does is calculate an expected value of Y at every level of X. The constraint is that the fit must be linear: it can only summarize the data using a straight line, set by two parameters (intercept and slope). How it does this is the subject of your regression class this semester.  There are many ways to calculate the expected value of y given x, what makes OLS so useful is its parsimony-- in the bivariate case it requires only two parameters (slope and intercept) to be estimated. This is contrast to other, more flexible approaches, which trade off parsimony for more accurate fit. 
+
+In many cases, I will tailor my presentations for policy audiences around conditional means in exactly the way we have just done. For example, a bar plot of math scores by ses is likely more intuitive for many policy audiences than regression results, but communicates the same basic idea:
+
+
+
+```{r}
+start <- 'Plotting conditional means for policy audiences'
+end <- 'Conditional Mean: Regression'
+
+writeLines(logparse(lf, start = start,end=end))
+```
+
+
+```{r, results = 'asis'}
+writeLines(alignfigure('horiz10.png', 'center'))
+```
+
+
 
 Below, I regress math scores on SES, then predict math scores at every observed level of SES. I then plot this prediction. 
 
@@ -125,3 +145,4 @@ writeLines(alignfigure('regress.png', 'center'))
 ```
 
 *Quick Exercise* Use regression to predict reading scores. Compare the mse from your regression to the mse from the other methods used. What do you observe? 
+

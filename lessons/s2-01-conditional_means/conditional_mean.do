@@ -1,4 +1,4 @@
-version 12 /* Can set version here, use the most recent as default */
+version 15 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 
 log using "cond_mean.log",replace /*Open up new log */
@@ -6,7 +6,7 @@ log using "cond_mean.log",replace /*Open up new log */
 /* Conditional Means*/
 /* Making the link between conditional means and regression */
 /* Will Doyle */
-/* 2017-01-10 */
+/* 2017-01-09 */
 /* Github Repo:  */
 
 clear matrix
@@ -201,35 +201,53 @@ sort byses1
 
 graph twoway scatter bynels2m byses1, msize(vtiny)
 
+/* Predict using the mean */
 egen uncond_mean=mean(bynels2m)
 
+/*Generate residuals */
 gen uncond_mean_error=bynels2m-uncond_mean
 
+/* Square residuals */
 gen uncond_mean_error_sq=uncond_mean_error*uncond_mean_error
 
+/* Get Root mean squared error */
 quietly sum uncond_mean_error_sq
 
 scalar uncond_mean_mse=r(mean)
+
+scalar uncond_mean_rmse=sqrt(uncond_mean_mse)
 
 graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
     (line uncond_mean byses1,lcolor(blue)), legend(order(2 "Unconditional Mean"))
 
 graph export "uncond_mean.`gtype'", replace
 
+// OR . . . 
+
+reg bynels2m 
+
+scalar li uncond_mean_rmse
 
 //Above average vs. below average 
+
+// Generate prediction
 
 egen sesq2=cut(byses1), group(2)
 
 egen cond_mean2=mean(bynels2m), by(sesq2)
 
+// Get residual
 gen cond_mean2_error=bynels2m-cond_mean2
 
+// Square residual
 gen cond_mean2_error_sq=cond_mean2_error*cond_mean2_error
 
+// Mean squared error
 quietly sum cond_mean2_error_sq
 
 scalar cond_mean2_mse=r(mean)
+
+scalar cond_mean2_rmse=sqrt(cond_mean2_mse)
 
 graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
              (line uncond_mean byses1,lcolor(blue)) ///
@@ -237,6 +255,11 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
               legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups") )
 
 graph export "cond_mean2.`gtype'", replace
+
+// Or . . .
+
+reg sesq2
+
 
 /*Conditional mean by Quartiles*/
 
@@ -251,6 +274,8 @@ gen cond_mean4_error_sq=cond_mean4_error*cond_mean2_error
 quietly sum cond_mean4_error_sq
 
 scalar cond_mean4_mse=r(mean)
+
+scalar cond_mean4_rmse=sqrt(cond_mean4_mse)
 
 scalar li
 
@@ -277,6 +302,8 @@ quietly sum cond_mean10_error_sq
 
 scalar cond_mean10_mse=r(mean)
 
+scalar cond_mean10_rmse=sqrt(cond_mean10_mse)
+
 // scalar li
 
 graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
@@ -287,6 +314,32 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups" 4 "Conditional Mean, 4 Groups" 5 "Conditional Mean, 10 Groups"))
 
 graph export "cond_mean10.`gtype'", replace
+
+
+/*Plotting conditional means for policy audiences*/
+
+scalar n=_N/10
+
+preserve
+
+// 
+collapse (mean) math_cond_mean=bynels2m (semean) math_cond_mean_se=bynels2m, by(sesq10)
+scalar alpha=.05
+scalar myt=invttail(n, alpha/2)
+gen low_ci=math_cond_mean-(math_cond_mean_se*myt)
+gen high_ci=math_cond_mean+(math_cond_mean_se*myt)
+replace sesq10=sesq10+1
+
+graph twoway (bar math_cond_mean sesq10, horizontal  ) ||  ///
+             (rcap low_ci high_ci sesq10, horizontal msize(0) lcolor(gs12)) ///
+			 , xtitle("NELS Math Score") ytitle("Socio-Economic Status") ///
+			 legend(off) ///
+			 ylabel(2(1)9 1 "Lowest 10%" 10 "Highest 10%",angle(45))
+			 
+graph export "horiz10.`gtype'", replace
+			 
+restore
+
 
 /*Conditional Mean: Regression*/
 
@@ -301,6 +354,8 @@ gen reg_error_sq=reg_error*reg_error
 quietly sum reg_error_sq
 
 scalar reg_mse=r(mean)
+
+scalar reg_rmse=sqrt(reg_mse)
 
 graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
              (line uncond_mean byses1,lcolor(blue)) ///
