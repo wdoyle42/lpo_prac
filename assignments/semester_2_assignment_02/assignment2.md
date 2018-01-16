@@ -33,4 +33,5 @@ women’s labor force outcomes.
     results of your estimation. This should be a comment in the do file.
 
 Submit to me a do file that accomplishes all of the above steps. 
+
 PLEASE SUBMIT THIS AS A TXT FILE, for example: doyle_assignment2.txt
