@@ -1,7 +1,7 @@
 ## Vanderbilt University
 ## Leadership, Policy and Organizations
 ## Class Number 9952
-## Spring 2017
+## Spring 2018
 
 **Assignment 2**
 
@@ -32,5 +32,6 @@ women’s labor force outcomes.
 6.  In a single paragraph (no more than 150 words), comment on the
     results of your estimation. This should be a comment in the do file.
 
-Submit to me a do file that accomplishes all of the above steps. I
-should not have to change any aspect of the do file.
+Submit to me a do file that accomplishes all of the above steps. 
+
+PLEASE SUBMIT THIS AS A TXT FILE, for example: doyle_assignment2.txt
