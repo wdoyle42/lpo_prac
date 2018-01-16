@@ -1,7 +1,7 @@
 ## Vanderbilt University
 ## Leadership, Policy and Organizations
 ## Class Number 9952
-## Spring 2017
+## Spring 2018
 
 **Assignment 2**
 
