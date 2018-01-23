@@ -1,6 +1,6 @@
 # Assignment 3
 
-Using the api dataset,(http://www.ats.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop.dta) complete the following steps for each type of school: elementary,
+Using the api dataset,(https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop) complete the following steps for each type of school: elementary,
 middle school, and high schools. Do this by creating a loop structure around the following
 steps.
 
