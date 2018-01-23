@@ -1,6 +1,6 @@
 Basics of Regression in Stata
 ================
-LPO 9952 | Spring 2017
+LPO 9952 | Spring 2018
 
 Intro
 -----
@@ -12,38 +12,34 @@ We'll be using data from the National Longitudinal Survey of Youth, 1997. For mo
 Simple regression model
 -----------------------
 
-We'll be working with the same regression model as Wooldridge, with \(y\) as a linear function of \(x\).
+We'll be working with the same regression model as Wooldridge, with *y* as a linear function of *x*.
 
-\[
-  y_i=\beta_o +\beta_1 x_i +u_i
-\]
+*y*<sub>*i*</sub> = *β*<sub>*o*</sub> + *β*<sub>1</sub>*x*<sub>*i*</sub> + *u*<sub>*i*</sub>
 
-We're interested in coming up with estimates of the unknown population parameters \(\beta_0\) and \(\beta_1\).
+We're interested in coming up with estimates of the unknown population parameters *β*<sub>0</sub> and *β*<sub>1</sub>.
 
 Since we'll be doing OLS, we'll make all of the standard assumptions:
 
--   The function \(y_i=\beta_o +\beta_1 x_i +u\) is linear in parameters
+-   The function *y*<sub>*i*</sub> = *β*<sub>*o*</sub> + *β*<sub>1</sub>*x*<sub>*i*</sub> + *u* is linear in parameters
 
--   Our sample, including data \(y_i\) and \(x_i\) has been drawn randomly.
+-   Our sample, including data *y*<sub>*i*</sub> and *x*<sub>*i*</sub> has been drawn randomly.
 
--   There's variation in \(x\)
+-   There's variation in *x*
 
--   The expected value of the error given the covariate is 0: \(E(u|x)=0\), and the same is true in the sample, \(E(u_i|x_i)=0\), meaning that \(x\) is fixed in repeated samples
+-   The expected value of the error given the covariate is 0: *E*(*u*|*x*)=0, and the same is true in the sample, *E*(*u*<sub>*i*</sub>|*x*<sub>*i*</sub>)=0, meaning that *x* is fixed in repeated samples
 
-The estimators \(\hat{\beta_0}\), \(\hat{\beta_1}\) are unbiased given the above assumptions hold. This means that \(E(\hat{\beta_1}=\beta_1)\) in repeated sampling.
+The estimators $\\hat{\\beta\_0}$, $\\hat{\\beta\_1}$ are unbiased given the above assumptions hold. This means that $E(\\hat{\\beta\_1}=\\beta\_1)$ in repeated sampling.
 
 Let's figure out how income and postsecondary attainment are related. Using the NLSY97 data set, we will get estimates for the following population regression model:
 
-\[
-income_i=\beta_0+\beta_1(Months_i)+u_i
-\]
+*i**n**c**o**m**e*<sub>*i*</sub> = *β*<sub>0</sub> + *β*<sub>1</sub>(*M**o**n**t**h**s*<sub>*i*</sub>)+*u*<sub>*i*</sub>
 
 Plotting Data
 -------------
 
-Before we do this, let's do a scatterplot. The scatterplot is the most fundamental graphical tool for regression. As a starting rule, never run a regression before looking at a scatterplot. In the accompanying do file, I've included the macros for setting this up in terms of \(x\) and \(y\).
+Before we do this, let's do a scatterplot. The scatterplot is the most fundamental graphical tool for regression. As a starting rule, never run a regression before looking at a scatterplot. In the accompanying do file, I've included the macros for setting this up in terms of *x* and *y*.
 
-First, let's just plot \(y\) as a function of \(x\):
+First, let's just plot *y* as a function of *x*:
 
     . graph twoway scatter `y' `x', msize(small) ytitle(`ytitle') xtitle(`xtitle')
 
@@ -52,7 +48,7 @@ First, let's just plot \(y\) as a function of \(x\):
 
 <img src = "simple_scatter.png" />
 
-We can than add a lowess fit to see what the shape of the relationship between \(x\) and \(y\) looks like.
+We can than add a lowess fit to see what the shape of the relationship between *x* and *y* looks like.
 
 There are a variety of ways to check on the pattern on the data. A lowess regression gives you a local average estimate, which is sensitive to the patterns in the data:
 
@@ -89,8 +85,7 @@ Our next step is to plot a linear fit to the data.
     >       ytitle(`ytitle') ///
     >       xtitle(`xtitle') ///
     >       legend( order(2 `xtitle' 1 "Linear fit") ) //
-    (note:  named style cricle not found in class symbol, default attributes
-        used)
+    (note:  named style cricle not found in class symbol, default attributes used)
     Months not an integer, option order() ignored
 
     .       
@@ -106,12 +101,12 @@ We start with a basic regression of income on months of postsecondary education.
 
     . reg `y' `x'
 
-          Source |       SS       df       MS              Number of obs =     898
-    -------------+------------------------------           F(  1,   896) =  117.29
-           Model |  7.5359e+10     1  7.5359e+10           Prob > F      =  0.0000
-        Residual |  5.7570e+11   896   642521746           R-squared     =  0.1157
-    -------------+------------------------------           Adj R-squared =  0.1148
-           Total |  6.5106e+11   897   725817279           Root MSE      =   25348
+          Source |       SS           df       MS      Number of obs   =       898
+    -------------+----------------------------------   F(1, 896)       =    117.29
+           Model |  7.5359e+10         1  7.5359e+10   Prob > F        =    0.0000
+        Residual |  5.7570e+11       896   642521746   R-squared       =    0.1157
+    -------------+----------------------------------   Adj R-squared   =    0.1148
+           Total |  6.5106e+11       897   725817279   Root MSE        =     25348
 
     ------------------------------------------------------------------------------
             yinc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
@@ -153,23 +148,7 @@ We can use a different approach to get the same scalars. In Stata, referencing `
          beta0 =  12815.633
 
     . scalar li 
-          test = Significant
-         req_t =  1.9626151
-       my_pval =        .05
-      stat_sig =  9.044e-26
-           myt =  10.829852
-         my_df =        896
-    adj_rsquare =  .11476102
-       rsquare =  .11574791
-         fstat =   117.2857
-           myf =   117.2857
-    residss_std =  6.425e+08
-     modss_std =  7.536e+10
-          df_m =          1
-      df_resid =        896
-        my_mss =  7.536e+10
-          ybar =   21186.17
-         modss =  7.536e+10
+    root_my_rss =   25319.77
         my_rss =  5.757e+11
        residss =  5.757e+11
            myk =          2
@@ -200,12 +179,12 @@ By default, Stata gives 95% confidence intervals. To get confidence intervals at
 
     . reg `y' `x', level(90)
 
-          Source |       SS       df       MS              Number of obs =     898
-    -------------+------------------------------           F(  1,   896) =  117.29
-           Model |  7.5359e+10     1  7.5359e+10           Prob > F      =  0.0000
-        Residual |  5.7570e+11   896   642521746           R-squared     =  0.1157
-    -------------+------------------------------           Adj R-squared =  0.1148
-           Total |  6.5106e+11   897   725817279           Root MSE      =   25348
+          Source |       SS           df       MS      Number of obs   =       898
+    -------------+----------------------------------   F(1, 896)       =    117.29
+           Model |  7.5359e+10         1  7.5359e+10   Prob > F        =    0.0000
+        Residual |  5.7570e+11       896   642521746   R-squared       =    0.1157
+    -------------+----------------------------------   Adj R-squared   =    0.1148
+           Total |  6.5106e+11       897   725817279   Root MSE        =     25348
 
     ------------------------------------------------------------------------------
             yinc |      Coef.   Std. Err.      t    P>|t|     [90% Conf. Interval]
@@ -231,7 +210,7 @@ Residuals are not stored as part of the estimation results, but can be generated
             uhat | -.0592957
     ------------------------
 
-These residuals can then be plotted as a function of \(x\).
+These residuals can then be plotted as a function of *x*.
 
     . graph twoway scatter uhat `x',yline(0) msize(tiny)
 
@@ -298,7 +277,7 @@ These predicted values can be plotted relative to the actual data.
 Measures of Model Fit
 ---------------------
 
-The first measure of model fit we consider is the \(F\) statistic. There are several ways to think about the \(F\) statistic. For now, I'm going to suggest that you think of it as the ratio of two measures. The first measure is the difference between the predicted value and the mean, or how different are your predictions than what would be predicted using the unconditional mean. The second measure is the difference between the predicted value and the actual value. We'll discuss this in class, but you should have an intuitive sense as to why the former should be large relative to the latter.
+The first measure of model fit we consider is the *F* statistic. There are several ways to think about the *F* statistic. For now, I'm going to suggest that you think of it as the ratio of two measures. The first measure is the difference between the predicted value and the mean, or how different are your predictions than what would be predicted using the unconditional mean. The second measure is the difference between the predicted value and the actual value. We'll discuss this in class, but you should have an intuitive sense as to why the former should be large relative to the latter.
 
     . ereturn list
 
@@ -415,7 +394,7 @@ The first measure of model fit we consider is the \(F\) statistic. There are sev
            myf =   117.2857
          fstat =   117.2857
 
-The most commonly used measure of model fit is \(R^2\). It is simply the square of the correlation between the actual dv and the predicted dv.
+The most commonly used measure of model fit is *R*<sup>2</sup>. It is simply the square of the correlation between the actual dv and the predicted dv.
 
     . corr yhat `y'
     (obs=898)
@@ -450,3 +429,35 @@ Below, I conduct a test of statistical significance "by hand" to show how this i
     . exit
 
     end of do-file
+
+
+    . scalar li
+          test = Significant
+         req_t =  1.9626151
+       my_pval =        .05
+      stat_sig =  9.044e-26
+           myt =  10.829852
+         my_df =        896
+    adj_rsquare =  .11476102
+       rsquare =  .11574791
+         fstat =   117.2857
+           myf =   117.2857
+    residss_std =  6.425e+08
+     modss_std =  7.536e+10
+          df_m =          1
+      df_resid =        896
+        my_mss =  7.536e+10
+          ybar =   21186.17
+         modss =  7.536e+10
+    root_my_rss =   25319.77
+        my_rss =  5.757e+11
+       residss =  5.757e+11
+           myk =          2
+           myN =        898
+      se_beta1 =  27.998234
+         beta1 =  303.21674
+      se_beta0 =  1145.8177
+         beta0 =  12815.633
+       sebeta1 =  27.998234
+      varbeta1 =  783.90109
+           myb =  303.21674

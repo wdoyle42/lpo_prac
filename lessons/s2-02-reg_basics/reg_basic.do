@@ -5,8 +5,8 @@ log using "reg_basic.log",replace
 /* PhD Practicum, Spring 2015 */
 /* Getting Started with Regression */
 /* Will Doyle*/
-/* 1/17/16 */
-/* Saved on Blackboard */
+/* 1/23/18 */
+/* Github Repo */
 
  /*Graph type postscript */
 // local gtype ps
@@ -193,6 +193,7 @@ mat mymat=r(StatTotal)
 scalar my_rss=mymat[1,1]
 
 scalar li residss my_rss
+
 
 ///What's the model sum of squares?
 

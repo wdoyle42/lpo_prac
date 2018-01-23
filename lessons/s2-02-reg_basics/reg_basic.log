@@ -1,16 +1,15 @@
-------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/wdoyle_work/practicum/lpo_prac_2016/central/lessons/reg_ba
-> sics/reg_basic.log
+       log:  /Users/doylewr/practicum_2017/central/lessons/s2-02-reg_basics/reg_basic.log
   log type:  text
- opened on:  17 Jan 2017, 11:06:15
+ opened on:  23 Jan 2018, 10:44:44
 
 . 
 . /* PhD Practicum, Spring 2015 */
 . /* Getting Started with Regression */
 . /* Will Doyle*/
-. /* 1/17/16 */
-. /* Saved on Blackboard */
+. /* 1/23/18 */
+. /* Github Repo */
 . 
 .  /*Graph type postscript */
 . // local gtype ps
@@ -36,7 +35,7 @@
 
 . 
 . sample 10
-(8086 observations deleted)
+(8,086 observations deleted)
 
 . 
 . local y yinc
@@ -94,8 +93,7 @@
 >       ytitle(`ytitle') ///
 >       xtitle(`xtitle') ///
 >       legend( order(2 `xtitle' 1 "Linear fit") ) //
-(note:  named style cricle not found in class symbol, default attributes
-    used)
+(note:  named style cricle not found in class symbol, default attributes used)
 Months not an integer, option order() ignored
 
 .       
@@ -109,12 +107,12 @@ Months not an integer, option order() ignored
 . 
 . reg `y' `x'
 
-      Source |       SS       df       MS              Number of obs =     898
--------------+------------------------------           F(  1,   896) =  117.29
-       Model |  7.5359e+10     1  7.5359e+10           Prob > F      =  0.0000
-    Residual |  5.7570e+11   896   642521746           R-squared     =  0.1157
--------------+------------------------------           Adj R-squared =  0.1148
-       Total |  6.5106e+11   897   725817279           Root MSE      =   25348
+      Source |       SS           df       MS      Number of obs   =       898
+-------------+----------------------------------   F(1, 896)       =    117.29
+       Model |  7.5359e+10         1  7.5359e+10   Prob > F        =    0.0000
+    Residual |  5.7570e+11       896   642521746   R-squared       =    0.1157
+-------------+----------------------------------   Adj R-squared   =    0.1148
+       Total |  6.5106e+11       897   725817279   Root MSE        =     25348
 
 ------------------------------------------------------------------------------
         yinc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
@@ -155,23 +153,7 @@ Months not an integer, option order() ignored
 
 . 
 . scalar li 
-      test = Significant
-     req_t =  1.9626151
-   my_pval =        .05
-  stat_sig =  9.044e-26
-       myt =  10.829852
-     my_df =        896
-adj_rsquare =  .11476102
-   rsquare =  .11574791
-     fstat =   117.2857
-       myf =   117.2857
-residss_std =  6.425e+08
- modss_std =  7.536e+10
-      df_m =          1
-  df_resid =        896
-    my_mss =  7.536e+10
-      ybar =   21186.17
-     modss =  7.536e+10
+root_my_rss =   25319.77
     my_rss =  5.757e+11
    residss =  5.757e+11
        myk =          2
@@ -201,12 +183,12 @@ residss_std =  6.425e+08
 . /*Use different confidence intervals */
 . reg `y' `x', level(90)
 
-      Source |       SS       df       MS              Number of obs =     898
--------------+------------------------------           F(  1,   896) =  117.29
-       Model |  7.5359e+10     1  7.5359e+10           Prob > F      =  0.0000
-    Residual |  5.7570e+11   896   642521746           R-squared     =  0.1157
--------------+------------------------------           Adj R-squared =  0.1148
-       Total |  6.5106e+11   897   725817279           Root MSE      =   25348
+      Source |       SS           df       MS      Number of obs   =       898
+-------------+----------------------------------   F(1, 896)       =    117.29
+       Model |  7.5359e+10         1  7.5359e+10   Prob > F        =    0.0000
+    Residual |  5.7570e+11       896   642521746   R-squared       =    0.1157
+-------------+----------------------------------   Adj R-squared   =    0.1148
+       Total |  6.5106e+11       897   725817279   Root MSE        =     25348
 
 ------------------------------------------------------------------------------
         yinc |      Coef.   Std. Err.      t    P>|t|     [90% Conf. Interval]
@@ -366,6 +348,7 @@ functions:
     my_rss =  5.757e+11
 
 . 
+. 
 . ///What's the model sum of squares?
 > 
 . scalar modss=e(mss)
@@ -479,4 +462,35 @@ functions:
 
 end of do-file
 
+
+. scalar li
+      test = Significant
+     req_t =  1.9626151
+   my_pval =        .05
+  stat_sig =  9.044e-26
+       myt =  10.829852
+     my_df =        896
+adj_rsquare =  .11476102
+   rsquare =  .11574791
+     fstat =   117.2857
+       myf =   117.2857
+residss_std =  6.425e+08
+ modss_std =  7.536e+10
+      df_m =          1
+  df_resid =        896
+    my_mss =  7.536e+10
+      ybar =   21186.17
+     modss =  7.536e+10
+root_my_rss =   25319.77
+    my_rss =  5.757e+11
+   residss =  5.757e+11
+       myk =          2
+       myN =        898
+  se_beta1 =  27.998234
+     beta1 =  303.21674
+  se_beta0 =  1145.8177
+     beta0 =  12815.633
+   sebeta1 =  27.998234
+  varbeta1 =  783.90109
+       myb =  303.21674
 
