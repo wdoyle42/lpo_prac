@@ -105,7 +105,6 @@ replace fouryr=. if f2ps1sec==.
 graph twoway scatter foury byses1		
 
 
-
 xtile byses_p =byses1, nquantiles(100)
 
 preserve

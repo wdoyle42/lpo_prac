@@ -1,0 +1,2124 @@
+------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_2017/central/lessons/s1-11-more_graphics/more_graphi
+> cs.log
+  log type:  text
+ opened on:  14 Nov 2017, 11:00:11
+
+. 
+. // NAME: MOAR GRAPHICs
+. // FILE: more_graphics.do
+. // AUTH: Will Doyle
+. // INIT: 5 November 2017
+. // LAST: 14 November 2017
+. 
+. clear all                               // clear memory
+
+. set more off                            // turn off annoying "__more__" feature
+
+. 
+. // set link for data, plot, and table directories
+. global datadir "../data/"
+
+. global plotdir "../plots/"
+
+. global tabsdir "../tables/"
+
+. 
+. // set plot and table types
+. global gtype eps
+
+. global ttype html
+
+. 
+. // theme for graphics
+. set scheme s1color
+
+. 
+. // open up modified plans data
+. use ../s1-10-programming/plans_b, clear
+
+. 
+. //catplot
+. catplot bystexp, name(cat1)
+
+. 
+. // Using over
+. catplot bystexp, over(bysex) name(cat2, replace) blabel(bar,format(%9.2f)) percent
+
+. 
+. // Yvars trick
+. catplot bystexp, over(bysex) asyvars
+
+. 
+. //QE: Create a catplot for plans by ses quartile, using asyvars
+. 
+. 
+. egen ses_q=cut(byses1), group(4)
+(924 missing values generated)
+
+. 
+. catplot f1psepln, over(ses_q) asyvars name(cat_ses_q)
+
+.  
+. local quartiles First Second Third Fourth
+
+. /*
+> local i=0
+> foreach quart of local quartiles {
+> catplot f1psepln if ses_q==`i', ///
+>                                         asyvars ///
+>                                         blabel(bar,format(%9.0f)) ///
+>                                         percent ///
+>                                         name(cat_ses`i') ///
+>                                         title("`quart'")
+>                                         
+> graph save cat_ses`i', replace
+> local i=`i'+1
+> }
+> 
+> graph combine cat_ses0.gph cat_ses1.gph cat_ses2.gph cat_ses3.gph, rows(2)
+> */
+. 
+. // Ordering
+. catplot bystexp , var1opts(sort(1) descending)
+
+. 
+. // yvars, again
+. catplot bystexp , var1opts(sort(1) descending) asyvars
+
+. 
+. // recast
+. 
+. catplot bystexp , var1opts(sort(1) descending) recast(dot)
+
+. 
+. 
+. //QE plans by sex, recast to dot
+. 
+. 
+. catplot f1psepln , over(bysex) var2opts(sort(1) descending) recast(dot)
+
+. 
+. //Ciplot
+. 
+. ciplot bynels2m , by(bystexp)
+
+. 
+. ciplot bynels2r, by(f1psepln) msymbol(circle) xlabel(,angle(45) labsize(vsmall)) 
+
+. 
+. //QE: Change to reading scores by plans and use better points
+. 
+. // Cibar
+. 
+. cibar bynels2m, over1(bystexp) over2(bysex) ciopts(msize(*0))
+
+. 
+. // Collapse trick
+. 
+. local myvar f2ps1sec
+
+. 
+. foreach i of numlist -4 -8 -9 { /* Start inner loop */
+  2.                      replace `myvar'=. if `myvar'== `i'
+  3.                                             }  /* End inner loop */
+(1689 real changes made, 1689 to missing)
+(359 real changes made, 359 to missing)
+(49 real changes made, 49 to missing)
+
+.                                         
+. 
+.                                                                                         
+>                                                           
+. gen fouryr =0 
+
+. replace fouryr=1 if f2ps1sec==1|f2ps1sec==3
+(4352 real changes made)
+
+. replace fouryr=. if f2ps1sec==. 
+(2097 real changes made, 2097 to missing)
+
+. 
+. graph twoway scatter foury byses1               
+
+. 
+. 
+. 
+. xtile byses_p =byses1, nquantiles(100)
+
+. 
+. preserve
+
+. collapse (mean) mean_four=fouryr (count) total_four=fouryr, by(byses_p)
+
+. 
+. graph twoway scatter mean_four byses_p [w=total_four], msymbol(circle_hollow) name(coll_
+> attend)
+(analytic weights assumed)
+(analytic weights assumed)
+(analytic weights assumed)
+
+. 
+. restore 
+
+. 
+.                                                                                         
+>                          
+. gen twoyr =0 
+
+. replace twoyr=1 if f2ps1sec==4|f2ps1sec==5|f2ps1sec==6
+(3688 real changes made)
+
+. replace twoyr=. if f2ps1sec==. 
+(2097 real changes made, 2097 to missing)
+
+. 
+. xtile bynels2m_p =bynels2m, nquantiles(100)
+
+. 
+. preserve
+
+. 
+. collapse (mean) mean_two=twoyr (count) total_two=twoyr, by(bynels2m_p)
+
+. 
+. graph twoway scatter mean_two bynels2m_p [w=total_two], msymbol(circle_hollow) name(coll
+> _attend2,replace)
+(analytic weights assumed)
+(analytic weights assumed)
+(analytic weights assumed)
+
+. 
+. restore 
+
+. 
+. 
+. gen math2=round(bynels2m)
+(276 missing values generated)
+
+. 
+. preserve
+
+. 
+. collapse (mean) mean_four=fouryr (count) total_four=fouryr, by(math2)
+
+. 
+. graph twoway scatter mean_four math2 [w=total_four], msymbol(circle_hollow) msize(*.5) n
+> ame(coll_attend3, replace)
+(analytic weights assumed)
+(analytic weights assumed)
+(analytic weights assumed)
+
+. 
+. restore
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD66594.000000"
+
+. //preserve
+. collapse (mean) mean_four=fouryr (count) total_four=fouryr, by(byses_p)
+
+. 
+. graph twoway scatter mean_four byses_p [w=total_four], msymbol(circle_hollow) name(coll_
+> attend)
+graph coll_attend already exists
+r(110);
+
+end of do-file
+
+r(110);
+
+. use ../../data/plans_b, clear
+
+. codebook bysex, table(20)
+option table() not allowed
+r(198);
+
+. codebook bysex, tab(20)
+
+------------------------------------------------------------------------------------------
+bysex                                                                        sex-composite
+------------------------------------------------------------------------------------------
+
+                  type:  numeric (byte)
+                 label:  bysex
+
+                 range:  [1,2]                        units:  1
+         unique values:  2                        missing .:  819/16160
+
+            tabulation:  Freq.   Numeric  Label
+                          7639         1  male
+                          7702         2  female
+                           819         .  
+
+. ssc install outreg2
+checking outreg2 consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. help outreg2
+
+. cd ../../working
+/Users/doylewr/practicum_2017/central/working
+
+. do outreg.do
+
+. use ../../data/plans_b, clear
+file ../../data/plans_b.dta not found
+r(601);
+
+end of do-file
+
+r(601);
+
+. do outreg.do
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. bystexp bynels2m bynelsr
+unrecognized command:  bystexp
+r(199);
+
+end of do-file
+
+r(199);
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynelsr
+variable bynelsr not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynelsr
+variable bynelsr not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bystexp: outreg2 using table.doc, replace sum(log) eqkeep(N mean) 
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      1450          -1           0         -1         -1
+    bynels2m |      1450    40.45288     13.5973      15.47         77
+    bynels2r |      1450     26.4733     9.46804       9.89      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       128           1           0          1          1
+    bynels2m |       128    29.07805    10.16626         15      68.68
+    bynels2r |       128    18.18445    6.721054       9.92      42.51
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       983           2           0          2          2
+    bynels2m |       983    33.88673    11.16621      15.15       75.4
+    bynels2r |       983    21.46531    7.571389       9.86      45.01
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       879           3           0          3          3
+    bynels2m |       879    38.75617    11.37873      14.97      71.77
+    bynels2r |       879     25.2495    7.925292       9.75      46.16
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       561           4           0          4          4
+    bynels2m |       561    36.30114    11.54116      15.65      68.14
+    bynels2r |       561    23.27492    8.430741       9.82      47.35
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      5416           5           0          5          5
+    bynels2m |      5416    45.50492    12.63673      14.71      77.47
+    bynels2r |      5416    29.65815    8.869102       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      3153           6           0          6          6
+    bynels2m |      3153     50.6976    12.18558      15.72      79.16
+    bynels2r |      3153    33.40571    8.541267       9.98      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      2666           7           0          7          7
+    bynels2m |      2666    50.61999    13.10357      15.12      79.27
+    bynels2r |      2666    33.37293    8.829855      10.04      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bystexp  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. shellout using `"table.doc"'
+shellout probably will not work with MacOSX
+
+/bin/bash: table.doc: command not found
+
+. help outreg2
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bystexp: outreg2 using table.doc, replace sum(log) eqkeep(N mean) sideway
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      1450          -1           0         -1         -1
+    bynels2m |      1450    40.45288     13.5973      15.47         77
+    bynels2r |      1450     26.4733     9.46804       9.89      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       128           1           0          1          1
+    bynels2m |       128    29.07805    10.16626         15      68.68
+    bynels2r |       128    18.18445    6.721054       9.92      42.51
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       983           2           0          2          2
+    bynels2m |       983    33.88673    11.16621      15.15       75.4
+    bynels2r |       983    21.46531    7.571389       9.86      45.01
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       879           3           0          3          3
+    bynels2m |       879    38.75617    11.37873      14.97      71.77
+    bynels2r |       879     25.2495    7.925292       9.75      46.16
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       561           4           0          4          4
+    bynels2m |       561    36.30114    11.54116      15.65      68.14
+    bynels2r |       561    23.27492    8.430741       9.82      47.35
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      5416           5           0          5          5
+    bynels2m |      5416    45.50492    12.63673      14.71      77.47
+    bynels2r |      5416    29.65815    8.869102       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      3153           6           0          6          6
+    bynels2m |      3153     50.6976    12.18558      15.72      79.16
+    bynels2r |      3153    33.40571    8.541267       9.98      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      2666           7           0          7          7
+    bynels2m |      2666    50.61999    13.10357      15.12      79.27
+    bynels2r |      2666    33.37293    8.829855      10.04      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bystexp  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bystexp: outreg2 using table.doc, replace sum(log) eqkeep(N mean) sideway
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      1450          -1           0         -1         -1
+    bynels2m |      1450    40.45288     13.5973      15.47         77
+    bynels2r |      1450     26.4733     9.46804       9.89      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       128           1           0          1          1
+    bynels2m |       128    29.07805    10.16626         15      68.68
+    bynels2r |       128    18.18445    6.721054       9.92      42.51
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       983           2           0          2          2
+    bynels2m |       983    33.88673    11.16621      15.15       75.4
+    bynels2r |       983    21.46531    7.571389       9.86      45.01
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       879           3           0          3          3
+    bynels2m |       879    38.75617    11.37873      14.97      71.77
+    bynels2r |       879     25.2495    7.925292       9.75      46.16
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       561           4           0          4          4
+    bynels2m |       561    36.30114    11.54116      15.65      68.14
+    bynels2r |       561    23.27492    8.430741       9.82      47.35
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      5416           5           0          5          5
+    bynels2m |      5416    45.50492    12.63673      14.71      77.47
+    bynels2r |      5416    29.65815    8.869102       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      3153           6           0          6          6
+    bynels2m |      3153     50.6976    12.18558      15.72      79.16
+    bynels2r |      3153    33.40571    8.541267       9.98      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      2666           7           0          7          7
+    bynels2m |      2666    50.61999    13.10357      15.12      79.27
+    bynels2r |      2666    33.37293    8.829855      10.04      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bystexp  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bystexp: outreg2 using table.doc, replace sum(log) eqkeep(mean) sideway
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      1450          -1           0         -1         -1
+    bynels2m |      1450    40.45288     13.5973      15.47         77
+    bynels2r |      1450     26.4733     9.46804       9.89      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       128           1           0          1          1
+    bynels2m |       128    29.07805    10.16626         15      68.68
+    bynels2r |       128    18.18445    6.721054       9.92      42.51
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       983           2           0          2          2
+    bynels2m |       983    33.88673    11.16621      15.15       75.4
+    bynels2r |       983    21.46531    7.571389       9.86      45.01
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       879           3           0          3          3
+    bynels2m |       879    38.75617    11.37873      14.97      71.77
+    bynels2r |       879     25.2495    7.925292       9.75      46.16
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       561           4           0          4          4
+    bynels2m |       561    36.30114    11.54116      15.65      68.14
+    bynels2r |       561    23.27492    8.430741       9.82      47.35
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      5416           5           0          5          5
+    bynels2m |      5416    45.50492    12.63673      14.71      77.47
+    bynels2r |      5416    29.65815    8.869102       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      3153           6           0          6          6
+    bynels2m |      3153     50.6976    12.18558      15.72      79.16
+    bynels2r |      3153    33.40571    8.541267       9.98      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      2666           7           0          7          7
+    bynels2m |      2666    50.61999    13.10357      15.12      79.27
+    bynels2r |      2666    33.37293    8.829855      10.04      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bystexp  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bystexp: outreg2 using table.doc, replace sum(log) eqkeep(mean) sideway
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      1450          -1           0         -1         -1
+    bynels2m |      1450    40.45288     13.5973      15.47         77
+    bynels2r |      1450     26.4733     9.46804       9.89      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       128           1           0          1          1
+    bynels2m |       128    29.07805    10.16626         15      68.68
+    bynels2r |       128    18.18445    6.721054       9.92      42.51
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       983           2           0          2          2
+    bynels2m |       983    33.88673    11.16621      15.15       75.4
+    bynels2r |       983    21.46531    7.571389       9.86      45.01
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       879           3           0          3          3
+    bynels2m |       879    38.75617    11.37873      14.97      71.77
+    bynels2r |       879     25.2495    7.925292       9.75      46.16
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       561           4           0          4          4
+    bynels2m |       561    36.30114    11.54116      15.65      68.14
+    bynels2r |       561    23.27492    8.430741       9.82      47.35
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      5416           5           0          5          5
+    bynels2m |      5416    45.50492    12.63673      14.71      77.47
+    bynels2r |      5416    29.65815    8.869102       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      3153           6           0          6          6
+    bynels2m |      3153     50.6976    12.18558      15.72      79.16
+    bynels2r |      3153    33.40571    8.541267       9.98      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      2666           7           0          7          7
+    bynels2m |      2666    50.61999    13.10357      15.12      79.27
+    bynels2r |      2666    33.37293    8.829855      10.04      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bystexp  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. catplot bystuexp fipsepln
+variable bystuexp not found
+r(111);
+
+. catplot bystexp fipsepln
+variable fipsepln not found
+r(111);
+
+. catplot bystexp f1psepln
+
+. help catplot
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bystexp: outreg2 using table.doc, replace sum(log) eqkeep(mean) sideways see
+option sideways not allowed
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bystexp: outreg2 using table.doc, replace sum(log) eqkeep(mean) sideway see
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      1450          -1           0         -1         -1
+    bynels2m |      1450    40.45288     13.5973      15.47         77
+    bynels2r |      1450     26.4733     9.46804       9.89      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       128           1           0          1          1
+    bynels2m |       128    29.07805    10.16626         15      68.68
+    bynels2r |       128    18.18445    6.721054       9.92      42.51
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       983           2           0          2          2
+    bynels2m |       983    33.88673    11.16621      15.15       75.4
+    bynels2r |       983    21.46531    7.571389       9.86      45.01
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       879           3           0          3          3
+    bynels2m |       879    38.75617    11.37873      14.97      71.77
+    bynels2r |       879     25.2495    7.925292       9.75      46.16
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       561           4           0          4          4
+    bynels2m |       561    36.30114    11.54116      15.65      68.14
+    bynels2r |       561    23.27492    8.430741       9.82      47.35
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      5416           5           0          5          5
+    bynels2m |      5416    45.50492    12.63673      14.71      77.47
+    bynels2r |      5416    29.65815    8.869102       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      3153           6           0          6          6
+    bynels2m |      3153     50.6976    12.18558      15.72      79.16
+    bynels2r |      3153    33.40571    8.541267       9.98      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      2666           7           0          7          7
+    bynels2m |      2666    50.61999    13.10357      15.12      79.27
+    bynels2r |      2666    33.37293    8.829855      10.04      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bystexp  
+Hit Enter to continue. 
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bystexp: outreg2 using table.doc, replace sum(log) eqkeep(mean) 
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      1450          -1           0         -1         -1
+    bynels2m |      1450    40.45288     13.5973      15.47         77
+    bynels2r |      1450     26.4733     9.46804       9.89      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       128           1           0          1          1
+    bynels2m |       128    29.07805    10.16626         15      68.68
+    bynels2r |       128    18.18445    6.721054       9.92      42.51
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       983           2           0          2          2
+    bynels2m |       983    33.88673    11.16621      15.15       75.4
+    bynels2r |       983    21.46531    7.571389       9.86      45.01
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       879           3           0          3          3
+    bynels2m |       879    38.75617    11.37873      14.97      71.77
+    bynels2r |       879     25.2495    7.925292       9.75      46.16
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       561           4           0          4          4
+    bynels2m |       561    36.30114    11.54116      15.65      68.14
+    bynels2r |       561    23.27492    8.430741       9.82      47.35
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      5416           5           0          5          5
+    bynels2m |      5416    45.50492    12.63673      14.71      77.47
+    bynels2r |      5416    29.65815    8.869102       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      3153           6           0          6          6
+    bynels2m |      3153     50.6976    12.18558      15.72      79.16
+    bynels2r |      3153    33.40571    8.541267       9.98      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      2666           7           0          7          7
+    bynels2m |      2666    50.61999    13.10357      15.12      79.27
+    bynels2r |      2666    33.37293    8.829855      10.04      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bystexp  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bystexp: outreg2 using table.doc, replace sum(log) eqkeep(mean) 
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      1450          -1           0         -1         -1
+    bynels2m |      1450    40.45288     13.5973      15.47         77
+    bynels2r |      1450     26.4733     9.46804       9.89      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       128           1           0          1          1
+    bynels2m |       128    29.07805    10.16626         15      68.68
+    bynels2r |       128    18.18445    6.721054       9.92      42.51
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       983           2           0          2          2
+    bynels2m |       983    33.88673    11.16621      15.15       75.4
+    bynels2r |       983    21.46531    7.571389       9.86      45.01
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       879           3           0          3          3
+    bynels2m |       879    38.75617    11.37873      14.97      71.77
+    bynels2r |       879     25.2495    7.925292       9.75      46.16
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |       561           4           0          4          4
+    bynels2m |       561    36.30114    11.54116      15.65      68.14
+    bynels2r |       561    23.27492    8.430741       9.82      47.35
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      5416           5           0          5          5
+    bynels2m |      5416    45.50492    12.63673      14.71      77.47
+    bynels2r |      5416    29.65815    8.869102       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      3153           6           0          6          6
+    bynels2m |      3153     50.6976    12.18558      15.72      79.16
+    bynels2r |      3153    33.40571    8.541267       9.98      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+     bystexp |      2666           7           0          7          7
+    bynels2m |      2666    50.61999    13.10357      15.12      79.27
+    bynels2r |      2666    33.37293    8.829855      10.04      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bystexp  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bystexp: outreg2 using table.doc, replace sum(log) eqkeep(mean) drop(bystexp)
+invalid 'onebyone' 
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bystexp bynels2m bynels2r
+
+. 
+. bysort bysex: outreg2 using table.doc, replace sum(log) eqkeep(mean) drop(bystexp)
+variable bysex not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bysex bynels2m bynels2r
+
+. 
+. bysort bysex: outreg2 using table.doc, replace sum(log) eqkeep(mean) 
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       bysex |      7639           1           0          1          1
+    bynels2m |      7576    46.08566    13.96372      14.71      79.27
+    bynels2r |      7576    28.98142    9.716404       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       bysex |      7702           2           0          2          2
+    bynels2m |      7660    44.67795      13.246      15.12      78.99
+    bynels2r |      7660    30.34355    9.190324       9.82      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bysex  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/outreg.do"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bysex bynels2m bynels2r
+
+. 
+. bysort bysex: outreg2 using table.doc, replace sum(log) eqkeep(mean) 
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       bysex |      7639           1           0          1          1
+    bynels2m |      7576    46.08566    13.96372      14.71      79.27
+    bynels2r |      7576    28.98142    9.716404       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       bysex |      7702           2           0          2          2
+    bynels2m |      7660    44.67795      13.246      15.12      78.99
+    bynels2r |      7660    30.34355    9.190324       9.82      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bysex  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD66594.000000"
+
+. 
+. bysort bysex: outreg2 using table.doc, replace sum(log) eqkeep(Mean) 
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+      stu_id |      7639    279697.6    104894.6     101107     461228
+      sch_id |      7639    2796.834     1048.95       1011       4612
+    strat_id |      7639    279.5283    104.8931        101        461
+         psu |      7639    1.550596     .558703          1          3
+    f1sch_id |      5786    2830.162    1117.233       1011       9999
+-------------+--------------------------------------------------------
+     f1univ1 |      7639    101.8641    2.477206        101        125
+    f1univ2a |      7639    1.016494     .180889          1          3
+    f1univ2b |      7639    1.790025    1.813481          1          7
+    g10cohrt |      7639           1           0          1          1
+    g12cohrt |      7639    .8172536    .3864838          0          1
+-------------+--------------------------------------------------------
+     bystuwt |      7639     224.748    154.9946          0   978.3751
+       bysex |      7639           1           0          1          1
+      byrace |      7576    5.522043    1.915658          1          7
+     bydob_p |      7537      198554    63.97877     198300     198712
+     bypared |      7618     4.51759      2.0745          1          8
+-------------+--------------------------------------------------------
+    bymothed |      7616    3.770089    2.007812          1          8
+    byfathed |      7610    3.871879    2.190857          1          8
+    byincome |      7639    9.109308    2.395764          1         13
+      byses1 |      7576    .0589097    .7340074      -1.96        1.8
+      byses2 |      7576    .0598944    .7428758       -1.9       1.98
+-------------+--------------------------------------------------------
+     bystexp |      7576    4.348601    2.300706         -1          7
+    bynels2m |      7576    46.08566    13.96372      14.71      79.27
+    bynels2r |      7576    28.98142    9.716404       9.74      50.57
+       f1qwt |      7639    213.1207    169.9389          0   1324.621
+     f1pnlwt |      7639    211.2499    170.8183          0   1311.548
+-------------+--------------------------------------------------------
+    f1psepln |      6637    4.322887    1.091991          1          6
+    f2ps1sec |      7639    .0259196    3.450144         -9          9
+       amind |      7576    .0095037     .097029          0          1
+       asian |      7576    .0974129    .2965387          0          1
+       black |      7576    .1325238    .3390817          0          1
+-------------+--------------------------------------------------------
+    hispanic |      7576    .0656019    .2476013          0          1
+ multiracial |      7576    .0791975    .2700645          0          1
+       white |      7576    .0485744    .2149909          0          1
+      race_7 |      7576    .5671859    .4954982          0          1
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+      stu_id |      7702    278086.6    104338.5     101101     461234
+      sch_id |      7702    2780.725    1043.388       1011       4612
+    strat_id |      7702     277.916    104.3356        101        461
+         psu |      7702    1.564918    .5723854          1          3
+    f1sch_id |      5944    2806.082    1133.122       1011       9999
+-------------+--------------------------------------------------------
+     f1univ1 |      7702    101.7589    2.221393        101        123
+    f1univ2a |      7702    1.010906    .1472969          1          3
+    f1univ2b |      7702    1.732667     1.77557          1          7
+    g10cohrt |      7702           1           0          1          1
+    g12cohrt |      7702    .8347183    .3714588          0          1
+-------------+--------------------------------------------------------
+     bystuwt |      7702    219.6142    146.1171          0   904.4423
+       bysex |      7702           2           0          2          2
+      byrace |      7660    5.548825    1.897172          1          7
+     bydob_p |      7646    198566.6    57.41863     198300     198711
+     bypared |      7686    4.484127    2.108494          1          8
+-------------+--------------------------------------------------------
+    bymothed |      7685    3.676773    2.015463          1          8
+    byfathed |      7674    3.867735    2.225369          1          8
+    byincome |      7702    8.999221    2.455578          1         13
+      byses1 |      7660     .025483    .7513934      -2.11       1.82
+      byses2 |      7660    .0297572    .7572436      -2.11       1.98
+-------------+--------------------------------------------------------
+     bystexp |      7660    4.861619     2.21366         -1          7
+    bynels2m |      7660    44.67795      13.246      15.12      78.99
+    bynels2r |      7660    30.34355    9.190324       9.82      50.57
+       f1qwt |      7702    208.4927    161.1479          0    1427.47
+     f1pnlwt |      7702    207.3541    161.5755          0   1445.493
+-------------+--------------------------------------------------------
+    f1psepln |      6803     4.57313    .8325176          1          6
+    f2ps1sec |      7702    .7599325    3.178602         -9          9
+       amind |      7660    .0075718    .0866917          0          1
+       asian |      7660    .0942559    .2922034          0          1
+       black |      7660    .1325065    .3390628          0          1
+-------------+--------------------------------------------------------
+    hispanic |      7660    .0648825    .2463345          0          1
+ multiracial |      7660    .0809399    .2727607          0          1
+       white |      7660    .0479112    .2135924          0          1
+      race_7 |      7660    .5719321     .494831          0          1
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+      stu_id |       819    294138.9    96383.96     101222     461162
+      sch_id |       819    2941.145    963.8479       1012       4611
+    strat_id |       819    293.9597    96.37937        101        461
+         psu |       819     1.54823    .5335274          1          3
+    f1sch_id |       648    2943.741     1038.62       1012       9998
+-------------+--------------------------------------------------------
+     f1univ1 |       819    112.7473    2.810364        111        118
+    f1univ2a |       819    2.417582    .8133865          2          4
+    f1univ2b |       819    1.449328    1.165229          1          5
+    g10cohrt |       819    .7912088    .4066932          0          1
+    g12cohrt |       819    .8522589      .35506          0          1
+-------------+--------------------------------------------------------
+     bystuwt |       819           0           0          0          0
+    byincome |       819    9.113553    2.418965          1         13
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+       f1qwt |       819    284.6702    185.1782     1.7717   911.4909
+-------------+--------------------------------------------------------
+     f1pnlwt |       819    216.9518    188.4707          0   777.9367
+    f1psepln |       762    4.380577    1.012168          1          6
+    f2ps1sec |       819   -.3211233    3.640062         -9          9
+
+Following variable has no observation, not included:  
+bysex  byrace  bydob_p  bypared  bymothed  byfathed  byses1  byses2  bystexp  amind  asian
+>   black  hispanic  multiracial  white  race_7  
+table.doc
+dir : seeout
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD66594.000000"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bysex bynels2m bynels2r
+
+. 
+. bysort bysex: outreg2 using table.doc, replace sum(log) eqkeep(Mean) 
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       bysex |      7639           1           0          1          1
+    bynels2m |      7576    46.08566    13.96372      14.71      79.27
+    bynels2r |      7576    28.98142    9.716404       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       bysex |      7702           2           0          2          2
+    bynels2m |      7660    44.67795      13.246      15.12      78.99
+    bynels2r |      7660    30.34355    9.190324       9.82      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bysex  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD66594.000000"
+
+. use ../data/plans_b, clear
+
+. 
+. preserve
+
+. 
+. keep bysex bynels2m bynels2r
+
+. 
+. bysort bysex: outreg2 using table.doc, replace sum(log) eqkeep(Mean) 
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       bysex |      7639           1           0          1          1
+    bynels2m |      7576    46.08566    13.96372      14.71      79.27
+    bynels2r |      7576    28.98142    9.716404       9.74      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       bysex |      7702           2           0          2          2
+    bynels2m |      7660    44.67795      13.246      15.12      78.99
+    bynels2r |      7660    30.34355    9.190324       9.82      50.57
+
+
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+    bynels2m |       648    44.80427    11.24556       16.6      72.75
+    bynels2r |       648    28.87716    7.237261      11.74      47.24
+
+Following variable has no observation, not included:  
+bysex  
+table.doc
+dir : seeout
+
+. 
+. restore
+
+. 
+end of do-file
+
+. ssc install tabout
+checking tabout consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. help tabout
+
+. ssc install tabout
+checking tabout consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. do tabout.do
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. tabout bystexp using table1.rtf ///
+>         c(mean bynels2m)
+invalid 'c' 
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. tabout bystexp using table1.rtf, ///
+>         c(mean bynels2m)
+
+Invalid type of entry in cells option, or you may
+have forgotten to turn on the sum or svy option
+
++------------------------------------------------------------------------------------+
+| Type of table        |      Allowable cell contents         |   Available layout   |
+|                      |             cells( )                 |     layout( )        |
+|----------------------+--------------------------------------+----------------------|
+| basic                | freq cell row col cum                | col row  cb rb       |
+|                      | any number of above, in any order    |                      |
+|                      | for example: cells(freq col)         |                      |
+|----------------------+--------------------------------------+----------------------|
+| basic with SE or CI  | freq cell row col se ci lb ub        | col row cb rb        |
+|                      | only one of: freq cell row col       |                      |
+| (turn on svy option) | (must come first in the cell)        |                      |
+|                      | and any number of: se ci lb ub       |                      |
+|                      | for example: cells(col se lb ub)     |                      |
+|----------------------+--------------------------------------+----------------------|
+| summary              | any number of: N mean var sd skewness| no options (fixed)   |
+| -as a oneway table   | kurtosis sum uwsum min max count     |                      |
+|                      | median iqr r9010 r9050 r7525 r1050   |                      |
+| (turn on sum option; | p1 p5 p10 p25 p50 p75 p90 p95 p99    |                      |
+| also may need to turn| with each followed by variable name  |                      |
+| on oneway option)    | for example: cells(min wage mean age)|                      |
+|----------------------+--------------------------------------+----------------------|
+| summary              | only one of: N mean var sd skewness  | no options (fixed)   |
+| -as a twoway table   | kurtosis sum uwsum min max count     |                      |
+|                      | median iqr r9010 r9050 r7525 r1050   |                      |
+| (turn on sum option) | p1 p5 p10 p25 p50 p75 p90 p95 p99    |                      |
+|                      | followed by one variable name        |                      |
+|                      | for example: cells(sum income)       |                      |
+|----------------------+--------------------------------------+----------------------|
+| summary with SE or CI| mean followed by one variable name   | col row cb rb        |
+| (turn on sum option  | and any number of: se ci lb ub       |                      |
+|  and svy option)     | for example: cells(mean weight se ci)|                      |
++------------------------------------------------------------------------------------+
+
+. 
+end of do-file
+
+. do tabout.do
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. tabout bystexp using table1.rtf, ///
+>         c(mean bynels2m) sum
+(note: file table1.rtf not found)
+
+Table output written to: table1.rtf
+
+how far in school student thinks will get-composite     Mean
+        bynels2m
+{don^t know}    40.5
+less than high school graduation        29.1
+high school graduation or ged only      33.9
+attend or complete 2-year college/school        38.8
+attend college, 4-year degree incomplete        36.3
+graduate from college   45.5
+obtain master^s degree or equivalent    50.7
+obtain phd, md, or other advanced degree        50.6
+Total   45.4
+
+. 
+end of do-file
+
+. do tabout.do
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. tabout bystexp using table1.docx, ///
+>         c(mean bynels2m) sum
+(note: file table1.docx not found)
+
+Table output written to: table1.docx
+
+how far in school student thinks will get-composite     Mean
+        bynels2m
+{don^t know}    40.5
+less than high school graduation        29.1
+high school graduation or ged only      33.9
+attend or complete 2-year college/school        38.8
+attend college, 4-year degree incomplete        36.3
+graduate from college   45.5
+obtain master^s degree or equivalent    50.7
+obtain phd, md, or other advanced degree        50.6
+Total   45.4
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. tabout bystexp using table1.html, ///
+>         c(mean bynels2m) sum
+(note: file table1.html not found)
+
+Table output written to: table1.html
+
+how far in school student thinks will get-composite     Mean
+        bynels2m
+{don^t know}    40.5
+less than high school graduation        29.1
+high school graduation or ged only      33.9
+attend or complete 2-year college/school        38.8
+attend college, 4-year degree incomplete        36.3
+graduate from college   45.5
+obtain master^s degree or equivalent    50.7
+obtain phd, md, or other advanced degree        50.6
+Total   45.4
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. tabout bystexp using table1.xlsx, ///
+>         c(mean bynels2m) sum ///
+>         
+(note: file table1.xlsx not found)
+
+Table output written to: table1.xlsx
+
+how far in school student thinks will get-composite     Mean
+        bynels2m
+{don^t know}    40.5
+less than high school graduation        29.1
+high school graduation or ged only      33.9
+attend or complete 2-year college/school        38.8
+attend college, 4-year degree incomplete        36.3
+graduate from college   45.5
+obtain master^s degree or equivalent    50.7
+obtain phd, md, or other advanced degree        50.6
+Total   45.4
+
+. 
+end of do-file
+
+. open table1.xlsx
+unrecognized command:  open
+r(199);
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. tabout bystexp using table1.xls, ///
+>         c(mean bynels2m) sum ///
+>         
+(note: file table1.xls not found)
+
+Table output written to: table1.xls
+
+how far in school student thinks will get-composite     Mean
+        bynels2m
+{don^t know}    40.5
+less than high school graduation        29.1
+high school graduation or ged only      33.9
+attend or complete 2-year college/school        38.8
+attend college, 4-year degree incomplete        36.3
+graduate from college   45.5
+obtain master^s degree or equivalent    50.7
+obtain phd, md, or other advanced degree        50.6
+Total   45.4
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD66594.000000"
+
+. 
+. use ../data/plans_b, clear
+
+. 
+. svyset psu [pw=bystuwt], strat(strat_id)
+
+      pweight: bystuwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. svyset psu [pw=bystuwt], strat(strat_id)
+
+      pweight: bystuwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. // Conditional means
+. tabout bystexp using table1.xls, ///
+>         c(mean bynels2m se) sum svy ///
+> 
+
+The file table1.xls already exists, but you haven't
+used either the replace or append option. Please change
+the file name or include replace or append.
+
+
+.         
+.         
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. svyset psu [pw=bystuwt], strat(strat_id)
+
+      pweight: bystuwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. // Conditional means
+. tabout bystexp using table1.xls, ///
+>         c(mean bynels2m se) sum svy ///
+> 
+
+The file table1.xls already exists, but you haven't
+used either the replace or append option. Please change
+the file name or include replace or append.
+
+
+.         
+.         
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. svyset psu [pw=bystuwt], strat(strat_id)
+
+      pweight: bystuwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. // Conditional means
+. tabout bystexp using table1.xls, ///
+>         c(mean bynels2m se) sum svy replace ///
+> 
+Survey results being calculated
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..........
+Table output written to: table1.xls
+
+how far in school student thinks will get-composite     Mean    SE
+{don^t know}    40.0    (0.5)
+less than high school graduation        28.8    (0.9)
+high school graduation or ged only      33.5    (0.4)
+attend or complete 2-year college/school        38.5    (0.5)
+attend college, 4-year degree incomplete        35.8    (0.6)
+graduate from college   44.9    (0.3)
+obtain master^s degree or equivalent    50.0    (0.3)
+obtain phd, md, or other advanced degree        49.5    (0.4)
+Total   44.4    (0.3)
+
+.         
+.         
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. svyset psu [pw=bystuwt], strat(strat_id)
+
+      pweight: bystuwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. // Conditional means
+. tabout bystexp using table1.xls, ///
+>         c(mean bynels2m se) sum svy replace ///
+> 
+Survey results being calculated
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..........
+Table output written to: table1.xls
+
+how far in school student thinks will get-composite     Mean    SE
+{don^t know}    40.0    (0.5)
+less than high school graduation        28.8    (0.9)
+high school graduation or ged only      33.5    (0.4)
+attend or complete 2-year college/school        38.5    (0.5)
+attend college, 4-year degree incomplete        35.8    (0.6)
+graduate from college   44.9    (0.3)
+obtain master^s degree or equivalent    50.0    (0.3)
+obtain phd, md, or other advanced degree        49.5    (0.4)
+Total   44.4    (0.3)
+
+. // crosstab     
+.         
+. tabout bystexp bysex using table2.xls, ///
+> svy replace     
+Survey results being calculated
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+.......
+Table output written to: table2.xls
+
+        sex-composite           
+how far in school student thinks will get-composite     male    female  Total
+        No.     No.     No.
+{don^t know}    181,264.4       155,434.9       336,699.3
+less than high school graduation        19,602.4        12,719.1        32,321.6
+high school graduation or ged only      169,880.5       77,118.1        246,998.6
+attend or complete 2-year college/school        131,992.1       87,486.4        219,478.5
+attend college, 4-year degree incomplete        70,672.0        62,202.0        132,874.0
+graduate from college   639,075.4       580,747.7       1,219,823.1
+obtain master^s degree or equivalent    300,887.6       370,904.1       671,791.7
+obtain phd, md, or other advanced degree        203,475.8       344,856.1       548,331.8
+Total   1,716,850.2     1,691,468.3     3,408,318.6
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. svyset psu [pw=bystuwt], strat(strat_id)
+
+      pweight: bystuwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. // Conditional means
+. tabout bystexp using table1.xls, ///
+>         c(mean bynels2m se) sum svy replace ///
+> 
+Survey results being calculated
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..........
+Table output written to: table1.xls
+
+how far in school student thinks will get-composite     Mean    SE
+{don^t know}    40.0    (0.5)
+less than high school graduation        28.8    (0.9)
+high school graduation or ged only      33.5    (0.4)
+attend or complete 2-year college/school        38.5    (0.5)
+attend college, 4-year degree incomplete        35.8    (0.6)
+graduate from college   44.9    (0.3)
+obtain master^s degree or equivalent    50.0    (0.3)
+obtain phd, md, or other advanced degree        49.5    (0.4)
+Total   44.4    (0.3)
+
+. // crosstab     
+.         
+. tabout bystexp bysex using table2.xls, ///
+>  c(pct) svy replace     
+Survey results being calculated
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+.......
+Table output written to: table2.xls
+
+        sex-composite           
+how far in school student thinks will get-composite     male    female  Total
+        Prop.   Prop.   Prop.
+{don^t know}    0.1     0.0     0.1
+less than high school graduation        0.0     0.0     0.0
+high school graduation or ged only      0.0     0.0     0.1
+attend or complete 2-year college/school        0.0     0.0     0.1
+attend college, 4-year degree incomplete        0.0     0.0     0.0
+graduate from college   0.2     0.2     0.4
+obtain master^s degree or equivalent    0.1     0.1     0.2
+obtain phd, md, or other advanced degree        0.1     0.1     0.2
+Total   0.5     0.5     1.0
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. svyset psu [pw=bystuwt], strat(strat_id)
+
+      pweight: bystuwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. // Conditional means
+. tabout bystexp using table1.xls, ///
+>         c(mean bynels2m se) sum svy replace ///
+> 
+Survey results being calculated
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..........
+Table output written to: table1.xls
+
+how far in school student thinks will get-composite     Mean    SE
+{don^t know}    40.0    (0.5)
+less than high school graduation        28.8    (0.9)
+high school graduation or ged only      33.5    (0.4)
+attend or complete 2-year college/school        38.5    (0.5)
+attend college, 4-year degree incomplete        35.8    (0.6)
+graduate from college   44.9    (0.3)
+obtain master^s degree or equivalent    50.0    (0.3)
+obtain phd, md, or other advanced degree        49.5    (0.4)
+Total   44.4    (0.3)
+
+. // crosstab     
+.         
+. tabout bystexp bysex using table2.xls, ///
+>  c(pct row) svy replace 
+
+Only one category (freq cell col or row) can be used with svy option.
+
++------------------------------------------------------------------------------------+
+| Type of table        |      Allowable cell contents         |   Available layout   |
+|                      |             cells( )                 |     layout( )        |
+|----------------------+--------------------------------------+----------------------|
+| basic                | freq cell row col cum                | col row  cb rb       |
+|                      | any number of above, in any order    |                      |
+|                      | for example: cells(freq col)         |                      |
+|----------------------+--------------------------------------+----------------------|
+| basic with SE or CI  | freq cell row col se ci lb ub        | col row cb rb        |
+|                      | only one of: freq cell row col       |                      |
+| (turn on svy option) | (must come first in the cell)        |                      |
+|                      | and any number of: se ci lb ub       |                      |
+|                      | for example: cells(col se lb ub)     |                      |
+|----------------------+--------------------------------------+----------------------|
+| summary              | any number of: N mean var sd skewness| no options (fixed)   |
+| -as a oneway table   | kurtosis sum uwsum min max count     |                      |
+|                      | median iqr r9010 r9050 r7525 r1050   |                      |
+| (turn on sum option; | p1 p5 p10 p25 p50 p75 p90 p95 p99    |                      |
+| also may need to turn| with each followed by variable name  |                      |
+| on oneway option)    | for example: cells(min wage mean age)|                      |
+|----------------------+--------------------------------------+----------------------|
+| summary              | only one of: N mean var sd skewness  | no options (fixed)   |
+| -as a twoway table   | kurtosis sum uwsum min max count     |                      |
+|                      | median iqr r9010 r9050 r7525 r1050   |                      |
+| (turn on sum option) | p1 p5 p10 p25 p50 p75 p90 p95 p99    |                      |
+|                      | followed by one variable name        |                      |
+|                      | for example: cells(sum income)       |                      |
+|----------------------+--------------------------------------+----------------------|
+| summary with SE or CI| mean followed by one variable name   | col row cb rb        |
+| (turn on sum option  | and any number of: se ci lb ub       |                      |
+|  and svy option)     | for example: cells(mean weight se ci)|                      |
++------------------------------------------------------------------------------------+
+
+. 
+end of do-file
+
+. do "/Users/doylewr/practicum_2017/central/working/tabout.do"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. svyset psu [pw=bystuwt], strat(strat_id)
+
+      pweight: bystuwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. // Conditional means
+. tabout bystexp using table1.xls, ///
+>         c(mean bynels2m se) sum svy replace ///
+> 
+Survey results being calculated
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..........
+Table output written to: table1.xls
+
+how far in school student thinks will get-composite     Mean    SE
+{don^t know}    40.0    (0.5)
+less than high school graduation        28.8    (0.9)
+high school graduation or ged only      33.5    (0.4)
+attend or complete 2-year college/school        38.5    (0.5)
+attend college, 4-year degree incomplete        35.8    (0.6)
+graduate from college   44.9    (0.3)
+obtain master^s degree or equivalent    50.0    (0.3)
+obtain phd, md, or other advanced degree        49.5    (0.4)
+Total   44.4    (0.3)
+
+. // crosstab     
+.         
+. tabout bystexp bysex using table2.xls, ///
+>  c(row) svy replace     
+Survey results being calculated
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+.......
+Table output written to: table2.xls
+
+        sex-composite           
+how far in school student thinks will get-composite     male    female  Total
+        Prop.   Prop.   Prop.
+{don^t know}    0.5     0.5     1.0
+less than high school graduation        0.6     0.4     1.0
+high school graduation or ged only      0.7     0.3     1.0
+attend or complete 2-year college/school        0.6     0.4     1.0
+attend college, 4-year degree incomplete        0.5     0.5     1.0
+graduate from college   0.5     0.5     1.0
+obtain master^s degree or equivalent    0.4     0.6     1.0
+obtain phd, md, or other advanced degree        0.4     0.6     1.0
+Total   0.5     0.5     1.0
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD66594.000000"
+
+. 
+. 
+. use ../data/plans_b, clear
+
+. 
+. svyset psu [pw=bystuwt], strat(strat_id)
+
+      pweight: bystuwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+
+. 
+. // Conditional means
+. tabout bystexp using table1.xls, ///
+>         c(mean bynels2m se) sum svy replace ///
+> 
+Survey results being calculated
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+..........
+Table output written to: table1.xls
+
+how far in school student thinks will get-composite     Mean    SE
+{don^t know}    40.0    (0.5)
+less than high school graduation        28.8    (0.9)
+high school graduation or ged only      33.5    (0.4)
+attend or complete 2-year college/school        38.5    (0.5)
+attend college, 4-year degree incomplete        35.8    (0.6)
+graduate from college   44.9    (0.3)
+obtain master^s degree or equivalent    50.0    (0.3)
+obtain phd, md, or other advanced degree        49.5    (0.4)
+Total   44.4    (0.3)
+
+. // crosstab     
+.         
+. tabout bysex bystexp using table2.xls, ///
+>  c(row) svy replace     
+Survey results being calculated
+----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
+.......
+Table output written to: table2.xls
+
+        how far in school student thinks will get-composite                               
+>                               
+sex-composite   {don^t know}    less than high school graduation        high school gradua
+> tion or ged only      attend or complete 2-year college/school        attend college, 4-
+> year degree incomplete        graduate from college   obtain master^s degree or equivale
+> nt    obtain phd, md, or other advanced degree        Total
+        Prop.   Prop.   Prop.   Prop.   Prop.   Prop.   Prop.   Prop.   Prop.
+male    0.1     0.0     0.1     0.1     0.0     0.4     0.2     0.1     1.0
+female  0.1     0.0     0.0     0.1     0.0     0.3     0.2     0.2     1.0
+Total   0.1     0.0     0.1     0.1     0.0     0.4     0.2     0.2     1.0
+
+. 
+end of do-file
+
+. exit

@@ -1,15 +1,15 @@
---------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/ols_in_stata/
-> ols_regression_stata.log
+       log:  /Users/doylewr/practicum_2017/central/lessons/s2-03-ols_in_stata/ols_regression_stata.lo
+> g
   log type:  text
- opened on:  24 Jan 2017, 16:23:27
+ opened on:  23 Jan 2018, 15:55:24
 
 . 
-. /* PhD Practicum, Spring 2017 */
+. /* PhD Practicum, Spring 2018 */
 . /* Outputting regression results*/
 . /* Will Doyle*/
-. /* 1/24/17 */
+. /* 1/23/18 */
 . /* Saved on OAK */
 . 
 . clear
@@ -43,7 +43,7 @@ all files already exist and are up to date.
 . 
 . /// Transformations of key independent variables
 > 
-. gen expn_stu_k=expn_stu/1000
+. gen expn_stu_k=expn_stu
 
 . 
 . gen comp_stu_h=comp_stu*100
@@ -132,7 +132,7 @@ Summary statistics: mean sd
     meal_pct |  44.70524   27.12338 
          str |  19.64043   1.891812 
       str_20 |  .4333333   .4961266 
-  expn_stu_k |  5.312408   .6339371 
+  expn_stu_k |  5312.408   633.9371 
 
 .     
 . esttab descriptives using esttab_means.`tab_type' , ///
@@ -145,6 +145,7 @@ Summary statistics: mean sd
 >     replace 
 (output written to esttab_means.rtf)
 
+. 
 .         
 . /* Describing conditional mean of outcome as a function of covariates*/
 . 
@@ -210,7 +211,7 @@ Small Clas~e |
     meal_pct |  40.20112   29.78182 
          str |  17.22926   1.069095 
       str_20 |         0          0 
-  expn_stu_k |  5.844176   .7127741 
+  expn_stu_k |  5844.176   712.7741 
 -------------+----------------------
 Medium Cla~e |                      
     read_scr |  655.0952   19.03064 
@@ -220,7 +221,7 @@ Medium Cla~e |
     meal_pct |  44.02096   25.93847 
          str |  19.68908   .6305783 
       str_20 |  .3666667   .4830459 
-  expn_stu_k |  5.247282   .4960094 
+  expn_stu_k |  5247.282   496.0094 
 -------------+----------------------
 Large Clas~e |                      
     read_scr |  648.0733   18.19773 
@@ -230,7 +231,7 @@ Large Clas~e |
     meal_pct |  50.57791   25.85828 
          str |  21.95428   1.094183 
       str_20 |         1          0 
-  expn_stu_k |  4.910889   .3997575 
+  expn_stu_k |  4910.889   399.7575 
 -------------+----------------------
 Total        |                      
     read_scr |  654.9705   20.10798 
@@ -240,7 +241,7 @@ Total        |
     meal_pct |  44.70524   27.12338 
          str |  19.64043   1.891812 
       str_20 |  .4333333   .4961266 
-  expn_stu_k |  5.312408   .6339371 
+  expn_stu_k |  5312.408   633.9371 
 
 . 
 . esttab descriptives_size using esttab_means_size.`tab_type', ///
@@ -256,6 +257,7 @@ Total        |
 >     replace 
 (output written to esttab_means_size.rtf)
 
+. 
 .         
 . /* Estimate Models */
 .         
@@ -281,18 +283,16 @@ Total        |
 . 
 . #delimit;
 delimiter now ;
-. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates 
-> all estimates in memory. rtf specifies rich text, best for word */
->                label                          /*Use labels for models and variables 
-> */
+. esttab *_model using `y'_models.`tab_type',     /* estout command: * indicates all estimates in mem
+> ory. rtf specifies rich text, best for word */
+>                label                          /*Use labels for models and variables */
 >                nodepvars                      /* Use my model titles */
->                b(2)                           /* b= coefficients , this gives two si
-> g digits */
+>                b(2)                           /* b= coefficients , this gives two sig digits */
 >                se(2)                         /* I do want standard errors */
 >                r2 (2)                      /* R squared */
 >                ar2 (2)                     /* Adj R squared */
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats fr
-> om the ereturn (list) */
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn 
+> (list) */
 >                sfmt (2 0 0 0)                /* format for scalar stats*/
 >                replace                   /* replace existing file */
 >                ;
@@ -301,21 +301,21 @@ delimiter now ;
 . #delimit cr
 delimiter now cr
 . 
+. // Redo table, this time include t stats instead of se and no stars!
 . 
 . #delimit;
 delimiter now ;
-. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates 
-> all estimates in memory. rtf specifies rich text, best for word */
->                label                          /*Use labels for models and variables 
-> */
+. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates i
+> n memory. rtf specifies rich text, best for word */
+>                label                          /*Use labels for models and variables */
 >                nodepvars                      /* Use my model titles */
->                b(2)                           /* b= coefficients , this gives two si
-> g digits */
+>                b(2)                           /* b= coefficients , this gives two sig digits */
 >                t(2)                         /* I do want t stats */
+>                            nostar
 >                r2 (2)                      /* R squared */
 >                ar2 (2)                     /* Adj R squared */
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats fr
-> om the ereturn (list) */
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn 
+> (list) */
 >                sfmt (2 0 0 0)                /* format for scalar stats*/
 >                replace                   /* replace existing file */
 >                ;
@@ -324,21 +324,20 @@ delimiter now ;
 . #delimit cr
 delimiter now cr
 . 
+. 
 . #delimit;
 delimiter now ;
-. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates 
-> all estimates in memory. rtf specifies rich text, best for word */
->                label                          /*Use labels for models and variables 
-> */
+. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates i
+> n memory. rtf specifies rich text, best for word */
+>                label                          /*Use labels for models and variables */
 >                nodepvars                      /* Use my model titles */
->                b(2)                           /* b= coefficients , this gives two si
-> g digits */
->                se(2)                         /* I do want t stats */
+>                b(2)                           /* b= coefficients , this gives two sig digits */
+>                t(2)                         /* I do want t stats */
 >                            nostar 
 >                r2 (2)                      /* R squared */
 >                ar2 (2)                     /* Adj R squared */
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats fr
-> om the ereturn (list) */
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn 
+> (list) */
 >                sfmt (2 0 0 0)                /* format for scalar stats*/
 >                replace                   /* replace existing file */
 >                ;
@@ -350,20 +349,18 @@ delimiter now cr
 . 
 . #delimit;
 delimiter now ;
-. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates 
-> all estimates in memory. rtf specifies rich text, best for word */
->                label                          /*Use labels for models and variables 
-> */
+. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates i
+> n memory. rtf specifies rich text, best for word */
+>                label                          /*Use labels for models and variables */
 >                nodepvars                      /* Use my model titles */
->                b(4)                           /* b= coefficients , this gives two si
-> g digits */
->                ci(4)                         /* I do want confidence interval */    
->                       
+>                b(4)                           /* b= coefficients , this gives two sig digits */
+>                ci(4)                         /* I do want confidence interval */                   
+>        
 >                            nostar
 >                r2 (4)                      /* R squared */
 >                ar2 (4)                     /* Adj R squared */
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats fr
-> om the ereturn (list) */
+>                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn 
+> (list) */
 >                sfmt (4 0 0 0)                /* format for scalar stats*/
 >                replace                   /* replace existing file */
 >                ;
@@ -380,8 +377,7 @@ delimiter now cr
 . 
 . #delimit;
 delimiter now ;
-. plotbeta  avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to r
-> eport */
+. plotbeta  avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to report */
 >           labels                              /*Use Variable Labels*/
 >           xtitle (Parameters)                 /*Label of x axis*/
 >           title ("Model w/ No Covariates")    /*Title */ 
@@ -403,7 +399,7 @@ This term will not be plotted
 
 . #delimit cr
 delimiter now cr
-. 
+.  
 . graph save teach_model, replace
 (file teach_model.gph saved)
 
@@ -414,8 +410,7 @@ delimiter now cr
 . 
 . #delimit;
 delimiter now ;
-. plotbeta avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to re
-> port */
+. plotbeta avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to report */
 >           labels                              /*Use Variable Labels*/
 >           xtitle (Parameters)                 /*Label of x axis*/
 >           title ("Model w/ Student Chars")    /*Title */ 
@@ -487,12 +482,7 @@ NOTE: Make sure there are no options in the lincom expressions
 . #delimit cr
 delimiter now cr
 . 
-. 
-. graph export all_models.`gtype', replace 
-(file all_models.eps written in EPS format)
-
-. 
-. exit
+. exit 
 
 end of do-file
 

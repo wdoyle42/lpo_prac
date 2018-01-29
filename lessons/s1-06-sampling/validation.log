@@ -1,0 +1,35 @@
+------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_2017/central/lessons/s1-06-sampling/validation.log
+  log type:  text
+ opened on:  17 Oct 2017, 07:07:53
+
+. 
+. // NAME: Data cleaning
+. // FILE: validation.do
+. // AUTH: Will Doyle
+. // REVS: Benjamin Skinner
+. // INIT: 22 October 2014
+. // LAST: 15 October 2017
+.      
+. clear all                               // clear memory
+
+. set more off                            // turn off annoying "__more__" feature
+
+. 
+. 
+. // load plans data
+. use plans.dta
+file plans.dta not found
+r(601);
+
+end of do-file
+
+r(601);
+
+. cd "/Users/doylewr/practicum_2017/central/lessons/s1-08-validation"
+/Users/doylewr/practicum_2017/central/lessons/s1-08-validation
+
+. do validation.do
+
+. capture log close                       // closes any logs, should they be open

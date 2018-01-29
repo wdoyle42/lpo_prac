@@ -37,7 +37,6 @@ describe
 
 codebook pop
 
-edit
 
 /* Show me the data for the first ten states */
 list if _n <11
@@ -61,7 +60,7 @@ summarize poplt5_pr
 
 /* Summarize the new variable in more detail */
 
-sum  poplt5_pr, detail
+sum poplt5_pr, detail
 
 /* Create a new variable for proportion of pop urban */
 /*What is the mean, and median of the new variable ?*/
@@ -72,19 +71,15 @@ sum  poplt5_pr, detail
 
 /*Whoops */
 
-bysort region: sum poplt5_pr
+bysort region: sum poplt5_pr 
 
-
-/*Create a table of urbanicity by region */
-  
+/*Create a table of urbanicity by region */  
 
 /*Univariate graphics */
 
 histogram poplt5_pr
 
-
 *bysort region: histogram poplt5_pr
-
 
 /*Whoops */
 
@@ -105,9 +100,9 @@ li state poplt5_pr if poplt5_pr >.1 /*List state name and pop less than 5 if pop
 
 gen pop65p_pr=pop65p/pop
 
-graph  twoway scatter poplt5_pr pop65p_pr /*Scatterplot of young population as a function of older population */
+graph twoway scatter poplt5_pr pop65p_pr /*Scatterplot of young population as a function of older population */
 
-graph  twoway scatter poplt5_pr pop65p_pr, msymbol(none) mlabel(state) /*Add State Labels*/
+graph twoway scatter poplt5_pr pop65p_pr, msymbol(none) mlabel(state) /*Add State Labels*/
 
 graph  twoway scatter poplt5_pr pop65p_pr, msymbol(none) mlabel(state)  mlabsize (tiny)/*Change Label Size*/    
 

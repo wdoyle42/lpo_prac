@@ -56,6 +56,8 @@ list cnum api99 county_inc if _n < 10
 onewayplot api99, by(county_inc) stack ms(oh) msize(*.1) width(1) name(api99_ow)
 graph export ${plotdir}api99_ow.eps, name(api99_ow) replace
 
+
+
 // one-to-many match merging: but why?
 
 use api, clear
@@ -106,10 +108,12 @@ inspect api99
 inspect api00
 
 // command: mdesc
-mdesc api99 api00 
+mdesc api99 api00, detail 
 
 // command: mvpatterns
 mvpatterns api99 api00 ell mobility
+
+exit 
 
 // create flag if missing ell
 gen ell_flag = ell == .

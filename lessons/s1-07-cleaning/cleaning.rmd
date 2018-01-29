@@ -1,6 +1,6 @@
 ---
 title: Data cleaning
-author: LPO 9951 | Fall 2016
+author: LPO 9951 | Fall 2017
 output: github_document
 ---
 

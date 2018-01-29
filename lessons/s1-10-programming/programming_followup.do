@@ -35,14 +35,14 @@ local tests bynels2m bynels2r
 
 summarize `tests' /*Will work */
 
-local ses byses1 byses2
+local ses `myvar' byses2
 
 summarize `ses'
 
 
-/**********************/
+/**************************/
 /* Recoding Section Begin*/
-/**********************/
+/*************************/
 
 if `recoding'==1{
 /* Difference between globals and locals */
@@ -60,7 +60,7 @@ foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
                                           } /* End loop over variables */
  */
   
-local race_names amind asian black hispanic multiracial white
+local race_names amind asian black hispanic_no_race hispanic_with_race multiracial white
 
 tab(byrace), gen(race_)
 
@@ -74,7 +74,8 @@ label variable byincome "Income"
 label variable amind "American Indian/AK Native"
 label variable asian "Asian/ PI"
 label variable black "African American"
-label variable hispanic "Hispanic"
+label variable hispanic_no_race "Hispanic, no race specified"
+label variable hispanic_with_race "Hispanic, race specified"
 label variable white "White"
 label variable multiracial "Multiracial"
 
@@ -84,14 +85,16 @@ else{
 use plans_b, clear
 }/* end else */
 
-/**********************/
+/*************************/
 /* Recoding Section End */
+/************************/
+
+
+
+
+
 /**********************/
-
-
-
-/**********************/
-/* Analysis Section */
+/* Analysis Section   */
 /**********************/
 if `analysis'==1{
 
@@ -253,6 +256,29 @@ else{
 di "Did not run analysis"
 }
   
-exit
+local contin `myvar' byses2 bynels2m bynels2r 
+
+foreach myvar of local contin{
+
+/* Generate percentiles */
+_pctile `myvar', nquantiles(5)
+
+/*Generate binary variables */
+gen `myvar'_q1=`myvar'<r(r1)
+replace `myvar'_q1=. if `myvar'==.
+gen `myvar'_q2=`myvar'>=r(r1)& `myvar'<r(r2)
+gen `myvar'_q3=`myvar'>=r(r2)& `myvar'<r(r3)
+gen `myvar'_q4=`myvar'>=r(r3)& `myvar'<r(r4)
+gen `myvar'_q5=`myvar'>=r(r4)
+
+} /* end loop over continuous variables */
+
+drop *_q*
+
+foreach myvar of local contin{
+xtile `myvar'q=`myvar', nquantile(5)
+tab `myvar'q, gen(`myvar'q_)
+drop `myvar'q
+}
 
 

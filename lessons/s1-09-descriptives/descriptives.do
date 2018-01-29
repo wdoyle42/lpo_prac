@@ -33,11 +33,12 @@ svyset psu [pw = f1pnlwt], strat(strat_id) singleunit(scaled)
 // DESCRIBE THE DEPENDENT VARIABLE
 
 // histogram of base year math score
-histogram bynels2m, name(hist_bynels2m) ///
+histogram bynels2m, name(hist_bynels2m)  ///
     xtitle("NELS-1992 Scale-Equated Math Score") ///    
-    bin(100) /// we can try different bin widths
-    fraction
-
+    bin(25) /// we can try different bin widths
+    percent
+	
+	
 graph export hist_bynels2m.$gtype, name(hist_bynels2m) replace
     
 // spikeplot of base year math score
@@ -52,8 +53,9 @@ kdensity bynels2m, name(kd_bynels2m) ///
     n(100) ///
     bwidth(.025) ///
     normal /// 
+	kernel(gaussian) ///
     normopts(lpattern(dash)) 
-
+ 	
 graph export kd_bynels2m.$gtype, name(kd_bynels2m) replace
 
 // kernel density plots of base year math score across gender
@@ -71,13 +73,17 @@ kdensity bynels2m if bysex == 1, name(kd_bynels2m_cond) ///
 
 graph export kd_bynels2m_cond.$gtype, name(kd_bynels2m_cond) replace
 
+
 // BASIC DESCRIPTIVE TABLE
 
 // get mean estimates using svy
-svy: mean bynels2m bynels2r byses1 byses2
+svy: mean bynels2m bynels2r byses1 byses2 amind asian black hispanic white female
+
+// Store it
+estimates store my_mean
 
 // store the estimates in a nice table using esttab
-esttab . using means_se.$ttype, ///    // . means all in current memory
+esttab my_mean using means_se.$ttype, ///    // . means all in current memory
     not ///                              // do not include t-tests 
     replace ///                          // replace if it exists
     nostar ///                           // no significance tests 
@@ -87,6 +93,8 @@ esttab . using means_se.$ttype, ///    // . means all in current memory
     nonotes ///                          // no standard table notes 
     nonumbers ///                        // no column/model numbers
     addnotes("Linearized estimates of standard errors in parentheses")
+	
+//	("Balanced Repeated Replicate (BRR) estimates of standard errors in parenthesese)
 
 // use tabstat to make table
 tabstat bynels2m bynels2r byses1 byses2, stat(sd) save 
@@ -95,10 +103,10 @@ tabstat bynels2m bynels2r byses1 byses2, stat(sd) save
 mat mysd = r(StatTotal)
 
 // add to earlier results using estadd
-estadd matrix mysd
+estadd  matrix mysd: my_mean
 
 // save new table, this time with sds instead of ses
-esttab . using means_sd.$ttype, ///
+esttab my_mean using means_sd.$ttype, ///
     not /// 
     replace ///
     nostar ///
@@ -108,7 +116,7 @@ esttab . using means_sd.$ttype, ///
     nonumbers ///
     nonotes ///
     addnotes("Standard deviations in parentheses")
-
+ 
 
 // CATEGORICAL VARIABLE
 

@@ -1,0 +1,15 @@
+\BOOKMARK [2][-]{section*.1}{Quick Exercise}{}% 1
+\BOOKMARK [2][-]{section*.2}{A Note on Macros and Do-Files}{}% 2
+\BOOKMARK [1][-]{section*.3}{Scalars}{}% 3
+\BOOKMARK [2][-]{section*.4}{Quick Exercise}{section*.3}% 4
+\BOOKMARK [1][-]{section*.5}{The varlist Concept}{}% 5
+\BOOKMARK [1][-]{section*.6}{The Numlist concept}{}% 6
+\BOOKMARK [2][-]{section*.7}{Quick Exercise}{section*.6}% 7
+\BOOKMARK [1][-]{section*.8}{Loops}{}% 8
+\BOOKMARK [2][-]{section*.9}{The forvalues structure}{section*.8}% 9
+\BOOKMARK [2][-]{section*.10}{The foreach structure}{section*.8}% 10
+\BOOKMARK [2][-]{section*.11}{The while command}{section*.8}% 11
+\BOOKMARK [2][-]{section*.12}{Nested Loops}{section*.8}% 12
+\BOOKMARK [2][-]{section*.13}{Writing loops}{section*.8}% 13
+\BOOKMARK [2][-]{section*.14}{Debugging loops}{section*.8}% 14
+\BOOKMARK [1][-]{section*.15}{In Class Exercise}{}% 15

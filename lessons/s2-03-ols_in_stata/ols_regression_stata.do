@@ -2,7 +2,7 @@ capture log close
 
 log using "ols_regression_stata.log",replace
 
-/* PhD Practicum, Spring 2017 */
+/* PhD Practicum, Spring 2018 */
 /* Outputting regression results*/
 /* Will Doyle*/
 /* 1/23/18 */
@@ -30,7 +30,7 @@ use caschool, clear
 
 /// Transformations of key independent variables
 
-gen expn_stu_k=expn_stu/1000
+gen expn_stu_k=expn_stu
 
 gen comp_stu_h=comp_stu*100
 
@@ -93,6 +93,7 @@ esttab descriptives using esttab_means.`tab_type' , ///
     label ///
     nonumber ///
     replace 
+
 	
 /* Describing conditional mean of outcome as a function of covariates*/
 
@@ -130,6 +131,7 @@ esttab descriptives_size using esttab_means_size.`tab_type', ///
     nomtitles ///
 	collabels(none) ///
     replace 
+
 	
 /* Estimate Models */
 	
@@ -147,11 +149,30 @@ estimates store st_tch_fin_comp_model, title ("Model 4")
 
 #delimit;
 
-esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
+esttab *_model using `y'_models.`tab_type',     /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
                label                          /*Use labels for models and variables */
                nodepvars                      /* Use my model titles */
                b(2)                           /* b= coefficients , this gives two sig digits */
                se(2)                         /* I do want standard errors */
+               r2 (2)                      /* R squared */
+               ar2 (2)                     /* Adj R squared */
+               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
+               sfmt (2 0 0 0)                /* format for scalar stats*/
+               replace                   /* replace existing file */
+               ;
+
+#delimit cr
+
+// Redo table, this time include t stats instead of se and no stars!
+
+#delimit;
+
+esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
+               label                          /*Use labels for models and variables */
+               nodepvars                      /* Use my model titles */
+               b(2)                           /* b= coefficients , this gives two sig digits */
+               t(2)                         /* I do want t stats */
+			   nostar
                r2 (2)                      /* R squared */
                ar2 (2)                     /* Adj R squared */
                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
@@ -169,22 +190,6 @@ esttab *_model using `y'_models.`tab_type',          /* estout command: * indica
                nodepvars                      /* Use my model titles */
                b(2)                           /* b= coefficients , this gives two sig digits */
                t(2)                         /* I do want t stats */
-               r2 (2)                      /* R squared */
-               ar2 (2)                     /* Adj R squared */
-               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
-               sfmt (2 0 0 0)                /* format for scalar stats*/
-               replace                   /* replace existing file */
-               ;
-
-#delimit cr
-
-#delimit;
-
-esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
-               label                          /*Use labels for models and variables */
-               nodepvars                      /* Use my model titles */
-               b(2)                           /* b= coefficients , this gives two sig digits */
-               se(2)                         /* I do want t stats */
 			   nostar 
                r2 (2)                      /* R squared */
                ar2 (2)                     /* Adj R squared */
@@ -230,7 +235,7 @@ plotbeta  avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression 
 		  ;
 
 #delimit cr
-
+ 
 graph save teach_model, replace
 
 estimates restore st_tch_model
@@ -294,6 +299,7 @@ graph combine teach_model.gph //
 
 #delimit cr
 
+exit 
 
 graph export all_models.`gtype', replace 
 

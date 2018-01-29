@@ -12,7 +12,6 @@ log using "validation.log", replace    // open new log
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
 
-
 // load plans data
 use plans.dta
 
@@ -20,7 +19,7 @@ use plans.dta
 svyset psu [pw = bystuwt], str(strat_id) singleunit(scaled)
 
 // set up local to hold variables we wish to recode 
-local allvar bystexp bysex byrace byses1 f1psepln
+local allvar bystexp bysex byrace byses1 f1psepln 
 
 // change values for vars in local that in (-4,-8,-9) to missing
 foreach myvar in `allvar' {
@@ -31,13 +30,25 @@ foreach myvar in `allvar' {
 
 // student expectations for education 
 tab bystexp
+
 svy: proportion bystexp
 
 // store estimates
 estimates store expect_tab
 
+// show estimates
+estimates replay expect_tab
+
+// put estimates back in memory
+estimates restore expect_tab
+
+//one line version
+
+eststo expect_tab: svy: proportion bystexp
+
+
 // save as table using esttab
-esttab expect_tab using expect_tab.rtf, b(3) se(4) ///
+esttab expect_tab using expect_tab.rtf, b(3) se(4) nostar ///
     varlabels(_prop_1 "Unsure" ///
               _prop_2 "Less than HS" ///
               _prop_3 "HS or GED" ///
@@ -48,6 +59,7 @@ esttab expect_tab using expect_tab.rtf, b(3) se(4) ///
               _prop_8 "PhD or Prof") ///
     replace
 
+exit 	
 	
 estpost svy: tabulate byrace bystexp, row percent
 estimates store expect_tab2

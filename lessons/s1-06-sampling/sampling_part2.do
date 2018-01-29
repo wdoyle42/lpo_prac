@@ -21,8 +21,10 @@ mean age height weight
 // explore survey design
 tab stratid psuid
 
+
 // mean with probability weights
 mean age height weight [pw = finalwgt] 
+
 
 // TAYLOR SERIES LINEARIZED ESTIMATES
 
@@ -38,10 +40,11 @@ svy: mean age height weight
 webuse nhanes2brr, clear
 
 // svyset automagically
-svyset
+svyset, brrweight(c1ty*)
 
 // compute mean using svy pre-command and brr weights
 svy: mean age height weight
+
 
 // load data from web, nhanes2 no brr
 webuse nhanes2, clear
@@ -63,6 +66,7 @@ mata: st_matrix("h32", h32)
 // use our BRR weighting matrix with svy
 svy brr, hadamard(h32): mean age height weight 
 
+
 // JACKNIFE ESTIMATES
 
 // load data from web, nhanes2jknife
@@ -70,6 +74,7 @@ webuse nhanes2jknife, clear
 
 // set svyset using jackknife weigts
 svyset [pweight = finalwgt], jkrweight(jkw_*) vce(jackknife)
+
 
 // compute naive means without jackknife weights
 mean age weight height
@@ -94,12 +99,18 @@ mean birthwgtlbs
 // compute mean with svy bootstrap
 svy: mean birthwgtlbs
 
+exit 
 
 // Using ECLS
+
+/* Jackknife estimation*/
+svyset  [pw=C67PW0], jkrweight(C67PW1-C67PW90) vce(jackknife)
 
 // Using ELS
 
 use ../../data/plans.dta, clear
+
+/* TS estimation */ 
 
 svyset psu [pw=f1pnlwt],strata(strat_id)
 
@@ -108,10 +119,28 @@ mean bynels2m, over(byrace)
 svy: mean bynels2m, over(byrace) 
 
 
+use ../../data/plans.dta, clear
+
+sample 50
+
+svyset psu [pw=f1pnlwt],strata(strat_id)
+
+svydes 
+
+exit 
+
+
 // Using HSLS
+
 
 
 
 // end file     
 log close
 exit
+
+//ECLS Manual p. 7-11, 9-12, exhibit 9-2
+
+// ELS Manual p. 81, 87 (BRR), 
+
+// HSLS Manual 

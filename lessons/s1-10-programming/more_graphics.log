@@ -1,0 +1,285 @@
+------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_2017/central/lessons/s1-10-programming/more_graphics
+> .log
+  log type:  text
+ opened on:  14 Nov 2017, 09:00:05
+
+. 
+. // NAME: MOAR GRAPHICs
+. // FILE: more_graphics.do
+. // AUTH: Will Doyle
+. // REVS: Benjamin Skinner
+. // INIT: 5 November 2017
+. // LAST: 14 November 2017
+. 
+. clear all                               // clear memory
+
+. set more off                            // turn off annoying "__more__" feature
+
+. 
+. // set link for data, plot, and table directories
+. global datadir "../data/"
+
+. global plotdir "../plots/"
+
+. global tabsdir "../tables/"
+
+. 
+. // set plot and table types
+. global gtype eps
+
+. global ttype html
+
+. 
+. // theme for graphics
+. set scheme s1color
+
+. 
+. // open up modified plans data
+. use ../s1-10-programming/plans_b, clear
+
+. 
+. 
+. //catplot
+. catplot bystexp, name(cat1)
+
+. 
+. // Using over
+. catplot bystexp, over(bysex) name(cat2)
+
+. 
+. 
+. // Yvars trick
+. catplot bystexp, over(bysex) asyvars
+
+. 
+. //QE: Create a catplot for plans by income quartile, using asyvars
+. 
+. // Ordering
+. catplot bystexp , var1opts(sort(1) descending)
+
+. 
+. // yvars, again
+. catplot bystexp , var1opts(sort(1) descending) asyvars
+
+. 
+. // recast
+. 
+. catplot bystexp , var1opts(sort(1) descending) recast(dot)
+
+. 
+. //QE recast to scatter
+. 
+. //Ciplot
+. 
+. ciplot bynels2m , by(bystexp)
+
+. 
+. 
+. //QE: Change to reading scores and use better points
+. 
+. // Cibar
+. 
+. cibar bynels2m, over1(bystexp)
+
+. 
+. // Collapse trick
+. 
+. local myvar f2ps1sec
+
+. 
+. foreach i of numlist -4 -8 -9 { /* Start inner loop */
+  2.                      replace `myvar'=. if `myvar'== `i'
+  3.                                             }  /* End inner loop */
+(1689 real changes made, 1689 to missing)
+(359 real changes made, 359 to missing)
+(49 real changes made, 49 to missing)
+
+.                                         
+. 
+.                                                                   
+.                                                                                   
+. gen fouryr =0 
+
+. replace fouryr=1 if f2ps1sec==1|f2ps1sec==3
+(4352 real changes made)
+
+. replace fouryr=. if f2ps1sec==. 
+(2097 real changes made, 2097 to missing)
+
+. 
+. graph twoway scatter foury byses1               
+
+. 
+. xtile byses_p =byses1, nquantiles(100)
+
+. 
+. 
+. collapse (mean) mean_four=fouryr (count) total_four=fouryr, by(byses_p)
+
+. 
+end of do-file
+
+. browse
+
+. graph twoway scatter mean_four byses_p
+
+. cd "/Users/doylewr/practicum_2017/central/assignments/semester_1_assignment_06"
+/Users/doylewr/practicum_2017/central/assignments/semester_1_assignment_06
+
+. do assignment6_followup.do
+
+. // Assignment 6? Followup
+. 
+. // Create a switch
+. 
+. local recode_data=1
+
+. 
+. local analysis=1 
+
+. 
+. if load_data=1{
+load_data not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/Users/doylewr/practicum_2017/central/assignments/semester_1_assignment_06/assignmen
+> t6_followup.do"
+
+. // Assignment 6? Followup
+. 
+. // Create a switch
+. 
+. local recode_data=1
+
+. 
+. local analysis=1 
+
+. 
+. if `load_data'=1{
+=1 invalid name
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "/Users/doylewr/practicum_2017/central/assignments/semester_1_assignment_06/assignmen
+> t6_followup.do"
+
+. // Assignment 6? Followup
+. 
+. // Create a switch
+. 
+. local recode_data=1
+
+. 
+. local analysis=1 
+
+. 
+. if `load_data'==1{
+==1 invalid name
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "/Users/doylewr/practicum_2017/central/assignments/semester_1_assignment_06/assignmen
+> t6_followup.do"
+
+. // Assignment 6? Followup
+. 
+. // Create a switch
+. 
+. local recode_data=1
+
+. 
+. local analysis=1 
+
+. 
+. if `recode_data'==1{
+. use ../../data/plans, clear
+. 
+. /* Do stuff to recode*/
+. 
+. save ../../data/plans, replace
+file ../../data/plans.dta saved
+. 
+. 
+. else{
+. di "Not recoding data" 
+. use ../../data/plans, clear
+. }
+. program error:  matching close brace not found
+r(198);
+
+end of do-file
+
+r(198);
+. do "/Users/doylewr/practicum_2017/central/assignments/semester_1_assignment_06/assignmen
+> t6_followup.do"
+
+. // Assignment 6? Followup
+. 
+. // Create a switch
+. 
+. local recode_data=0
+
+. 
+. local analysis=1 
+
+. 
+. if `recode_data'==1{
+. use ../../data/plans, clear
+. 
+. /* Do stuff to recode*/
+. 
+. save ../../data/plans, replace
+. }
+
+. 
+. else{
+. di "Not recoding data" 
+Not recoding data
+. use ../../data/plans, clear
+. }
+
+. 
+end of do-file
+
+. help esttab
+
+. help estout
+
+. ssc install catplot
+checking catplot consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. ssc ciplot
+ssc: ciplot: invalid subcommand
+r(198);
+
+. ssc install ciplot
+checking ciplot consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. ssc install cibar
+checking cibar consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. ssc install cibar
+checking cibar consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. cd "/Users/doylewr/practicum_2017/central/lessons/s1-11-more_graphics"
+/Users/doylewr/practicum_2017/central/lessons/s1-11-more_graphics
+
+. do more_graphics.do
+
+. capture log close                       // closes any logs, should they be open

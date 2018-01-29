@@ -2,7 +2,7 @@ version 13
 capture log close
 log using "reg_basic.log",replace
 
-/* PhD Practicum, Spring 2015 */
+/* PhD Practicum, Spring 2018 */
 /* Getting Started with Regression */
 /* Will Doyle*/
 /* 1/23/18 */
@@ -59,6 +59,17 @@ graph export "scatter_lowess.`gtype'", replace
 
 /*Exercise: do the same with another covariate*/
 
+//local x wkhrsy
+//local xtitle "Work hours/year"
+
+graph twoway lowess `y' `x' || ///
+      scatter `y' `x', ///
+      msize(tiny) ///
+      msymbol(smcircle) ///
+      ytitle(`ytitle') ///
+      xtitle(`xtitle') ///
+      legend( order(2 "`xtitle'" 1 "Lowess fit") )
+      
 
  /*Linear fit to the data*/
     
@@ -73,7 +84,6 @@ graph twoway lfit `y' `x' || ///
 
 graph export "scatter_linear.`gtype'",replace
 
-
 /*Get regression results */
 
 reg `y' `x'
@@ -87,8 +97,12 @@ mat betamat=e(b)
 /*Where are the standard errors ?*/
 
 mat vcmat=e(V)
-  
+ 
 scalar myb=betamat[1,1]
+
+
+// NOOOOO
+//scalar myb=e(b)[1,1]
 
 scalar varbeta1=vcmat[1,1]
 
@@ -110,6 +124,7 @@ scalar se_beta1=_se[`x']
 
 scalar li beta1
 
+
 /*Use different confidence intervals */
 reg `y' `x', level(90)
 
@@ -119,9 +134,12 @@ predict uhat, residuals
 /*Residuals sum to 0 by definition */
 tabstat uhat, stat(sum)
 
+
+
 /*Plot residuals by x*/
 graph twoway scatter uhat `x',yline(0) msize(tiny)
 graph export "residplot.`gtype'",replace
+
 
 
 /*More complex graph*/
@@ -134,6 +152,8 @@ graph twoway scatter uhat `x', ///
      msymbol(triangle) 
 
 
+	 
+	 
 /*Putting the pieces together*/
 graph twoway scatter uhat `x', ///
       msize(tiny) ///
@@ -239,6 +259,8 @@ corr yhat `y'
 
 scalar rsquare= e(r2)
 
+
+
 /*What is adjusted r squared? */
 
 scalar adj_rsquare= 1-((1-rsquare)*((myN-1)/(myN-myk)))
@@ -247,15 +269,19 @@ scalar adj_rsquare= 1-((1-rsquare)*((myN-1)/(myN-myk)))
 
 scalar my_df=myN-myk
 
-scalar myt=beta1/sebeta1
-
-scalar stat_sig=(2*ttail(my_df,myt))
+// Observed t value 
+scalar myt=beta1/sebeta1 
 
 scalar my_pval=.05
 
 scalar req_t=invttail(my_df,(my_pval/2))
 
-scalar test=cond(myt>=req_t,"Significant","Not significant")
+scalar test=cond(abs(myt)>=req_t,"Significant","Not significant")
+
+// p value 
+scalar stat_sig=(2*ttail(my_df,myt))
+
+
 
 exit
 

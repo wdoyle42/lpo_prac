@@ -13,11 +13,13 @@ set more off                            // turn off annoying "__more__" feature
   
 // downloading ado files
 
-net search renvars
+net search renvars 
 
 // load in school vote data 
 
 webuse school, clear
+
+save school, replace
 
 // outsheet dataset
 
@@ -28,6 +30,14 @@ outsheet using "school_data.csv", comma replace
 insheet using "school_data.csv", comma clear
 
 // describe data
+
+//Save as tab delimited
+
+outsheet using "school_data.tsv", replace
+
+//Open up tab delimited file
+
+insheet using "school_data.tsv", clear
 
 describe
 
@@ -44,7 +54,7 @@ label variable vote "Voted for public school funding"
 // describe again
 
 describe
-
+ 
 // labeling values within variables 
 
 tab vote
@@ -62,6 +72,7 @@ gen inc = exp(loginc)
 sum loginc inc
 
 // recoding variables
+sum inc
 
 gen inc_bin = 0
 
@@ -74,6 +85,8 @@ recode inc_q (0 = 1 "First Quartile") ///
     (2 = 3 "3rd Quartile") ///
     (3 = 4 "4th Quartile"), gen(new_inc_q)
 
+exit 	
+	
 // compute new variable
 
 gen ptax = exp(logptax)

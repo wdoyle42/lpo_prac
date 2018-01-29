@@ -7,17 +7,58 @@ log using "cleaning.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 15 October 2014
-// LAST: 24 Ocotber 2016
-     
+// LAST: 24 Ocotber 2017
+  
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
 
 // load CA school data with problems
 use caschool_problem, replace
 
+
+// label data
+
+la data "California school district-level data from 1998" 
+
+
 // replacing problematic variable labels 
 describe
+label variable observation_number "Unit ID"
 label variable gr_span "Grade Span"
+
+// I AM MAKING AN ASSUMPTION ABOUT THIS VARIABLE//
+// WE REALLY REALLY NEED TO CHECK THIS *****  //
+
+la var teachers "Full time equivalent teachers" 
+
+la var calw "Percent of students whose parents are enrolled in CalWorks"
+
+la var meal_pct "Percent of students eligible for free/reduced price meals" 
+
+la var computer "Number of computers in the district" 
+
+la var testscr "Academic Performance Index score" 
+
+la var comp_stu "Number of computers per student" 
+
+la var str "Student/Teacher Ratio"
+
+// I AM MAKING AN ASSUMPTION ABOUT THIS VARIABLE//
+// WE REALLY REALLY NEED TO CHECK THIS *****  //
+
+la var avginc "Average income (maybe)" 
+
+la var el_pct "English language learners percent" 
+
+
+//Flag this for missing ***** //
+la var read_scr "Average reading score"
+
+//Flag this for missing ***** //
+la var math_scr "Average math score"  
+
+la var foo "Unknown variable" 
+
 
 // LOOKING FOR OUTLIERS WITH VARIOUS PLOTS
 
@@ -29,10 +70,21 @@ graph export  box_str.eps, name(box_str) replace
 histogram str, name(hist_str)
 graph export  hist_str.eps, name(hist_str) replace
 
+// NOTE: student teacher ratio for observation #121 coded incorrectly (was 47.4, ratio is about 18
+// Code below replaces for this district 
+replace str =enrl_tot/teachers if observation_number==121
+
+// NOTE: student teacher ratio for observation #301 coded incorrectly (was 34, ratio is about 18
+// Code below replaces for this district 
+replace str =enrl_tot/teachers if observation_number==301
+
 // IMPOSSIBLE VALUES 
 
 // summarize calw percent
 sum calw_pct
+
+// Remove impossible values for calworks because some schools recorded more than 100
+replace calw_pct =. if calw_pct>100
 
 // LOOKING FOR IMPLAUSIBLE VALUES WITH VARIOUS PLOTS
 

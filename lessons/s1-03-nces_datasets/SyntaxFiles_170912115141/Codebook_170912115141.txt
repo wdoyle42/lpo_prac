@@ -1,0 +1,53 @@
+1999 Early Childhood Longitudinal Study - Kindergarten Class of 1998-99 EDAT Extract Codebook
+
+C:\EDAT\ECLS-K\Codebook_170912115141.txt
+
+/*****************************************************************************************
+NOTES:                                                                                  
+   (1) Full sample weights and/or replicate weights are added automatically.
+   (2) Identification numbers are added automatically.
+*****************************************************************************************/
+
+
+
+File:       k8_child
+Name:       CHILDID
+Position:   1
+Length:     8
+Label:      CHILD IDENTIFICATION NUMBER
+
+Description:
+
+
+                                                                        Frequency             Percent 
+Category            Label                                              Unweighted          Unweighted 
+------------------- ----------------------------------------- ------------------- ------------------- 
+                    CHILD ID                                               21,409              100.00 
+TOTAL                                                                      21,409              100.00 
+
+
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------
+
+
+File:       k8_child
+Name:       C1SPHOME
+Position:   4350
+Length:     1
+Label:      C1 SPEAK SPANISH AT HOME
+
+Description:
+
+
+                                                                        Frequency             Percent 
+Category            Label                                              Unweighted          Unweighted 
+------------------- ----------------------------------------- ------------------- ------------------- 
+1                   SPEAK SPANISH AT HOME                                   1,771                8.27 
+2                   DON'T SPEAK SPANISH AT HOME                            17,355               81.06 
+—                                                                           2,283               10.66 
+TOTAL                                                                      21,409              100.00 
+
+— Indicates nonresponse for the entire instrument
+
+----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------

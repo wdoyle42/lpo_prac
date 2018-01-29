@@ -1,9 +1,9 @@
--------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s1-04-dataset_manipu
-> lation/dataset_manipulation.log
+       log:  /Users/doylewr/practicum_2017/central/lessons/s1-04-dataset_manipulation
+> /dataset_manipulation.log
   log type:  text
- opened on:  18 Sep 2017, 16:30:48
+ opened on:  19 Sep 2017, 10:43:42
 
 . 
 . // NAME: Dataset manipulation
@@ -15,31 +15,30 @@
 . 
 . clear all                               // clear memory
 
-. set more off                            // turn off annoying "__more__" featu
-> re
+. set more off                            // turn off annoying "__more__" feature
 
 . 
 . //Data import
 . 
-. import delimited "https://stats.idre.ucla.edu/wp-content/uploads/2016/02/hsb2
-> -2.csv", clear
+. import delimited "https://stats.idre.ucla.edu/wp-content/uploads/2016/02/hsb2-2.csv
+> ", clear
 (11 vars, 200 obs)
 
-. 
+.  
 . // Excel
 . 
 . import excel "tabn304.10.xls", cellrange(A5:L64) clear
 
 . 
-. 
 . // set globals for url data link and local data path
-. global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_int
-> ro/apipop"
+. global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/api
+> pop"
 
 . 
 . // read web data into memory
 . use $urldata, clear
 
+. 
 . 
 . // split into three datasets: elementary, middle, and high school
 . 
@@ -51,9 +50,18 @@
 . // elementary schools
 . preserve
 
-. keep if stype == 1                      
+. keep if stype == 1    
 (1773 observations deleted)
 
+. tab stype 
+
+      stype |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          E |      4,421      100.00      100.00
+------------+-----------------------------------
+      Total |      4,421      100.00
+
+.                  
 . save elem, replace
 file elem.dta saved
 
@@ -80,6 +88,7 @@ file hs.dta saved
 file middle.dta saved
 
 . 
+. 
 . // merging via the append command
 . append using elem   
 (label yr_rnd already defined)
@@ -98,7 +107,45 @@ file middle.dta saved
 (label yr_rnd already defined)
 
 . 
+. /* Quick Exercise: Create a dataset that has just middle and elementary schools.
+>  Do this using first the append command and then the merge command.*/
+.  
+.  // Elementary schools in memory
+.  use elem, clear
+
+.  
+.  append using middle
+(label yr_rnd already defined)
+(label awards already defined)
+(label both already defined)
+(label comp_imp already defined)
+(label sch_wide already defined)
+(label stype already defined)
+
+.  
+.  use elem, clear
+
+.  
+.  merge 1:1 snum using middle, nogen
+(label stype already defined)
+(label sch_wide already defined)
+(label comp_imp already defined)
+(label both already defined)
+(label awards already defined)
+(label yr_rnd already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         5,439
+        from master                     4,421  
+        from using                      1,018  
+
+    matched                                 0  
+    -----------------------------------------
+
+.  
 . // merging via the merge command
+. 
 . use elem, clear
 
 . 
@@ -119,6 +166,7 @@ file middle.dta saved
     matched                                 0  (_merge_a==3)
     -----------------------------------------
 
+. 
 . merge 1:1 snum using middle, gen(_merge_b)
 (label stype already defined)
 (label sch_wide already defined)
@@ -196,6 +244,48 @@ file api_2.dta saved
                   Total |      6,194      100.00
 
 . 
+. 
+. /* Quick Exercise: Create a dataset that has only mobility and percent tested. Next
+>  create another dataset that has only the year round and percent responding variabl
+> es. 
+> Now merge these two datasets together using a one-to-one merge.*/
+. 
+. 
+. use $urldata, clear
+
+. 
+. preserve
+
+. keep snum mobility pcttest
+
+. save api_a, replace
+file api_a.dta saved
+
+. restore
+
+. 
+. preserve
+
+. keep snum yr_rnd pct_resp
+
+. save api_b, replace
+file api_b.dta saved
+
+. restore
+
+. 
+. use api_a, clear
+
+. 
+. merge 1:1 snum using api_b, nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             6,194  
+    -----------------------------------------
+
+. 
 . // collapsing data
 . 
 . // reload main dataset, since we didn't preserve it before
@@ -208,20 +298,92 @@ Number of unique values of cnum is  57
 Number of records is  6194
 
 . 
+. preserve
+
 . // mean of pcttest and mobility within countyr
 . collapse (mean) pcttest mobility, by (cnum)
 
+. restore
+
 . 
+. // Total enrollment by district
+. 
+. collapse (sum) district_enroll=enroll, by(dnum)
+
+. 
+. save district_enroll, replace
+file district_enroll.dta saved
+
+. 
+. use $urldata, clear
+
+. 
+. merge m:1 dnum using district_enroll
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             6,194  (_merge==3)
+    -----------------------------------------
+
+.  
 . // give count of number of observations (should be number of unique counties)
 . count
-   57
+ 6194
 
+. 
+. /* Quick Exercise: Create a district level dataset that contains district 
+> level averages for the following variables:apioo api99 ell meals*/
+. 
+. 
+. use $urldata, clear
+
+. preserve
+
+. collapse (mean) /// 
+>         mean_api00=api00 /// 
+>         mean_api99=api99 ///
+>         mean_ell=ell ///
+>         mean_meals=meals ///
+>         (median) ///
+>         med_api00=api00 /// 
+>         med_api99=api99 ///
+>         med_ell=ell ///
+>         med_meals=meals ///
+>         , by(dnum)
+
+.         
+. save district_stuff, replace
+(note: file district_stuff.dta not found)
+file district_stuff.dta saved
+
+. 
+. restore
+
+. 
+. merge m:1 dnum using district_stuff
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             6,194  (_merge==3)
+    -----------------------------------------
+
+. 
+. 
+. 
+. /* QE: then do the same thing using medians*/
+. 
+. 
+. /* Merge both into main dataset? */
+. 
+. 
 . 
 . // end file
 . log close                               // close log
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s1-04-dataset_manipu
-> lation/dataset_manipulation.log
+       log:  /Users/doylewr/practicum_2017/central/lessons/s1-04-dataset_manipulation
+> /dataset_manipulation.log
   log type:  text
- closed on:  18 Sep 2017, 16:30:52
--------------------------------------------------------------------------------
+ closed on:  19 Sep 2017, 10:43:48
+-------------------------------------------------------------------------------------

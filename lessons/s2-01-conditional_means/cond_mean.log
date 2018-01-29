@@ -1,14 +1,14 @@
-----------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
       name:  <unnamed>
        log:  /Users/doylewr/practicum_2017/central/lessons/s2-01-conditional_means/cond_mean.log
   log type:  text
- opened on:   9 Jan 2018, 12:26:37
+ opened on:   9 Jan 2018, 14:26:39
 
 . 
 . /* Conditional Means*/
 . /* Making the link between conditional means and regression */
 . /* Will Doyle */
-. /* 2017-01-09 */
+. /* 2018-01-09 */
 . /* Github Repo:  */
 . 
 . clear matrix
@@ -392,11 +392,15 @@ file ../../data/plans2.dta saved
 . 
 . //Using the mean as a prediction
 . 
+. scalar drop _all
+
+. 
 . sort byses1
 
 . 
 . graph twoway scatter bynels2m byses1, msize(vtiny)
 
+. 
 . 
 . /* Predict using the mean */
 . egen uncond_mean=mean(bynels2m)
@@ -452,6 +456,7 @@ file ../../data/plans2.dta saved
 uncond_mean_rmse =  .13536213
 
 . 
+. 
 . //Above average vs. below average 
 . 
 . // Generate prediction
@@ -493,21 +498,24 @@ uncond_mean_rmse =  .13536213
 (file cond_mean2.eps written in EPS format)
 
 . 
+. 
+. 
 . // Or . . .
 . 
-. reg sesq2
+. reg bynels2m sesq2
 
       Source |       SS           df       MS      Number of obs   =    15,236
--------------+----------------------------------   F(0, 15235)     =      0.00
-       Model |           0         0           .   Prob > F        =         .
-    Residual |  3808.88422    15,235   .25000881   R-squared       =    0.0000
--------------+----------------------------------   Adj R-squared   =    0.0000
-       Total |  3808.88422    15,235   .25000881   Root MSE        =    .50001
+-------------+----------------------------------   F(1, 15234)     =   2278.39
+       Model |  36.7977231         1  36.7977231   Prob > F        =    0.0000
+    Residual |  246.040721    15,234  .016150763   R-squared       =    0.1301
+-------------+----------------------------------   Adj R-squared   =    0.1300
+       Total |  282.838444    15,235  .018565044   Root MSE        =    .12709
 
 ------------------------------------------------------------------------------
-       sesq2 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-       _cons |   .5027566   .0040508   124.11   0.000     .4948166    .5106967
+       sesq2 |   .0982905   .0020592    47.73   0.000     .0942542    .1023268
+       _cons |    .404363   .0014601   276.95   0.000     .4015011    .4072249
 ------------------------------------------------------------------------------
 
 . 
@@ -525,7 +533,7 @@ uncond_mean_rmse =  .13536213
 (276 missing values generated)
 
 . 
-. gen cond_mean4_error_sq=cond_mean4_error*cond_mean2_error
+. gen cond_mean4_error_sq=cond_mean4_error*cond_mean4_error
 (276 missing values generated)
 
 . 
@@ -539,19 +547,11 @@ uncond_mean_rmse =  .13536213
 
 . 
 . scalar li
-       myt =  1.9614331
-         n =       1616
-     alpha =        .05
-  reg_rmse =  .12275883
-   reg_mse =  .01506973
-cond_mean10_rmse =  .17966919
-cond_mean10_mse =  .03228102
 cond_mean4_rmse =  .12365016
 cond_mean4_mse =  .01528936
 cond_mean2_rmse =  .12651073
 cond_mean2_mse =  .01600496
 uncond_mean_rmse =  .13536213
-undcond_mean_rmse =  .13536213
 uncond_mean_mse =  .01832291
 
 . 
@@ -559,14 +559,40 @@ uncond_mean_mse =  .01832291
 >              (line uncond_mean byses1,lcolor(blue)) ///
 >              (line cond_mean2 byses1,lcolor(orange)) ///
 >              (line cond_mean4 byses1,lcolor(yellow)), ///    
->              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups" 4 "Conditional Mean, 4 Groups")
->  )
+>              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups" 4 "Conditional Mean,
+>  4 Groups") )
 
-. 
 . 
 . graph export "cond_mean4.`gtype'", replace
 (file cond_mean4.eps written in EPS format)
 
+. 
+. egen read_mean4=mean(bynels2r), by(sesq4)
+
+. 
+. // Conditional mean for reading scores
+. gen read_mean4_error=bynels2r-cond_mean4
+(276 missing values generated)
+
+. 
+. gen read_mean4_error_sq=read_mean4_error*read_mean4_error
+(276 missing values generated)
+
+. 
+. quietly sum read_mean4_error_sq
+
+. 
+. scalar read_mean4_mse=r(mean)
+
+. 
+. scalar read_mean4_rmse=sqrt(read_mean4_mse)
+
+. 
+. graph twoway (scatter bynels2r byses1,msize(vtiny) mcolor(black)) ///
+>              (line read_mean4 byses1,lcolor(yellow)), ///    
+>              legend(order(2  "Conditional Mean, 4 Groups") )
+
+. 
 . 
 . /*Conditional means across Deciles*/
 . 
@@ -577,7 +603,7 @@ uncond_mean_mse =  .01832291
 . egen cond_mean_10_math=mean(bynels2m), by(sesq10)
 
 . 
-. gen cond_mean10_error=bynels2r-cond_mean_10
+. gen cond_mean10_error=bynels2m-cond_mean_10
 (276 missing values generated)
 
 . 
@@ -601,15 +627,18 @@ uncond_mean_mse =  .01832291
 >              (line cond_mean2 byses1,lcolor(orange)) ///
 >              (line cond_mean4 byses1,lcolor(yellow)) ///  
 >                          (line cond_mean_10_math byses1,lcolor(purple)), ///  
->              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups" 4 "Conditional Mean, 4 Groups" 
-> 5 "Conditional Mean, 10 Groups"))
+>              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups" 4 "Conditional Mean,
+>  4 Groups" 5 "Conditional Mean, 10 Groups"))
 
 . 
 . graph export "cond_mean10.`gtype'", replace
 (file cond_mean10.eps written in EPS format)
 
 . 
+. // Conditional mean by ses and sex
 . 
+. //egen cond_mean_10_bysex= mean(bynels2m), by(sesq10 bysex)
+.  
 . /*Plotting conditional means for policy audiences*/
 . 
 . scalar n=_N/10
@@ -641,13 +670,11 @@ uncond_mean_mse =  .01832291
 
 .                          
 . graph export "horiz10.`gtype'", replace
-(note: file horiz10.eps not found)
 (file horiz10.eps written in EPS format)
 
 .                          
 . restore
 
-. 
 . 
 . /*Conditional Mean: Regression*/
 . 
@@ -695,8 +722,8 @@ uncond_mean_mse =  .01832291
 >              (line cond_mean2 byses1,lcolor(orange)) ///
 >              (line cond_mean4 byses1,lcolor(yellow)) ///
 >              (line reg_predict byses1,lcolor(red)), ///        
->              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups" 4 "Conditional Mean, 4 Groups" 
-> 5 "Regression Prediction") )
+>              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups" 4 "Conditional Mean,
+>  4 Groups" 5 "Regression Prediction") )
 
 . 
 . graph export "regress.`gtype'", replace
@@ -704,25 +731,61 @@ uncond_mean_mse =  .01832291
 
 . 
 . scalar li
-       myt =  1.9614331
-         n =       1616
-     alpha =        .05
   reg_rmse =  .12275883
    reg_mse =  .01506973
-cond_mean10_rmse =  .17966919
-cond_mean10_mse =  .03228102
+       myt =  1.9614331
+     alpha =        .05
+         n =       1616
+cond_mean10_rmse =  .12252576
+cond_mean10_mse =  .01501256
+read_mean4_rmse =  .17997469
+read_mean4_mse =  .03239089
 cond_mean4_rmse =  .12365016
 cond_mean4_mse =  .01528936
 cond_mean2_rmse =  .12651073
 cond_mean2_mse =  .01600496
 uncond_mean_rmse =  .13536213
-undcond_mean_rmse =  .13536213
 uncond_mean_mse =  .01832291
 
 . 
-. 
-. 
-. 
-. 
+. exit 
+
 end of do-file
 
+
+. browse bynels2m reg_predict reg_error
+
+. reg bynels2m byses1
+
+      Source |       SS           df       MS      Number of obs   =    15,236
+-------------+----------------------------------   F(1, 15234)     =   3532.18
+       Model |  53.2360435         1  53.2360435   Prob > F        =    0.0000
+    Residual |    229.6024    15,234  .015071708   R-squared       =    0.1882
+-------------+----------------------------------   Adj R-squared   =    0.1882
+       Total |  282.838444    15,235  .018565044   Root MSE        =    .12277
+
+------------------------------------------------------------------------------
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      byses1 |   .0795636   .0013387    59.43   0.000     .0769396    .0821877
+       _cons |   .4504293   .0009962   452.15   0.000     .4484766    .4523819
+------------------------------------------------------------------------------
+
+. sca li
+  reg_rmse =  .12275883
+   reg_mse =  .01506973
+       myt =  1.9614331
+     alpha =        .05
+         n =       1616
+cond_mean10_rmse =  .12252576
+cond_mean10_mse =  .01501256
+read_mean4_rmse =  .17997469
+read_mean4_mse =  .03239089
+cond_mean4_rmse =  .12365016
+cond_mean4_mse =  .01528936
+cond_mean2_rmse =  .12651073
+cond_mean2_mse =  .01600496
+uncond_mean_rmse =  .13536213
+uncond_mean_mse =  .01832291
+
+. exit, clear

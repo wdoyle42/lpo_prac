@@ -54,6 +54,8 @@ use
    F2QWT
    F2F1WT
    F2BYWT
+   BYS20B
+   F3BYPNLPSWT
 using $datadir$els_dta;
 
 // change delimiter back to carriage return
@@ -64,6 +66,8 @@ renvars *, lower
 
 // save reduced ELS dataset
 save $datadir$elssave, replace
+
+
 
 // Early Childhood Longitudinal Study - Kindergarten (ECLS-K)
 
@@ -88,7 +92,6 @@ renvars *, lower
 
 // save reduced ECLS-K dataset
 save $datadir$eclsave, replace
-
 
 
 // High School Longitudinal Study (HSLS)
@@ -117,6 +120,7 @@ use
    W1MATHTCH
    W1SCITCH
    S1AVID
+   X2SES 
 using $datadir$hsls_dta;
 
 // change delimiter back to carriage return

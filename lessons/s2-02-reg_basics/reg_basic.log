@@ -2,10 +2,10 @@
       name:  <unnamed>
        log:  /Users/doylewr/practicum_2017/central/lessons/s2-02-reg_basics/reg_basic.log
   log type:  text
- opened on:  23 Jan 2018, 10:44:44
+ opened on:  23 Jan 2018, 15:04:11
 
 . 
-. /* PhD Practicum, Spring 2015 */
+. /* PhD Practicum, Spring 2018 */
 . /* Getting Started with Regression */
 . /* Will Doyle*/
 . /* 1/23/18 */
@@ -83,6 +83,18 @@
 . 
 . /*Exercise: do the same with another covariate*/
 . 
+. //local x wkhrsy
+. //local xtitle "Work hours/year"
+. 
+. graph twoway lowess `y' `x' || ///
+>       scatter `y' `x', ///
+>       msize(tiny) ///
+>       msymbol(smcircle) ///
+>       ytitle(`ytitle') ///
+>       xtitle(`xtitle') ///
+>       legend( order(2 "`xtitle'" 1 "Lowess fit") )
+
+.       
 . 
 .  /*Linear fit to the data*/
 .     
@@ -101,7 +113,6 @@ Months not an integer, option order() ignored
 . graph export "scatter_linear.`gtype'",replace
 (file scatter_linear.eps written in EPS format)
 
-. 
 . 
 . /*Get regression results */
 . 
@@ -133,9 +144,13 @@ Months not an integer, option order() ignored
 . 
 . mat vcmat=e(V)
 
-.   
+.  
 . scalar myb=betamat[1,1]
 
+. 
+. 
+. // NOOOOO
+. //scalar myb=e(b)[1,1]
 . 
 . scalar varbeta1=vcmat[1,1]
 
@@ -153,6 +168,23 @@ Months not an integer, option order() ignored
 
 . 
 . scalar li 
+      test = Significant
+     req_t =  1.9626151
+   my_pval =        .05
+  stat_sig =  9.044e-26
+       myt =  10.829852
+     my_df =        896
+adj_rsquare =  .11476102
+   rsquare =  .11574791
+     fstat =   117.2857
+       myf =   117.2857
+residss_std =  6.425e+08
+ modss_std =  7.536e+10
+      df_m =          1
+  df_resid =        896
+    my_mss =  7.536e+10
+      ybar =   21186.17
+     modss =  7.536e+10
 root_my_rss =   25319.77
     my_rss =  5.757e+11
    residss =  5.757e+11
@@ -179,6 +211,7 @@ root_my_rss =   25319.77
 . scalar li beta1
      beta1 =  303.21674
 
+. 
 . 
 . /*Use different confidence intervals */
 . reg `y' `x', level(90)
@@ -211,12 +244,15 @@ root_my_rss =   25319.77
 ------------------------
 
 . 
+. 
+. 
 . /*Plot residuals by x*/
 . graph twoway scatter uhat `x',yline(0) msize(tiny)
 
 . graph export "residplot.`gtype'",replace
 (file residplot.eps written in EPS format)
 
+. 
 . 
 . 
 . /*More complex graph*/
@@ -230,6 +266,8 @@ root_my_rss =   25319.77
 
 . 
 . 
+.          
+.          
 . /*Putting the pieces together*/
 . graph twoway scatter uhat `x', ///
 >       msize(tiny) ///
@@ -433,20 +471,45 @@ functions:
 . scalar rsquare= e(r2)
 
 . 
-. /*What is adjusted r squared? */
+. exit 
+
+end of do-file
+
+
+. scalar li rsquare
+   rsquare =  .11574791
+
+. reg yinc ccol
+
+      Source |       SS           df       MS      Number of obs   =       898
+-------------+----------------------------------   F(1, 896)       =    117.29
+       Model |  7.5359e+10         1  7.5359e+10   Prob > F        =    0.0000
+    Residual |  5.7570e+11       896   642521746   R-squared       =    0.1157
+-------------+----------------------------------   Adj R-squared   =    0.1148
+       Total |  6.5106e+11       897   725817279   Root MSE        =     25348
+
+------------------------------------------------------------------------------
+        yinc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |   303.2167   27.99823    10.83   0.000      248.267    358.1665
+       _cons |   12815.63   1145.818    11.18   0.000     10566.83    15064.43
+------------------------------------------------------------------------------
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD34962.000000"
+
 . 
 . scalar adj_rsquare= 1-((1-rsquare)*((myN-1)/(myN-myk)))
 
 .            
-. /*Tests of statistical significance */
 . 
-. scalar my_df=myN-myk
+end of do-file
 
-. 
-. scalar myt=beta1/sebeta1
+. scalar li adj_rsquare
+adj_rsquare =  .11476102
 
-. 
-. scalar stat_sig=(2*ttail(my_df,myt))
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD34962.000000"
+
+. scalar myt=beta1/sebeta1 
 
 . 
 . scalar my_pval=.05
@@ -455,42 +518,127 @@ functions:
 . scalar req_t=invttail(my_df,(my_pval/2))
 
 . 
-. scalar test=cond(myt>=req_t,"Significant","Not significant")
+. scalar test=cond(abs(myt)>=req_t,"Significant","Not significant")
 
 . 
-. exit
-
 end of do-file
 
-
-. scalar li
-      test = Significant
-     req_t =  1.9626151
-   my_pval =        .05
-  stat_sig =  9.044e-26
+. scalar li myt
        myt =  10.829852
-     my_df =        896
-adj_rsquare =  .11476102
-   rsquare =  .11574791
-     fstat =   117.2857
-       myf =   117.2857
-residss_std =  6.425e+08
- modss_std =  7.536e+10
-      df_m =          1
-  df_resid =        896
-    my_mss =  7.536e+10
-      ybar =   21186.17
-     modss =  7.536e+10
-root_my_rss =   25319.77
-    my_rss =  5.757e+11
-   residss =  5.757e+11
-       myk =          2
-       myN =        898
-  se_beta1 =  27.998234
-     beta1 =  303.21674
-  se_beta0 =  1145.8177
-     beta0 =  12815.633
-   sebeta1 =  27.998234
-  varbeta1 =  783.90109
-       myb =  303.21674
 
+. scalar li req_t
+     req_t =  1.9626151
+
+. scalar li test
+      test = Significant
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD34962.000000"
+
+. // p value 
+. scalar stat_sig=(2*ttail(my_df,myt))
+
+. 
+end of do-file
+
+. scalar li statg_sig
+scalar statg_sig not found
+r(111);
+
+. scalar li stat_sig
+  stat_sig =  9.044e-26
+
+. reg yinc ccol
+
+      Source |       SS           df       MS      Number of obs   =       898
+-------------+----------------------------------   F(1, 896)       =    117.29
+       Model |  7.5359e+10         1  7.5359e+10   Prob > F        =    0.0000
+    Residual |  5.7570e+11       896   642521746   R-squared       =    0.1157
+-------------+----------------------------------   Adj R-squared   =    0.1148
+       Total |  6.5106e+11       897   725817279   Root MSE        =     25348
+
+------------------------------------------------------------------------------
+        yinc |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        ccol |   303.2167   27.99823    10.83   0.000      248.267    358.1665
+       _cons |   12815.63   1145.818    11.18   0.000     10566.83    15064.43
+------------------------------------------------------------------------------
+
+. cd ../
+/Users/doylewr/practicum_2017/central/lessons
+
+. ls
+
+total 8
+-rw-r--r--   1 doylewr  VANDERBILT\Domain Users   327 Jan 18  2017 Readme.md
+drwxr-xr-x   3 doylewr  VANDERBILT\Domain Users   102 Nov 28 09:24 grab_bag/
+drwxr-xr-x   7 doylewr  VANDERBILT\Domain Users   238 Sep  4 15:22 s1-01-introduction/
+drwxr-xr-x  13 doylewr  VANDERBILT\Domain Users   442 Sep 11 15:33 s1-02-stata_basics/
+drwxr-xr-x  11 doylewr  VANDERBILT\Domain Users   374 Sep 12 11:22 s1-03-nces_datasets/
+drwxr-xr-x  25 doylewr  VANDERBILT\Domain Users   850 Sep 25 13:34 s1-04-dataset_manipulation/
+drwxr-xr-x  25 doylewr  VANDERBILT\Domain Users   850 Sep 26 12:03 s1-05-more_dataset_manipulation/
+drwxr-xr-x  20 doylewr  VANDERBILT\Domain Users   680 Oct 17 07:07 s1-06-sampling/
+drwxr-xr-x  20 doylewr  VANDERBILT\Domain Users   680 Oct 24 15:00 s1-07-cleaning/
+drwxr-xr-x  15 doylewr  VANDERBILT\Domain Users   510 Oct 17 12:13 s1-08-validation/
+drwxr-xr-x  61 doylewr  VANDERBILT\Domain Users  2074 Nov 28 10:37 s1-09-descriptives/
+drwxr-xr-x  14 doylewr  VANDERBILT\Domain Users   476 Nov 14 09:00 s1-10-programming/
+drwxr-xr-x   8 doylewr  VANDERBILT\Domain Users   272 Nov 29 20:13 s1-11-more_graphics/
+drwxr-xr-x  25 doylewr  VANDERBILT\Domain Users   850 Jan 10 11:08 s2-01-conditional_means/
+drwxr-xr-x  21 doylewr  VANDERBILT\Domain Users   714 Jan 23 15:15 s2-02-reg_basics/
+drwxr-xr-x  28 doylewr  VANDERBILT\Domain Users   952 Jan 23 15:20 s2-03-ols_in_stata/
+drwxr-xr-x  19 doylewr  VANDERBILT\Domain Users   646 Feb  7  2017 s2-04-regression_prediction/
+drwxr-xr-x  18 doylewr  VANDERBILT\Domain Users   612 Feb 21  2017 s2-05-binary_catgegorical/
+drwxr-xr-x  12 doylewr  VANDERBILT\Domain Users   408 Feb 14  2017 s2-05-model_design/
+drwxr-xr-x   7 doylewr  VANDERBILT\Domain Users   238 Mar  6  2017 s2-06-binary_cateogrical/
+drwxr-xr-x  22 doylewr  VANDERBILT\Domain Users   748 Mar 28  2017 s2-07-diagnose/
+drwxr-xr-x   7 doylewr  VANDERBILT\Domain Users   238 Aug 28 16:54 s2-08-adv_reporting/
+drwxr-xr-x  17 doylewr  VANDERBILT\Domain Users   578 Apr 11  2017 s2-09-panel_data/
+drwxr-xr-x  15 doylewr  VANDERBILT\Domain Users   510 Apr  4  2017 s2-10-binary_dv/
+drwxr-xr-x   3 doylewr  VANDERBILT\Domain Users   102 Mar 14  2017 s2-11-replication/
+drwxr-xr-x   4 doylewr  VANDERBILT\Domain Users   136 Jan 18  2017 s2-12-reproducible_research/
+drwxr-xr-x  42 doylewr  VANDERBILT\Domain Users  1428 Jan 31  2017 s2-13-simulation/
+drwxr-xr-x  10 doylewr  VANDERBILT\Domain Users   340 May 11  2017 s3-01-limited/
+drwxr-xr-x  12 doylewr  VANDERBILT\Domain Users   408 May 20  2017 s3-02-matching/
+drwxr-xr-x  21 doylewr  VANDERBILT\Domain Users   714 May  8  2017 s3-03-missing/
+drwxr-xr-x  43 doylewr  VANDERBILT\Domain Users  1462 May 11  2017 s3-04-polychotomous/
+drwxr-xr-x  10 doylewr  VANDERBILT\Domain Users   340 May 15  2017 s3-05-instrumental_variables/
+
+. cd ../s2-03-ols_in_stata
+unable to change to ../s2-03-ols_in_stata
+r(170);
+
+. cd ./s2-03-ols_in_stata
+/Users/doylewr/practicum_2017/central/lessons/s2-03-ols_in_stata
+
+. ls
+
+total 1864
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users   47066 Jan 24  2017 Print.pdf
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users   67823 Jan 24  2017 all_models.eps
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users   43803 Jan 23 10:47 all_models.png
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users   62530 Jan 24  2017 caschool.dta
+-rw-r--r--@ 1 doylewr  VANDERBILT\Domain Users   34844 Jan 24  2017 esttab_means.pdf
+-rw-r--r--@ 1 doylewr  VANDERBILT\Domain Users  106588 Jan 24  2017 esttab_means.png
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    3098 Jan 24  2017 esttab_means.rtf
+-rw-r--r--@ 1 doylewr  VANDERBILT\Domain Users   37589 Jan 24  2017 esttab_means_size.pdf
+-rw-r--r--@ 1 doylewr  VANDERBILT\Domain Users  145414 Jan 24  2017 esttab_means_size.png
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    6079 Jan 24  2017 esttab_means_size.rtf
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    5443 Jan 24  2017 esttab_means_size2.rtf
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    2410 Jan 30  2017 means.dta
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    8986 Jan 23 10:47 ols_regression_stata.Rmd
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    9115 Jan 23 15:20 ols_regression_stata.do
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users   14565 Jan 25  2017 ols_regression_stata.log
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users   22012 Jan 23 10:47 ols_regression_stata.md
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    7068 Jan 24  2017 ols_regression_stata_followup.do
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    8510 Jan 24  2017 read_scr_models.rtf
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users   10954 Jan 24  2017 reporting_results.log
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users   10145 Jan 24  2017 st_teach_fin_comp_model.gph
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users   10012 Jan 24  2017 st_teach_fin_model.gph
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    9838 Jan 24  2017 st_teach_model.gph
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    9151 Jan 24  2017 teach_model.gph
+-rw-r--r--  1 doylewr  VANDERBILT\Domain Users    8510 Jan 24  2017 testscr_models.rtf
+-rw-r--r--@ 1 doylewr  VANDERBILT\Domain Users   47059 Jan 24  2017 testscr_results.pdf
+-rw-r--r--@ 1 doylewr  VANDERBILT\Domain Users  154585 Jan 24  2017 testscr_results.png
+
+. do ols_regression_stata.do
+
+. capture log close

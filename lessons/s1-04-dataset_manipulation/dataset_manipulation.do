@@ -14,17 +14,17 @@ set more off                            // turn off annoying "__more__" feature
 //Data import
 
 import delimited "https://stats.idre.ucla.edu/wp-content/uploads/2016/02/hsb2-2.csv", clear
-
+ 
 // Excel
 
 import excel "tabn304.10.xls", cellrange(A5:L64) clear
-
 
 // set globals for url data link and local data path
 global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop"
 
 // read web data into memory
 use $urldata, clear
+
 
 // split into three datasets: elementary, middle, and high school
 
@@ -35,7 +35,9 @@ use $urldata, clear
 
 // elementary schools
 preserve
-keep if stype == 1                      
+keep if stype == 1    
+tab stype 
+                 
 save elem, replace
 restore
 
@@ -49,14 +51,31 @@ restore
 keep if stype == 3                      
 save middle, replace
 
+
 // merging via the append command
 append using elem   
 append using hs
 
+/* Quick Exercise: Create a dataset that has just middle and elementary schools.
+ Do this using first the append command and then the merge command.*/
+ 
+ // Elementary schools in memory
+ use elem, clear
+ 
+ append using middle
+ 
+ use elem, clear
+ 
+ merge 1:1 snum using middle, nogen
+
+ exit 
+ 
 // merging via the merge command
+
 use elem, clear
 
 merge 1:1 snum using hs, gen(_merge_a)
+
 merge 1:1 snum using middle, gen(_merge_b)
 
 // show merge stats for each merge
@@ -87,11 +106,24 @@ use $urldata, clear
 // count of unique counties in dataset
 unique cnum
 
+preserve
 // mean of pcttest and mobility within countyr
 collapse (mean) pcttest mobility, by (cnum)
+restore
 
+// Total enrollment by district
+
+collapse (sum) district_enroll=enroll, by(dnum)
+
+save district_enroll, replace
+
+use $urldata, clear
+
+merge m:1 dnum using district_enroll
+ 
 // give count of number of observations (should be number of unique counties)
 count
+
 
 // end file
 log close                               // close log

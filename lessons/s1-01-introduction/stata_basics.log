@@ -1,0 +1,222 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_new/central/lessons/s1-01-introduction/stata_ba
+> sics.log
+  log type:  text
+ opened on:   4 Sep 2017, 15:22:27
+
+. 
+. // NAME: Stata Basics
+. // FILE: lecture2_stata_basic.do
+. // AUTH: Will Doyle
+. // REVS: Benjamin Skinner
+. // INIT: 2012-09-04 
+. // LAST: 2017-09-4
+. 
+. clear all                               // clear memory
+
+. set more off                            // turn off annoying "__more__" feature
+
+.   
+. // downloading ado files
+. 
+. net search renvars
+(contacting http://www.stata.com)
+
+4 packages found (Stata Journal and STB listed first)
+-----------------------------------------------------
+
+dm88_1 from http://www.stata-journal.com/software/sj5-4
+    SJ5-4 dm88_1.  Update:  Renaming variables, multiply and... / Update:
+    Renaming variables, multiply and systematically / by Nicholas J. Cox,
+    Durham University, UK / Jeroen Weesie, Utrecht University, Netherlands /
+    Support:  n.j.cox@durham.ac.uk, j.weesie@fss.uu.nl / After installation,
+
+dm88 from http://www.stata.com/stb/stb60
+    STB-60 dm88.  Renaming variables, multiply and systematically / STB insert
+    by Nicholas J. Cox, University of Durham, UK / Jeroen Weesie, Utrecht
+    University, Netherlands / Support:  n.j.cox@durham.ac.uk
+    j.weesie@fss.uu.nl / After installation, see help renvars
+
+cleanchars from http://fmwww.bc.edu/RePEc/bocode/c
+    'CLEANCHARS': module to replace specific characters or strings in variable
+    names and/or variable labels and/or string variable values and/or value
+    label names and levels with stated characters/strings (using 1-1 or m-1
+    match) / cleanchars is a program that helps out with replacing /
+
+renvarlab from http://fmwww.bc.edu/RePEc/bocode/r
+    'RENVARLAB': module to rename variables, with option of using variable
+    labels to create new variable names / This command is an extension of
+    renvars (also available from / SSC), which renames a list of variables by
+    applying the given / transformation to all of the variables. It has all of
+
+
+. 
+. // load in school vote data 
+. 
+. webuse school, clear
+
+. 
+. // outsheet dataset
+. 
+. outsheet using "school_data.csv", comma replace
+(note: file school_data.csv not found)
+
+. 
+. // insheet dataset
+. 
+. insheet using "school_data.csv", comma clear
+(11 vars, 95 obs)
+
+. 
+. // describe data
+. 
+. describe
+
+Contains data
+  obs:            95                          
+ vars:            11                          
+ size:         1,900                          
+-------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+-------------------------------------------------------------------------------------
+obs             byte    %8.0g                 
+pub12           byte    %8.0g                 
+pub34           byte    %8.0g                 
+pub5            byte    %8.0g                 
+private         byte    %8.0g                 
+years           byte    %8.0g                 
+school          byte    %8.0g                 
+loginc          float   %9.0g                 
+logptax         float   %9.0g                 
+vote            byte    %8.0g                 
+logeduc         float   %9.0g                 
+-------------------------------------------------------------------------------------
+Sorted by:  
+     Note:  dataset has changed since last saved
+
+. 
+. // labeling data 
+. 
+. label data "Voting on school expenditures"
+
+. 
+. // labeling variables 
+. 
+. label variable loginc "Log of income"
+
+. 
+. label variable vote "Voted for public school funding"
+
+. 
+. // describe again
+. 
+. describe
+
+Contains data
+  obs:            95                          Voting on school expenditures
+ vars:            11                          
+ size:         1,900                          
+-------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+-------------------------------------------------------------------------------------
+obs             byte    %8.0g                 
+pub12           byte    %8.0g                 
+pub34           byte    %8.0g                 
+pub5            byte    %8.0g                 
+private         byte    %8.0g                 
+years           byte    %8.0g                 
+school          byte    %8.0g                 
+loginc          float   %9.0g                 Log of income
+logptax         float   %9.0g                 
+vote            byte    %8.0g                 Voted for public school funding
+logeduc         float   %9.0g                 
+-------------------------------------------------------------------------------------
+Sorted by:  
+     Note:  dataset has changed since last saved
+
+. 
+. // labeling values within variables 
+. 
+. tab vote
+
+  Voted for |
+     public |
+     school |
+    funding |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |         36       37.89       37.89
+          1 |         59       62.11      100.00
+------------+-----------------------------------
+      Total |         95      100.00
+
+. 
+. label define voteopts 0 "no" 1 "yes"
+
+. 
+. label values vote voteopts
+
+. 
+. tab vote
+
+  Voted for |
+     public |
+     school |
+    funding |      Freq.     Percent        Cum.
+------------+-----------------------------------
+         no |         36       37.89       37.89
+        yes |         59       62.11      100.00
+------------+-----------------------------------
+      Total |         95      100.00
+
+. 
+. // transforming variables 
+. 
+. gen inc = exp(loginc)
+
+. 
+. sum loginc inc
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+      loginc |        95    9.971017    .4118853      8.294      10.82
+         inc |        95    23093.31     8871.35     3999.8   50011.07
+
+. 
+. // recoding variables
+. 
+. gen inc_bin = 0
+
+. 
+. replace inc_bin = 1 if inc > r(mean)
+(30 real changes made)
+
+. 
+. egen inc_q = cut(inc), group(4)
+
+. 
+. recode inc_q (0 = 1 "First Quartile") ///
+>     (1 = 2 "2nd Quartile") ///
+>     (2 = 3 "3rd Quartile") ///
+>     (3 = 4 "4th Quartile"), gen(new_inc_q)
+(95 differences between inc_q and new_inc_q)
+
+. 
+. // compute new variable
+. 
+. gen ptax = exp(logptax)
+
+. 
+. gen taxrate = ptax / inc
+
+. 
+. // end file
+. log close                               // close log
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_new/central/lessons/s1-01-introduction/stata_ba
+> sics.log
+  log type:  text
+ closed on:   4 Sep 2017, 15:22:28
+-------------------------------------------------------------------------------------

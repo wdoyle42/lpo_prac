@@ -1,0 +1,85 @@
+--------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_2017/central/lesso
+> ns/s1-06-sampling/2017-09-26-deltacostsubset_ad.log
+  log type:  text
+ opened on:   3 Oct 2017, 15:04:38
+
+. 
+. // NAME: Delta Cost Project Data Subset
+. // FILE: 2017-09-22-deltacostsubset_ad.do>
+. // AUTH: Amberly Dziesinski
+. // INIT: 2017-09-22
+. // LAST: 2017-09-26
+. 
+. clear all                      // clear memory
+
+. set more off                   // turn off annoying "_
+> _more__" feature
+
+. 
+. 
+. /* import Delta Cost data 
+> limit to public, 2yr, 4yr (no tecnical or specialized)
+>  
+>         sector: 
+>                 1 Public 4-year or above
+>                 4 Public 2-year
+>                 
+> limit vars to:
+> OPEID (unitid)
+> IPEDSID (unitid_linchpin)
+> Name (instname)
+> State (state)
+> Sector (sector)
+> FTE enrollment (has_fte)
+> Revenus from state, federal and private sources
+>         state03
+>         federal03
+>         private03
+> Provide totals at the state level for fte and revenues
+>  measures, for the full dataset
+> merge in the SHEFO data */
+. 
+. 
+. // set globals for entire file relative to the do file
+>  you are working in 
+. global workdir `c(pwd)' 
+
+. global datadir "../data/"
+
+. global delta_00_15 "../data/delta_public_release_00_15
+> " 
+
+. global delta_87_99 "../data/delta_public_release_87_99
+> "
+
+. 
+. // display globals
+. di "$workdir" 
+/Users/doylewr/practicum_2017/central/lessons/s1-06-samp
+> ling
+
+. di "$delta_00_15" 
+../data/delta_public_release_00_15
+
+. di "$delta_87_99" 
+../data/delta_public_release_87_99
+
+. 
+. use "$delta_87_99"
+file ../data/delta_public_release_87_99.dta not found
+r(601);
+
+end of do-file
+
+r(601);
+
+. cd "/Users/doylewr/volatility/scripts"
+/Users/doylewr/volatility/scripts
+
+. do "/Users/doylewr/volatility/scripts/2017-09-26-delta
+> costsubset_ad.do"
+
+. capture log close                           // closes 
+> any logs, should they be open

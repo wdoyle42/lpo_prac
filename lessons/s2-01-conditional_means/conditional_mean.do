@@ -197,9 +197,12 @@ else use ${ddir}plans2.dta, clear
 
 //Using the mean as a prediction
 
+scalar drop _all
+
 sort byses1
 
 graph twoway scatter bynels2m byses1, msize(vtiny)
+
 
 /* Predict using the mean */
 egen uncond_mean=mean(bynels2m)
@@ -227,6 +230,7 @@ graph export "uncond_mean.`gtype'", replace
 reg bynels2m 
 
 scalar li uncond_mean_rmse
+
 
 //Above average vs. below average 
 
@@ -256,9 +260,11 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
 
 graph export "cond_mean2.`gtype'", replace
 
+
+
 // Or . . .
 
-reg sesq2
+reg bynels2m sesq2
 
 
 /*Conditional mean by Quartiles*/
@@ -269,7 +275,7 @@ egen cond_mean4=mean(bynels2m), by(sesq4)
 
 gen cond_mean4_error=bynels2m-cond_mean4
 
-gen cond_mean4_error_sq=cond_mean4_error*cond_mean2_error
+gen cond_mean4_error_sq=cond_mean4_error*cond_mean4_error
 
 quietly sum cond_mean4_error_sq
 
@@ -285,8 +291,25 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
              (line cond_mean4 byses1,lcolor(yellow)), ///    
              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups" 4 "Conditional Mean, 4 Groups") )
 
-
 graph export "cond_mean4.`gtype'", replace
+
+egen read_mean4=mean(bynels2r), by(sesq4)
+
+// Conditional mean for reading scores
+gen read_mean4_error=bynels2r-cond_mean4
+
+gen read_mean4_error_sq=read_mean4_error*read_mean4_error
+
+quietly sum read_mean4_error_sq
+
+scalar read_mean4_mse=r(mean)
+
+scalar read_mean4_rmse=sqrt(read_mean4_mse)
+
+graph twoway (scatter bynels2r byses1,msize(vtiny) mcolor(black)) ///
+             (line read_mean4 byses1,lcolor(yellow)), ///    
+             legend(order(2  "Conditional Mean, 4 Groups") )
+
 
 /*Conditional means across Deciles*/
 
@@ -294,7 +317,7 @@ egen sesq10=cut(byses1), group(10)
 
 egen cond_mean_10_math=mean(bynels2m), by(sesq10)
 
-gen cond_mean10_error=bynels2r-cond_mean_10
+gen cond_mean10_error=bynels2m-cond_mean_10
 
 gen cond_mean10_error_sq=cond_mean10_error*cond_mean10_error
 
@@ -315,7 +338,10 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
 
 graph export "cond_mean10.`gtype'", replace
 
+// Conditional mean by ses and sex
 
+//egen cond_mean_10_bysex= mean(bynels2m), by(sesq10 bysex)
+ 
 /*Plotting conditional means for policy audiences*/
 
 scalar n=_N/10
@@ -339,7 +365,6 @@ graph twoway (bar math_cond_mean sesq10, horizontal  ) ||  ///
 graph export "horiz10.`gtype'", replace
 			 
 restore
-
 
 /*Conditional Mean: Regression*/
 
@@ -368,6 +393,6 @@ graph export "regress.`gtype'", replace
 
 scalar li
 
-
+exit 
 
 

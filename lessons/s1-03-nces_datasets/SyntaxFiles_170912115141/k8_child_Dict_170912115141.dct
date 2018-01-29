@@ -1,0 +1,6 @@
+dictionary using "C:\EDAT\ECLSK_98_99_K8_CHILD_v1_0.dat" {
+
+_column(1)     str8 CHILDID   %8s       "CHILD IDENTIFICATION NUMBER"
+_column(4350)  long C1SPHOME  %1.0f     "C1 SPEAK SPANISH AT HOME"
+
+}
