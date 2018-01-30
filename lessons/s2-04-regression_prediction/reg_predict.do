@@ -1,11 +1,11 @@
-version 13
+version 14
 capture log close
 log using "reg_predictlog",replace
 
-/* PhD Practicum, Spring 2017 */
+/* PhD Practicum, Spring 2018 */
 /* Using Prediction to Interpret Regressions */
 /* Will Doyle*/
-/* 2/7/17 */
+/* 1/30/18 */
 
 clear
 
@@ -130,7 +130,6 @@ predict yhat, xb
 //Get SE of prediction
 predict yhat_se,stdp
 
-
 // Generate Prediction interval 
 gen low_ci=yhat-(`myt'*yhat_se)
 gen hi_ci=yhat+(`myt'*yhat_se)
@@ -147,7 +146,7 @@ graph twoway scatter `y' `x',msize(small) mcolor(blue)  ///
   || line hi_ci `x', lcolor(red) lpattern(dash) ///
   || line low_ci_90 `x', lcolor(yellow) lpattern(dash) ///
   || line hi_ci_90 `x', lcolor(yellow) lpattern(dash) ///
-      legend( order(1 "Math score" 2 "Prediction" 3 "95% Confidence Interval" 5 "90% COnfidence Interval")) ///
+      legend( order(1 "Math score" 2 "Prediction" 3 "95% Confidence Interval" 5 "90% Confidence Interval")) ///
       name(basic_predict)
 
 graph export basic_predict.`gtype', replace
@@ -225,83 +224,6 @@ graph twoway line pred12 pred13 || ///
 graph export ci_predict95.`gtype', replace 
 
 drop pred11 pred12 pred13
-
-// Expenditures per student
-
-local x expn_stu_t
-
-// Use summary to get min and max of key IV    
-sum `x', detail
-
-local mymin=r(min)
-local mymax=r(max)
-
-
-estimates restore basic_controls
-
-local dfr=e(df_r)
-
-#delimit ;
-margins , /* init margins */
-    predict(xb) /* Type of prediction */
-    nose /* Don't give SE */
-    at( (mean) /* Precition at mean of all variables */
-    `controls' /* Set controls at mean */
-    `x'=(`mymin'(.1)`mymax'))  /*range from min to max of x in steps of .1 */
-     post  /* Post results in matrix form */
-         ;
-#delimit cr
-
-// Pull results
-mat xb=e(b)
-
-// store x values used to generate predictions
-mat allx=e(at)
-
-// store just x values from that matrix
-matrix myx=allx[1...,1]'
-
-// Bring back in regression results
-estimates restore basic_controls
-
-// Run margins again, but this time get standard error of prediction as output
-margins , predict(stdp) nose at(`x'=(`mymin'(.1)`mymax') (mean) `controls') post
-
-//Grab standard error of prediction
-mat stdp=e(b)
-
-//Put three matrices together: standard error, prediction, and values of x: transpose 
-mat pred1=[stdp \ xb\ myx]'
-
-//Put matrix in data 
-svmat pred1
-
-//Generate
-generate lb = pred12 - (`myt' * pred11) /*Prediction minus t value times SE */
-generate ub = pred12 + (`myt'* pred11) /*Prediction plus t value times SE */
-
-/*Plot Simple Prediction */
-
-graph twoway line pred12 pred13, ///
-    xtitle("Hypothetical Values of Student-Teacher Ratio") ///
-    ytitle("Predicted Values of Math Test Scores") ///
-    name(basic_predict_margins)
-
-graph export basic_predict.`gtype', replace 
-
-/*Plot Prediction with CI*/
-
-graph twoway line pred12 pred13 || ///
-    line lb pred13,lcolor(red) || ///
-    line ub pred13,lcolor(red) ///
-    xtitle("Hypothetical Values of Student Teacher Ratio ") ///
-    ytitle("Predicted Values of Math Test Scores") ///
-    legend(order(1 "Predicted Value" 2 "Lower/Upper Bound 95% CI" )) ///
-    name(ci_predict95) 
-
-graph export ci_predict95_exp.`gtype', replace 
-
-exit 
 /*Or: Marginsplaot */
 
 estimates restore basic_controls
@@ -318,16 +240,17 @@ margins , /* init margins */
          ;
 #delimit cr
 
-marginsplot , recast(line) plotopts(lcolor(black)) recastci(rarea) ci1opts(color(gs(10)))
-}
-exit
+marginsplot , recast(line) plotopts(lcolor(black)) recastci(rarea)  
 
-/* End first part */
+}/* End first part */
 
 if `second_part'==1{
 
 /*Prediction vs. forecasting*/
 
+    drop yhat* *ci
+             
+    
 estimates restore basic
 predict yhat, xb
 predict yhat_se,stdp
@@ -349,7 +272,7 @@ graph twoway scatter `y' `x',msize(small) mcolor(blue)  ///
   || line hi_ci_f `x', lcolor(green) lpattern (dash) ///
     legend( order(1 "Math score" 2 "Prediction" 3 "95% Confidence Interval, Prediction" 5 "95% Confidence Interval, Forecast"))
 
-graph export predictvforecast.`gtype'
+graph export predictvforecast.`gtype', replace
 
 gen outside=`y' < low_ci_f | `y' >hi_ci_f
 

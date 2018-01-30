@@ -1,6 +1,6 @@
 ---
 title: Regression Prediction
-author: LPO 9952 | Spring 2017
+author: LPO 9952 | Spring 2018
 output: github_document
 ---
 
@@ -12,11 +12,9 @@ source('../../r/stataknitrhelper.r')
 opts_chunk$set(echo = FALSE, message = FALSE, comment = NA)
 ```
 
-Vanderbilt University
-Leadership, Policy and Organizations Class Number 9952
-Spring 2016
-Using Prediction to Understand Regression
-Too often, analysts consider the analysis done when they’ve run a regression and then re- ported some tables. You should consider reporting your parameter estimates as the start of your report, not the end. In aprticular, you should think about what your results predict. The point of almost all policy anlaysis is to predict what would happen to the dependent variable if the indpendent variable changed. This is the essence of prediction.
+
+Too often, analysts consider the analysis done when they’ve run a regression and then reported some tables. You should consider reporting your parameter estimates as the start of your report, not the end. In particular, you should think about what your results predict. The point of almost all policy anlaysis is to predict what would happen to the dependent variable if the indpendent variable changed. This is the essence of prediction.
+
 You’ll want to use prediction for several different purposes, each of which we’ll go through.
 • Toshowhowwellthemodelpredictsthedatausedtoestimateparameters • Tomakeout-ofsamplepredictionsusingtheregressionline.
 • Toforecastresultsforindividualsinsample
