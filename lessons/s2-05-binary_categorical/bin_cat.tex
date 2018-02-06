@@ -25,11 +25,11 @@
 
 
 \begin{flushleft}
-Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9952\\ Spring 2017
+Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9952\\ Spring 2018
 \end{flushleft}
 
 \begin{center}
-\textbf{Binary and Cateogrical Variables}
+\textbf{Binary and Categorical Variables}
 \end{center}
 
 
@@ -178,7 +178,22 @@ Number of PSUs     =       751                  Population size    =   2908622
 
 \end{stlog}
 
+This gives us a properly formatted table, like so
 
+
+
+\begin{table}
+  \centering
+  \caption{Results of OLS, Dependent Variable= Math Scores}
+  \include{order1}
+\end{table}
+
+\subsection{Quick Exercise}
+\label{sec:quick-exercise}
+
+Run the above regression, but use parental education as a
+predictor. Create a properly formatted table with parental education
+as a categorical variable. 
 
 \section{Reference Categories for Categorical Variables}
 
@@ -252,6 +267,21 @@ No Plans/DK  |  -.0899849   .0054533   -16.50   0.000    -.1007065   -.0792633
 . 
 \end{stlog}
 
+
+\begin{table}
+  \centering
+  \caption{Results of OLS, Dependent Variable= Math Scores}
+  \include{order2}
+\end{table}
+
+
+\subsection{Quick Exercise}
+\label{sec:quick-exercise-1}
+
+Run the regression above, but include parental education. This time,
+output the results with some college as the reference category for
+parental education. 
+
 \section{Interactions}
 
 When interacting a binary variable with a categorical variable, you
@@ -259,17 +289,8 @@ must do the FULL interaction-- you can't just interact with one
 level. Same thing applies to continuous variables. 
 
 
-\section{Using Margins}
-
-Once you're undertaking interactions with categorical variables, it's
-generally a good idea to interpret them using the margins command. In
-the below code I use margins to interpret the interaction between a
-categorical and a binary variable and to make a table with confidence
-intervals from the output. 
-
-
 \begin{stlog}
-
+ 
 . // Factor notation, interaction
 . 
 . //Proper factor notation: setting base levels
@@ -278,36 +299,35 @@ intervals from the output.
 
 Survey: Linear regression
 
-Number of strata   =       361                  Number of obs      =     14561
-Number of PSUs     =       751                  Population size    =   2908622
-                                                Design df          =       390
-                                                F(   6,    385)    =    436.30
-                                                Prob > F           =    0.0000
-                                                R-squared          =    0.2508
+Number of strata   =       361                  Number of obs     =     14,561
+Number of PSUs     =       751                  Population size   =  2,908,622
+                                                Design df         =        390
+                                                F(   6,    385)   =     436.30
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2508
 
---------------------------------------------------------------------------------
-               |             Linearized
-      bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
----------------+----------------------------------------------------------------
-    order_plan |
-  No Plans/DK  |  -.0852546   .0068928   -12.37   0.000    -.0988062   -.0717029
-    Votech/CC  |  -.0712396   .0038389   -18.56   0.000    -.0787872   -.0636921
-               |
-      1.female |  -.0190811   .0031363    -6.08   0.000    -.0252473   -.0129149
-               |
-    order_plan#|
-        female |
-No Plans/DK#1  |  -.0140878   .0101094    -1.39   0.164    -.0339636     .005788
-  Votech/CC#1  |   -.002454   .0051646    -0.48   0.635    -.0126079    .0076999
-               |
-        byses1 |   .0629263   .0020983    29.99   0.000      .058801    .0670516
-         _cons |   .4938647   .0029628   166.69   0.000     .4880397    .4996898
---------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+                  |             Linearized
+         bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+------------------+----------------------------------------------------------------
+       order_plan |
+  ---No Plans/DK  |  -8.525456   .6892792   -12.37   0.000    -9.880624   -7.170288
+    ---Votech/CC  |  -7.123964   .3838901   -18.56   0.000    -7.878717   -6.369211
+                  |
+         1.female |  -1.908111   .3136299    -6.08   0.000    -2.524728   -1.291494
+                  |
+order_plan#female |
+---No Plans/DK#1  |  -1.408776   1.010942    -1.39   0.164    -3.396355    .5788024
+  ---Votech/CC#1  |  -.2453994   .5164566    -0.48   0.635    -1.260787    .7699881
+                  |
+           byses1 |   6.292627   .2098255    29.99   0.000     5.880097    6.705158
+            _cons |   49.38647   .2962783   166.69   0.000     48.80397    49.96898
+-----------------------------------------------------------------------------------
 
 . 
-. esttab order3 using order3.rtf, varwidth(50) ///
->     refcat(1.order_plan "College Plans, Reference=Plans to go to College:" 1.orde
-> r_plan#1.female "Interaction of Plans with Female:", nolabel) ///
+. esttab order3 using order3.`ttype', varwidth(50) ///
+>     refcat(1.order_plan "College Plans, Reference=Plans to go to College:" 1.order_plan#1.female "In
+> teraction of Plans with Female:", nolabel) ///
 >  interaction(" X ") ///
 >    label ///
 >                    nomtitles ///
@@ -320,10 +340,24 @@ No Plans/DK#1  |  -.0140878   .0101094    -1.39   0.164    -.0339636     .005788
 >                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
 >                sfmt (2 0 0 0)               ///
 >                replace                 
-(output written to order3.rtf)
+(output written to order3.tex)
 
-. 
-. 
+\end{stlog}
+
+
+\include{order3}
+
+\section{Using Margins}
+
+Once you're undertaking interactions with categorical variables, it's
+generally a good idea to interpret them using the margins command. In
+the below code I use margins to interpret the interaction between a
+categorical and a binary variable and to make a table with confidence
+intervals from the output. 
+
+
+\begin{stlog}
+
 . // Margins to figure out what's going on
 . margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1)) post
 
@@ -382,5 +416,20 @@ Expression   : Linear prediction, predict(xb)
 
 
 \end{stlog}
+
+
+
+\begin{table}
+  \centering
+  \caption{Predicted Math Scores by College Plans and Sex}
+  \include{margins}
+\end{table}
+
+
+\subsection{Quick Exercise}
+Again include parental education, and generate predicted probabilities
+using the margins command. Then go back and choose a different
+reference category. Does a different reference category result in
+different predicted probablities? 
 
 \end{document}

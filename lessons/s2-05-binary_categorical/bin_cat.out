@@ -1,6 +1,9 @@
 \BOOKMARK [1][-]{section*.1}{Coding}{}% 1
 \BOOKMARK [1][-]{section*.2}{Binary Variables}{}% 2
 \BOOKMARK [1][-]{section*.3}{Categorical Variables}{}% 3
-\BOOKMARK [1][-]{section*.4}{Reference Categories for Categorical Variables}{}% 4
-\BOOKMARK [1][-]{section*.5}{Interactions}{}% 5
-\BOOKMARK [1][-]{section*.6}{Using Margins}{}% 6
+\BOOKMARK [2][-]{section*.4}{Quick Exercise}{section*.3}% 4
+\BOOKMARK [1][-]{section*.5}{Reference Categories for Categorical Variables}{}% 5
+\BOOKMARK [2][-]{section*.6}{Quick Exercise}{section*.5}% 6
+\BOOKMARK [1][-]{section*.7}{Interactions}{}% 7
+\BOOKMARK [1][-]{section*.8}{Using Margins}{}% 8
+\BOOKMARK [2][-]{section*.9}{Quick Exercise}{section*.8}% 9

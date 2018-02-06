@@ -1,0 +1,42 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{1}{c}}
+\hline\hline
+                                                  &\multicolumn{1}{c}{(1)}         \\
+\hline
+College Plans, Reference=Plans to go to College:  &                     \\
+[1em]
+---No Plans/DK                                    &      -8.525\sym{***}\\
+                                                  &     (0.689)         \\
+[1em]
+---Votech/CC                                      &      -7.124\sym{***}\\
+                                                  &     (0.384)         \\
+[1em]
+Female=1                                          &      -1.908\sym{***}\\
+                                                  &     (0.314)         \\
+[1em]
+Interaction of Plans with Female:                 &                     \\
+[1em]
+---No Plans/DK X Female=1                         &      -1.409         \\
+                                                  &     (1.011)         \\
+[1em]
+---Votech/CC X Female=1                           &      -0.245         \\
+                                                  &     (0.516)         \\
+[1em]
+SES                                               &       6.293\sym{***}\\
+                                                  &     (0.210)         \\
+[1em]
+Constant                                          &      49.386\sym{***}\\
+                                                  &     (0.296)         \\
+\hline
+Observations                                      &       14561         \\
+\(R^{2}\)                                         &        0.25         \\
+Adjusted \(R^{2}\)                                &                     \\
+F                                                 &      436.30         \\
+DF model                                          &           6         \\
+DF residual                                       &         390         \\
+\hline\hline
+\multicolumn{2}{l}{\footnotesize Standard errors in parentheses}\\
+\multicolumn{2}{l}{\footnotesize \sym{*} \(p<0.05\), \sym{**} \(p<0.01\), \sym{***} \(p<0.001\)}\\
+\end{tabular}
+}

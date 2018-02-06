@@ -1,6 +1,6 @@
 capture log close
 
-log using "bin_cat.log", replace
+log using "bin_cat_stata.log", replace
 
 // Working with binary and cateogrical independent variables
 // Will Doyle
@@ -22,7 +22,9 @@ global ddir "../../data/"
 
 local y bynels2m 
 
-local controls byses1 
+local controls byses1
+
+local ttype tex
 
 /**************************************************/
 /* Coding */
@@ -185,7 +187,7 @@ eststo order1: svy: reg `y' order_plan
 eststo order1: svy: reg `y' i.order_plan byses1 female
 
 
-esttab order1 using order1.rtf,  varwidth(50) label  ///
+esttab order1 using order1.`ttype',  varwidth(50) label  ///
 				nobaselevels ///
                nodepvars              ///
                    b(3)                   ///
@@ -197,7 +199,7 @@ esttab order1 using order1.rtf,  varwidth(50) label  ///
                replace                   
 			   
 			   
-esttab order1 using order1.rtf,  varwidth(50) label  ///
+esttab order1 using order1.`ttype',  varwidth(50) label  ///
     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know",nolabel) ///
         nobaselevels ///
                nomtitles ///
@@ -214,7 +216,7 @@ esttab order1 using order1.rtf,  varwidth(50) label  ///
 //Proper factor notation
 eststo order1: svy: reg `y' i.order_plan i.bymothed2 byses1 female
 
-esttab order1 using order1a.rtf,  varwidth(50) label  ///
+esttab order1 using order1a.`ttype',  varwidth(50) label  ///
     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know" 2.bymothed2 "Mother's Education, Ref= Less than HS"  ,nolabel) ///
         nobaselevels ///
                nomtitles ///
@@ -227,14 +229,13 @@ esttab order1 using order1a.rtf,  varwidth(50) label  ///
                sfmt (2 0 0 0)               ///
                replace                   
 			   
-			   
-exit 
+			  
 			   
 
 //Proper factor notation: setting base levels
 eststo order2: svy: reg `y' ib(freq).order_plan byses1 female
 
-esttab order2 using order2.rtf,  varwidth(50) label  ///
+esttab order2 using order2.`ttype',  varwidth(50) label  ///
                nodepvars              ///
                    b(3)                   ///
                 se(3)                     ///       
@@ -245,7 +246,7 @@ esttab order2 using order2.rtf,  varwidth(50) label  ///
                replace                   
 
 
-esttab order2 using order2.rtf,  varwidth(50)   ///
+esttab order2 using order2.`ttype',  varwidth(50)   ///
     refcat(1.order_plan "College Plans, Reference=Plans to go to College",nolabel) ///
         label ///
                    nomtitles ///
@@ -266,7 +267,7 @@ margins, predict(xb) at((mean) byses1 order_plan=(1 2 3)) post
 //Proper factor notation: setting base levels
 eststo order3: svy: reg `y' b3.order_plan##i.female byses1
 
-esttab order3 using order3.rtf, varwidth(50) ///
+esttab order3 using order3.`ttype', varwidth(50) ///
     refcat(1.order_plan "College Plans, Reference=Plans to go to College:" 1.order_plan#1.female "Interaction of Plans with Female:", nolabel) ///
  interaction(" X ") ///
    label ///
@@ -285,7 +286,7 @@ esttab order3 using order3.rtf, varwidth(50) ///
 // Margins to figure out what's going on
 margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1)) post
 
-esttab . using margins.rtf , margin label nostar ci ///
+esttab . using margins.`ttype' , margin label nostar ci ///
     varlabels(1._at "No College Plans, Male" ///
                   2._at "No College Plans, Female" ///
                       3._at "Vo-Tech/Community College, Male" ///
