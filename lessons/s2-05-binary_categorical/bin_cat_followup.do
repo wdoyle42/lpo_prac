@@ -1,13 +1,15 @@
 capture log close
 
-log using "bin_cat.log", replace
+log using "bin_cat_stata.log", replace
 
 // Working with binary and cateogrical independent variables
 // Will Doyle
-// 2/21/2017
+// 2018-01-29
 // Practicum repo on github
 
 // TOC
+
+graph drop _all
 
 local coding=1
 
@@ -15,14 +17,15 @@ local regression=1
 
 local margins=1
 
-
 //locals
 
 global ddir "../../data/"
 
 local y bynels2m 
 
-local controls byses1 
+local controls byses1
+
+local ttype rtf
 
 /**************************************************/
 /* Coding */
@@ -181,11 +184,12 @@ tab order_plan
 // NOPE!
 eststo order1: svy: reg `y' order_plan
 
+
 //Proper factor notation
 eststo order1: svy: reg `y' i.order_plan byses1 female
 
 
-esttab order1 using order1.rtf,  varwidth(50) label  ///
+esttab order1 using order1.`ttype',  varwidth(50) label  ///
 				nobaselevels ///
                nodepvars              ///
                    b(3)                   ///
@@ -196,8 +200,9 @@ esttab order1 using order1.rtf,  varwidth(50) label  ///
                sfmt (2 0 0 0)               ///
                replace                   
 			   
+
 			   
-esttab order1 using order1.rtf,  varwidth(50) label  ///
+esttab order1 using order1.`ttype',  varwidth(50) label  ///
     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know",nolabel) ///
         nobaselevels ///
                nomtitles ///
@@ -210,12 +215,35 @@ esttab order1 using order1.rtf,  varwidth(50) label  ///
                sfmt (2 0 0 0)               ///
                replace                   
 
+/*
+1  did not finish high school
+                         3,044         2  graduated from high school or
+                                          ged
+                         1,663         3  attended 2-year school, no
+                                          degree
+                         1,597         4  graduated from 2-year school
+                         1,758         5  attended college, no 4-year
+                                          degree
+                         3,466         6  graduated from college
+                         1,785         7  completed master^s degree or
+                                          equivalent
+                         1,049         8  completed phd, md, other
+                                          advanced degree
+                           856         .  
 
-//Proper factor notation
-eststo order1: svy: reg `y' i.order_plan i.bymothed2 byses1 female
+*/
 
-esttab order1 using order1a.rtf,  varwidth(50) label  ///
-    refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know" 2.bymothed2 "Mother's Education, Ref= Less than HS" ,nolabel) ///
+
+recode bypared (1=1 )(2=2 ) (3 5=3) (4=4) (6=5) (7/8=6), gen(pared_level)			   
+label define ed_levels 1 "---LT HS" 2 "---HS" 3  "---Some College" 4 "---2yr Degree" 5 "---Bachelors" 6 "---Graduate"
+label values pared_level ed_levels			   
+			   
+eststo order_pared: svy: reg `y' i.order_plan i.pared_level  female
+
+esttab order_pared using order1.`ttype',  varwidth(50) label  ///
+    refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know" ///
+	2.pared_level "Parental Education, Reference= Less than HS", ///
+	nolabel) ///
         nobaselevels ///
                nomtitles ///
                nodepvars              ///
@@ -226,11 +254,12 @@ esttab order1 using order1a.rtf,  varwidth(50) label  ///
                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
                sfmt (2 0 0 0)               ///
                replace                   
-						   
+			   
 //Proper factor notation: setting base levels
-eststo order2: svy: reg `y' ib(last).order_plan byses1 female
+eststo order2: svy: reg `y' ib(freq).order_plan byses1 female
 
-esttab order2 using order2.rtf,  varwidth(50) label  ///
+
+esttab order2 using order2.`ttype',  varwidth(50) label  ///
                nodepvars              ///
                    b(3)                   ///
                 se(3)                     ///       
@@ -240,13 +269,11 @@ esttab order2 using order2.rtf,  varwidth(50) label  ///
                sfmt (2 0 0 0)               ///
                replace                   
 
-eststo order2: svy: reg `y' ib(freq).order_plan  ib(freq).bymothed2 byses1 female			   
-
-esttab order2 using order2a.rtf,  varwidth(50)   ///
-    refcat(1.order_plan "College Plans, Reference=Plans to go to College" 1.bymothed2 "Mother's Education, Ref= Some College" ,nolabel) ///
+esttab order2 using order2.`ttype',  varwidth(50)   ///
+    refcat(1.order_plan "College Plans, Reference=Plans to go to College",nolabel) ///
         label ///
-                   nomtitles ///
-                       nobaselevels ///
+         nomtitles ///
+         nobaselevels ///
                nodepvars              ///
                 b(3)                   ///
                 se(3)                     ///       
@@ -255,19 +282,38 @@ esttab order2 using order2a.rtf,  varwidth(50)   ///
                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
                sfmt (2 0 0 0)               ///
                replace                   
-			   
-			   
-			   
+
 margins, predict(xb) at((mean) byses1 order_plan=(1 2 3)) post
+
+eststo order2: svy: reg `y' ib(freq).order_plan female ib3.pared_level
+
+esttab order2 using order2.`ttype',  varwidth(50)   ///
+    refcat(1.order_plan "College Plans, Reference=Plans to go to College" ///
+			1.pared_level "Parental Education, Reference= Some College" ///
+			,nolabel) ///
+         label ///
+         nomtitles ///
+         nobaselevels ///
+               nodepvars              ///
+                b(3)                   ///
+                se(3)                     ///       
+               r2 (2)                    ///
+               ar2 (2)                   ///
+               scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+               sfmt (2 0 0 0)               ///
+               replace                   
+
 
 // Factor notation, interaction
 
 //Proper factor notation: setting base levels
-eststo order3: svy: reg `y' ib(3).order_plan##i.female byses1
+eststo order3:  reg `y' b3.order_plan##i.female byses1
 
-esttab order3 using order3.rtf, varwidth(50) ///
+
+
+esttab order3 using order3.`ttype', varwidth(50) ///
     refcat(1.order_plan "College Plans, Reference=Plans to go to College:" 1.order_plan#1.female "Interaction of Plans with Female:", nolabel) ///
-	interaction(" X ") ///
+ interaction(" X ") ///
    label ///
                    nomtitles ///
                        nobaselevels ///
@@ -280,83 +326,52 @@ esttab order3 using order3.rtf, varwidth(50) ///
                sfmt (2 0 0 0)               ///
                replace                 
 
-eststo order3a: svy: reg `y' ib(3).order_plan##ib(freq).bymothed2##i.female byses1
+estimates restore order3
 
-esttab order3a using order3a.rtf, varwidth(50) ///
-    refcat(1.order_plan "College Plans, Reference=Plans to go to College:"  ///
-			1.order_plan#1.female "Interaction of Plans with Female:" ///
-			1.bymothed2 "Mother's Education, Ref= Some College" ///
-			1.bymothed2#1.female "Interaction of Mother's Education with Female"	///
-			1.order_plan#1.bymothed2#1.female   "Interaction of Plans, Mother's Education, and Female" ///
-			, nolabel) ///
-		interaction(" X ") ///
-   label ///
-                   nomtitles ///
-                       nobaselevels ///
-               nodepvars              ///
-                b(3)                   ///
-                se(3)                     ///       
-               r2 (2)                    ///
-               ar2 (2)                   ///
-               scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
-               sfmt (2 0 0 0)               ///
-               replace 
+// Margins to figure out what's going on
+eststo marg_predict: margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1)) post
 
-			   
-esttab order3a using order3b.rtf, varwidth(50) ///
-    refcat(1.order_plan "College Plans, Reference=Plans to go to College:"  ///
-			1.order_plan#1.female "Interaction of Plans with Female:" ///			
-			, nolabel) ///
-	interaction(" X ") ///
-	indicate("Mother's Education & Interactions"=*.bymothed*) ///
-   label ///
-                   nomtitles ///
-                       nobaselevels ///
-               nodepvars              ///
-                b(3)                   ///
-                se(3)                     ///       
-               r2 (2)                    ///
-               ar2 (2)                   ///
-               scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
-               sfmt (2 0 0 0)               ///
-               replace     
-			   
+mat pred=e(b)
+mat var= e(V)
+mat var_diag=vecdiag(var)
+
+esttab . using margins.`ttype' , margin label nostar ci ///
+    varlabels(1._at "No College Plans, Male" ///
+                  2._at "No College Plans, Female" ///
+                      3._at "Vo-Tech/Community College, Male" ///
+                          4._at "Vo-Tech/Community College, Female" ///
+                              5._at "Four-Year College Plans, Male" ///
+                                  6._at "Four-Year College Plans, Female" ) ///
+        replace 
 		
+// fairly lame
+marginsplot, name(margins_1)
+
+// less lame
+
+marginsplot, recast(scatter) ciopts(recast(rspike)) name(margins_2)
+
+// ??
+marginsplot, recast(bar) plotopts()
 
 estimates restore order3
-			   
+
+
+eststo order4: svy: reg bynels2m ib2.order_plan##i.female i.pared_level##i.female
+
+
 // Margins to figure out what's going on
-margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1)) post
-
-esttab . using margins.rtf , margin label nostar ci ///
-    varlabels(1._at "No College Plans, Male" ///
-                  2._at "No College Plans, Female" ///
-                      3._at "Vo-Tech/Community College, Male" ///
-                          4._at "Vo-Tech/Community College, Female" ///
-                              5._at "Four-Year College Plans, Male" ///
-                                  6._at "Four-Year College Plans, Female" ) ///
-        replace
+foreach i of numlist 1/3{
+estimates restore order4
+eststo marg_predict_`i' : margins, predict(xb) at((mean) order_plan=(`i') pared_level= (1 2 3 4 5 6) female=(0 1)) post
+}
 
 
+esttab marg_predict_? using overly_complex.`ttype' , margin label nostar ci ///
+    replace 
 
-eststo order3a: svy: reg `y' ib(3).order_plan##ib(freq).bymothed2##i.female byses1
 
-eststo marg1:margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1) bymothed=2 ) post		
-
-estimates restore order3a
-
-eststo marg2:margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1) bymothed=4 ) post		
-		
-esttab marg1 marg2 using margins.rtf , margin label nostar ci ///
-    varlabels(1._at "No College Plans, Male" ///
-                  2._at "No College Plans, Female" ///
-                      3._at "Vo-Tech/Community College, Male" ///
-                          4._at "Vo-Tech/Community College, Female" ///
-                              5._at "Four-Year College Plans, Male" ///
-                                  6._at "Four-Year College Plans, Female" ) ///
-        replace		
-		
-marginsplot, recast(bar) by(female) xtitle("") subtitle("Male") subtitle("Female")
 
 log close
+
 exit
