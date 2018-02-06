@@ -1,8 +1,8 @@
-------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
       name:  <unnamed>
        log:  /Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat_stata.log
   log type:  text
- opened on:   6 Feb 2018, 12:31:18
+ opened on:   6 Feb 2018, 14:23:26
 
 . 
 . // Working with binary and cateogrical independent variables
@@ -21,7 +21,6 @@
 . local margins=1
 
 . 
-. 
 . //locals
 . 
 . global ddir "../../data/"
@@ -33,7 +32,7 @@
 . local controls byses1
 
 . 
-. local ttype tex
+. local ttype rtf
 
 . 
 . /**************************************************/
@@ -406,6 +405,7 @@ Number of PSUs     =       751                  Population size   =  3,055,918
 ------------------------------------------------------------------------------
 
 . 
+. 
 . //Proper factor notation
 . eststo order1: svy: reg `y' i.order_plan byses1 female
 (running regress on estimation sample)
@@ -444,9 +444,10 @@ Number of PSUs     =       751                  Population size   =  2,908,622
 >                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
 >                sfmt (2 0 0 0)               ///
 >                replace                   
-(output written to order1.tex)
+(output written to order1.rtf)
 
 .                            
+. 
 .                            
 . esttab order1 using order1.`ttype',  varwidth(50) label  ///
 >     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know",nolabel) ///
@@ -460,12 +461,38 @@ Number of PSUs     =       751                  Population size   =  2,908,622
 >                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
 >                sfmt (2 0 0 0)               ///
 >                replace                   
-(output written to order1.tex)
+(output written to order1.rtf)
 
 . 
+. /*
+> 1  did not finish high school
+>                          3,044         2  graduated from high school or
+>                                           ged
+>                          1,663         3  attended 2-year school, no
+>                                           degree
+>                          1,597         4  graduated from 2-year school
+>                          1,758         5  attended college, no 4-year
+>                                           degree
+>                          3,466         6  graduated from college
+>                          1,785         7  completed master^s degree or
+>                                           equivalent
+>                          1,049         8  completed phd, md, other
+>                                           advanced degree
+>                            856         .  
+> 
+> */
 . 
-. //Proper factor notation
-. eststo order1: svy: reg `y' i.order_plan i.bymothed2 byses1 female
+. 
+. recode bypared (1=1 )(2=2 ) (3 5=3) (4=4) (6=5) (7/8=6), gen(pared_level)                          
+(8058 differences between bypared and pared_level)
+
+. label define ed_levels 1 "---LT HS" 2 "---HS" 3  "---Some College" 4 "---2yr Degree" 5 "---Bachelor
+> s" 6 "---Graduate"
+
+. label values pared_level ed_levels                         
+
+.                            
+. eststo order_pared: svy: reg `y' i.order_plan i.pared_level  female
 (running regress on estimation sample)
 
 Survey: Linear regression
@@ -473,32 +500,34 @@ Survey: Linear regression
 Number of strata   =       361                  Number of obs     =     14,561
 Number of PSUs     =       751                  Population size   =  2,908,622
                                                 Design df         =        390
-                                                F(   7,    384)   =     384.50
+                                                F(   8,    383)   =     243.13
                                                 Prob > F          =     0.0000
-                                                R-squared         =     0.2522
+                                                R-squared         =     0.2016
 
--------------------------------------------------------------------------------------
-                    |             Linearized
-           bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
---------------------+----------------------------------------------------------------
-         order_plan |
-      ---Votech/CC  |   1.812286   .5314466     3.41   0.001     .7674273    2.857145
-      ---Four Year  |    9.07079   .5424563    16.72   0.000     8.004286    10.13729
-                    |
-          bymothed2 |
-             ---HS  |   1.358285   .5034555     2.70   0.007     .3684583    2.348111
-   ---Some College  |   .1084834   .5241018     0.21   0.836    -.9219349    1.138902
----College or More  |   .4193892    .649304     0.65   0.519    -.8571849    1.695963
-                    |
-             byses1 |   6.406699   .2902276    22.07   0.000     5.836092    6.977305
-             female |  -2.097979   .2648312    -7.92   0.000    -2.618654   -1.577303
-              _cons |   39.90187    .644805    61.88   0.000     38.63414     41.1696
--------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+                 |             Linearized
+        bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-----------------+----------------------------------------------------------------
+      order_plan |
+   ---Votech/CC  |   1.867231   .5302296     3.52   0.000     .8247653    2.909697
+   ---Four Year  |   10.17716   .5485875    18.55   0.000     9.098596    11.25571
+                 |
+     pared_level |
+          ---HS  |   4.311856   .6482477     6.65   0.000     3.037358    5.586353
+---Some College  |   6.055646    .594868    10.18   0.000     4.886097    7.225196
+  ---2yr Degree  |   6.688304   .6764882     9.89   0.000     5.358284    8.018324
+   ---Bachelors  |   9.153235   .6217046    14.72   0.000     7.930923    10.37555
+    ---Graduate  |   12.47742   .7002531    17.82   0.000     11.10068    13.85416
+                 |
+          female |  -2.366976    .273278    -8.66   0.000    -2.904259   -1.829694
+           _cons |   32.87273   .6906146    47.60   0.000     31.51493    34.23052
+----------------------------------------------------------------------------------
 
 . 
-. esttab order1 using order1a.`ttype',  varwidth(50) label  ///
->     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know" 2.bymothed2 "Mother's Education, Re
-> f= Less than HS"  ,nolabel) ///
+. esttab order_pared using order1.`ttype',  varwidth(50) label  ///
+>     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know" ///
+>         2.pared_level "Parental Education, Reference= Less than HS", ///
+>         nolabel) ///
 >         nobaselevels ///
 >                nomtitles ///
 >                nodepvars              ///
@@ -509,209 +538,24 @@ Number of PSUs     =       751                  Population size   =  2,908,622
 >                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
 >                sfmt (2 0 0 0)               ///
 >                replace                   
-(output written to order1a.tex)
-
-.                            
-.                           
-.                            
-. 
-. //Proper factor notation: setting base levels
-. eststo order2: svy: reg `y' ib(freq).order_plan byses1 female
-(running regress on estimation sample)
-
-Survey: Linear regression
-
-Number of strata   =       361                  Number of obs     =     14,561
-Number of PSUs     =       751                  Population size   =  2,908,622
-                                                Design df         =        390
-                                                F(   4,    387)   =     647.17
-                                                Prob > F          =     0.0000
-                                                R-squared         =     0.2507
-
----------------------------------------------------------------------------------
-                |             Linearized
-       bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
-----------------+----------------------------------------------------------------
-     order_plan |
----No Plans/DK  |  -8.998486   .5453333   -16.50   0.000    -10.07065   -7.926325
-  ---Votech/CC  |   -7.24972   .2801882   -25.87   0.000    -7.800588   -6.698852
-                |
-         byses1 |   6.298143   .2098067    30.02   0.000     5.885649    6.710637
-         female |  -2.086194   .2648791    -7.88   0.000    -2.606963   -1.565424
-          _cons |   49.48077   .2872533   172.25   0.000     48.91601    50.04553
----------------------------------------------------------------------------------
+(output written to order1.rtf)
 
 . 
-. esttab order2 using order2.`ttype',  varwidth(50) label  ///
->                nodepvars              ///
->                    b(3)                   ///
->                 se(3)                     ///       
->                r2 (2)                    ///
->                ar2 (2)                   ///
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
->                sfmt (2 0 0 0)               ///
->                replace                   
-(output written to order2.tex)
+. exit 
 
-. 
-. 
-. esttab order2 using order2.`ttype',  varwidth(50)   ///
->     refcat(1.order_plan "College Plans, Reference=Plans to go to College",nolabel) ///
->         label ///
->                    nomtitles ///
->                        nobaselevels ///
->                nodepvars              ///
->                 b(3)                   ///
->                 se(3)                     ///       
->                r2 (2)                    ///
->                ar2 (2)                   ///
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
->                sfmt (2 0 0 0)               ///
->                replace                   
-(output written to order2.tex)
+end of do-file
 
-. 
-. margins, predict(xb) at((mean) byses1 order_plan=(1 2 3)) post
 
-Predictive margins                              Number of obs     =     13,055
-Model VCE    : Linearized
+. cor ed_level byses1
+variable ed_level not found
+r(111);
 
-Expression   : Linear prediction, predict(xb)
+. cor pared_level byses1
+(obs=15,236)
 
-1._at        : order_plan      =           1
-               byses1          =    .0400221 (mean)
+             | pared_~l   byses1
+-------------+------------------
+ pared_level |   1.0000
+      byses1 |   0.8039   1.0000
 
-2._at        : order_plan      =           2
-               byses1          =    .0400221 (mean)
 
-3._at        : order_plan      =           3
-               byses1          =    .0400221 (mean)
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |     Margin   Std. Err.      t    P>|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         _at |
-          1  |   39.68796   .5037281    78.79   0.000      38.6976    40.67832
-          2  |   41.43673   .2612051   158.64   0.000     40.92318    41.95027
-          3  |   48.68645   .2276586   213.86   0.000     48.23886    49.13404
-------------------------------------------------------------------------------
-
-. 
-. // Factor notation, interaction
-. 
-. //Proper factor notation: setting base levels
-. eststo order3: svy: reg `y' b3.order_plan##i.female byses1
-(running regress on estimation sample)
-
-Survey: Linear regression
-
-Number of strata   =       361                  Number of obs     =     14,561
-Number of PSUs     =       751                  Population size   =  2,908,622
-                                                Design df         =        390
-                                                F(   6,    385)   =     436.30
-                                                Prob > F          =     0.0000
-                                                R-squared         =     0.2508
-
------------------------------------------------------------------------------------
-                  |             Linearized
-         bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
-------------------+----------------------------------------------------------------
-       order_plan |
-  ---No Plans/DK  |  -8.525456   .6892792   -12.37   0.000    -9.880624   -7.170288
-    ---Votech/CC  |  -7.123964   .3838901   -18.56   0.000    -7.878717   -6.369211
-                  |
-         1.female |  -1.908111   .3136299    -6.08   0.000    -2.524728   -1.291494
-                  |
-order_plan#female |
----No Plans/DK#1  |  -1.408776   1.010942    -1.39   0.164    -3.396355    .5788024
-  ---Votech/CC#1  |  -.2453994   .5164566    -0.48   0.635    -1.260787    .7699881
-                  |
-           byses1 |   6.292627   .2098255    29.99   0.000     5.880097    6.705158
-            _cons |   49.38647   .2962783   166.69   0.000     48.80397    49.96898
------------------------------------------------------------------------------------
-
-. 
-. esttab order3 using order3.`ttype', varwidth(50) ///
->     refcat(1.order_plan "College Plans, Reference=Plans to go to College:" 1.order_plan#1.female "In
-> teraction of Plans with Female:", nolabel) ///
->  interaction(" X ") ///
->    label ///
->                    nomtitles ///
->                        nobaselevels ///
->                nodepvars              ///
->                 b(3)                   ///
->                 se(3)                     ///       
->                r2 (2)                    ///
->                ar2 (2)                   ///
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
->                sfmt (2 0 0 0)               ///
->                replace                 
-(output written to order3.tex)
-
-. 
-. 
-. // Margins to figure out what's going on
-. margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1)) post
-
-Adjusted predictions                            Number of obs     =     13,055
-Model VCE    : Linearized
-
-Expression   : Linear prediction, predict(xb)
-
-1._at        : order_plan      =           1
-               female          =           0
-               byses1          =    .0400221 (mean)
-
-2._at        : order_plan      =           1
-               female          =           1
-               byses1          =    .0400221 (mean)
-
-3._at        : order_plan      =           2
-               female          =           0
-               byses1          =    .0400221 (mean)
-
-4._at        : order_plan      =           2
-               female          =           1
-               byses1          =    .0400221 (mean)
-
-5._at        : order_plan      =           3
-               female          =           0
-               byses1          =    .0400221 (mean)
-
-6._at        : order_plan      =           3
-               female          =           1
-               byses1          =    .0400221 (mean)
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |     Margin   Std. Err.      t    P>|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         _at |
-          1  |   41.11286   .6376636    64.47   0.000     39.85917    42.36655
-          2  |   37.79598   .7331028    51.56   0.000     36.35465     39.2373
-          3  |   42.51435   .3467731   122.60   0.000     41.83258    43.19613
-          4  |   40.36084   .3435734   117.47   0.000     39.68536    41.03633
-          5  |   49.63832   .2939528   168.86   0.000     49.06039    50.21625
-          6  |   47.73021    .257478   185.38   0.000     47.22399    48.23643
-------------------------------------------------------------------------------
-
-. 
-. esttab . using margins.`ttype' , margin label nostar ci ///
->     varlabels(1._at "No College Plans, Male" ///
->                   2._at "No College Plans, Female" ///
->                       3._at "Vo-Tech/Community College, Male" ///
->                           4._at "Vo-Tech/Community College, Female" ///
->                               5._at "Four-Year College Plans, Male" ///
->                                   6._at "Four-Year College Plans, Female" ) ///
->         replace
-(output written to margins.tex)
-
-. 
-. 
-. log close
-      name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat_stata.log
-  log type:  text
- closed on:   6 Feb 2018, 12:31:21
-------------------------------------------------------------------------------------------------------

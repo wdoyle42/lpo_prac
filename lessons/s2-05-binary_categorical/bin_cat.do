@@ -15,7 +15,6 @@ local regression=1
 
 local margins=1
 
-
 //locals
 
 global ddir "../../data/"
@@ -24,7 +23,7 @@ local y bynels2m
 
 local controls byses1
 
-local ttype tex
+local ttype rtf
 
 /**************************************************/
 /* Coding */
@@ -183,6 +182,7 @@ tab order_plan
 // NOPE!
 eststo order1: svy: reg `y' order_plan
 
+
 //Proper factor notation
 eststo order1: svy: reg `y' i.order_plan byses1 female
 
@@ -198,6 +198,7 @@ esttab order1 using order1.`ttype',  varwidth(50) label  ///
                sfmt (2 0 0 0)               ///
                replace                   
 			   
+
 			   
 esttab order1 using order1.`ttype',  varwidth(50) label  ///
     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know",nolabel) ///
@@ -212,12 +213,35 @@ esttab order1 using order1.`ttype',  varwidth(50) label  ///
                sfmt (2 0 0 0)               ///
                replace                   
 
+/*
+1  did not finish high school
+                         3,044         2  graduated from high school or
+                                          ged
+                         1,663         3  attended 2-year school, no
+                                          degree
+                         1,597         4  graduated from 2-year school
+                         1,758         5  attended college, no 4-year
+                                          degree
+                         3,466         6  graduated from college
+                         1,785         7  completed master^s degree or
+                                          equivalent
+                         1,049         8  completed phd, md, other
+                                          advanced degree
+                           856         .  
 
-//Proper factor notation
-eststo order1: svy: reg `y' i.order_plan i.bymothed2 byses1 female
+*/
 
-esttab order1 using order1a.`ttype',  varwidth(50) label  ///
-    refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know" 2.bymothed2 "Mother's Education, Ref= Less than HS"  ,nolabel) ///
+
+recode bypared (1=1 )(2=2 ) (3 5=3) (4=4) (6=5) (7/8=6), gen(pared_level)			   
+label define ed_levels 1 "---LT HS" 2 "---HS" 3  "---Some College" 4 "---2yr Degree" 5 "---Bachelors" 6 "---Graduate"
+label values pared_level ed_levels			   
+			   
+eststo order_pared: svy: reg `y' i.order_plan i.pared_level  female
+
+esttab order_pared using order1.`ttype',  varwidth(50) label  ///
+    refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know" ///
+	2.pared_level "Parental Education, Reference= Less than HS", ///
+	nolabel) ///
         nobaselevels ///
                nomtitles ///
                nodepvars              ///
@@ -228,10 +252,10 @@ esttab order1 using order1a.`ttype',  varwidth(50) label  ///
                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
                sfmt (2 0 0 0)               ///
                replace                   
-			   
-			  
-			   
 
+exit 
+			   
+			   
 //Proper factor notation: setting base levels
 eststo order2: svy: reg `y' ib(freq).order_plan byses1 female
 
@@ -245,12 +269,11 @@ esttab order2 using order2.`ttype',  varwidth(50) label  ///
                sfmt (2 0 0 0)               ///
                replace                   
 
-
 esttab order2 using order2.`ttype',  varwidth(50)   ///
     refcat(1.order_plan "College Plans, Reference=Plans to go to College",nolabel) ///
         label ///
-                   nomtitles ///
-                       nobaselevels ///
+         nomtitles ///
+         nobaselevels ///
                nodepvars              ///
                 b(3)                   ///
                 se(3)                     ///       

@@ -1,0 +1,48 @@
+;; RefTeX parse info file
+;; File: /Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex
+;; User: doylewr (Doyle)
+
+(set reftex-docstruct-symbol '(
+
+
+(xr nil "\\\\\\\\\\\\")
+
+(index-tags)
+
+(is-multi t)
+
+(bibview-cache)
+
+(master-dir . "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/")
+
+(label-numbers ("sec:quick-exercise" . 1))
+
+(bof "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex")
+
+(toc "toc" "    1 Coding" "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex" nil 2 "1" "\\section{Coding}" 883)
+
+(toc "toc" "    2 Binary Variables" "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex" nil 2 "2" "\\section{Binary Variables}" 1762)
+
+(toc "toc" "    3 Categorical Variables" "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex" nil 2 "3" "\\section{Categorical Variables}" 2277)
+
+(bof "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/order1.tex")
+
+(eof "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/order1.tex")
+
+(toc "toc" "      3.1 Quick Exercise" "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex" nil 3 "3.1" "\\subsection{Quick Exercise}" 6751)
+
+("sec:quick-exercise" "s" nil "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex" nil "")
+
+(toc "toc" "    4 Reference Categories for Categorical Variables" "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex" nil 2 "4" "\\section{Reference Categories for Categorical Variables}" 6963)
+
+(toc "toc" "      4.1 Quick Exercise" "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex" nil 3 "4.1" "\\subsection{Quick Exercise}" 10126)
+
+("sec:quick-exercise-1" "s" nil "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex" nil "")
+
+(toc "toc" "    5 Interactions" "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex" nil 2 "5" "\\section{Interactions}" 10342)
+
+(toc "toc" "    6 Using Margins" "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex" nil 2 "6" "\\section{Using Margins}" 13118)
+
+(eof "/Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat.tex")
+))
+
