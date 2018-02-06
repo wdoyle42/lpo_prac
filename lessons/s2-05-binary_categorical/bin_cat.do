@@ -296,5 +296,15 @@ esttab . using margins.`ttype' , margin label nostar ci ///
         replace
 
 
+// fairly lame
+marginsplot, name(margins_1)
+
+// less lame
+
+marginsplot, recast(scatter) ciopts(recast(rspike)) name(margins_2)
+
+// ??
+marginsplot, recast(bar) 
+
 log close
 exit
