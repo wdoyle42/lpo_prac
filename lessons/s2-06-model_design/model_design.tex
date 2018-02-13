@@ -25,7 +25,7 @@
 
 
 \begin{flushleft}
-Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9952\\ Spring 2017
+Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9952\\ Spring 2018
 \end{flushleft}
 
 \begin{center}
@@ -149,6 +149,68 @@ The solution is to use the \texttt{e(sample)} command to limit the
 sample to the relevant analysis sample. First, run the model that
 restricts the data the most (has the most missing data), then limit
 subsequent models using the statement \texttt{if e(sample)==1}.
+
+\section{The natural log transformation}
+
+The variable \texttt{lwage} is the natural log of wages. This means
+that it has been transformed by taking the natural log of the
+underlying variable:
+
+\begin{equation*}
+  log_e(y_i)=x \equiv e^x=y_i
+\end{equation*}
+
+
+Where $e$ is Euler's constant, $e=\sum_{n=0}^\infty
+\frac{1}{n!}=\frac{1}{1}+\frac{1}{1}+\frac{1}{1 \dot 2}+\frac{1}{1 \dot
+  2 \dot 3} \ldots$
+
+The log transformation is used all the time, and particularly in
+econometrics. It's useful whenever you have a variable that follows
+some kind of exponential distribution, with widely disparate
+levels. Earnings, school sizes, revenues of instititions of higher
+education and state populations are all examples of these kinds of
+situations. 
+
+When the dependent variable is log transformed but the independent
+variable is not, this is called a log-level regression. In a log-level
+regression,  
+
+
+\begin{equation*}
+  log(y_i)=\beta_o+\beta_1x_i+\epsilon_i
+\end{equation*}
+
+Which implies that
+
+\begin{equation*}
+  y_i=e^{=\beta_o+\beta_1 x_i + \epsilon_i}
+\end{equation*}
+
+And . . .
+
+\begin{equation*}
+  \frac{dy}{dx}=\beta e^{\beta_0+beta_1x_1+\epsilon}=\beta_1y
+\end{equation*}
+
+Which means that the coefficent, $\beta_1$
+
+\begin{equation*}
+  \beta_1=\frac{dy}{dx}\frac{1}{y}
+\end{equation*}
+
+This changes our interpretation to mean that for a one unit increase
+in $x$, $y$ is predicted to increase by $\beta_1$ proportion of $y$ or
+more commonly by $100*\beta_1$ percent. It changes the scale of the
+dependent variable to be on the $1/y$ scale as opposed to the $y$
+scale, so everything is about a proportional (or percentage) increase
+in $y$. 
+
+\subsection{Quick Exercise}
+\label{sec:quick-exercise}
+
+Interpret the coefficients from the basic earnings regression of log
+wages on years of education. 
 
 
 \section{Selecting Variables: Stepwise Regression OR A Cautionary Tale of Woe}
@@ -464,11 +526,28 @@ would look like this:
 
 \end{stlog}
 
+\subsection{Quick Exercise}
+
+Run a regression with an interaction between urban and
+south. Interpret the results.
+
 \subsection{Interactions with a binary and continous variable}
 \label{sec:inter-with-binary}
 
 Let's say we're interested in whether education affects wages
-differently for black and white men. The specification of an
+differently for black and white men.  If possible, we should start by
+plotting the data to see if these patterns are evident. 
+
+
+
+\begin{figure}[h!]
+  \centering
+  \caption{Wages by education and race}
+  \includegraphics{interact1}
+\end{figure}
+
+
+The specification of an
 interaction between a binary variable and a continous variable would
 look like this:
 
@@ -505,6 +584,12 @@ black#c.educ |
 
 . 
 \end{stlog}
+
+
+\subsection{Quick Exercise}
+
+Run a regression with an interaction between urban and
+education. Interpret the results. 
 
 \subsection{Interactions with two continous variables}
 \label{sec:inter-with-two-1}
