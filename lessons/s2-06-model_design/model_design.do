@@ -18,7 +18,7 @@ estimates clear /* Clears any estimates hanging around */
 
 set more off /*Get rid of annoying "more" feature */
 
-ssc install bcuse
+//ssc install bcuse
 
 ssc install nnest
 
@@ -99,7 +99,30 @@ gen meduc_flag=meduc==.
 gen feduc_flag=feduc==.
 
 tab meduc_flag feduc_flag
-  
+
+
+/* Quick digression: log transform */
+
+preserve
+
+clear
+
+di log(0)
+di log(1)
+di log(10)
+di log(100)
+di log(1000)
+
+set obs 1000
+
+egen fakenumber= fill(1(10)1000)
+
+gen log_fakenumber=log(fakenumber)
+
+graph twoway line log_fakenumber fakenumber
+restore
+
+
 /*NOOOOOOOO!!! Stepwise regression*/
 
 stepwise, pr(.2): reg lwage hours educ age meduc feduc tenure south married black urban sibs kww iq brthord
@@ -157,14 +180,6 @@ nnest educ age
 
 /* Interactions */
 
-gen educ_adj=educ+.2
-  
-graph twoway (scatter wage educ if black==0, msize(small) mcolor(red)) ///
-    (scatter wage educ_adj if black==1, msize(small) mcolor(blue))   ///
-        (lfit wage educ if black==0, lcolor(red))  ///
-            (lfit wage educ if black==1, lcolor(blue)), ///
-                legend(order(1 "White" 2 "Black")) 
-
 								
 /*Binary-binary interaction*/
 
@@ -174,13 +189,26 @@ eststo black_marry: reg lwage hours age educ i.black##i.married iq meduc south u
 
 /*Binary-continous interaction*/
 
+
+/* PLotting interactions */
+
+gen educ_adj=educ+.2
+  
+graph twoway (scatter wage educ if black==0, msize(small) mcolor(red)) ///
+    (scatter wage educ_adj if black==1, msize(small) mcolor(blue))   ///
+        (lfit wage educ if black==0, lcolor(red))  ///
+            (lfit wage educ if black==1, lcolor(blue)), ///
+                legend(order(1 "White" 2 "Black")) 
+
+graph export interact1.pdf, replace
+
+
 eststo black_educ: reg lwage hours age i.black##c.educ married  iq meduc south urban
 
 /*Continuous-Continuous interaction*/
 
 eststo age_educ : reg lwage hours age educ c.age#c.educ black married iq meduc south urban 
  
-
 /// Margins after interactions
 
 estimates replay black_marry 
@@ -340,7 +368,7 @@ twoway (rarea ub10 lb10 age_levels in 1/11, color(gs14)) ///
                     (line exp_pred16 age_levels in 1/11, lcolor(red) ) ///
                         (line ub16 age_levels in 1/11, lcolor(red) lwidth(thin) lpattern(dash)) ///
                             (line lb16 age_levels in 1/11, lcolor(red) lwidth(thin) lpattern(dash)) , ///
-                                legend(order( 3 "Less than HS" 6 "College Grad")) name(educ_ci)
+                                legend(order( 3 "Less than HS" 6 "College Grad"))  xtitle("Age") name(educ_ci)
 
 
 drop lb* ub* exp_pred* pred* pred_ed* pred_se_ed*
@@ -384,20 +412,7 @@ egen educ_levels=fill(`mymin'(1)`mymax')
 
 twoway line exp_pred0 exp_pred5 exp_pred10 exp_pred15 exp_pred15 educ_levels in 1/10, ///
        legend(order(1 "0 Years" 2 "5 Years" 3 "10 Years" 4 "15 Years" 5 "20 Years"))  ytitle("Wages") xtitle("Education") name(tenure_mult)
-exit 
-	   
-/* Plot at different levels with confidence intervals */
-twoway (rarea ub10 lb10 age_levels in 1/11, color(gs14)) ///
-    (rarea ub16 lb16 age_levels in 1/11, color(gs14)) ///
-        (line exp_pred10 age_levels in 1/11, lcolor(blue) ) ///
-            (line lb10 age_levels in 1/11, lcolor(blue) lwidth(thin) lpattern(dash)) ///
-                (line ub10 age_levels in 1/11, lcolor(blue) lwidth(thin) lpattern(dash)) ///
-                    (line exp_pred16 age_levels in 1/11, lcolor(red) ) ///
-                        (line ub16 age_levels in 1/11, lcolor(red) lwidth(thin) lpattern(dash)) ///
-                            (line lb16 age_levels in 1/11, lcolor(red) lwidth(thin) lpattern(dash)) , ///
-                                legend(order( 3 "Less than HS" 6 "College Grad")) name(educ_ci)
 
-exit 
 
 
 /*Another Continuous-Continuous interaction*/
@@ -412,6 +427,9 @@ sum iq, detail
 
 scalar iqlo=round(r(p10))
 scalar iqhi=round(r(p90))
+
+//for later
+local iqhi=round(r(p90))
 
 scalar diff=iqhi-iqlo
 scalar step=round(diff/10)
@@ -446,8 +464,8 @@ foreach myiq of numlist `iqlo'(`step')`iqhi'{
     gen lb`myiq'=exp(pred_ed`myiq'-(invttail(`mydf',`sigtail')*pred_se_ed`myiq'1))
 }
 
-/*Kludge*/
-    
+
+// Kludge
 local iqhi=118
 
 /*For multiple levels */
