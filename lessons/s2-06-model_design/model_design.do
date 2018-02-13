@@ -179,7 +179,6 @@ reg lwage hours iq
 nnest educ age
 
 /* Interactions */
-
 								
 /*Binary-binary interaction*/
 
@@ -189,8 +188,7 @@ eststo black_marry: reg lwage hours age educ i.black##i.married iq meduc south u
 
 /*Binary-continous interaction*/
 
-
-/* PLotting interactions */
+/* PLotting interactions in raw data */
 
 gen educ_adj=educ+.2
   
@@ -201,7 +199,6 @@ graph twoway (scatter wage educ if black==0, msize(small) mcolor(red)) ///
                 legend(order(1 "White" 2 "Black")) 
 
 graph export interact1.pdf, replace
-
 
 eststo black_educ: reg lwage hours age i.black##c.educ married  iq meduc south urban
 
