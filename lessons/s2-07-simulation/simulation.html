@@ -2,8 +2,8 @@
 <p>LPO 9952 | Spring 2018</p>
 <h2 id="simulation-for-understanding">Simulation for Understanding</h2>
 <p>In most intro regression classes, the emphasis is on learning proofs, either directly or through the instructor providing intuition around proofs. However, there is another way to learn the topics: simulation. When using simulation, you create the population of interest, apply an estimator, then learn about the properties of that estimator through repeatedly sampling from the population and calculating estimates. This is known as the Monte Carlo method, in that the analyst uses repeated random sampling. The term comes from Stanislaw Ulam, who came up with the idea to solve computational problems as part of the Manhattan project. Today, we'll use simulation to understand some basic properties of regression.</p>
-<h2 id="simulating-the-central-limit-theoreom">Simulating the Central Limit Theoreom</h2>
-<p>We begin with a much sinmpler example. The central limit theorem says that if we repeatedly sample from a larger population, the sampling distribution of means will be normal, and will have a mean equal to the population parameter. The code below checks if that's actually the case.</p>
+<h2 id="simulating-the-central-limit-theorem">Simulating the Central Limit Theorem</h2>
+<p>We begin with a much simpler example. The central limit theorem says that if we repeatedly sample from a larger population, the sampling distribution of means will be normal, and will have a mean equal to the population parameter. The code below checks if that's actually the case.</p>
 <pre><code>    . local mymean 5
 
     . local mysd 1
@@ -34,7 +34,7 @@
 
     . scalar pop_mean=_b[x]
 
-    . // Popoluation standard deviation
+    . // Population standard deviation
     . tabstat x, stat(sd) save
 
         variable |        sd
@@ -120,7 +120,7 @@ We can compare our estimate of $\\bar{x}$ with the value we specified to see if 
 Basic Regression
 ----------------
 
-In regression, the central finding is the same, but as applied to coefficients. That is, in repeated samples, the sampling distribution of coefficients will be distributed normal, with a standard error equivalent to the standard deviation of the sampling distribution. Below we generate a population where `y` is a linear function of `x1` plus an error term. We then repeatedly sample from that population, calculate our estimate of the parameter of interest, and accumulate results over multiple iterations. We can then show an empirical representation of the sampling distritbuion.
+In regression, the central finding is the same, but as applied to coefficients. That is, in repeated samples, the sampling distribution of coefficients will be distributed normal, with a standard error equivalent to the standard deviation of the sampling distribution. Below we generate a population where `y` is a linear function of `x1` plus an error term. We then repeatedly sample from that population, calculate our estimate of the parameter of interest, and accumulate results over multiple iterations. We can then show an empirical representation of the sampling distribution.
 </code></pre>
 <pre><code>. use x, clear
 
@@ -184,7 +184,7 @@ Mean estimation                     Number of obs    =    1000
 <p><em>Quick Exercise</em> What if <code>y</code> is not normally distributed? Does regression still work then?</p>
 <p><em>Quick Exercise</em> What if the error term is not normally distributed? Does regression still work then?</p>
 <h2 id="multiple-regression">Multiple Regression</h2>
-<p>One key question for regression is omitted variables bias. The idea here is that there is an additional variable <code>x2</code> that is related to <code>y</code> and to <code>x1</code> that may affect our estimates of the coefficient for <code>x1</code>. Again, below we simulate this problem, starting with a variable <code>x2</code> that is related to <code>x1</code> and to <code>y</code>, and estimating a regression with only <code>x1</code> included. We can see what this does to our sampling distrbution under different circumstances.</p>
+<p>One key question for regression is omitted variables bias. The idea here is that there is an additional variable <code>x2</code> that is related to <code>y</code> and to <code>x1</code> that may affect our estimates of the coefficient for <code>x1</code>. Again, below we simulate this problem, starting with a variable <code>x2</code> that is related to <code>x1</code> and to <code>y</code>, and estimating a regression with only <code>x1</code> included. We can see what this does to our sampling distribution under different circumstances.</p>
 <pre><code>. local my_corr=.02
 
 . local my_means 10 20 
@@ -238,7 +238,7 @@ end of do-file</code></pre>
 </ol>
 <p>The second element is more difficult. Most statistical programming languages can easily generate variables from a wide variety of distributions. It's getting the covariances right that's hard. This is particularly true of categorical variables</p>
 <p>In Stata, the best solution I've found is to use the <code>drawnorm</code> command to create a set of continuous variables that have the right correlations with one another, then turn them into binary variables that cover the correct proportion of the population. This won't be exactly the same as your data, but we can get pretty close.</p>
-<p>To fix ideas, consider that we might want to estimate the impact of planning to go to a four year institiution on math scores, but we think that students who have received high quality counseling will both be more likely to plan to go to college and will have higher math scores. We don't have a measure of high quality counseling. Omitting this variable will bias our results, but the question is by how much?</p>
+<p>To fix ideas, consider that we might want to estimate the impact of planning to go to a four year institution on math scores, but we think that students who have received high quality counseling will both be more likely to plan to go to college and will have higher math scores. We don't have a measure of high quality counseling. Omitting this variable will bias our results, but the question is by how much?</p>
 <p>In the worked example in the do file, I use an existing correlation matrix <code>cormat</code> and add another variable to it that has the properties that an omitted variable might have.</p>
 <pre><code>. mat newcol=(0.01\.5\-.2\.5\.5) /*Adds a column */
 . 
@@ -261,3 +261,119 @@ pared_bin  -.00697178   .26393122  -.15579093           1
 &gt; size&#39;)
 (obs 160,000)
 .</code></pre>
+<p>You can then use these normally distributed variables to create binary variables, with the proportions drawn from your actual data.</p>
+<pre><code>
+. /*Specify cut in normal dist for proportion with and without characteristics*/
+. 
+. gen femcut=invnormal(`prop_fem&#39;)    
+. gen female=female_st&gt;femcut
+. 
+. gen paredcut=invnormal(`prop_pared&#39;)
+. gen pared= pared_st&gt;paredcut 
+. 
+. gen plancut=invnormal(`prop_plans&#39;) 
+. gen plans=plans_st&gt;plancut 
+. 
+. local race_other=1-`prop_race&#39;
+. 
+. gen racecut=invnormal(`race_other&#39;) 
+. gen race=race_st&lt;racecut 
+. 
+. local prop_counsel=.95
+.     
+. gen counselcut=invnormal(`prop_counsel&#39;) 
+. gen counsel=counsel_st&gt;counselcut
+.     
+. drawnorm e, sds(11)
+. 
+. local effect 2
+. 
+. gen y=`int&#39;+(`fem_coeff&#39;*female)+(`plans_coeff&#39;*plans)+(`race_coeff&#39;*race)+(`pared
+&gt; _coeff&#39;*pared)+(`ses_coeff&#39;*ses) + (`effect&#39;*counsel)+e
+. 
+. keep y female plans race pared ses counsel e
+. 
+</code></pre>
+<p>From there, it's easy to then generate a y variable and start running simulations.</p>
+<pre><code>
+. /*Monte Carlo Study */
+. 
+. drop y
+. 
+. local effect 10 /* Size of the effect of counseling, can vary with each iteration 
+&gt; */
+. 
+. gen y=`int&#39;+(`fem_coeff&#39;*female)+(`plans_coeff&#39;*plans)+(`race_coeff&#39;*race)+(`pared
+&gt; _coeff&#39;*pared)+(`ses_coeff&#39;*ses) + (`effect&#39;*counsel)+e
+.     
+. save counsel_universe_`effect&#39;, replace
+file counsel_universe_10.dta saved
+. 
+. tempname results_store
+. postfile `results_store&#39; plans1 plans2  using results_file, replace
+. local j=1  
+. while `j&#39;&lt;=100{  
+  2. 
+. use counsel_universe_`effect&#39;,clear  
+  3.   
+. quietly sample 10
+  4. 
+. quietly reg y female plans race pared ses counsel /* True regression */
+  5. 
+. scalar plans1=_b[plans]
+  6. 
+.  /*Pulls coefficient, puts it into scalar */
+. quietly reg y female plans race pared ses /*OVB regression */
+  7. 
+. scalar plans2=_b[plans]
+  8. 
+. post `results_store&#39; (plans1) (plans2)
+  9. 
+. di &quot;Finishing iteration `j&#39;&quot;
+ 10. 
+. local j=`j&#39;+1
+ 11. }
+</code></pre>
+<p>Notice the coefficient for counseling is set at 10. A key tool of simulation is to vary your assumptions to see what difference it makes if different assumptions are used. Let's vary that impact and see what happens:</p>
+<pre><code>
+/*Now vary effect size*/
+
+local effect_size 5 10 15 20
+
+foreach effect of local effect_size{
+
+use counsel_universe_10, replace
+    
+drop y
+
+gen y=`int&#39;+(`fem_coeff&#39;*female)+(`plans_coeff&#39;*plans)+(`race_coeff&#39;*race)+(`pared_coeff&#39;*pared)+(`ses_coeff&#39;*ses) + (`effect&#39;*counsel)+e
+    
+save counsel_universe_`effect&#39;, replace
+
+tempname results_store
+postfile `results_store&#39; plans1 plans2  using results_file_`effect&#39;, replace
+local j=1  
+while `j&#39;&lt;=100{  
+
+use counsel_universe_`effect&#39;,clear  
+  
+quietly sample 10
+
+quietly reg y female plans race pared ses counsel /*True model */
+
+scalar plans1=_b[plans]
+
+ /*Pulls coefficient, puts it into scalar */
+quietly reg y female plans race pared ses /*OVB model*/
+
+scalar plans2=_b[plans]
+
+post `results_store&#39; (plans1) (plans2)
+
+di &quot;Finishing iteration `j&#39;&quot;
+
+local j=`j&#39;+1
+}
+</code></pre>
+<p>The code above runs through 4 different possible coefficients, then runs a separate simulation study for each. The graphs show the difference between the sampling distribution for the estimated model and the true model in each case.</p>
+<p><em>Quick-ish Exercise</em> Create a variable for the unobserved characteristic of motivation (oh fine, grit) which is uncorrelated with the other variables in the model. Assume it's normally distributed, and set it to be standardized (mean 0 sd 1). Change its impact on math scores to range from 1 to 25. What happens to your estimate of plans when this variable is excluded?</p>
