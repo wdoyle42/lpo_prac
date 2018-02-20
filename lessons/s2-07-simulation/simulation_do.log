@@ -1,0 +1,837 @@
+------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_2017/central/lessons/s2-07-simulation/simulati
+> on_do.log
+  log type:  text
+ opened on:  20 Feb 2018, 10:57:21
+
+. 
+. /* Simluation techniques */
+. /* Using simulation to understand and correct problems with regression*/
+. /* Will Doyle */
+. /* 140220 */
+. /* Practicum Folder */
+. 
+. clear
+
+. 
+. clear mata /* Clears any fluff that might be in mata */
+
+. 
+. clear matrix
+
+. 
+. graph drop _all
+
+.   
+. estimates clear /* Clears any estimates hanging around */
+
+. 
+. set more off /*Get rid of annoying "more" feature */
+
+.    
+. 
+. /**************************************************/
+. /* Outline */
+. /**************************************************/
+. 
+. /* 1. Recoding and data setup */
+. 
+. local recoding=1
+
+.   
+. /* 2. Analysis and output */
+. 
+.   local analysis=1
+
+.   
+. /*3. Simulation */
+. 
+. local simulation=1
+
+. 
+. /**************************************************/
+. /* Globals */
+. /**************************************************/
+. 
+. global ddir "../../data/"
+
+. 
+. /**************************************************/  
+. /* 1. Recoding and data Setup */
+. /**************************************************/  
+. if `recoding'==1{
+.     
+.     use ${ddir}plans.dta, clear
+. 
+. /*Replace missing data */
+.   
+. foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
+  2.               foreach i of numlist -4 -8 -9 { /* Start inner loop */
+  3.                      replace `myvar'=. if `myvar'== `i'
+  4.                                             }  /* End inner loop */
+  5.                                           } /* End outer loop */
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(3,782 real changes made, 3,782 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(53 real changes made, 53 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(37 real changes made, 37 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(40 real changes made, 40 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(57 real changes made, 57 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1,131 real changes made, 1,131 to missing)
+(781 real changes made, 781 to missing)
+(46 real changes made, 46 to missing)
+. 
+. 
+. label variable byincome "Income"
+.                                               
+.  /* Recode race/ethnicity */
+.                                                                                   
+>           
+. local race_names amind asian black hispanic_norace hispanic_race multiracial white
+. 
+. tab(byrace), gen(race_)
+
+     student^s race/ethnicity-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+amer. indian/alaska native, non-hispani |        130        0.85        0.85
+asian, hawaii/pac. islander,non-hispani |      1,460        9.58       10.44
+black or african american, non-hispanic |      2,019       13.25       23.69
+            hispanic, no race specified |        994        6.52       30.21
+               hispanic, race specified |      1,220        8.01       38.22
+              multiracial, non-hispanic |        735        4.82       43.04
+                    white, non-hispanic |      8,678       56.96      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,236      100.00
+. 
+.  
+. local i=1
+. 
+. foreach val of local race_names{
+  2.   rename race_`i' `val'
+  3.   local i=`i'+1
+  4. }
+. 
+. gen hispanic=0
+. replace hispanic=1 if hispanic_no==1|hispanic_race==1
+(2,214 real changes made)
+. replace hispanic=. if byrace==.
+(924 real changes made, 924 to missing)
+. 
+. label variable amind "American Indian/AK Native"
+. label variable asian "Asian/ PI"
+. label variable black "African American"
+. label variable hispanic "Hispanic"
+. label variable white "White"
+. label variable multiracial "Multiracial"
+. 
+. /*Create var for underrrep minority */
+.     
+. gen urm=0
+. replace urm=1 if black==1 | hispanic==1
+(4,233 real changes made)
+. replace urm=. if byrace==.
+(924 real changes made, 924 to missing)
+. 
+. label var urm "Underrepresented Minority"
+.   
+. local plan_names p_noplan p_dontknow p_votech p_cc p_fouryr p_earlygrad
+. 
+. tab(f1psepln), gen(plan_)
+
+   f1 post-secondary plans right after |
+                           high school |      Freq.     Percent        Cum.
+---------------------------------------+-----------------------------------
+                don^t plan to continue |        207        1.46        1.46
+don^t know or planning but unspecified |        834        5.87        7.33
+vocational, technical, or trade school |        986        6.94       14.27
+            two-year community college |      2,894       20.38       34.65
+       four-year college or university |      8,955       63.05       97.70
+early hs grad attending postsec school |        326        2.30      100.00
+---------------------------------------+-----------------------------------
+                                 Total |     14,202      100.00
+. 
+. local i=1
+. 
+. foreach val of local plan_names{
+  2.   rename plan_`i' `val'
+  3.   local i=`i'+1
+  4. }
+. 
+. 
+. label variable p_noplan "Plans: No plans"
+. label variable p_dontknow "Plans: Don't know"
+. label variable p_votech "Plans: Voc/Tech School"
+. label variable p_cc "Plans: Comm Coll"
+. label variable p_fouryr "Four Year"
+. label variable p_earlygrad "Early Graduation"
+. 
+.   
+. local pareds bymothed byfathed bypared
+. 
+. local ed_names nohs hs attend2 grad2yr some4  4yrgrad masters phd
+. 
+. foreach pared of local pareds{
+  2. 
+. tab(`pared'), gen(`pared'_)
+  3. 
+. local i=1
+  4. 
+. 
+. foreach val of local ed_names{
+  5.   rename `pared'_`i' `pared'_`val'
+  6.   local i=`i'+1
+  7. }
+  8. 
+. label variable `pared'_nohs "Less than HS"
+  9. label variable `pared'_hs "HS/GED"
+ 10. label variable `pared'_attend2 "Attended 2 yr"
+ 11. label variable `pared'_grad2yr "Graduated 2yr"
+ 12. label variable `pared'_some4 "Four year attend"
+ 13. label variable `pared'_4yrgrad "Bachelor's"
+ 14. label variable `pared'_masters "Master's"
+ 15. label variable `pared'_phd "PhD"
+ 16. }
+
+              mother^s highest level of |
+                    education-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |      1,935       12.65       12.65
+      graduated from high school or ged |      4,117       26.91       39.55
+      attended 2-year school, no degree |      1,849       12.08       51.64
+           graduated from 2-year school |      1,620       10.59       62.22
+     attended college, no 4-year degree |      1,589       10.38       72.61
+                 graduated from college |      2,820       18.43       91.04
+completed master^s degree or equivalent |      1,060        6.93       97.97
+completed phd, md, other advanced degre |        311        2.03      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,301      100.00
+
+              father^s highest level of |
+                    education-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |      2,039       13.34       13.34
+      graduated from high school or ged |      4,314       28.23       41.57
+      attended 2-year school, no degree |      1,438        9.41       50.97
+           graduated from 2-year school |      1,194        7.81       58.79
+     attended college, no 4-year degree |      1,417        9.27       68.06
+                 graduated from college |      2,735       17.89       85.95
+completed master^s degree or equivalent |      1,282        8.39       94.34
+completed phd, md, other advanced degre |        865        5.66      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,284      100.00
+
+    parents^ highest level of education |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |        942        6.16        6.16
+      graduated from high school or ged |      3,044       19.89       26.05
+      attended 2-year school, no degree |      1,663       10.87       36.91
+           graduated from 2-year school |      1,597       10.44       47.35
+     attended college, no 4-year degree |      1,758       11.49       58.83
+                 graduated from college |      3,466       22.65       81.48
+completed master^s degree or equivalent |      1,785       11.66       93.15
+completed phd, md, other advanced degre |      1,049        6.85      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,304      100.00
+. 
+. 
+. gen pared_bin=0
+. replace pared_bin=1 if bypared_4yrgrad==1 | bypared_masters==1| bypared_phd==1
+(6,300 real changes made)
+. replace pared_bin=. if bypared==.
+(856 real changes made, 856 to missing)
+. 
+.   
+. gen female=bysex==2
+. replace female=. if bysex==.
+(819 real changes made, 819 to missing)
+. 
+. label variable female "Female"
+. 
+. /* y=50+(-2*fakefem)+(10*plans)+(-10*race)+(10*pared)+`effect'*counsel+e*/
+. 
+.   
+. }/*End recoding section */
+
+. 
+. else di "No recoding"
+
+. 
+. /**************************************************/
+. /* 2. Locals */
+. /**************************************************/  
+. 
+. local female female
+
+.     
+. local ses byses1
+
+.     
+. local pared pared_bin 
+
+.     
+. local race urm 
+
+. 
+. local plans p_fouryr 
+
+. 
+. local y bynels2m 
+
+. /**************************************************/
+. /*3. Analysis and output*/
+. /**************************************************/
+. 
+. if `analysis==1'{
+. 
+. /*Stuff we'll want later */
+. 
+. prop `female'
+
+Proportion estimation             Number of obs   =     15,341
+
+--------------------------------------------------------------
+             |                                   Normal
+             | Proportion   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+female       |
+           0 |   .4979467    .004037      .4900338    .5058596
+           1 |   .5020533    .004037      .4941404    .5099662
+--------------------------------------------------------------
+. 
+. local prop_fem=_b[1]
+. 
+. prop `plans'
+
+Proportion estimation             Number of obs   =     14,202
+
+--------------------------------------------------------------
+             |                                   Normal
+             | Proportion   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+p_fouryr     |
+           0 |    .369455   .0040502       .361516     .377394
+           1 |    .630545   .0040502       .622606     .638484
+--------------------------------------------------------------
+. 
+. local prop_plans=_b[1]
+. 
+. prop `race'
+
+Proportion estimation             Number of obs   =     15,236
+
+--------------------------------------------------------------
+             |                                   Normal
+             | Proportion   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+urm          |
+           0 |   .7221712    .003629      .7150579    .7292845
+           1 |   .2778288    .003629      .2707155    .2849421
+--------------------------------------------------------------
+. 
+. local prop_race=_b[1]
+. 
+. prop `pared'
+
+Proportion estimation             Number of obs   =     15,304
+
+--------------------------------------------------------------
+             |                                   Normal
+             | Proportion   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+pared_bin    |
+           0 |   .5883429   .0039783       .580545    .5961408
+           1 |   .4116571   .0039783      .4038592     .419455
+--------------------------------------------------------------
+. 
+. local prop_pared=_b[1]
+. 
+. corr `female' `plans' `race' `pared' `ses'
+(obs=13,356)
+
+             |   female p_fouryr      urm pared_~n   byses1
+-------------+---------------------------------------------
+      female |   1.0000
+    p_fouryr |   0.0738   1.0000
+         urm |   0.0095  -0.0999   1.0000
+   pared_bin |  -0.0070   0.2639  -0.1558   1.0000
+      byses1 |  -0.0280   0.3175  -0.2809   0.7066   1.0000
+
+. 
+. mat cormat=r(C)
+. 
+. /*Survey set */
+. svyset psu [pw=f1pnlwt],str(strat_id)
+
+      pweight: f1pnlwt
+          VCE: linearized
+  Single unit: missing
+     Strata 1: strat_id
+         SU 1: psu
+        FPC 1: <zero>
+. 
+. /*Run regression*/
+.     
+. svy: reg `y' `female' `plans' `race' `pared' `ses'
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata   =       361                  Number of obs     =     14,862
+Number of PSUs     =       751                  Population size   =  2,997,383
+                                                Design df         =        390
+                                                F(   5,    386)   =     615.92
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.3069
+
+------------------------------------------------------------------------------
+             |             Linearized
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      female |  -1.958481   .2468279    -7.93   0.000     -2.44376   -1.473201
+    p_fouryr |   7.617676   .2588433    29.43   0.000     7.108773    8.126579
+         urm |    -7.7766   .3816368   -20.38   0.000    -8.526923   -7.026277
+   pared_bin |  -.2998049   .3669753    -0.82   0.414    -1.021302    .4216926
+      byses1 |   4.843076    .235401    20.57   0.000     4.380262     5.30589
+       _cons |   44.14914   .2987769   147.77   0.000     43.56173    44.73656
+------------------------------------------------------------------------------
+. 
+. /*Grab coeffs*/
+. 
+. local int=_b[_cons]    
+. 
+. local fem_coeff=_b[`female']
+. 
+. di `fem_coeff'
+-1.9584805
+. 
+. local plans_coeff=_b[`plans']
+. 
+. local race_coeff=_b[`race']
+. 
+. local pared_coeff=_b[`pared']
+. 
+. local ses_coeff=_b[`ses']
+. 
+. eststo myresults
+. 
+. predict res, resid
+(2,804 missing values generated)
+. 
+. sum(res)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         res |     13,356    .2143845    11.12312  -39.95344    42.2474
+. 
+. #delimit;
+delimiter now ;
+. quietly esttab * using sim_model.rtf,          /* estout command: * indicates all 
+> estimates in memory. csv specifies comma sep, best for excel */
+>                label                          /*Use labels for models and variable
+> s */
+>                nodepvars                      /* Use my model titles */
+>                b(2)                           /* b= coefficients , this gives two 
+> sig digits */
+>                not                            /* I don't want t statistics */
+>                se(2)                         /* I do want standard errors */
+>                nostar                       /* No stars */
+>                r2 (2)                      /* R squared */
+>                scalar(F  df_m df_r N)   /* select stats from the ereturn (list) */
+>                sfmt (2 0 0 0)                /* format for stats*/
+>                replace                   /* replace existing file */
+>                note("Linearized standard errors in parentheses.")
+>                ;
+. #delimit cr
+delimiter now cr
+. 
+. } /*End Analysis Section*/
+
+. 
+. 
+.     
+. /**************************************************/
+. /* 4.Simulation */ 
+. /**************************************************/
+. 
+. if `simulation'==1{
+.   
+. /* Generating Random Variables */
+. 
+. clear
+. 
+. set seed 0621
+. 
+. /*Continuous variables: uncorrelated*/
+. 
+. local popsize =1.6e5
+. drawnorm fakeses, n(`popsize')
+(obs 160,000)
+. 
+. drop fakeses
+. 
+. /*Continous variables: correlated */
+. drawnorm fakeses fakeincome, means(0 40)  sds(1 15) corr(1 .7\.7 1) n(`popsize') /
+> *Need to specify means and size of correlation */
+(obs 160,000)
+. 
+. drop fakeses fakeincome
+.     
+. /*Binary variable: independent */
+. 
+. gen fakefem=rbinomial(1,.50) /* 1 trial, p=.50 */
+. 
+. drop fakefem
+.     
+. /*Binary variable correlated with a continous variable */
+. 
+. mat mymat=J(5,5,.7) /*Creates a diagonal matrix with .7 */
+. mat mymat[1,1]=1 /*Replace the first row, first column with 1 */
+. mat mymat[2,2]=1
+. mat mymat[3,3]=1
+. mat mymat[4,4]=1
+. mat mymat[5,5]=1
+. 
+. mat li cormat
+
+symmetric cormat[5,5]
+               female    p_fouryr         urm   pared_bin      byses1
+   female           1
+ p_fouryr   .07380079           1
+      urm   .00951101  -.09993916           1
+pared_bin  -.00697178   .26393122  -.15579093           1
+   byses1  -.02800299   .31752007  -.28091318     .706646           1
+.     
+. drawnorm a b c d f, corr(mymat) n(`popsize')
+(obs 160,000)
+. 
+. drop a b c d f
+. 
+. 
+. 
+. /*Hypothetical structure for omitted variables*/
+. 
+. mat newcol=(0.01\.5\-.2\.5\.5) /*Adds a column */
+. 
+. mat cormat2=cormat,newcol
+. 
+. mat cormat2=cormat2\0.01,.5,-.2,.5,.5,1 /*Adds a row */
+. 
+. mat li cormat2
+
+symmetric cormat2[6,6]
+               female    p_fouryr         urm   pared_bin      byses1          c1
+   female           1
+ p_fouryr   .07380079           1
+      urm   .00951101  -.09993916           1
+pared_bin  -.00697178   .26393122  -.15579093           1
+   byses1  -.02800299   .31752007  -.28091318     .706646           1
+       r6         .01          .5         -.2          .5          .5           1
+. 
+. corr2data female_st plans_st race_st pared_st ses counsel_st, corr(cormat2) n(`pop
+> size')
+(obs 160,000)
+. 
+. /*Specify cut in normal dist for proportion with and without characteristics*/
+. 
+. gen femcut=invnormal(`prop_fem')    
+. gen female=female_st>femcut
+. 
+. gen paredcut=invnormal(`prop_pared')
+. gen pared= pared_st>paredcut 
+. 
+. gen plancut=invnormal(`prop_plans') 
+. gen plans=plans_st>plancut 
+. 
+. local race_other=1-`prop_race'
+. 
+. gen racecut=invnormal(`race_other') 
+. gen race=race_st<racecut 
+. 
+. local prop_counsel=.95
+.     
+. gen counselcut=invnormal(`prop_counsel') 
+. gen counsel=counsel_st>counselcut
+.     
+. drawnorm e, sds(11)
+. 
+. local effect 2
+. 
+. gen y=`int'+(`fem_coeff'*female)+(`plans_coeff'*plans)+(`race_coeff'*race)+(`pared
+> _coeff'*pared)+(`ses_coeff'*ses) + (`effect'*counsel)+e
+. 
+. keep y female plans race pared ses counsel e
+. 
+. preserve
+. 
+. sample 10
+(144,000 observations deleted)
+. 
+. reg y female plans race pared ses counsel /* True regression */
+
+      Source |       SS           df       MS      Number of obs   =    16,000
+-------------+----------------------------------   F(6, 15993)     =   1129.44
+       Model |  829378.219         6  138229.703   Prob > F        =    0.0000
+    Residual |  1957345.67    15,993  122.387649   R-squared       =    0.2976
+-------------+----------------------------------   Adj R-squared   =    0.2974
+       Total |  2786723.89    15,999   174.18113   Root MSE        =    11.063
+
+------------------------------------------------------------------------------
+           y |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      female |  -2.161771   .1752727   -12.33   0.000    -2.505326   -1.818217
+       plans |   7.474845   .1885195    39.65   0.000     7.105325    7.844364
+        race |   -7.57456   .2008082   -37.72   0.000    -7.968167   -7.180954
+       pared |  -.2080624   .2155049    -0.97   0.334    -.6304762    .2143514
+         ses |   4.889658   .1112904    43.94   0.000     4.671516      5.1078
+     counsel |   2.924825   .4092291     7.15   0.000      2.12269     3.72696
+       _cons |   44.03635   .2386703   184.51   0.000     43.56853    44.50417
+------------------------------------------------------------------------------
+. 
+. reg y female plans race pared ses /*OVB regression */
+
+      Source |       SS           df       MS      Number of obs   =    16,000
+-------------+----------------------------------   F(5, 15994)     =   1340.91
+       Model |   823126.43         5  164625.286   Prob > F        =    0.0000
+    Residual |  1963597.46    15,994   122.77088   R-squared       =    0.2954
+-------------+----------------------------------   Adj R-squared   =    0.2952
+       Total |  2786723.89    15,999   174.18113   Root MSE        =     11.08
+
+------------------------------------------------------------------------------
+           y |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      female |  -2.156435   .1755453   -12.28   0.000    -2.500524   -1.812347
+       plans |   7.675077   .1867178    41.11   0.000     7.309089    8.041065
+        race |  -7.571484   .2011219   -37.65   0.000    -7.965705   -7.177262
+       pared |  -.1862479   .2158204    -0.86   0.388    -.6092801    .2367844
+         ses |   5.019152   .1099774    45.64   0.000     4.803584     5.23472
+       _cons |   44.09383    .238908   184.56   0.000     43.62554    44.56211
+------------------------------------------------------------------------------
+. 
+. restore
+. 
+. /*Monte Carlo Study */
+. 
+. drop y
+. 
+. local effect 10 /* Size of the effect of counseling, can vary with each iteration 
+> */
+. 
+. gen y=`int'+(`fem_coeff'*female)+(`plans_coeff'*plans)+(`race_coeff'*race)+(`pared
+> _coeff'*pared)+(`ses_coeff'*ses) + (`effect'*counsel)+e
+.     
+. save counsel_universe_`effect', replace
+(note: file counsel_universe_10.dta not found)
+file counsel_universe_10.dta saved
+. 
+. tempname results_store
+. postfile `results_store' plans1 plans2  using results_file, replace
+(note: file results_file.dta not found)
+. local j=1  
+. while `j'<=100{  
+  2. 
+. use counsel_universe_`effect',clear  
+  3.   
+. quietly sample 10
+  4. 
+. quietly reg y female plans race pared ses counsel /* True regression */
+  5. 
+. scalar plans1=_b[plans]
+  6. 
+.  /*Pulls coefficient, puts it into scalar */
+. quietly reg y female plans race pared ses /*OVB regression */
+  7. 
+. scalar plans2=_b[plans]
+  8. 
+. post `results_store' (plans1) (plans2)
+  9. 
+. di "Finishing iteration `j'"
+ 10. 
+. local j=`j'+1
+ 11. }
+Finishing iteration 1
+Finishing iteration 2
+Finishing iteration 3
+Finishing iteration 4
+Finishing iteration 5
+Finishing iteration 6
+Finishing iteration 7
+Finishing iteration 8
+Finishing iteration 9
+Finishing iteration 10
+Finishing iteration 11
+Finishing iteration 12
+Finishing iteration 13
+Finishing iteration 14
+Finishing iteration 15
+Finishing iteration 16
+Finishing iteration 17
+Finishing iteration 18
+Finishing iteration 19
+Finishing iteration 20
+Finishing iteration 21
+Finishing iteration 22
+Finishing iteration 23
+Finishing iteration 24
+Finishing iteration 25
+Finishing iteration 26
+Finishing iteration 27
+Finishing iteration 28
+Finishing iteration 29
+Finishing iteration 30
+Finishing iteration 31
+Finishing iteration 32
+Finishing iteration 33
+Finishing iteration 34
+Finishing iteration 35
+Finishing iteration 36
+Finishing iteration 37
+Finishing iteration 38
+Finishing iteration 39
+Finishing iteration 40
+Finishing iteration 41
+Finishing iteration 42
+Finishing iteration 43
+Finishing iteration 44
+Finishing iteration 45
+Finishing iteration 46
+Finishing iteration 47
+Finishing iteration 48
+Finishing iteration 49
+Finishing iteration 50
+Finishing iteration 51
+Finishing iteration 52
+Finishing iteration 53
+Finishing iteration 54
+Finishing iteration 55
+Finishing iteration 56
+Finishing iteration 57
+Finishing iteration 58
+Finishing iteration 59
+Finishing iteration 60
+Finishing iteration 61
+Finishing iteration 62
+Finishing iteration 63
+Finishing iteration 64
+Finishing iteration 65
+Finishing iteration 66
+Finishing iteration 67
+Finishing iteration 68
+Finishing iteration 69
+Finishing iteration 70
+Finishing iteration 71
+Finishing iteration 72
+Finishing iteration 73
+Finishing iteration 74
+Finishing iteration 75
+Finishing iteration 76
+Finishing iteration 77
+Finishing iteration 78
+Finishing iteration 79
+Finishing iteration 80
+Finishing iteration 81
+Finishing iteration 82
+Finishing iteration 83
+Finishing iteration 84
+Finishing iteration 85
+Finishing iteration 86
+Finishing iteration 87
+Finishing iteration 88
+Finishing iteration 89
+Finishing iteration 90
+Finishing iteration 91
+Finishing iteration 92
+Finishing iteration 93
+Finishing iteration 94
+Finishing iteration 95
+Finishing iteration 96
+Finishing iteration 97
+Finishing iteration 98
+Finishing iteration 99
+Finishing iteration 100
+. postclose `results_store'
+. 
+. use results_file, clear
+. 
+. kdensity plans1, xline(`plans_coeff', lcolor(blue) lstyle(dash)) addplot(kdensity 
+> plans2) legend(order(1 "True Model" 2 "OVB Model"))
+(note:  named style dash not found in class linestyle, default attributes used)
+. 
+. exit 
+
+end of do-file
+
+
+. do simulation.do
+
+. version 12 /* Can set version here, use the most recent as default */
+
+. capture log close /* Closes any logs, should they be open */
