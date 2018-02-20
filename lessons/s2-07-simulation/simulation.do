@@ -32,7 +32,7 @@ local recoding=1
   
 /* 2. Analysis and output */
 
-  local analysis=1
+local analysis=1
   
 /*3. Simulation */
 
@@ -43,6 +43,16 @@ local simulation=1
 /**************************************************/
 
 global ddir "../../data/"
+
+/**************************************************/
+/* Locals */
+/**************************************************/
+
+// Graphics type
+local gtype png
+
+// Table type
+local ttype rtf
 
 /**************************************************/  
 /* 1. Recoding and data Setup */
@@ -154,6 +164,7 @@ label variable female "Female"
 
 /* y=50+(-2*fakefem)+(10*plans)+(-10*race)+(10*pared)+`effect'*counsel+e*/
 
+save ${ddir}plans3, replace    
   
 }/*End recoding section */
 
@@ -180,6 +191,9 @@ local y bynels2m
 
 if `analysis==1'{
 
+
+use ${ddir}plans3.dta, clear
+    
 /*Stuff we'll want later */
 
 prop `female'
@@ -257,19 +271,21 @@ quietly esttab * using sim_model.rtf,          /* estout command: * indicates al
 
 if `simulation'==1{
 
+clear
+    
 // TOC
 
 //1: Run CLT example
 local xbar_example=1
 
 //2: Run basic regression example
-local reg_example_1=0
+local reg_example_1=1
 
 //3: Run multiple regression example
-local reg_example_2=0
+local reg_example_2=1
 
 //4: Run complex example based on data
-local complex_example=0
+local complex_example=1
     
 // Create a hypothetical situation
 
@@ -278,6 +294,10 @@ local mysd 1
 local pop_size 10000
 local sample_size 100
 local nreps 1000
+
+// Is CLT a real thing?
+
+if `xbar_example'==1{
 
 // Create variable x based on values above
 drawnorm x, means(`mymean') sds(`mysd') n(`pop_size')
@@ -301,11 +321,7 @@ sample `sample_size', count // Take a sample
 mean x // Calculate mean 
 tabstat x, stat(sd) // Calculate sds
 restore //
-
-
-// Is CLT a real thing?
-
-if `xbar_example'==1{
+        
 // create a place in memory called buffer which will store a variable called xbar in a file called means.dta
 postfile buffer xbar using means, replace 
 
@@ -338,7 +354,12 @@ tabstat xbar,stat(sd) save
 mat M=r(StatTotal)
 
 scalar simulate_se=M[1,1]
+
 }
+
+
+// Run MC study for basic regression
+if `reg_example_1'==1{
 
 // Regression simulation: first example
 
@@ -357,9 +378,8 @@ local beta_1=2
 // Generate outcome
 gen y=`beta_0'+`beta_1'*x+e
 
-// Run MC study for basic regression
-if `reg_example_1'==1{
-// create a place in memory called buffer which will store a variable called xbar in a file called means.dta
+
+    // create a place in memory called buffer which will store a variable called xbar in a file called means.dta
 postfile buffer beta_0 beta_1 using reg_1, replace 
 
 forvalues i=1/`nreps'{
@@ -389,8 +409,14 @@ mean beta_1
 
 }
 
+
+    
 // Multiple regression example
 
+if `reg_example_2'==1{
+
+clear
+    
 local my_corr=.02
 
 local my_means 10 20 
@@ -410,7 +436,7 @@ local beta_2=4
 
 gen y= `beta_0'+`beta_1'*x1 +`beta_2'*x2 + e
 
-if `reg_example_2'==1{
+    
 // create a place in memory called buffer which will store a variable called xbar in a file called means.dta
 postfile buffer beta_0 beta_1 using reg_2, replace 
 
@@ -564,8 +590,6 @@ use results_file, clear
 
 kdensity plans1, xline(`plans_coeff', lcolor(blue) lstyle(dash)) addplot(kdensity plans2) legend(order(1 "True Model" 2 "OVB Model"))
 
-exit 
-
 /*Now vary effect size*/
 
 local effect_size 5 10 15 20
@@ -609,7 +633,7 @@ postclose `results_store'
 
 use results_file_`effect', clear
 
-kdensity plans1, xline(`plans_coeff', lcolor(black) lpattern(dash)) addplot(kdensity plans2) legend(order(1 "True Model" 2 "OVB Model"))  title("Effect Size=`effect'")
+kdensity plans1, xline(`plans_coeff', lcolor(black) lpattern(dash)) addplot(kdensity plans2) legend(order(1 "True Model" 2 "OVB Model"))  title("Coefficient for Counseling=`effect'")
 
 graph save monte_carlo_`effect'.gph, replace
 
