@@ -130,12 +130,9 @@ eststo full_model_a, title("Model 2:No Test 3")
 
 estat vif
 
-
-
 /**************************************************/
 /*Heteroskedasticity*/
-/**************************************************/
-  
+/**************************************************/  
 
 reg lw_het  `x' `controls'
 
@@ -168,6 +165,7 @@ estat imtest, white
 reg lw_het `x' `controls', robust
 eststo full_model_robust, title("Model 2: Robust SE")
 
+reg lw_het `x' `controls', vce(robust)
 
 /*Clustered se.'s*/
 reg `y' `x' `controls', cluster(med)
@@ -179,6 +177,7 @@ eststo full_model_cluster, title("Model 2: Cluster SE")
 reg `y' `x' `controls'
   
 reg `y' `x' `controls', beta
+
 
 eststo full_model_beta, title("Model 2: Standardized Coefficients")
 
@@ -231,11 +230,14 @@ graph save qfit_add, replace
 
 graph combine basic_scatter.gph lowess_add.gph lfit_add.gph qfit_add.gph, rows(2)
 
+
 graph export logfit.`gtype', replace
 
 reg lw s expr expr2
 
 test expr expr2
+
+
 
 
 /**************************************************/
