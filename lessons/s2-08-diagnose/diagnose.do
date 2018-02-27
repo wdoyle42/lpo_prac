@@ -1,12 +1,12 @@
-version 12
+version 14
 capture log close
 log using "diagnose.log",replace
 
 /* PhD Practicum, Spring 2017 */
 /* Diagnosing Problems with Regression */
 /* Will Doyle*/
-/* 3/21/2017 */
-/* Saved on Blackboard */
+/* 2/27/2018 */
+/* On github repo */
 
 clear
 
