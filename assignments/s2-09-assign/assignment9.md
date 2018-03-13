@@ -1,24 +1,9 @@
 ## Assignment 9
 
-Use the Mroz data to answer the following questions about female employment.
+Use either your data or the plans data to complete the following steps:
 
-1. Run a logit model predicting labor force participation based on characteristics of
-the woman and of the children.
+1. Create a table of baseline equivalence, that shows how various whether or not there are significant differences among the control variables as a function of your treatment variable. 
 
-2. Generate the marginal effects for all of the variables, holding other predictors at
-their means.
+2. Run a regression across both your full sample and various subsamples, reporting the results for just your key independent variable or variables in a table. 
 
-3. In comments in the do file. Explain why the estimates of an independent variable’s
-relationship to the outcome are not constant across population.
-
-4. Generate the predicted probability of working for a range of mother’s years of
-education. Create a plot or table for these predicted probabilities.
-
-5. Generated the predicted probability of working for range of mother’s years of education
-interacted with husband’s wage. Create a plot or table to explain the
-relationship you observe.
-
-6. Does including characteristics related to the husband’s education significantly
-increase model fit from your preferred model? Compare predictions of these two
-models graphically using the ROC.
-
+3. Create a graphic that shows how the relationship between one of your key independent variables and your dependent variable varies by levels of another variable. Repeat that graphic for various subsamples of the data. (hint: use grc1leg2)
