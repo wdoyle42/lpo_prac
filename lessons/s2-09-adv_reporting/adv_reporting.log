@@ -3,7 +3,7 @@
        log:  /Users/doylewr/practicum_2017/central/lessons/s2-09-adv_reporting/adv_r
 > eporting.log
   log type:  text
- opened on:  13 Mar 2018, 13:58:40
+ opened on:  13 Mar 2018, 14:17:58
 
 . 
 . clear
@@ -243,6 +243,11 @@ black or african american, non-hispanic |      2,027       13.23       23.64
 . local race amind asian black hispanic multiracial 
 
 . 
+. gen female= bysex==2
+
+. replace female=. if bysex==.
+(859 real changes made, 859 to missing)
+
 . 
 . gen expect_college=.
 (16,289 missing values generated)
@@ -271,10 +276,10 @@ black or african american, non-hispanic |      2,027       13.23       23.64
 . local ses byses1
 
 . 
-. local race amind asian black hispanic multiracial white 
+. local race amind asian black hispanic multiracial 
 
 . 
-. local sex bysex
+. local sex female
 
 . 
 . local tests bynels2m bynels2r
@@ -302,9 +307,10 @@ black or african american, non-hispanic |      2,027       13.23       23.64
   3. 
 . foreach race_var of local race{
   4. if `test_level'==-1{
-  5.      quietly reg `race_var' `x' 
+  5.      quietly reg `race_var' `x' // Full sample
   6. }
-  7.  else quietly reg `race_var' `x' if test_group==`test_level'
+  7. 
+. else quietly reg `race_var' `x' if test_group==`test_level'
   8. 
 . scalar my_diff = round(_b[`x'], `mysig')
   9. 
@@ -401,12 +407,7 @@ r2  -8.595
 r1    .005
 r2   1.086
 
-M[2,1]
-       c1
-r1   .058
-r2  5.409
-
-M_col[12,1]
+results_tab[10,1]
         c1
 r1   -.004
 r2   -1.83
@@ -418,23 +419,6 @@ r1   -.065
 r2  -8.595
 r1    .005
 r2   1.086
-r1    .058
-r2   5.409
-
-results_tab[12,1]
-        c1
-r1   -.004
-r2   -1.83
-r1    .036
-r2   5.681
-r1   -.031
-r2  -4.211
-r1   -.065
-r2  -8.595
-r1    .005
-r2   1.086
-r1    .058
-r2   5.409
 
 M[2,1]
       c1
@@ -506,27 +490,7 @@ r2   .665
 r1   .008
 r2  1.132
 
-M[2,1]
-        c1
-r1   -.101
-r2  -5.909
-
-M_col[12,1]
-        c1
-r1    .004
-r2    .932
-r1    .008
-r2    .915
-r1     .07
-r2   4.454
-r1     .01
-r2    .665
-r1    .008
-r2   1.132
-r1   -.101
-r2  -5.909
-
-results_tab[12,2]
+results_tab[10,2]
         c1      c1
 r1   -.004    .004
 r2   -1.83    .932
@@ -538,8 +502,6 @@ r1   -.065     .01
 r2  -8.595    .665
 r1    .005    .008
 r2   1.086   1.132
-r1    .058   -.101
-r2   5.409  -5.909
 
 M[2,1]
        c1
@@ -611,27 +573,7 @@ r2  -1.001
 r1    .003
 r2    .328
 
-M[2,1]
-        c1
-r1   -.092
-r2  -4.431
-
-M_col[12,1]
-        c1
-r1   -.002
-r2   -.475
-r1    .039
-r2   3.499
-r1    .066
-r2   4.278
-r1   -.015
-r2  -1.001
-r1    .003
-r2    .328
-r1   -.092
-r2  -4.431
-
-results_tab[12,3]
+results_tab[10,3]
         c1      c1      c1
 r1   -.004    .004   -.002
 r2   -1.83    .932   -.475
@@ -643,8 +585,6 @@ r1   -.065     .01   -.015
 r2  -8.595    .665  -1.001
 r1    .005    .008    .003
 r2   1.086   1.132    .328
-r1    .058   -.101   -.092
-r2   5.409  -5.909  -4.431
 
 M[2,1]
        c1
@@ -716,27 +656,7 @@ r2   .167
 r1  -.002
 r2  -.169
 
-M[2,1]
-       c1
-r1   -.01
-r2  -.371
-
-M_col[12,1]
-       c1
-r1  -.004
-r2  -.756
-r1   .003
-r2   .204
-r1   .009
-r2   .608
-r1   .003
-r2   .167
-r1  -.002
-r2  -.169
-r1   -.01
-r2  -.371
-
-results_tab[12,4]
+results_tab[10,4]
         c1      c1      c1      c1
 r1   -.004    .004   -.002   -.004
 r2   -1.83    .932   -.475   -.756
@@ -748,8 +668,6 @@ r1   -.065     .01   -.015    .003
 r2  -8.595    .665  -1.001    .167
 r1    .005    .008    .003   -.002
 r2   1.086   1.132    .328   -.169
-r1    .058   -.101   -.092    -.01
-r2   5.409  -5.909  -4.431   -.371
 
 M[2,1]
         c1
@@ -821,27 +739,7 @@ r2    -2.8
 r1    .028
 r2    1.63
 
-M[2,1]
-       c1
-r1  -.008
-r2   -.21
-
-M_col[12,1]
-        c1
-r1   -.011
-r2  -2.907
-r1    .033
-r2   1.198
-r1    .013
-r2    .894
-r1   -.055
-r2    -2.8
-r1    .028
-r2    1.63
-r1   -.008
-r2    -.21
-
-results_tab[12,5]
+results_tab[10,5]
         c1      c1      c1      c1      c1
 r1   -.004    .004   -.002   -.004   -.011
 r2   -1.83    .932   -.475   -.756  -2.907
@@ -853,14 +751,16 @@ r1   -.065     .01   -.015    .003   -.055
 r2  -8.595    .665  -1.001    .167    -2.8
 r1    .005    .008    .003   -.002    .028
 r2   1.086   1.132    .328   -.169    1.63
-r1    .058   -.101   -.092    -.01   -.008
-r2   5.409  -5.909  -4.431   -.371    -.21
 
 . 
-. matrix rownames results_tab="Native American" "t value"  "Asian"  "t value" "Afric
-> an American" "t value" "Hispanic" "t value" "Multiracial" "t value" "White" "t val
-> ue"
+. matrix rownames results_tab= ///
+>  "Native American" "t value" ///
+>  "Asian"  "t value" ///
+>  "African American" "t value" ///
+>  "Hispanic" "t value" /// 
+>  "Multiracial" "t value" 
 
+. 
 . 
 . matrix colnames results_tab = "Full Sample" "Lowest Quartile" "2nd Quartile" "3rd 
 > Quartile" "4th Quartile" 
@@ -871,45 +771,59 @@ r2   5.409  -5.909  -4.431   -.371    -.21
 . estout matrix(results_tab) using "baseline_tab.`ttype'", style(fixed) replace
 (output written to baseline_tab.rtf)
 
+.   
+.   
+. // Regression results
 . 
-. exit    
+. foreach test_level of numlist 0(1)3{
+  2.     
+. quietly reg `y' `x' if test_group==`test_level'
+  3. 
+. scalar my_coeff = round(_b[`x'], `mysig')
+  4. 
+. scalar my_se =round(_se[`x'],`mysig')
+  5. 
+. scalar my_n=round(e(N))
+  6.     
+. mat M1= [my_coeff\my_se\my_n]
+  7.     
+. quietly reg `y' `x' `controls' if test_group==`test_level'
+  8. 
+. scalar my_coeff = round(_b[`x'], `mysig')
+  9. 
+. scalar my_se =round(_se[`x'],`mysig')
+ 10. 
+. scalar my_n=round(e(N))
+ 11.     
+. mat M2= [my_coeff\my_se\my_n]
+ 12.     
+. mat M=(M1,M2)   
+ 13. 
+.     if `test_level'==0{
+ 14.         mat reg_results=M
+ 15.     }
+ 16.     else mat reg_results=(reg_results,M)
+ 17.     
+. } // end loop over test levels    
+
+. 
+.     
+. matrix rownames reg_results= "Expect College" "SE" "N"
+
+. matrix colnames reg_results="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Q
+> uartile" 
+
+. 
+. 
+. // Table
+.     
+. estout matrix(reg_results) using "reg_resuts.`ttype'", style(fixed) replace
+(note: file reg_resuts.rtf not found)
+(output written to reg_resuts.rtf)
+
+. 
+. exit 
 
 end of do-file
 
-
-. tab bysex
-
-                        sex-composite |      Freq.     Percent        Cum.
---------------------------------------+-----------------------------------
-                                 male |      7,689       49.83       49.83
-                               female |      7,741       50.17      100.00
---------------------------------------+-----------------------------------
-                                Total |     15,430      100.00
-
-. tab bysex, missing
-
-                        sex-composite |      Freq.     Percent        Cum.
---------------------------------------+-----------------------------------
-                                 male |      7,689       47.20       47.20
-                               female |      7,741       47.52       94.73
-                                    . |        859        5.27      100.00
---------------------------------------+-----------------------------------
-                                Total |     16,289      100.00
-
-. codebook bysex
-
-------------------------------------------------------------------------------------
-bysex                                                                  sex-composite
-------------------------------------------------------------------------------------
-
-                  type:  numeric (byte)
-                 label:  bysex
-
-                 range:  [1,2]                        units:  1
-         unique values:  2                        missing .:  859/16,289
-
-            tabulation:  Freq.   Numeric  Label
-                         7,689         1  male
-                         7,741         2  female
-                           859         .  
 

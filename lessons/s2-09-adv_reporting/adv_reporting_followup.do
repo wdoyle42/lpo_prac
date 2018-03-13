@@ -70,9 +70,9 @@ local x expect_college
 
 local ses byses1
 
-local race amind asian black hispanic multiracial white female
+local race amind asian black hispanic multiracial 
 
-local sex bysex
+local sex female
 
 local tests bynels2m bynels2r
 
@@ -93,9 +93,10 @@ local counter=1
 
 foreach race_var of local race{
 if `test_level'==-1{
-     quietly reg `race_var' `x' 
+     quietly reg `race_var' `x' // Full sample
 }
- else quietly reg `race_var' `x' if test_group==`test_level'
+
+else quietly reg `race_var' `x' if test_group==`test_level'
 
 scalar my_diff = round(_b[`x'], `mysig')
 
@@ -123,21 +124,19 @@ mat li results_tab
 } // End loop over test scores
 
 matrix rownames results_tab= ///
-"Native American" "t value" ///
+ "Native American" "t value" ///
  "Asian"  "t value" ///
  "African American" "t value" ///
  "Hispanic" "t value" /// 
- "Multiracial" "t value" ///
- "White" "t value" ///
- "Female" "t value"
+ "Multiracial" "t value" 
+
 
 matrix colnames results_tab = "Full Sample" "Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
 
     // Table
     
 estout matrix(results_tab) using "baseline_tab.`ttype'", style(fixed) replace
-
-exit    
+  
   
 // Regression results
 
@@ -174,14 +173,17 @@ mat M=(M1,M2)
 
     
 matrix rownames reg_results= "Expect College" "SE" "N"
-matrix colnames reg_results="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
+matrix colnames reg_results="Lowest Quartile" "Lowest Quartile" ///
+ "2nd Quartile"  "2nd Quartile" /// 
+ "3rd Quartile" "3rd Quartile" /// 
+ "4th Quartile" "4th Quartile" 
 
 
 // Table
     
- //estout matrix(reg_results) using "reg_resuts.`ttype'", style(tex) replace
+estout matrix(reg_results) using "reg_resuts.`ttype'", style(fixed) replace
 
-
+exit 
     
 // Complex Graphics
 
