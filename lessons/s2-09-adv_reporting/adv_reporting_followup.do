@@ -51,6 +51,8 @@ label variable multiracial "Multiracial"
 
 local race amind asian black hispanic multiracial 
 
+gen female= bysex==2
+replace female=. if bysex==.
 
 gen expect_college=.
 
@@ -68,7 +70,7 @@ local x expect_college
 
 local ses byses1
 
-local race amind asian black hispanic multiracial white 
+local race amind asian black hispanic multiracial white female
 
 local sex bysex
 
@@ -84,13 +86,16 @@ local mysig=.001
 
 // Balance test: how different is the key covariate (treatment variable) by levels of the control variables
 
-foreach test_level of numlist 0(1)3{
+foreach test_level of numlist -1(1)3{
     
 //Counter variable
 local counter=1
 
-foreach race_var of local race{        
-     quietly reg `race_var' `x' if test_group==`test_level'
+foreach race_var of local race{
+if `test_level'==-1{
+     quietly reg `race_var' `x' 
+}
+ else quietly reg `race_var' `x' if test_group==`test_level'
 
 scalar my_diff = round(_b[`x'], `mysig')
 
@@ -109,7 +114,7 @@ if `counter'==1{
  mat li M_col
 } //end loop over race variables
 
-    if `test_level'==0{
+    if `test_level'==-1{
        mat results_tab=M_col
     }
     else mat results_tab=(results_tab,M_col)
@@ -117,14 +122,22 @@ if `counter'==1{
 mat li results_tab
 } // End loop over test scores
 
-matrix rownames results_tab="Native American" "t value"  "Asian"  "t value" "African American" "t value" "Hispanic" "t value" "Multiracial" "t value" "White" "t value"
+matrix rownames results_tab= ///
+"Native American" "t value" ///
+ "Asian"  "t value" ///
+ "African American" "t value" ///
+ "Hispanic" "t value" /// 
+ "Multiracial" "t value" ///
+ "White" "t value" ///
+ "Female" "t value"
 
-matrix colnames results_tab ="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
+matrix colnames results_tab = "Full Sample" "Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
 
     // Table
     
 estout matrix(results_tab) using "baseline_tab.`ttype'", style(fixed) replace
-   
+
+exit    
   
 // Regression results
 
