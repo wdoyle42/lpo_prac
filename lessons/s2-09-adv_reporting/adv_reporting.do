@@ -188,3 +188,7 @@ graph save "scatter_`quartile'.gph", replace
 // Combine  all levels
 
 grc1leg2 scatter_1.gph scatter_2.gph scatter_3.gph scatter_4.gph, legendfrom("scatter_1.gph") rows(2) name(scatter,replace) xcommon ycommon
+
+graph export scatter.eps, replace
+
+exit 
