@@ -2,7 +2,7 @@
 
 Use either your data or the plans data to complete the following steps:
 
-1. Create a table of baseline equivalence, that shows how various whether or not there are significant differences among the control variables as a function of your treatment variable. 
+1. Create a table of baseline equivalence, that shows whether there are significant differences among the control variables as a function of your treatment variable. 
 
 2. Run a regression across both your full sample and various subsamples, reporting the results for just your key independent variable or variables in a table. 
 
