@@ -1,9 +1,8 @@
-------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s2-09-adv_reporting/adv_r
-> eporting.log
+       log:  /Users/doylewr/practicum_2017/central/lessons/s2-09-adv_reporting/adv_reporting.log
   log type:  text
- opened on:  13 Mar 2018, 14:17:58
+ opened on:  13 Mar 2018, 14:54:08
 
 . 
 . clear
@@ -27,52 +26,39 @@ Contains data from ../../data/attend.dta
   obs:        16,289                          
  vars:            28                          11 Apr 2013 10:46
  size:       961,051                          
-------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
               storage   display    value
 variable name   type    format     label      variable label
-------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
 stu_id          long    %12.0f                Student ID
-f2evratt        byte    %12.0f     F2EVRATT   Whether has ever attended a
-                                                postsecondary institution -
-                                                composite
+f2evratt        byte    %12.0f     F2EVRATT   Whether has ever attended a postsecondary institution - composite
 sch_id          int     %8.0g                 school id
 strat_id        int     %8.0g                 stratum
 psu             byte    %8.0g      psu        primary sampling unit
 f1sch_id        int     %8.0g                 link to first follow-up school
-f1univ1         int     %8.0g      f1univ1    sample member status in by and f1
-                                                rounds
-f1univ2a        byte    %8.0g      f1univ2a   base year status and how sample member
-                                                entered f1 sample
+f1univ1         int     %8.0g      f1univ1    sample member status in by and f1 rounds
+f1univ2a        byte    %8.0g      f1univ2a   base year status and how sample member entered f1 sample
 f1univ2b        byte    %8.0g      f1univ2b   sample member f1 status
-g10cohrt        byte    %8.0g      g10cohrt   sophomore cohort member in 2001-2002
-                                                school year
+g10cohrt        byte    %8.0g      g10cohrt   sophomore cohort member in 2001-2002 school year
 g12cohrt        byte    %8.0g      g12cohrt   f1 senior cohort member
 bystuwt         float   %9.0g                 student weight
 bysex           byte    %8.0g      bysex      sex-composite
 byrace          byte    %8.0g      byrace     student^s race/ethnicity-composite
 bydob_p         long    %12.0g                student^s year and month of birth
 bypared         byte    %8.0g      bypared    parents^ highest level of education
-bymothed        byte    %8.0g      bymothed   mother^s highest level of
-                                                education-composite
-byfathed        byte    %8.0g      byfathed   father^s highest level of
-                                                education-composite
-byincome        byte    %8.0g      byincome   total family income from all sources
-                                                2001-composite
+bymothed        byte    %8.0g      bymothed   mother^s highest level of education-composite
+byfathed        byte    %8.0g      byfathed   father^s highest level of education-composite
+byincome        byte    %8.0g      byincome   total family income from all sources 2001-composite
 byses1          float   %9.0g                 socio-economic status composite, v.1
 byses2          float   %9.0g                 socio-economic status composite, v.2
-bystexp         byte    %8.0g      bystexp    how far in school student thinks will
-                                                get-composite
-bynels2m        float   %9.0g                 els-nels 1992 scale equated sophomore
-                                                math score
-bynels2r        float   %9.0g                 els-nels 1992 scale equated sophomore
-                                                reading score
+bystexp         byte    %8.0g      bystexp    how far in school student thinks will get-composite
+bynels2m        float   %9.0g                 els-nels 1992 scale equated sophomore math score
+bynels2r        float   %9.0g                 els-nels 1992 scale equated sophomore reading score
 f1qwt           float   %9.0g                 questionnaire weight for f1
-f1pnlwt         float   %9.0g                 panel weight, by and f1 (2002 and
-                                                2004)
-f1psepln        byte    %8.0g      f1psepln   f1 post-secondary plans right after
-                                                high school
+f1pnlwt         float   %9.0g                 panel weight, by and f1 (2002 and 2004)
+f1psepln        byte    %8.0g      f1psepln   f1 post-secondary plans right after high school
 _merge          byte    %23.0g     _merge     
-------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
 Sorted by: 
 
 . 
@@ -297,8 +283,7 @@ black or african american, non-hispanic |      2,027       13.23       23.64
 . local mysig=.001
 
 . 
-. // Balance test: how different is the key covariate (treatment variable) by levels
->  of the control variables
+. // Balance test: how different is the key covariate (treatment variable) by levels of the control variables
 . 
 . foreach test_level of numlist -1(1)3{
   2.     
@@ -762,8 +747,7 @@ r2   1.086   1.132    .328   -.169    1.63
 
 . 
 . 
-. matrix colnames results_tab = "Full Sample" "Lowest Quartile" "2nd Quartile" "3rd 
-> Quartile" "4th Quartile" 
+. matrix colnames results_tab = "Full Sample" "Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
 
 . 
 .     // Table
@@ -775,52 +759,110 @@ r2   1.086   1.132    .328   -.169    1.63
 .   
 . // Regression results
 . 
-. foreach test_level of numlist 0(1)3{
-  2.     
-. quietly reg `y' `x' if test_group==`test_level'
-  3. 
-. scalar my_coeff = round(_b[`x'], `mysig')
-  4. 
-. scalar my_se =round(_se[`x'],`mysig')
-  5. 
-. scalar my_n=round(e(N))
-  6.     
-. mat M1= [my_coeff\my_se\my_n]
-  7.     
-. quietly reg `y' `x' `controls' if test_group==`test_level'
-  8. 
-. scalar my_coeff = round(_b[`x'], `mysig')
-  9. 
-. scalar my_se =round(_se[`x'],`mysig')
- 10. 
-. scalar my_n=round(e(N))
- 11.     
-. mat M2= [my_coeff\my_se\my_n]
- 12.     
-. mat M=(M1,M2)   
- 13. 
-.     if `test_level'==0{
- 14.         mat reg_results=M
- 15.     }
- 16.     else mat reg_results=(reg_results,M)
- 17.     
-. } // end loop over test levels    
+. egen ses_group=cut(byses1), group(4)
+(964 missing values generated)
 
 . 
+. replace test_group=test_group+1
+(15,976 real changes made)
+
+. replace ses_group=ses_group+1
+(15,325 real changes made)
+
+. 
+. local grouping_vars test_group ses_group
+
+. 
+. foreach grouping_var of local grouping_vars{
+  2. 
+. foreach test_level of numlist 0(1)4{
+  3.  
+. if `test_level'==0{
+  4. quietly eststo naive_`test_level':reg `y' `x'
+  5. }
+  6. else quietly eststo naive_`test_level':reg `y' `x' if `grouping_var'==`test_level'
+  7. 
+. scalar my_coeff = round(_b[`x'], `mysig')
+  8. 
+. scalar my_se =round(_se[`x'],`mysig')
+  9. 
+. scalar my_n=round(e(N))
+ 10.     
+. mat M1= [my_coeff\my_se\my_n]
+ 11. 
+. if `test_level'==0{   
+ 12. quietly eststo full_`test_level':reg `y' `x' `controls' 
+ 13. }
+ 14. else quietly eststo full_`test_level':reg `y' `x' `controls' if `grouping_var'==`test_level'
+ 15. 
+. scalar my_coeff = round(_b[`x'], `mysig')
+ 16. 
+. scalar my_se =round(_se[`x'],`mysig')
+ 17. 
+. scalar my_n=round(e(N))
+ 18.     
+. mat M2= [my_coeff\my_se\my_n]
+ 19.     
+. mat M=(M1,M2)   
+ 20. 
+.     if `test_level'==0{
+ 21.         mat reg_results=M
+ 22.     }
+ 23.     else mat reg_results=(reg_results,M)
+ 24.     
+. } // end loop over test levels    
+ 25. 
 .     
 . matrix rownames reg_results= "Expect College" "SE" "N"
+ 26. matrix colnames reg_results=  "Full Sample" "Full Sample" ///
+>   "Lowest Quartile" "Lowest Quartile" ///
+>  "2nd Quartile"  "2nd Quartile" /// 
+>  "3rd Quartile" "3rd Quartile" /// 
+>  "4th Quartile" "4th Quartile" ///
+> 
+ 27. 
+. mat li reg_results
+ 28. // Table
+.   estout matrix(reg_results) using "reg_results.`ttype'", style(fixed) append
+ 29. 
+.   
+. } // Close loop over grouping variables
 
-. matrix colnames reg_results="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Q
-> uartile" 
+reg_results[3,10]
+               Full Sample   Full Sample  Lowest Qua~e  Lowest Qua~e  2nd Quartile  2nd Quartile  3rd Quartile  3rd Quartile
+Expect Col~e           .41          .251          .287          .211          .303          .219          .324          .265
+          SE          .009           .01          .019          .019           .02           .02           .02           .02
+           N         12084         12084          2671          2671          2861          2861          3138          3138
+
+              4th Quartile  4th Quartile
+Expect Col~e          .375          .324
+          SE          .022          .022
+           N          3414          3414
+(output written to reg_results.rtf)
+
+reg_results[3,10]
+               Full Sample   Full Sample  Lowest Qua~e  Lowest Qua~e  2nd Quartile  2nd Quartile  3rd Quartile  3rd Quartile
+Expect Col~e           .41          .251          .356          .232          .326          .235          .335          .237
+          SE          .009           .01          .019           .02          .019           .02           .02          .021
+           N         12084         12084          2767          2767          2898          2898          3090          3090
+
+              4th Quartile  4th Quartile
+Expect Col~e          .292          .228
+          SE          .018          .019
+           N          3329          3329
+(output written to reg_results.rtf)
 
 . 
 . 
-. // Table
-.     
-. estout matrix(reg_results) using "reg_resuts.`ttype'", style(fixed) replace
-(note: file reg_resuts.rtf not found)
-(output written to reg_resuts.rtf)
+. esttab naive_0 full_0 ///
+> naive_1 full_1 ///
+> naive_2 full_2 ///
+> naive_3 full_3 ///
+> naive_4 full_4 ///
+>  using results.rtf, keep(`x') scalar(N) not se nostar replace
+(output written to results.rtf)
 
+. 
 . 
 . exit 
 

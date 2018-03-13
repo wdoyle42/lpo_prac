@@ -140,9 +140,21 @@ estout matrix(results_tab) using "baseline_tab.`ttype'", style(fixed) replace
   
 // Regression results
 
-foreach test_level of numlist 0(1)3{
-    
-quietly reg `y' `x' if test_group==`test_level'
+egen ses_group=cut(byses1), group(4)
+
+replace test_group=test_group+1
+replace ses_group=ses_group+1
+
+local grouping_vars test_group ses_group
+
+foreach grouping_var of local grouping_vars{
+
+foreach test_level of numlist 0(1)4{
+ 
+if `test_level'==0{
+quietly eststo naive_`test_level':reg `y' `x'
+}
+else quietly eststo naive_`test_level':reg `y' `x' if `grouping_var'==`test_level'
 
 scalar my_coeff = round(_b[`x'], `mysig')
 
@@ -151,8 +163,11 @@ scalar my_se =round(_se[`x'],`mysig')
 scalar my_n=round(e(N))
     
 mat M1= [my_coeff\my_se\my_n]
-    
-quietly reg `y' `x' `controls' if test_group==`test_level'
+
+if `test_level'==0{   
+quietly eststo full_`test_level':reg `y' `x' `controls' 
+}
+else quietly eststo full_`test_level':reg `y' `x' `controls' if `grouping_var'==`test_level'
 
 scalar my_coeff = round(_b[`x'], `mysig')
 
@@ -173,15 +188,28 @@ mat M=(M1,M2)
 
     
 matrix rownames reg_results= "Expect College" "SE" "N"
-matrix colnames reg_results="Lowest Quartile" "Lowest Quartile" ///
+matrix colnames reg_results=  "Full Sample" "Full Sample" ///
+  "Lowest Quartile" "Lowest Quartile" ///
  "2nd Quartile"  "2nd Quartile" /// 
  "3rd Quartile" "3rd Quartile" /// 
- "4th Quartile" "4th Quartile" 
+ "4th Quartile" "4th Quartile" ///
 
 
+mat li reg_results
 // Table
-    
-estout matrix(reg_results) using "reg_resuts.`ttype'", style(fixed) replace
+  estout matrix(reg_results) using "reg_results.`ttype'", style(fixed) append
+
+  
+} // Close loop over grouping variables
+
+
+esttab naive_0 full_0 ///
+naive_1 full_1 ///
+naive_2 full_2 ///
+naive_3 full_3 ///
+naive_4 full_4 ///
+ using results.rtf, keep(`x') scalar(N) not se nostar replace
+
 
 exit 
     
