@@ -1,9 +1,8 @@
 capture log close
 // LPO Practicum
 // Will Doyle
-// Spring 2017
+// Spring 2018
 // Advanced Reporting: complex tables and graphics
-
 
 
 clear
@@ -58,6 +57,11 @@ gen expect_college=.
 replace expect_college=1 if bystexp>=5 & bystexp <.
 replace expect_college=0 if bystexp>0 &bystexp <5
 
+
+// Grouping variable for test scores
+egen test_group=cut(bynels2m), group(4)
+
+
 /* Set locals */
 
 local y f2evratt
@@ -72,103 +76,115 @@ local sex  bysex
 
 local tests bynels2m bynels2r
 
-local controls "ses" "race" "sex" "tests" 
+local controls " `ses' `race' `sex' `tests'" 
 
 local gtype pdf
 
+local ttype tex
 
-exit
-// Balance test
+local mysig=.001
 
+// Balance test: how different is the key covaraite (treatment variable) by levels of the control variables
 
+foreach test_level of numlist 0(1)3{
 
-if `systemno'==4{        
- quietly reg `test_var' tsaa_eli if abs(running)<`bw' & acyear<2007
+    
+//Counter variable
+local counter=1
+
+foreach race_var of local race{        
+     quietly reg `race_var' `x' if test_group==`test_level'
+
+scalar my_diff = round(_b[`x'], `mysig')
+
+scalar my_t =round(_b[`x']/_se[`x'],`mysig')
+     
+mat M= [my_diff\my_t]
+
+if `counter'==1{
+    mat M_col=M
 }
-else{
- quietly reg `test_var' tsaa_eli if abs(running)<`bw' & system2==`systemno' &acyear<2007
-}
+    else mat M_col=(M_col\M)
+ local counter=`counter'+1     
+} //end loop over race variables
 
-scalar my_diff = round(_b[tsaa_eli],.001)
+    if `test_level'==0{
+       mat results_tab=M_col
+    }
+    else mat results_tab=(results_tab,M_col)
 
-scalar my_t =round(_b[tsaa_eli]/_se[tsaa_eli],`my_sig')
+} // End loop over test scores
 
-mat M= [my_diff,my_t]
+matrix rownames results_tab="Native American" "t value"  "Asian"  "t value" "African American" "t value" "Hispanic" "t value" "Multiracial" "t value"
 
-if `bw'==27{
-    mat M_line=M
-}
-else mat M_line=(M_line,M)
+matrix colnames results_tab ="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
 
-} // End bandwidth loop
+    // Table
+    
+estout matrix(results_tab) using "baseline_tab.`ttype'", replace
+  
 
-if `i'==1{
-    mat M_out=M_line
-}
-else mat M_out=(M_out \ M_line)
-
-    local i=`i'+1
-} // End variable loop
-
-if `systemno'==1{
-mat M_balance=M_out
-}
-else mat M_balance=(M_balance \M_out)
-
-}
 
 // Regression results
 
+foreach test_level of numlist 0(1)3{
     
-if `regression'==1{
+quietly reg `y' `x' if test_group==`test_level'
 
-//Local Linear, no FE
+scalar my_coeff = round(_b[`x'], `mysig')
 
-foreach systemno of numlist 1/4{
+scalar my_se =round(_se[`x'],`mysig')
 
-capture mat drop beta_line se_line
-
-foreach bw of local bws{
-
-//Full Sample
+scalar my_n=round(e(N))
     
-if `systemno'==4{
-reg persist `interact' `controls' i.acyear if abs(running)<`bw' & acyear<2007 , robust
-}
+mat M1= [my_coeff\my_se\my_n]
+    
+quietly reg `y' `x' `controls' if test_group==`test_level'
 
-else{
- reg persist `interact' `controls' i.acyear if abs(running)<`bw'&system2==`systemno' & acyear<2007 , robust
-}
+scalar my_coeff = round(_b[`x'], `mysig')
 
+scalar my_se =round(_se[`x'],`mysig')
 
-if `bw'==27{
-    mat beta_line=round(_b[tsaa_eli],`my_sig')
-    mat se_line=round(_se[tsaa_eli],`my_sig')
-    mat n_line=e(N)
-}
-else{
-    mat beta_line=(beta_line,round(_b[tsaa_eli],`my_sig'))
-    mat se_line=(se_line,round(_se[tsaa_eli],`my_sig'))
-    mat n_line=(n_line,e(N))
-}
+scalar my_n=round(e(N))
+    
+mat M2= [my_coeff\my_se\my_n]
+    
+mat M=(M1,M2)   
 
-
-}
+    if `test_level'==0{
+        mat reg_results=M
+    }
+    else mat reg_results=(reg_results,M)
+    
+} // end loop over test levels    
 
 
-mat M_out=(beta_line \ se_line \n_line)
-
-if `systemno'==1{
-mat loc_results=M_out
-}
-else{
-mat loc_results=(loc_results \M_out)
-}
-}
+    
+matrix rownames reg_results= "Expect College" "SE" "N"
+matrix colnames reg_results="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
 
 
+// Table
+    
+estout matrix(reg_results) using "reg_resuts.`ttype'", replace
+
+
+    
 // Complex Graphics
 
-// Combine three sectors
+local test_level=0
+foreach test_level of numlist 0(1)3{
+local quartile=`test_level'+1
 
-grc1leg2 persist_1.gph persist_2.gph persist_3.gph, legendfrom(persist_1.gph) rows(1) name(persist,replace)
+graph twoway (scatter bynels2m byses1 if test_group==`test_level' & expect_college==0,msize(vtiny) color(red) mcolor(%10)) ///
+             (lfit bynels2m byses1 if test_group==`test_level' & expect_college==0,lwidth(thin) lcolor(red)) /// 
+             (scatter bynels2m byses1 if test_group==`test_level' & expect_college==1,msize(vtiny) color(blue)  mcolor(%10)) ///
+          (lfit  bynels2m byses1 if test_group==`test_level' & expect_college==1,lwidth(thin) color(blue)), ///
+legend(order(2 "Doesn't expect to go to college" 4 "Expects to go to college")) ytitle("Test Scores")  xtitle("SES") title("Quartile=`quartile'")
+
+graph save "scatter_`quartile'.gph", replace
+}    
+
+// Combine  all levels
+
+grc1leg2 scatter_1.gph scatter_2.gph scatter_3.gph scatter_4.gph, legendfrom("scatter_1.gph") rows(2) name(scatter,replace) xcommon ycommon
