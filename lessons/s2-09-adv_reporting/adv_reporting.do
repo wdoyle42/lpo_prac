@@ -4,6 +4,7 @@ capture log close
 // Spring 2018
 // Advanced Reporting: complex tables and graphics
 
+log using adv_reporting.log, replace
 
 clear
 
@@ -121,7 +122,7 @@ matrix colnames results_tab ="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4t
 
     // Table
     
-estout matrix(results_tab) using "baseline_tab.`ttype'", replace
+estout matrix(results_tab) using "baseline_tab.`ttype'", style(tex) replace
   
 
 
@@ -158,7 +159,6 @@ mat M=(M1,M2)
     
 } // end loop over test levels    
 
-
     
 matrix rownames reg_results= "Expect College" "SE" "N"
 matrix colnames reg_results="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
@@ -166,7 +166,7 @@ matrix colnames reg_results="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th
 
 // Table
     
-estout matrix(reg_results) using "reg_resuts.`ttype'", replace
+ //estout matrix(reg_results) using "reg_resuts.`ttype'", style(tex) replace
 
 
     
