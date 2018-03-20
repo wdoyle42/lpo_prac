@@ -1,11 +1,11 @@
-version 12 /* Can set version here, use the most recent as default */
+version 14 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 log using "panel.log", replace
     
 /* Panel data */
 /* Working with panel datasets, xt commands*/
 /* Will Doyle */
-/* 170411 */
+/* 2018-03-20 */
 /* Practicum Folder */
 
 clear
@@ -36,7 +36,6 @@ drop if state == 1 /* The Alaska problem */
     
 /* Set up data as panel data */
 xtset state year, yearly
-
 
 // help tsvarlist
 
@@ -128,10 +127,37 @@ reg `y' legideo `controls' i.state
  
 /* Fixed effects with AR1 error terms */
 
- xtregar `y' legideo `controls', fe rhotype (tsc) twostep lbi
+// Common autocorrelation across panels, with time series correlation estimated, use Cochrane/Orcutt by default (not good)
 
+xtregar `y' legideo `controls', fe rhotype(tsc) 
+
+// Unit-specific ar(1) process, uses pw transformation (better) 
  xtpcse `y' legideo `controls' i.state, correlation (psar1) independent
- 
+
+/* First differenced model*/
+
+sort state year 
+
+// Two time periods 
+reg approps_i legideo i.state if year <1986
+
+reg approps_i legideo i.state if year <1986
+
+reg D(approps_i legideo) if year <1986
+
+// Fully specified model
+
+// Drop board
+
+local controls perc1824 incpcp_i percpriv taxcpc_i  legcomp_i 
+
+xtreg `y' legideo `controls', fe
+
+reg D(`y' legideo `controls') 
+
+xtpcse D.approps D.legideo D.perc1824 D.incpcp_i D.percpriv D.taxcpc_i  D.legcomp_i, correlation (ar1) independent
+
+
 /*Random effects */
 
 xtreg `y' legideo `controls', re
@@ -142,13 +168,6 @@ estimates store re1
 
 hausman fe1 re1,  sigmamore
 
-/* First differenced model*/
-
-sort state year 
-
-xtreg D.approps D.legideo D.perc1824 D.incpcp_i D.percpriv D.taxcpc_i  D.legcomp_i 
-
-xtpcse D.approps D.legideo D.perc1824 D.incpcp_i D.percpriv D.taxcpc_i  D.legcomp_i, correlation (ar1) independent
 
 log close
 
