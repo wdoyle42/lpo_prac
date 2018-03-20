@@ -1,4 +1,4 @@
-## Assignment 9
+## Assignment 10
 Using the diss.dta file, complete the following steps
 1. Run a “pooled” regression, estimating the impact of percent of the population aged 18-24
 on appropriations, with appropriate controls
