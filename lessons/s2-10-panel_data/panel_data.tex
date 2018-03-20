@@ -24,7 +24,7 @@
 
 
 \begin{flushleft}
-Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9522\\ Spring 2017
+Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9522\\ Spring 2018
 \end{flushleft}
 
 \begin{center}
@@ -57,18 +57,15 @@ names. Here's some terminology:
   refers to a dataset where there are many more units than
   observations over time. 
 
-
 \item \emph{Cross-sectional time-series data}: this refers to data
   where there are much longer time series, and fewer data points. 
-
 
 \item \emph{Hierarchical or ``grouped'' data}: this refers to data
   where the observations are naturally grouped, e.g. students in
   classrooms, classrooms in schools. This type of data can also
   include multiple observations over time. 
 
-
-\item \emph{Fixed effects}:when used by economists, this refers toc
+\item \emph{Fixed effects}:when used by economists, this refers to
   models where the group mean is controlled for, either by subtracting
   it from the dependent variable or by individually controlling for
   each group effect via dummy variables. Also known as LSDV: least
@@ -366,17 +363,18 @@ coefficients $\gamma_t$.
   y_{it}=\alpha_i+ \beta x_{it} + \gamma_t + \epsilon_{it}
 \end{equation*}
 
-To estimate the above in stata, we would need to use the \texttt{xi}
+To estimate the above in stata, we would need to use the \texttt{i}
 function, which transforms variables into a categorical variable. The
 following syntax gives fixed effects for time, with time as a
 categorical variable:
 
 \begin{stlog}
-  . 
-. xi: xtreg `y' legideo   `controls' i.year , fe
-i.board           _Iboard_1-5         (naturally coded; _Iboard_1 omitted)
-i.year            _Iyear_1984-1999    (naturally coded; _Iyear_1984 omitted)
-note: _Iboard_5 omitted because of collinearity
+ 
+. 
+. /* Fixed Effects for Units and Time (state and year) */
+. 
+.  xtreg `y' legideo  `controls'  i.year , fe
+note: 5.board omitted because of collinearity
 
 Fixed-effects (within) regression               Number of obs      =       784
 Group variable: state                           Number of groups   =        49
@@ -397,32 +395,39 @@ corr(u_i, Xb)  = -0.4822                        Prob > F           =    0.0000
     percpriv |  -3.777036   10.16795    -0.37   0.710    -23.73984    16.18577
     taxcpc_i |   1.501035   .1425019    10.53   0.000      1.22126     1.78081
    legcomp_i |   .0016732   .0018213     0.92   0.359    -.0019025     .005249
-   _Iboard_2 |  -24.88159   97.00964    -0.26   0.798    -215.3412     165.578
-   _Iboard_3 |  -454.4452   183.9582    -2.47   0.014    -815.6115   -93.27897
-   _Iboard_4 |  -711.7997   165.6897    -4.30   0.000    -1037.099   -386.5002
-   _Iboard_5 |  (omitted)
- _Iyear_1985 |   220.3299   90.99408     2.42   0.016     41.68063    398.9791
- _Iyear_1986 |   113.4229     97.881     1.16   0.247    -78.74752    305.5932
- _Iyear_1987 |  -19.38342   105.0826    -0.18   0.854    -225.6928     186.926
- _Iyear_1988 |  -67.57019   113.1309    -0.60   0.551    -289.6807    154.5403
- _Iyear_1989 |  -274.3213   122.1241    -2.25   0.025    -514.0883   -34.55431
- _Iyear_1990 |  -399.1526   125.7373    -3.17   0.002    -646.0135   -152.2917
- _Iyear_1991 |  -657.3481   125.0003    -5.26   0.000    -902.7619   -411.9343
- _Iyear_1992 |  -678.0808   134.1735    -5.05   0.000    -941.5044   -414.6571
- _Iyear_1993 |   -936.106   136.6561    -6.85   0.000    -1204.404   -667.8083
- _Iyear_1994 |  -968.5213   145.4102    -6.66   0.000    -1254.006   -683.0365
- _Iyear_1995 |  -1031.559   153.3461    -6.73   0.000    -1332.624   -730.4935
- _Iyear_1996 |  -1044.886   162.4511    -6.43   0.000    -1363.827   -725.9445
- _Iyear_1997 |  -1058.236   171.5086    -6.17   0.000     -1394.96   -721.5123
- _Iyear_1998 |  -1197.384   189.6214    -6.31   0.000    -1569.669   -825.0989
- _Iyear_1999 |  -1194.228   195.1562    -6.12   0.000    -1577.379   -811.0763
+             |
+       board |
+     cbweak  |  -24.88159   97.00964    -0.26   0.798    -215.3412     165.578
+      gball  |  -454.4452   183.9582    -2.47   0.014    -815.6115   -93.27897
+     gbfour  |  -711.7997   165.6897    -4.30   0.000    -1037.099   -386.5002
+       plan  |          0  (omitted)
+             |
+        year |
+       1985  |   220.3299   90.99408     2.42   0.016     41.68063    398.9791
+       1986  |   113.4229     97.881     1.16   0.247    -78.74752    305.5932
+       1987  |  -19.38342   105.0826    -0.18   0.854    -225.6928     186.926
+       1988  |  -67.57019   113.1309    -0.60   0.551    -289.6807    154.5403
+       1989  |  -274.3213   122.1241    -2.25   0.025    -514.0883   -34.55431
+       1990  |  -399.1526   125.7373    -3.17   0.002    -646.0135   -152.2917
+       1991  |  -657.3481   125.0003    -5.26   0.000    -902.7619   -411.9343
+       1992  |  -678.0808   134.1735    -5.05   0.000    -941.5044   -414.6571
+       1993  |   -936.106   136.6561    -6.85   0.000    -1204.404   -667.8083
+       1994  |  -968.5213   145.4102    -6.66   0.000    -1254.006   -683.0365
+       1995  |  -1031.559   153.3461    -6.73   0.000    -1332.624   -730.4935
+       1996  |  -1044.886   162.4511    -6.43   0.000    -1363.827   -725.9445
+       1997  |  -1058.236   171.5086    -6.17   0.000     -1394.96   -721.5123
+       1998  |  -1197.384   189.6214    -6.31   0.000    -1569.669   -825.0989
+       1999  |  -1194.228   195.1562    -6.12   0.000    -1577.379   -811.0763
+             |
        _cons |  -163.0829   776.2306    -0.21   0.834    -1687.061    1360.895
 -------------+----------------------------------------------------------------
      sigma_u |   1421.003
      sigma_e |  440.90254
          rho |  .91218326   (fraction of variance due to u_i)
 ------------------------------------------------------------------------------
-F test that all u_i=0:     F(48, 711) =    43.49             Prob > F = 0.0000
+F test that all u_i=0: F(48, 711) = 52.77                    Prob > F = 0.0000
+
+. 
 \end{stlog}
 
 
@@ -432,20 +437,19 @@ time period (stata will choose the first one). Having done this
 however, concerns about serial correlation should be adequately
 addressed. 
 
-% This can be observed by looking at a boxplot of errors by
-% time period:
+ This can be observed by looking at a boxplot of errors by
+ time period:
 
-% \texttt{predict res,e}
+ \texttt{predict res,e}
+ \texttt{graph box res, over(year)}
 
-% \texttt{graph box res, over(year)}
 
-
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=\textwidth]{box_year}
-%   \caption{Plot of Residuals by Year, Fixed Effects for Time}
-%   \label{fig:fetime}
-% \end{figure}
+ \begin{figure}
+   \centering
+   \includegraphics[width=\textwidth]{box_year}
+   \caption{Plot of Residuals by Year, Fixed Effects for Time}
+   \label{fig:fetime}
+ \end{figure}
 
 Fixed effects for time are not symmetric with fixed effects for groups
 in this model. To adjust for this, we can regress 
@@ -555,52 +559,48 @@ However, the transformation of the data in the above is done via the
 Cochrane-Orcutt, not Prais-Winsten transformation. Cochrane-Orcutt
 throws out the first unit in each time series, which can be a lot of
 data in a panel data setting. Another option is to use xtpcse, with
-correlation set to AR(1) (this also incorporates some other
+correlation set to AR(1). This also incorporates some other
 assumptions, which can be turned off by specifying the ``independent''
-option): 
+option. In particular, this allows for unit-specific autocorrelation,
+which is generally a better assumption.  
 
 
    \begin{stlog}
-. xi: xtpcse `y' legideo `controls' i.state, correlation (ar1) independent
-i.board           _Iboard_1-5         (naturally coded; _Iboard_1 omitted)
-i.state           _Istate_2-50        (naturally coded; _Istate_2 omitted)
-note: _Istate_22 omitted because of collinearity
+
+. // Unit-specific ar(1) process
+.  xtpcse `y' legideo `controls' i.state, correlation (psar1) independent
+note: 46.state omitted because of collinearity
 (note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
 
 Prais-Winsten regression, independent panels corrected standard errors
 
-Group variable:   state                         Number of obs      =       784
-Time variable:    year                          Number of groups   =        49
-Panels:           independent (balanced)        Obs per group: min =        16
-Autocorrelation:  common AR(1)                                 avg =        16
-                                                               max =        16
-Estimated covariances      =         1          R-squared          =    0.7922
-Estimated autocorrelations =         1          Wald chi2(57)      =   2190.60
-Estimated coefficients     =        58          Prob > chi2        =    0.0000
+Group variable:   state                         Number of obs     =        784
+Time variable:    year                          Number of groups  =         49
+Panels:           independent (balanced)        Obs per group:
+Autocorrelation:  panel-specific AR(1)                        min =         16
+                                                              avg =         16
+                                                              max =         16
+Estimated covariances      =         1          R-squared         =     0.9520
+Estimated autocorrelations =        49          Wald chi2(56)     =    2177.81
+Estimated coefficients     =        57          Prob > chi2       =     0.0000
 
 ------------------------------------------------------------------------------
              |           Indep-corrected
    approps_i |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-     legideo |   1.888544   1.304401     1.45   0.148    -.6680354    4.445124
-    perc1824 |   248.1162   31.72109     7.82   0.000      185.944    310.2884
-    incpcp_i |   64.87058   23.32603     2.78   0.005     19.15239    110.5888
-    percpriv |   17.34655   12.05532     1.44   0.150    -6.281443    40.97455
-    taxcpc_i |   .8642728   .1659276     5.21   0.000     .5390607    1.189485
-   legcomp_i |   .0019982   .0019003     1.05   0.293    -.0017263    .0057227
-   _Iboard_2 |  -27.46445   130.3439    -0.21   0.833    -282.9338    228.0049
-   _Iboard_3 |  -452.2384   257.9747    -1.75   0.080    -957.8594    53.38271
-   _Iboard_4 |  -745.5906   224.6817    -3.32   0.001    -1185.959   -305.2226
-   _Iboard_5 |   -1919.26   299.6468    -6.41   0.000    -2506.557   -1331.963
-   _Istate_3 |   338.7299    272.781     1.24   0.214    -195.9111    873.3709
-   _Istate_4 |  -1047.637   351.6939    -2.98   0.003    -1736.945     -358.33
-   _Istate_5 |  -1506.171   351.5809    -4.28   0.000    -2195.257   -817.0849
-   _Istate_6 |  -2198.617     293.85    -7.48   0.000    -2774.552   -1622.682
-   _Istate_7 |  -2631.542   489.1018    -5.38   0.000    -3590.164    -1672.92
-   _Istate_8 |    -526.62   281.7545    -1.87   0.062    -1078.849    25.60862
-   _Istate_9 |   -140.778   374.8207    -0.38   0.707    -875.4132    593.8572
-...
-     
+     legideo |   1.941346   1.113935     1.74   0.081    -.2419273    4.124619
+    perc1824 |     263.31   28.58896     9.21   0.000     207.2767    319.3434
+    incpcp_i |   124.4886   21.42011     5.81   0.000     82.50597    166.4712
+    percpriv |   1.636201   10.40599     0.16   0.875    -18.75916    22.03156
+    taxcpc_i |   .5548492   .1564309     3.55   0.000     .2482503    .8614482
+   legcomp_i |   .0029899   .0017338     1.72   0.085    -.0004084    .0063881
+             |
+       board |
+     cbweak  |  -103.2285   116.8174    -0.88   0.377    -332.1863    125.7294
+      gball  |  -1015.286   183.3439    -5.54   0.000    -1374.634   -655.9389
+     gbfour  |  -809.2099   194.6451    -4.16   0.000    -1190.707   -427.7125
+       plan  |   -4170.79   401.9689   -10.38   0.000    -4958.635   -3382.945
+  
    \end{stlog}
 
 
@@ -613,5 +613,21 @@ to run the Hausman test.  In practice, a random effect model is rarely
 appropriate unless the groups are defined as part of the sampling
 procedure. 
 
+\section{First Differenced Model}
+
+First differencing is just what it sounds like: subtracting the
+previous time period's observation from the current one:
+
+\begin{equation*}
+  \triangle y{it}= y_{it}-y_{it-1}
+\end{equation*}
+
+A first differenced model can be used with panel data, althought the
+interpretation of coefficients goes from change in x to
+change-in-change in x. 
+
+\begin{equation*}
+  \triangle y_{it}=\beta_o+\beta_1 \triangle x_{it} + \epsilon
+\end{equation*}
 
 \end{document}
