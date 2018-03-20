@@ -1,14 +1,14 @@
----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/panel_data/panel.log
+       log:  /Users/doylewr/practicum_2017/central/lessons/s2-10-panel_data/panel.log
   log type:  text
- opened on:  11 Apr 2017, 16:11:17
+ opened on:  20 Mar 2018, 11:58:35
 
 .     
 . /* Panel data */
 . /* Working with panel datasets, xt commands*/
 . /* Will Doyle */
-. /* 170411 */
+. /* 2018-03-20 */
 . /* Practicum Folder */
 . 
 . clear
@@ -34,77 +34,77 @@
 . 
 . li if _n <10
 
-     +-----------------------------------------------------------------------------------------------------------------+
-  1. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i | income_i | legcom~i |
-     |    AK | 1984 | 19753.82 | 12.06921 | 73539.69 | 31.08308 |  28.5234 | 4.554178 | 6158.481 | 70579.71 | 76966.31 |
-     |-----------------------------------------------------------------------------------------------------------------|
-     |           legideo          |           citideo          |          board          |          pub4tu~i           |
-     |              38.5          |          28.21498          |          gball          |          1395.343           |
-     +-----------------------------------------------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------+
+  1. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i |
+     |    AK | 1984 | 19753.82 | 12.06921 | 73539.69 | 31.08308 |  28.5234 | 4.554178 | 6158.481 |
+     |--------------+----------------------------------------------------------------------------|
+     |   income_i   |   legcom~i    |    legideo    |    citideo    |   board    |   pub4tu~i    |
+     |   70579.71   |   76966.31    |       38.5    |   28.21498    |   gball    |   1395.343    |
+     +-------------------------------------------------------------------------------------------+
 
-     +-----------------------------------------------------------------------------------------------------------------+
-  2. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i | income_i | legcom~i |
-     |    AK | 1985 |  25937.5 | 11.64328 | 75224.55 | 31.27586 | 26.46807 | 4.575117 | 5480.974 | 66418.59 |  74319.7 |
-     |-----------------------------------------------------------------------------------------------------------------|
-     |           legideo          |           citideo          |          board          |          pub4tu~i           |
-     |          38.41667          |          27.87713          |          gball          |          1347.362           |
-     +-----------------------------------------------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------+
+  2. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i |
+     |    AK | 1985 |  25937.5 | 11.64328 | 75224.55 | 31.27586 | 26.46807 | 4.575117 | 5480.974 |
+     |--------------+----------------------------------------------------------------------------|
+     |   income_i   |   legcom~i    |    legideo    |    citideo    |   board    |   pub4tu~i    |
+     |   66418.59   |    74319.7    |   38.41667    |   27.87713    |   gball    |   1347.362    |
+     +-------------------------------------------------------------------------------------------+
 
-     +-----------------------------------------------------------------------------------------------------------------+
-  3. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i | income_i | legcom~i |
-     |    AK | 1986 | 20161.46 | 11.39143 | 52050.73 | 29.94336 | 23.32024 | 5.302693 | 5183.568 | 62766.85 | 71139.42 |
-     |-----------------------------------------------------------------------------------------------------------------|
-     |           legideo          |           citideo          |          board          |          pub4tu~i           |
-     |             49.75          |          37.79125          |          gball          |          1306.067           |
-     +-----------------------------------------------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------+
+  3. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i |
+     |    AK | 1986 | 20161.46 | 11.39143 | 52050.73 | 29.94336 | 23.32024 | 5.302693 | 5183.568 |
+     |--------------+----------------------------------------------------------------------------|
+     |   income_i   |   legcom~i    |    legideo    |    citideo    |   board    |   pub4tu~i    |
+     |   62766.85   |   71139.42    |      49.75    |   37.79125    |   gball    |   1306.067    |
+     +-------------------------------------------------------------------------------------------+
 
-     +-----------------------------------------------------------------------------------------------------------------+
-  4. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i | income_i | legcom~i |
-     |    AK | 1987 | 16157.03 | 11.12533 | 59892.73 | 28.35402 | 23.42419 | 4.918142 | 2887.904 | 69083.27 | 68634.51 |
-     |-----------------------------------------------------------------------------------------------------------------|
-     |           legideo          |           citideo          |          board          |          pub4tu~i           |
-     |          34.42857          |          38.51671          |          gball          |          1559.095           |
-     +-----------------------------------------------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------+
+  4. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i |
+     |    AK | 1987 | 16157.03 | 11.12533 | 59892.73 | 28.35402 | 23.42419 | 4.918142 | 2887.904 |
+     |--------------+----------------------------------------------------------------------------|
+     |   income_i   |   legcom~i    |    legideo    |    citideo    |   board    |   pub4tu~i    |
+     |   69083.27   |   68634.51    |   34.42857    |   38.51671    |   gball    |   1559.095    |
+     +-------------------------------------------------------------------------------------------+
 
-     +-----------------------------------------------------------------------------------------------------------------+
-  5. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i | income_i | legcom~i |
-     |    AK | 1988 |  13370.6 | 10.70142 | 55485.95 | 27.99957 | 18.43513 |  8.24132 | 3250.582 |  66537.2 | 31179.41 |
-     |-----------------------------------------------------------------------------------------------------------------|
-     |           legideo          |           citideo          |          board          |          pub4tu~i           |
-     |          40.94643          |          45.02991          |          gball          |          1531.616           |
-     +-----------------------------------------------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------+
+  5. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i |
+     |    AK | 1988 |  13370.6 | 10.70142 | 55485.95 | 27.99957 | 18.43513 |  8.24132 | 3250.582 |
+     |--------------+----------------------------------------------------------------------------|
+     |   income_i   |   legcom~i    |    legideo    |    citideo    |   board    |   pub4tu~i    |
+     |    66537.2   |   31179.41    |   40.94643    |   45.02991    |   gball    |   1531.616    |
+     +-------------------------------------------------------------------------------------------+
 
-     +-----------------------------------------------------------------------------------------------------------------+
-  6. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i | income_i | legcom~i |
-     |    AK | 1989 | 13292.23 | 10.60019 | 56314.31 | 28.92177 | 17.21723 | 8.796088 | 3462.247 | 65042.52 | 29746.16 |
-     |-----------------------------------------------------------------------------------------------------------------|
-     |           legideo          |           citideo          |          board          |          pub4tu~i           |
-     |          31.73214          |          37.47217          |          gball          |           1690.88           |
-     +-----------------------------------------------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------+
+  6. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i |
+     |    AK | 1989 | 13292.23 | 10.60019 | 56314.31 | 28.92177 | 17.21723 | 8.796088 | 3462.247 |
+     |--------------+----------------------------------------------------------------------------|
+     |   income_i   |   legcom~i    |    legideo    |    citideo    |   board    |   pub4tu~i    |
+     |   65042.52   |   29746.16    |   31.73214    |   37.47217    |   gball    |    1690.88    |
+     +-------------------------------------------------------------------------------------------+
 
-     +-----------------------------------------------------------------------------------------------------------------+
-  7. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i | income_i | legcom~i |
-     |    AK | 1990 | 12531.32 | 10.12164 | 57074.58 | 28.95049 | 31.97714 | 7.617863 |  3561.69 | 65694.19 |  28221.3 |
-     |-----------------------------------------------------------------------------------------------------------------|
-     |           legideo          |           citideo          |          board          |          pub4tu~i           |
-     |          29.28572          |          33.83577          |          gball          |          1755.956           |
-     +-----------------------------------------------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------+
+  7. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i |
+     |    AK | 1990 | 12531.32 | 10.12164 | 57074.58 | 28.95049 | 31.97714 | 7.617863 |  3561.69 |
+     |--------------+----------------------------------------------------------------------------|
+     |   income_i   |   legcom~i    |    legideo    |    citideo    |   board    |   pub4tu~i    |
+     |   65694.19   |    28221.3    |   29.28572    |   33.83577    |   gball    |   1755.956    |
+     +-------------------------------------------------------------------------------------------+
 
-     +-----------------------------------------------------------------------------------------------------------------+
-  8. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i | income_i | legcom~i |
-     |    AK | 1991 | 11423.46 |  9.81387 | 47240.34 | 28.41009 | 29.89455 | 6.569116 | 3874.305 | 60818.79 | 27081.67 |
-     |-----------------------------------------------------------------------------------------------------------------|
-     |           legideo          |           citideo          |          board          |          pub4tu~i           |
-     |          33.01786          |          39.80915          |          gball          |          1850.204           |
-     +-----------------------------------------------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------+
+  8. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i |
+     |    AK | 1991 | 11423.46 |  9.81387 | 47240.34 | 28.41009 | 29.89455 | 6.569116 | 3874.305 |
+     |--------------+----------------------------------------------------------------------------|
+     |   income_i   |   legcom~i    |    legideo    |    citideo    |   board    |   pub4tu~i    |
+     |   60818.79   |   27081.67    |   33.01786    |   39.80915    |   gball    |   1850.204    |
+     +-------------------------------------------------------------------------------------------+
 
-     +-----------------------------------------------------------------------------------------------------------------+
-  9. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i | income_i | legcom~i |
-     |    AK | 1992 | 10545.08 | 9.858748 | 45123.37 |  28.3155 |  29.9786 | 6.798592 | 3206.962 | 58095.07 | 28513.18 |
-     |-----------------------------------------------------------------------------------------------------------------|
-     |           legideo          |           citideo          |          board          |          pub4tu~i           |
-     |          34.57143          |          39.62203          |          gball          |          2012.586           |
-     +-----------------------------------------------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------+
+  9. | state | year | approp~i | perc1824 |  gsppc_i | incpcp_i | ttld_ft_ | percpriv | taxcpc_i |
+     |    AK | 1992 | 10545.08 | 9.858748 | 45123.37 |  28.3155 |  29.9786 | 6.798592 | 3206.962 |
+     |--------------+----------------------------------------------------------------------------|
+     |   income_i   |   legcom~i    |    legideo    |    citideo    |   board    |   pub4tu~i    |
+     |   58095.07   |   28513.18    |   34.57143    |   39.62203    |   gball    |   2012.586    |
+     +-------------------------------------------------------------------------------------------+
 
 .         *bysort year: gen x1 = _n
 . di _N
@@ -115,8 +115,8 @@
 . 
 . /* Reshaping, long to wide and back again */
 . 
-. reshape wide approps_i perc1824 gsppc_i incpcp_i ttld_ft_ percpriv taxcpc_i income_i legcomp_i legideo citideo board pub4
-> tuit_i, i(state)   j(year)
+. reshape wide approps_i perc1824 gsppc_i incpcp_i ttld_ft_ percpriv taxcpc_i income_i legcomp_i legi
+> deo citideo board pub4tuit_i, i(state)   j(year)
 (note: j = 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999)
 
 Data                               long   ->   wide
@@ -141,8 +141,8 @@ xij variables:
 -----------------------------------------------------------------------------
 
 . 
-. reshape long approps_i perc1824 gsppc_i incpcp_i ttld_ft_ percpriv taxcpc_i income_i legcomp_i legideo citideo board pub4
-> tuit_i, i(state)   j(year) 
+. reshape long approps_i perc1824 gsppc_i incpcp_i ttld_ft_ percpriv taxcpc_i income_i legcomp_i legi
+> deo citideo board pub4tuit_i, i(state)   j(year) 
 (note: j = 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999)
 
 Data                               wide   ->   long
@@ -178,10 +178,10 @@ pub4tuit_i1984 pub4tuit_i1985 ... pub4tuit_i1999->pub4tuit_i
                 delta:  1 year
 
 . 
-. 
 . // help tsvarlist
 . 
-. // what is the correlation between appropriations in the current year and appropriations in the prior year?
+. // what is the correlation between appropriations in the current year and appropriations in the pri
+> or year?
 . 
 . corr approps_i L.approps_i
 (obs=735)
@@ -195,7 +195,8 @@ pub4tuit_i1984 pub4tuit_i1985 ... pub4tuit_i1999->pub4tuit_i
 
 
 . 
-. // what is the correlation between appropriations in the current year and appropriations two years ago?
+. // what is the correlation between appropriations in the current year and appropriations two years 
+> ago?
 . 
 . corr approps_i L2.approps_i
 (obs=686)
@@ -213,18 +214,18 @@ pub4tuit_i1984 pub4tuit_i1985 ... pub4tuit_i1999->pub4tuit_i
 . 
 . sum D.pub4tuit_i if year>=1990 
 
-    Variable |       Obs        Mean    Std. Dev.       Min        Max
--------------+--------------------------------------------------------
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
   pub4tuit_i |
-         D1. |       489     98.0542    151.8189  -556.7407   1272.844
+         D1. |        489     98.0542    151.8189  -556.7407   1272.844
 
 . 
 . sum approps_i L.F.approps_i
 
-    Variable |       Obs        Mean    Std. Dev.       Min        Max
--------------+--------------------------------------------------------
-   approps_i |       784    5106.147    1341.746   643.8942   10140.69
-   approps_i |       784    5106.147    1341.746   643.8942   10140.69
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+   approps_i |        784    5106.147    1341.746   643.8942   10140.69
+   approps_i |        784    5106.147    1341.746   643.8942   10140.69
 
 . 
 . /* Some plots */
@@ -249,7 +250,8 @@ delimiter now ;
 > ;
 
 . graph export tuit_box.pdf, replace;
-(file /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/panel_data/tuit_box.pdf written in PDF format)
+(file /Users/doylewr/practicum_2017/central/lessons/s2-10-panel_data/tuit_box.pdf written in PDF form
+> at)
 
 . #delimit ;
 delimiter now ;
@@ -264,7 +266,8 @@ delimiter now ;
 > ;
 
 . graph export approps_box.pdf, replace;
-(file /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/panel_data/approps_box.pdf written in PDF format)
+(file /Users/doylewr/practicum_2017/central/lessons/s2-10-panel_data/approps_box.pdf written in PDF f
+> ormat)
 
 .  #delimit cr
 delimiter now cr
@@ -280,12 +283,12 @@ delimiter now cr
 . 
 . reg `y'  legideo `controls'
 
-      Source |       SS       df       MS              Number of obs =     784
--------------+------------------------------           F( 10,   773) =  111.00
-       Model |   830964034    10  83096403.4           Prob > F      =  0.0000
-    Residual |   578657976   773   748587.29           R-squared     =  0.5895
--------------+------------------------------           Adj R-squared =  0.5842
-       Total |  1.4096e+09   783  1800283.54           Root MSE      =  865.21
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(10, 773)      =    111.00
+       Model |   830964034        10  83096403.4   Prob > F        =    0.0000
+    Residual |   578657976       773   748587.29   R-squared       =    0.5895
+-------------+----------------------------------   Adj R-squared   =    0.5842
+       Total |  1.4096e+09       783  1800283.54   Root MSE        =    865.21
 
 ------------------------------------------------------------------------------
    approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
@@ -314,14 +317,16 @@ delimiter now cr
 
 . 
 . graph export resid_state.pdf, replace
-(file /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/panel_data/resid_state.pdf written in PDF format)
+(file /Users/doylewr/practicum_2017/central/lessons/s2-10-panel_data/resid_state.pdf written in PDF f
+> ormat)
 
 . 
 . graph box e, over(year, sort(1) descending label(labsize(tiny))) name(time_error)/* Not too bad */
 
 . 
 . graph export resid_year.pdf, replace
-(file /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/panel_data/resid_year.pdf written in PDF format)
+(file /Users/doylewr/practicum_2017/central/lessons/s2-10-panel_data/resid_year.pdf written in PDF fo
+> rmat)
 
 . 
 . 
@@ -330,15 +335,16 @@ delimiter now cr
 . xtreg `y'  legideo `controls', fe
 note: 5.board omitted because of collinearity
 
-Fixed-effects (within) regression               Number of obs      =       784
-Group variable: state                           Number of groups   =        49
+Fixed-effects (within) regression               Number of obs     =        784
+Group variable: state                           Number of groups  =         49
 
-R-sq:  within  = 0.2281                         Obs per group: min =        16
-       between = 0.0860                                        avg =      16.0
-       overall = 0.1015                                        max =        16
+R-sq:                                           Obs per group:
+     within  = 0.2281                                         min =         16
+     between = 0.0860                                         avg =       16.0
+     overall = 0.1015                                         max =         16
 
-                                                F(9,726)           =     23.83
-corr(u_i, Xb)  = -0.2562                        Prob > F           =    0.0000
+                                                F(9,726)          =      23.83
+corr(u_i, Xb)  = -0.2562                        Prob > F          =     0.0000
 
 ------------------------------------------------------------------------------
    approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
@@ -362,7 +368,7 @@ corr(u_i, Xb)  = -0.2562                        Prob > F           =    0.0000
      sigma_e |  492.51715
          rho |  .86235025   (fraction of variance due to u_i)
 ------------------------------------------------------------------------------
-F test that all u_i=0:     F(48, 726) =    41.94             Prob > F = 0.0000
+F test that all u_i=0: F(48, 726) = 41.94                    Prob > F = 0.0000
 
 . 
 . estimates store fe1
@@ -371,12 +377,12 @@ F test that all u_i=0:     F(48, 726) =    41.94             Prob > F = 0.0000
 . reg `y' legideo `controls' i.state
 note: 46.state omitted because of collinearity
 
-      Source |       SS       df       MS              Number of obs =     784
--------------+------------------------------           F( 57,   726) =   89.21
-       Model |  1.2335e+09    57  21640594.9           Prob > F      =  0.0000
-    Residual |   176108102   726  242573.144           R-squared     =  0.8751
--------------+------------------------------           Adj R-squared =  0.8653
-       Total |  1.4096e+09   783  1800283.54           Root MSE      =  492.52
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(57, 726)      =     89.21
+       Model |  1.2335e+09        57  21640594.9   Prob > F        =    0.0000
+    Residual |   176108102       726  242573.144   R-squared       =    0.8751
+-------------+----------------------------------   Adj R-squared   =    0.8653
+       Total |  1.4096e+09       783  1800283.54   Root MSE        =    492.52
 
 ------------------------------------------------------------------------------
    approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
@@ -454,15 +460,16 @@ note: 46.state omitted because of collinearity
 .  xtreg `y' legideo  `controls'  i.year , fe
 note: 5.board omitted because of collinearity
 
-Fixed-effects (within) regression               Number of obs      =       784
-Group variable: state                           Number of groups   =        49
+Fixed-effects (within) regression               Number of obs     =        784
+Group variable: state                           Number of groups  =         49
 
-R-sq:  within  = 0.3942                         Obs per group: min =        16
-       between = 0.0321                                        avg =      16.0
-       overall = 0.0576                                        max =        16
+R-sq:                                           Obs per group:
+     within  = 0.3942                                         min =         16
+     between = 0.0321                                         avg =       16.0
+     overall = 0.0576                                         max =         16
 
-                                                F(24,711)          =     19.27
-corr(u_i, Xb)  = -0.4822                        Prob > F           =    0.0000
+                                                F(24,711)         =      19.27
+corr(u_i, Xb)  = -0.4822                        Prob > F          =     0.0000
 
 ------------------------------------------------------------------------------
    approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
@@ -503,18 +510,18 @@ corr(u_i, Xb)  = -0.4822                        Prob > F           =    0.0000
      sigma_e |  440.90254
          rho |  .91218326   (fraction of variance due to u_i)
 ------------------------------------------------------------------------------
-F test that all u_i=0:     F(48, 711) =    52.77             Prob > F = 0.0000
+F test that all u_i=0: F(48, 711) = 52.77                    Prob > F = 0.0000
 
 . 
 .  reg `y' legideo `controls' i.state i.year
 note: 46.state omitted because of collinearity
 
-      Source |       SS       df       MS              Number of obs =     784
--------------+------------------------------           F( 72,   711) =   90.84
-       Model |  1.2714e+09    72  17658432.4           Prob > F      =  0.0000
-    Residual |   138214880   711  194395.049           R-squared     =  0.9019
--------------+------------------------------           Adj R-squared =  0.8920
-       Total |  1.4096e+09   783  1800283.54           Root MSE      =   440.9
+      Source |       SS           df       MS      Number of obs   =       784
+-------------+----------------------------------   F(72, 711)      =     90.84
+       Model |  1.2714e+09        72  17658432.4   Prob > F        =    0.0000
+    Residual |   138214880       711  194395.049   R-squared       =    0.9019
+-------------+----------------------------------   Adj R-squared   =    0.8920
+       Total |  1.4096e+09       783  1800283.54   Root MSE        =     440.9
 
 ------------------------------------------------------------------------------
    approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
@@ -606,60 +613,64 @@ note: 46.state omitted because of collinearity
 .  
 . /* Fixed effects with AR1 error terms */
 . 
-.  xtregar `y' legideo `controls', fe rhotype (tsc) twostep lbi
+. // Common autocorrelation across panels, with time series correlation estimated, use Cochrane/Orcut
+> t by default (not good)
+. 
+. xtregar `y' legideo `controls', fe rhotype(tsc) 
 
-FE (within) regression with AR(1) disturbances  Number of obs      =       735
-Group variable: state                           Number of groups   =        49
+FE (within) regression with AR(1) disturbances  Number of obs     =        735
+Group variable: state                           Number of groups  =         49
 
-R-sq:  within  = 0.1475                         Obs per group: min =        15
-       between = 0.0584                                        avg =      15.0
-       overall = 0.0235                                        max =        15
+R-sq:                                           Obs per group:
+     within  = 0.1345                                         min =         15
+     between = 0.0847                                         avg =       15.0
+     overall = 0.0402                                         max =         15
 
-                                                F(9,677)           =     13.02
-corr(u_i, Xb)  = -0.6379                        Prob > F           =    0.0000
+                                                F(9,677)          =      11.69
+corr(u_i, Xb)  = -0.6748                        Prob > F          =     0.0000
 
 ------------------------------------------------------------------------------
    approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-     legideo |   2.203477   1.328746     1.66   0.098    -.4054819    4.812437
-    perc1824 |   308.6154   33.12758     9.32   0.000     243.5702    373.6605
-    incpcp_i |   16.72646   23.96317     0.70   0.485    -30.32461    63.77753
-    percpriv |   39.45439   12.99704     3.04   0.002     13.93505    64.97374
-    taxcpc_i |   .9035681   .1776652     5.09   0.000     .5547272    1.252409
-   legcomp_i |   .0015629   .0019213     0.81   0.416    -.0022095    .0053352
+     legideo |   1.981651   1.350901     1.47   0.143     -.670809    4.634111
+    perc1824 |   312.8345   35.18741     8.89   0.000      243.745    381.9241
+    incpcp_i |   21.98702   24.67777     0.89   0.373    -26.46715    70.44119
+    percpriv |   44.35956   13.37416     3.32   0.001     18.09975    70.61937
+    taxcpc_i |   .8159532   .1797964     4.54   0.000     .4629277    1.168979
+   legcomp_i |   .0016165   .0019168     0.84   0.399    -.0021471    .0053801
              |
        board |
-     cbweak  |  -88.92507   136.4487    -0.65   0.515    -356.8385    178.9884
-      gball  |  -444.8078   257.5141    -1.73   0.085    -950.4301     60.8145
-     gbfour  |  -797.8778   234.5891    -3.40   0.001    -1258.488    -337.268
+     cbweak  |  -87.53395   141.0643    -0.62   0.535      -364.51    189.4421
+      gball  |  -417.2306   268.0324    -1.56   0.120    -943.5053    109.0441
+     gbfour  |  -761.8658   243.3462    -3.13   0.002     -1239.67   -284.0617
        plan  |          0  (omitted)
              |
-       _cons |  -630.4428   486.6708    -1.30   0.196    -1586.008    325.1228
+       _cons |  -772.8644   466.0972    -1.66   0.098    -1688.034    142.3054
 -------------+----------------------------------------------------------------
-      rho_ar |  .38558457
-     sigma_u |  1626.9651
-     sigma_e |  422.42905
-     rho_fov |  .93684349   (fraction of variance because of u_i)
+      rho_ar |  .43206415
+     sigma_u |  1682.1516
+     sigma_e |  420.95598
+     rho_fov |  .94106635   (fraction of variance because of u_i)
 ------------------------------------------------------------------------------
-F test that all u_i=0:     F(48,677) =    22.21              Prob > F = 0.0000
-modified Bhargava et al. Durbin-Watson = 1.0483739
-Baltagi-Wu LBI = 1.2288309
+F test that all u_i=0: F(48,677) = 19.50                     Prob > F = 0.0000
 
 . 
+. // Unit-specific ar(1) process, uses pw transformation (better) 
 .  xtpcse `y' legideo `controls' i.state, correlation (psar1) independent
 note: 46.state omitted because of collinearity
 (note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
 
 Prais-Winsten regression, independent panels corrected standard errors
 
-Group variable:   state                         Number of obs      =       784
-Time variable:    year                          Number of groups   =        49
-Panels:           independent (balanced)        Obs per group: min =        16
-Autocorrelation:  panel-specific AR(1)                         avg =        16
-                                                               max =        16
-Estimated covariances      =         1          R-squared          =    0.9520
-Estimated autocorrelations =        49          Wald chi2(56)      =   2177.81
-Estimated coefficients     =        57          Prob > chi2        =    0.0000
+Group variable:   state                         Number of obs     =        784
+Time variable:    year                          Number of groups  =         49
+Panels:           independent (balanced)        Obs per group:
+Autocorrelation:  panel-specific AR(1)                        min =         16
+                                                              avg =         16
+                                                              max =         16
+Estimated covariances      =         1          R-squared         =     0.9520
+Estimated autocorrelations =        49          Wald chi2(56)     =    2177.81
+Estimated coefficients     =        57          Prob > chi2       =     0.0000
 
 ------------------------------------------------------------------------------
              |           Indep-corrected
@@ -733,139 +744,254 @@ Estimated coefficients     =        57          Prob > chi2        =    0.0000
         rhos =  .3034047  .1076646 -.4736346  .6385079  .5236709 ...   .196412
 ------------------------------------------------------------------------------
 
-.  
-. /*Random effects */
-. 
-. xtreg `y' legideo `controls', re
-
-Random-effects GLS regression                   Number of obs      =       784
-Group variable: state                           Number of groups   =        49
-
-R-sq:  within  = 0.2136                         Obs per group: min =        16
-       between = 0.5704                                        avg =      16.0
-       overall = 0.5107                                        max =        16
-
-                                                Wald chi2(10)      =    259.34
-corr(u_i, X)   = 0 (assumed)                    Prob > chi2        =    0.0000
-
-------------------------------------------------------------------------------
-   approps_i |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-     legideo |   3.660395   1.172635     3.12   0.002     1.362072    5.958717
-    perc1824 |   246.8909   23.12238    10.68   0.000     201.5719      292.21
-    incpcp_i |  -7.714237   18.40243    -0.42   0.675    -43.78234    28.35386
-    percpriv |   -37.4791   6.978047    -5.37   0.000    -51.15582   -23.80238
-    taxcpc_i |   1.569975   .1473129    10.66   0.000     1.281247    1.858703
-   legcomp_i |   .0018243   .0019544     0.93   0.351    -.0020062    .0056548
-             |
-       board |
-     cbweak  |  -26.06821   105.3905    -0.25   0.805    -232.6298    180.4933
-      gball  |  -362.6452   173.9324    -2.08   0.037    -703.5464   -21.74391
-     gbfour  |  -635.6635   159.6952    -3.98   0.000    -948.6603   -322.6667
-       plan  |  -1734.711   485.8972    -3.57   0.000    -2687.052   -782.3702
-             |
-       _cons |   1230.292   581.2082     2.12   0.034     91.14439    2369.439
--------------+----------------------------------------------------------------
-     sigma_u |  782.15356
-     sigma_e |  492.51715
-         rho |  .71606866   (fraction of variance due to u_i)
-------------------------------------------------------------------------------
-
-. 
-. estimates store re1
-
-. 
-. /*Hausman test */
-. 
-. hausman fe1 re1,  sigmamore
-
-Note: the rank of the differenced variance matrix (7) does not equal the number of coefficients being tested (9); be sure
-        this is what you expect, or there may be problems computing the test.  Examine the output of your estimators for
-        anything unexpected and possibly consider scaling your variables so that the coefficients are on a similar scale.
-
-                 ---- Coefficients ----
-             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
-             |      fe1          re1         Difference          S.E.
--------------+----------------------------------------------------------------
-     legideo |    3.508206     3.660395       -.1521887        .2686468
-    perc1824 |    269.2799     246.8909        22.38899        7.972059
-    incpcp_i |    12.85631    -7.714237        20.57055        8.601668
-    percpriv |   -3.949699     -37.4791         33.5294         7.87902
-    taxcpc_i |    1.436178     1.569975       -.1337973        .0587522
-   legcomp_i |    .0022197     .0018243        .0003954        .0005183
-       board |
-          2  |   -41.50431    -26.06821        -15.4361        29.86623
-          3  |   -597.6449    -362.6452       -234.9998        111.7685
-          4  |   -942.1278    -635.6635       -306.4643        94.66588
-------------------------------------------------------------------------------
-                           b = consistent under Ho and Ha; obtained from xtreg
-            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
-
-    Test:  Ho:  difference in coefficients not systematic
-
-                  chi2(7) = (b-B)'[(V_b-V_B)^(-1)](b-B)
-                          =       27.11
-                Prob>chi2 =      0.0003
-
 . 
 . /* First differenced model*/
 . 
 . sort state year 
 
 . 
-. xtreg D.approps D.legideo D.perc1824 D.incpcp_i D.percpriv D.taxcpc_i  D.legcomp_i 
+. // Two time periods 
+. reg approps_i legideo i.state if year <1986
 
-Random-effects GLS regression                   Number of obs      =       735
-Group variable: state                           Number of groups   =        49
-
-R-sq:  within  = 0.0933                         Obs per group: min =        15
-       between = 0.0435                                        avg =      15.0
-       overall = 0.0904                                        max =        15
-
-                                                Wald chi2(6)       =     72.39
-corr(u_i, X)   = 0 (assumed)                    Prob > chi2        =    0.0000
+      Source |       SS           df       MS      Number of obs   =        98
+-------------+----------------------------------   F(49, 48)       =     28.79
+       Model |   187203815        49  3820486.01   Prob > F        =    0.0000
+    Residual |  6369872.34        48  132705.674   R-squared       =    0.9671
+-------------+----------------------------------   Adj R-squared   =    0.9335
+       Total |   193573687        97  1995605.02   Root MSE        =    364.29
 
 ------------------------------------------------------------------------------
- D.approps_i |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+   approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
 -------------+----------------------------------------------------------------
-     legideo |
-         D1. |  -.6431784    1.46816    -0.44   0.661    -3.520718    2.234361
+     legideo |  -13.95488   5.708509    -2.44   0.018    -25.43261   -2.477155
              |
-    perc1824 |
-         D1. |    -44.658   86.35905    -0.52   0.605    -213.9186    124.6026
+       state |
+         AR  |   627.9221   367.7153     1.71   0.094     -111.419    1367.263
+         AZ  |  -1092.891   370.0556    -2.95   0.005    -1836.938   -348.8446
+         CA  |  -92.11371   364.3159    -0.25   0.801    -824.6199    640.3925
+         CO  |  -1701.397   364.9126    -4.66   0.000    -2435.103   -967.6911
+         CT  |  -1028.706   404.2798    -2.54   0.014    -1841.565   -215.8465
+         DE  |  -755.4012   370.5861    -2.04   0.047    -1500.514   -10.28799
+         FL  |  -390.9497   366.6435    -1.07   0.292    -1128.136    346.2365
+         GA  |   56.31025   368.9051     0.15   0.879    -685.4232    798.0437
+         HI  |   2763.451   399.7872     6.91   0.000     1959.625    3567.278
+         IA  |  -1645.509   396.2051    -4.15   0.000    -2442.132   -848.8849
+         ID  |  -579.2319   365.3318    -1.59   0.119    -1313.781    155.3169
+         IL  |  -2126.738   423.0353    -5.03   0.000    -2977.308   -1276.168
+         IN  |  -1411.622   364.3379    -3.87   0.000    -2144.172   -679.0716
+         KS  |  -877.3551   374.0796    -2.35   0.023    -1629.493   -125.2177
+         KY  |    121.047   375.6746     0.32   0.749    -634.2974    876.3914
+         LA  |  -305.9397   365.1403    -0.84   0.406    -1040.103    428.2241
+         MA  |  -2309.082   399.2625    -5.78   0.000    -3111.853   -1506.311
+         MD  |  -326.0034   394.3956    -0.83   0.413    -1118.989    466.9821
+         ME  |  -1724.779   425.2277    -4.06   0.000    -2579.757   -869.8013
+         MI  |  -974.2229   384.5072    -2.53   0.015    -1747.327   -201.1193
+         MN  |   524.3357   397.1805     1.32   0.193    -274.2493    1322.921
+         MO  |  -2378.039   366.2233    -6.49   0.000     -3114.38   -1641.697
+         MS  |   189.7737   364.8889     0.52   0.605    -543.8846     923.432
+         MT  |  -159.9918    379.512    -0.42   0.675    -923.0518    603.0681
+         NC  |   196.7538   385.1877     0.51   0.612    -577.7179    971.2255
+         ND  |  -210.2273    380.216    -0.55   0.583    -974.7028    554.2482
+         NE  |  -1832.695   416.6628    -4.40   0.000    -2670.452   -994.9384
+         NH  |  -4131.331   369.5825   -11.18   0.000    -4874.426   -3388.236
+         NJ  |  -122.1527   392.7416    -0.31   0.757    -911.8126    667.5073
+         NM  |   1989.887    390.654     5.09   0.000     1204.424    2775.349
+         NV  |  -202.0491   367.9061    -0.55   0.585    -941.7738    537.6756
+         NY  |  -810.6622   372.6144    -2.18   0.035    -1559.854   -61.47078
+         OH  |    -1526.8   382.9547    -3.99   0.000    -2296.782   -756.8182
+         OK  |  -1223.757   368.5183    -3.32   0.002    -1964.712   -482.8009
+         OR  |  -1441.298   365.0148    -3.95   0.000     -2175.21   -707.3869
+         PA  |  -2300.667   365.6999    -6.29   0.000    -3035.956   -1565.379
+         RI  |  -2452.246   389.5429    -6.30   0.000    -3235.474   -1669.017
+         SC  |   860.1942   364.3305     2.36   0.022     127.6587     1592.73
+         SD  |  -2676.286   396.8697    -6.74   0.000    -3474.246   -1878.326
+         TN  |  -927.9586   365.7133    -2.54   0.014    -1663.275   -192.6426
+         TX  |    322.908   367.4791     0.88   0.384    -415.9582    1061.774
+         UT  |  -1981.045   393.7209    -5.03   0.000    -2772.674   -1189.416
+         VA  |  -137.3311    369.414    -0.37   0.712    -880.0877    605.4255
+         VT  |  -3467.243   365.5895    -9.48   0.000     -4202.31   -2732.176
+         WA  |  -523.9936   370.8396    -1.41   0.164    -1269.617    221.6293
+         WI  |  -1160.842   370.1245    -3.14   0.003    -1905.027   -416.6565
+         WV  |   346.6934   394.1738     0.88   0.383    -445.8461    1139.233
+         WY  |   3726.371   369.1513    10.09   0.000     2984.142    4468.599
              |
-    incpcp_i |
-         D1. |   221.0694   38.56684     5.73   0.000     145.4798     296.659
-             |
-    percpriv |
-         D1. |   82.98699   15.51366     5.35   0.000     52.58077    113.3932
-             |
-    taxcpc_i |
-         D1. |   .3440062   .1841561     1.87   0.062    -.0169331    .7049455
-             |
-   legcomp_i |
-         D1. |    .001685   .0018231     0.92   0.355    -.0018881    .0052582
-             |
-       _cons |  -104.6579   30.00955    -3.49   0.000    -163.4756   -45.84029
--------------+----------------------------------------------------------------
-     sigma_u |          0
-     sigma_e |  484.01371
-         rho |          0   (fraction of variance due to u_i)
+       _cons |   6719.197   381.1462    17.63   0.000     5952.851    7485.543
 ------------------------------------------------------------------------------
 
 . 
-. xtpcse D.approps D.legideo D.perc1824 D.incpcp_i D.percpriv D.taxcpc_i  D.legcomp_i, correlation (ar1) independent
+. reg approps_i legideo i.state if year <1986
+
+      Source |       SS           df       MS      Number of obs   =        98
+-------------+----------------------------------   F(49, 48)       =     28.79
+       Model |   187203815        49  3820486.01   Prob > F        =    0.0000
+    Residual |  6369872.34        48  132705.674   R-squared       =    0.9671
+-------------+----------------------------------   Adj R-squared   =    0.9335
+       Total |   193573687        97  1995605.02   Root MSE        =    364.29
+
+------------------------------------------------------------------------------
+   approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     legideo |  -13.95488   5.708509    -2.44   0.018    -25.43261   -2.477155
+             |
+       state |
+         AR  |   627.9221   367.7153     1.71   0.094     -111.419    1367.263
+         AZ  |  -1092.891   370.0556    -2.95   0.005    -1836.938   -348.8446
+         CA  |  -92.11371   364.3159    -0.25   0.801    -824.6199    640.3925
+         CO  |  -1701.397   364.9126    -4.66   0.000    -2435.103   -967.6911
+         CT  |  -1028.706   404.2798    -2.54   0.014    -1841.565   -215.8465
+         DE  |  -755.4012   370.5861    -2.04   0.047    -1500.514   -10.28799
+         FL  |  -390.9497   366.6435    -1.07   0.292    -1128.136    346.2365
+         GA  |   56.31025   368.9051     0.15   0.879    -685.4232    798.0437
+         HI  |   2763.451   399.7872     6.91   0.000     1959.625    3567.278
+         IA  |  -1645.509   396.2051    -4.15   0.000    -2442.132   -848.8849
+         ID  |  -579.2319   365.3318    -1.59   0.119    -1313.781    155.3169
+         IL  |  -2126.738   423.0353    -5.03   0.000    -2977.308   -1276.168
+         IN  |  -1411.622   364.3379    -3.87   0.000    -2144.172   -679.0716
+         KS  |  -877.3551   374.0796    -2.35   0.023    -1629.493   -125.2177
+         KY  |    121.047   375.6746     0.32   0.749    -634.2974    876.3914
+         LA  |  -305.9397   365.1403    -0.84   0.406    -1040.103    428.2241
+         MA  |  -2309.082   399.2625    -5.78   0.000    -3111.853   -1506.311
+         MD  |  -326.0034   394.3956    -0.83   0.413    -1118.989    466.9821
+         ME  |  -1724.779   425.2277    -4.06   0.000    -2579.757   -869.8013
+         MI  |  -974.2229   384.5072    -2.53   0.015    -1747.327   -201.1193
+         MN  |   524.3357   397.1805     1.32   0.193    -274.2493    1322.921
+         MO  |  -2378.039   366.2233    -6.49   0.000     -3114.38   -1641.697
+         MS  |   189.7737   364.8889     0.52   0.605    -543.8846     923.432
+         MT  |  -159.9918    379.512    -0.42   0.675    -923.0518    603.0681
+         NC  |   196.7538   385.1877     0.51   0.612    -577.7179    971.2255
+         ND  |  -210.2273    380.216    -0.55   0.583    -974.7028    554.2482
+         NE  |  -1832.695   416.6628    -4.40   0.000    -2670.452   -994.9384
+         NH  |  -4131.331   369.5825   -11.18   0.000    -4874.426   -3388.236
+         NJ  |  -122.1527   392.7416    -0.31   0.757    -911.8126    667.5073
+         NM  |   1989.887    390.654     5.09   0.000     1204.424    2775.349
+         NV  |  -202.0491   367.9061    -0.55   0.585    -941.7738    537.6756
+         NY  |  -810.6622   372.6144    -2.18   0.035    -1559.854   -61.47078
+         OH  |    -1526.8   382.9547    -3.99   0.000    -2296.782   -756.8182
+         OK  |  -1223.757   368.5183    -3.32   0.002    -1964.712   -482.8009
+         OR  |  -1441.298   365.0148    -3.95   0.000     -2175.21   -707.3869
+         PA  |  -2300.667   365.6999    -6.29   0.000    -3035.956   -1565.379
+         RI  |  -2452.246   389.5429    -6.30   0.000    -3235.474   -1669.017
+         SC  |   860.1942   364.3305     2.36   0.022     127.6587     1592.73
+         SD  |  -2676.286   396.8697    -6.74   0.000    -3474.246   -1878.326
+         TN  |  -927.9586   365.7133    -2.54   0.014    -1663.275   -192.6426
+         TX  |    322.908   367.4791     0.88   0.384    -415.9582    1061.774
+         UT  |  -1981.045   393.7209    -5.03   0.000    -2772.674   -1189.416
+         VA  |  -137.3311    369.414    -0.37   0.712    -880.0877    605.4255
+         VT  |  -3467.243   365.5895    -9.48   0.000     -4202.31   -2732.176
+         WA  |  -523.9936   370.8396    -1.41   0.164    -1269.617    221.6293
+         WI  |  -1160.842   370.1245    -3.14   0.003    -1905.027   -416.6565
+         WV  |   346.6934   394.1738     0.88   0.383    -445.8461    1139.233
+         WY  |   3726.371   369.1513    10.09   0.000     2984.142    4468.599
+             |
+       _cons |   6719.197   381.1462    17.63   0.000     5952.851    7485.543
+------------------------------------------------------------------------------
+
+. 
+. reg D(approps_i legideo) if year <1986
+
+      Source |       SS           df       MS      Number of obs   =        49
+-------------+----------------------------------   F(1, 47)        =      4.16
+       Model |  686610.917         1  686610.917   Prob > F        =    0.0470
+    Residual |  7755609.26        47  165012.963   R-squared       =    0.0813
+-------------+----------------------------------   Adj R-squared   =    0.0618
+       Total |  8442220.18        48  175879.587   Root MSE        =    406.22
+
+------------------------------------------------------------------------------
+ D.approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     legideo |
+         D1. |  -9.340002   4.578789    -2.04   0.047    -18.55134   -.1286663
+             |
+       _cons |   324.4334   59.03229     5.50   0.000     205.6757     443.191
+------------------------------------------------------------------------------
+
+. 
+. // Fully specified model
+. 
+. // Drop board
+. 
+. local controls perc1824 incpcp_i percpriv taxcpc_i  legcomp_i 
+
+. 
+. xtreg `y' legideo `controls', fe
+
+Fixed-effects (within) regression               Number of obs     =        784
+Group variable: state                           Number of groups  =         49
+
+R-sq:                                           Obs per group:
+     within  = 0.1987                                         min =         16
+     between = 0.2514                                         avg =       16.0
+     overall = 0.2419                                         max =         16
+
+                                                F(6,729)          =      30.13
+corr(u_i, Xb)  = 0.0847                         Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+   approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     legideo |   4.705906   1.182804     3.98   0.000     2.383797    7.028015
+    perc1824 |   248.0642   24.12209    10.28   0.000     200.7072    295.4213
+    incpcp_i |   8.947458    20.3373     0.44   0.660     -30.9792    48.87412
+    percpriv |  -7.268255   10.54474    -0.69   0.491    -27.96995    13.43343
+    taxcpc_i |   1.338985   .1578655     8.48   0.000     1.029059     1.64891
+   legcomp_i |   .0022006   .0020295     1.08   0.279    -.0017838     .006185
+       _cons |   118.3153   666.7971     0.18   0.859    -1190.756    1427.387
+-------------+----------------------------------------------------------------
+     sigma_u |  1077.8878
+     sigma_e |  500.76865
+         rho |  .82247825   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(48, 729) = 41.44                    Prob > F = 0.0000
+
+. 
+. reg D(`y' legideo `controls') 
+
+      Source |       SS           df       MS      Number of obs   =       735
+-------------+----------------------------------   F(6, 728)       =     12.07
+       Model |  16140481.6         6  2690080.27   Prob > F        =    0.0000
+    Residual |   162312147       728  222956.246   R-squared       =    0.0904
+-------------+----------------------------------   Adj R-squared   =    0.0830
+       Total |   178452629       734  243123.473   Root MSE        =    472.18
+
+------------------------------------------------------------------------------
+ D.approps_i |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     legideo |
+         D1. |  -.6431784    1.46816    -0.44   0.661     -3.52551    2.239153
+             |
+    perc1824 |
+         D1. |    -44.658   86.35905    -0.52   0.605    -214.2005    124.8845
+             |
+    incpcp_i |
+         D1. |   221.0694   38.56684     5.73   0.000     145.3539    296.7849
+             |
+    percpriv |
+         D1. |   82.98699   15.51366     5.35   0.000     52.53013    113.4439
+             |
+    taxcpc_i |
+         D1. |   .3440062   .1841561     1.87   0.062    -.0175342    .7055466
+             |
+   legcomp_i |
+         D1. |    .001685   .0018231     0.92   0.356     -.001894    .0052641
+             |
+       _cons |  -104.6579   30.00955    -3.49   0.001    -163.5735   -45.74234
+------------------------------------------------------------------------------
+
+. 
+. xtpcse D.approps D.legideo D.perc1824 D.incpcp_i D.percpriv D.taxcpc_i  D.legcomp_i, correlation (a
+> r1) independent
 
 Prais-Winsten regression, independent panels corrected standard errors
 
-Group variable:   state                         Number of obs      =       735
-Time variable:    year                          Number of groups   =        49
-Panels:           independent (balanced)        Obs per group: min =        15
-Autocorrelation:  common AR(1)                                 avg =        15
-                                                               max =        15
-Estimated covariances      =         1          R-squared          =    0.1091
-Estimated autocorrelations =         1          Wald chi2(6)       =     90.14
-Estimated coefficients     =         7          Prob > chi2        =    0.0000
+Group variable:   state                         Number of obs     =        735
+Time variable:    year                          Number of groups  =         49
+Panels:           independent (balanced)        Obs per group:
+Autocorrelation:  common AR(1)                                min =         15
+                                                              avg =         15
+                                                              max =         15
+Estimated covariances      =         1          R-squared         =     0.1091
+Estimated autocorrelations =         1          Wald chi2(6)      =      90.14
+Estimated coefficients     =         7          Prob > chi2       =     0.0000
 
 ------------------------------------------------------------------------------
              |           Indep-corrected
@@ -895,9 +1021,76 @@ Estimated coefficients     =         7          Prob > chi2        =    0.0000
 ------------------------------------------------------------------------------
 
 . 
+. 
+. /*Random effects */
+. 
+. xtreg `y' legideo `controls', re
+
+Random-effects GLS regression                   Number of obs     =        784
+Group variable: state                           Number of groups  =         49
+
+R-sq:                                           Obs per group:
+     within  = 0.1901                                         min =         16
+     between = 0.5502                                         avg =       16.0
+     overall = 0.4872                                         max =         16
+
+                                                Wald chi2(6)      =     221.82
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+   approps_i |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     legideo |   4.535948    1.16663     3.89   0.000     2.249394    6.822501
+    perc1824 |    233.911   23.15338    10.10   0.000     188.5312    279.2908
+    incpcp_i |  -4.967394   18.66493    -0.27   0.790    -41.54999    31.61521
+    percpriv |  -36.83407    7.24854    -5.08   0.000    -51.04094   -22.62719
+    taxcpc_i |   1.451086   .1478461     9.81   0.000     1.161313    1.740859
+   legcomp_i |   .0020294   .0019741     1.03   0.304    -.0018396    .0058985
+       _cons |   1105.467   592.4596     1.87   0.062    -55.73283    2266.666
+-------------+----------------------------------------------------------------
+     sigma_u |  843.84138
+     sigma_e |  500.76865
+         rho |  .73955186   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. 
+. estimates store re1
+
+. 
+. /*Hausman test */
+. 
+. hausman fe1 re1,  sigmamore
+
+Note: the rank of the differenced variance matrix (5) does not equal the number of coefficients being
+        tested (6); be sure this is what you expect, or there may be problems computing the test.
+        Examine the output of your estimators for anything unexpected and possibly consider scaling
+        your variables so that the coefficients are on a similar scale.
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |      fe1          re1         Difference          S.E.
+-------------+----------------------------------------------------------------
+     legideo |    3.508206     4.535948       -1.027742        .3414402
+    perc1824 |    269.2799      233.911        35.36891        8.641158
+    incpcp_i |    12.85631    -4.967394         17.8237        8.539069
+    percpriv |   -3.949699    -36.83407        32.88437        7.781697
+    taxcpc_i |    1.436178     1.451086       -.0149079        .0618236
+   legcomp_i |    .0022197     .0020294        .0001902        .0005263
+------------------------------------------------------------------------------
+                           b = consistent under Ho and Ha; obtained from xtreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                  chi2(5) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =       34.08
+                Prob>chi2 =      0.0000
+
+. 
+. 
 . log close
       name:  <unnamed>
-       log:  /Users/doylewr/practicum/lpo_prac_2016-2017/central/lessons/panel_data/panel.log
+       log:  /Users/doylewr/practicum_2017/central/lessons/s2-10-panel_data/panel.log
   log type:  text
- closed on:  11 Apr 2017, 16:11:25
----------------------------------------------------------------------------------------------------------------------------
+ closed on:  20 Mar 2018, 11:58:47
+-----------------------------------------------------------------------------------------------------
