@@ -25,7 +25,7 @@
 
 
 \begin{flushleft}
-Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9522\\ Spring 2017\\
+Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9522\\ Spring 2018\\
 \end{flushleft}
 
 \begin{center}
@@ -33,7 +33,7 @@ Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9522\\
 \end{center}
 
 
-There are many times when the dependent variables  do not come in the
+There are many times when the dependent variables do not come in the
 nice, continuous, normally distributed form that we assume in
 introductory regression courses. The real world, being less generous,
 provides data in all kinds of forms. The first thing to think about is
@@ -58,12 +58,11 @@ binary data. A partial list includes:
 
 \item Employment after graduation: yes or no?
 
-
 \end{itemize}
 
 All of these share a common DGM that gives a binary response. We'll
 consider two models to deal with this kind of outcome variable: the
-outmoded linear probability model, and logistic regression. 
+outmoded (yet making a comeback) linear probability model, and logistic regression. 
 
 
 \section{Linear Probability Model}
@@ -79,10 +78,7 @@ see what happens. This is known as a \textit{linear probability
 \end{equation*}
 
 
-
 To do this in Stata, we would run the following:
-
-
 
 \begin{stlog}
 
@@ -137,12 +133,10 @@ predicted probabilities outside of 0,1. Of course, you can always just
 recode these predictions to be 1 or 0 but we generally try to avoid
 making up data. 
 
-
 \subsubsection{Quick Exercise}
 
 Run a regression that models attendance as a function of test
 scores. See if there are any predicted probabilities that are outside of the range 0,1. 
-
 
 \subsection{Non-Normality of Errors}
 
@@ -152,7 +146,6 @@ they are in fact binomial. This follows from
 \begin{equation*}
   y_i=1 \Rightarrow e_i=1-(\beta_0 + \mathbf{x_i\beta})
 \end{equation*}
-
 
 \begin{equation*}
   y_i=0 \Rightarrow e_i=-(\beta_0 + \mathbf{x_i\beta})
@@ -215,10 +208,22 @@ Linear regression                                      Number of obs =   13284
 . 
 \end{stlog}
 
-\section{Logit Model}
+\section{Models for Binary Dependent Variables}
 
 Given the above theoretical problems with the LPM, almost all analysts
-favor the use of models specifically for binary variables.
+favor the use of models specifically for binary variables. In
+particular, if you'd like to generate predicted probabilities as
+opposed to just understanding the conditional expectation function,
+you should use a model for a binary variable.
+
+A notable exception to analysts preferring a nonlinear model for a
+binary dependent variable would be Angrist and Pischke, who say ``The
+upshot of this discussion is that while a nonlinear model may fit the
+CEF (cnoditional expectation function) for LDVS (lmitied dependent
+variables) more closely than a linear model, when it comes to marginal
+effects, this probably matters little. This optimistic conclusion is
+not a theorem, but . .  it seems to be fairly robustly true.''
+
 
 \subsection{Generalized Linear Models}
 
@@ -270,14 +275,15 @@ probability scale, using the inverse of the function.
 The other important thing to know about the logit model is that it is
 estimated via maximum likelihood. This is in contrast to OLS, which we
 estimate via direct computation. You could, given the time and the
-willingness, sit down and compute the estimates for an OLS model. For
-a MLE model, we use a likelihood function which gives us the
-likelihood of the data given a certain set of parameters. The computer then
-adjusts the estimates of the parameters, checks to see if the
-likelihood has gone up or down, and repeats. The algorithm keeps on
-looking for the parameters that make the data most likely. This stops
-at a pre-set point when improvements in the likelihood are small. this
-condition is called \textit{convergence}
+willingness, sit down and compute the estimates for an OLS model (I
+have! It's . . . .  fun?) . For a MLE model, we use a likelihood
+function which gives us the likelihood of the \emph{data} given a
+certain set of proposed parameters. The computer then adjusts the
+estimates of the parameters using a certain algorithm, checks to see
+if the likelihood has gone up or down, and repeats. The algorithm
+keeps on looking for the parameters that make the data most
+likely. This stops at a pre-set point when improvements in the
+likelihood are small. This condition is called \textit{convergence}
 
 To run a logistic regression in Stata, enter:
 
@@ -338,6 +344,51 @@ means that we have to take into account the \textit{whole} model,
 since this is what is mapped onto the (0,1) scale. 
 
 
+
+\subsection{Generating Marginal Effects}
+
+The marginal effect of a covariate is the predicted change in the
+probability of the outcome as a result of a one unit change in the
+covariates, with all other covariates held constant at some level. For
+logistic regression, it's most common to hold all other variables at
+their means, but it's not the only way to go. 
+
+In Stata, marginal effects can be computed quickly using the
+\texttt{margins} command. Running this for all variables with the
+\texttt{dydx} option will give you the marginal effect of each
+covariate, interpreted as a change in probability of the outcome for a
+one unit change in the indepndent variable, holding all other
+variables constant. 
+
+
+\begin{stlog}
+. /* Generating marginal effects */
+. margins, dydx(*) /*for all coefficients, default is to hold others at mean */  
+
+Average marginal effects                          Number of obs   =      13284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict()
+dy/dx w.r.t. : byses1 amind asian black hispanic multiracial bysex bynels2m bynels2r
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      byses1 |   .1295129   .0050031    25.89   0.000     .1197071    .1393188
+       amind |  -.0416356   .0316113    -1.32   0.188    -.1035926    .0203213
+       asian |    .146752   .0141156    10.40   0.000     .1190861     .174418
+       black |   .0698837   .0097859     7.14   0.000     .0507036    .0890637
+    hispanic |   .0431026   .0096314     4.48   0.000     .0242253    .0619799
+ multiracial |   -.041628   .0146135    -2.85   0.004      -.07027    -.012986
+       bysex |    .083794    .006603    12.69   0.000     .0708524    .0967355
+    bynels2m |   .0066036    .000375    17.61   0.000     .0058685    .0073387
+    bynels2r |   .0044192   .0005392     8.20   0.000     .0033623     .005476
+------------------------------------------------------------------------------
+
+. 
+\end{stlog}
+
 \subsubsection{Quick Exercise}
 
 Run a logistic regression predicting  college attendance by
@@ -351,7 +402,7 @@ probabilities for $y=1$.
 Since we are primarily interested in the probability that $y=1$, the
 best course to take to interpret coefficients is to demonstrate what
 happens to the dependent variable as we allow certain independent
-variables to move across their range. In Stata, the \texttt{margins}
+variables to move within their range. In Stata, the \texttt{margins}
 is indispensable for this task.
 
 Reporting these results well takes some time and some effort. The
@@ -453,62 +504,6 @@ with high, medium and low test scores, holding
 other variables constant at a reasonable level. Do this
 for the entire range of ses and plot the result. 
 
-
-
-
-\subsection{Generating Marginal Effects}
-
-The marginal effect of a covariate is the predicted change in the
-probability of the outcome as a result of a one unit change in the
-covariates, with all other covariates held constant at some level. For
-logistic regression, it's most common to hold all other variables at
-their means, but it's not the only way to go. 
-
-In Stata, marginal effects can be computed quickly using the
-\texttt{margins} command. Running this for all variables with the
-\texttt{dydx} option will give you the marginal effect of each
-covariate, interpreted as a change in probability of the outcome for a
-one unit change in the indepndent variable, holding all other
-variables constant. 
-
-
-\begin{stlog}
-. /* Generating marginal effects */
-. margins, dydx(*) /*for all coefficients, default is to hold others at mean */  
-
-Average marginal effects                          Number of obs   =      13284
-Model VCE    : OIM
-
-Expression   : Pr(f2evratt), predict()
-dy/dx w.r.t. : byses1 amind asian black hispanic multiracial bysex bynels2m bynels2r
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-      byses1 |   .1295129   .0050031    25.89   0.000     .1197071    .1393188
-       amind |  -.0416356   .0316113    -1.32   0.188    -.1035926    .0203213
-       asian |    .146752   .0141156    10.40   0.000     .1190861     .174418
-       black |   .0698837   .0097859     7.14   0.000     .0507036    .0890637
-    hispanic |   .0431026   .0096314     4.48   0.000     .0242253    .0619799
- multiracial |   -.041628   .0146135    -2.85   0.004      -.07027    -.012986
-       bysex |    .083794    .006603    12.69   0.000     .0708524    .0967355
-    bynels2m |   .0066036    .000375    17.61   0.000     .0058685    .0073387
-    bynels2r |   .0044192   .0005392     8.20   0.000     .0033623     .005476
-------------------------------------------------------------------------------
-
-. 
-\end{stlog}
-
- A notable
-exception to analysts preferring a nonlinear model for a binary
-dependent variable would be Angrist and Pischke, who say ``The upshot of this
-discussion is that while a nonlinear model may fit the CEF
-(cnoditional expectation function) for LDVS (lmitied dependent
-variables) more closely than a linear model, when it comes to marginal
-effects, this probably matters little. This optimistic conclusion is
-not a theorem, but . .  it seems to be fairly robustly true.''
-
 \subsection{Reporting Odds Ratios}
 
 The odds ratio for any coefficient is the predicted change in odds for
@@ -600,7 +595,6 @@ method as in OLS, except the distribution of the test statistic is the
 Normal distribution not the T distribution. For that reason, we report
 z and not t statistics. 
 
-
 \subsection{Likelihood Ratio Test}
 
 To test whether a subset of coefficients jointly increase model fit,
@@ -608,7 +602,6 @@ we use the likelihood ratio test. This is two times the difference in
 log likelihoods, and can be done quite easily in Stata. To test the
 full model in our example against one with just the kids variables, we
 would run:
-
 
 In Stata, the test is: 
 
@@ -666,7 +659,8 @@ test.
 
 The pseudo $R^2$ is just like it sounds--not a real $R^2$. It shares
 the same general interpretation of $R^2$--levels close to 0 are bad,
-levels close to one are good. 
+levels close to one are good. It's based on transforming the
+likelihood ratio to be constrained by 0,1. 
 
 \subsection{Percent Correctly Predicted}
 

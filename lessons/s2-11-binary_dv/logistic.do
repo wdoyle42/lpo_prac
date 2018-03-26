@@ -1,10 +1,10 @@
 capture log close
 log using "logistic.log",replace
 
-/* PhD Practicum, Spring 2017 */
+/* PhD Practicum, Spring 2018 */
 /* Regression models for binary data*/
 /* Will Doyle*/
-/* 3/28/17 */
+/* 3/16/18 */
 
 clear
 
@@ -73,10 +73,15 @@ graph twoway scatter `y' `ses' , msize(tiny)
 
 predict e, resid
 
+
+// Scatterplot of residuaals: holy heteroscedastic
 graph twoway scatter  `ses' e, msize(tiny)
 
+
+// Can always use robust ses
 reg `y' `ses' `demog' `tests', vce(robust)
 
+// Save this for later
 estimates store lpm
 
 /* Generate predicted probabilites over range of ses*/
@@ -99,27 +104,34 @@ margins , predict(xb) ///
        ) ///
       post
 
-    
+// Grab results for plotting    
+
+// Predicted values
 mat yhat=e(b)
 
 mat li yhat
 
 mat yhat=yhat'
 
+// Key independent variable
 mat allx=e(at)
 
 mat li allx
 
 mat myx=allx[1...,1]
 
+// Put predicted values in memory
 svmat yhat, names("yhat_lpm")
 
+//put key iv in memory
 svmat myx
 
+// Plot results
 graph twoway line yhat_lpm myx1, name("LPM") ytitle("Pr(Attend)") xtitle("SES") 
 
 graph export lpm.pdf, replace name("LPM")
- 
+
+
 /*Logistic Function*/
 
 graph drop _all
@@ -128,14 +140,18 @@ local k=.25 /*Scale*/
 local x0=0 /*Location*/
 
 graph twoway function y=1/(1+exp((-`k')*(x-`x0'))),range(-2 2) name("Logit")
- 
+
+
 /*Logistic Regression */
 
+// Most general: glm
 glm `y' `ses' `demog' `tests', family(binomial) link(logit) /*Logit model */
 
+// Can also use probit, uses cdf of normal dist    
 glm `y' `ses' `demog' `tests', family(binomial) link(probit) /*Probit Model */
 
-logit `y' `ses' `demog' `tests' /*Simpler version of logit model */
+// Simpler version of logit model 
+logit `y' `ses' `demog' `tests' 
 
 est store full_model
 
@@ -156,7 +172,7 @@ margins , predict(pr) ///
        ) ///
       post
 
-    
+// Get predictions    
 mat yhat=e(b)
 
 mat yhat=yhat'
@@ -169,25 +185,15 @@ graph twoway line yhat_lpm yhat_logit myx1, ///
     xtitle("SES") ///
     legend(order(1 "LPM" 2 "Logit") )
 
-
-
 estimates restore full_model
-    
-    
-margins , predict(pr) ///
-    at((mean) _continuous ///
-        (min) `demog' ///
-        `x'=(-1(1)1) ///          
-       ) ///
-      post
-exit
 	  
 graph export logit_basic.pdf, replace name("Logistic")
 
 drop yhat_*
 
-    estimates restore full_model
+// What about marginsplot? <sigh> <eyeroll>    
 
+estimates restore full_model
 
 margins , predict(pr) ///
     at((mean) _continuous ///
@@ -235,6 +241,8 @@ graph export logit_race.pdf, replace name("All_Races")
 
 estimates restore full_model
 
+// Other functions
+
 listcoef /*Display odds ratios from model in memory */
 
 listcoef, reverse /* Reveres interpretation, helps with negative coefs */
@@ -244,6 +252,8 @@ logistic `y' `ses' `demog' `tests'  /*Works too */
 estimates restore full_model
 
 /* Measures of model fit: all imperfect */
+
+// Built in methods
 
 fitstat
 
@@ -272,6 +282,16 @@ estimates restore full_model
 
 estat classification
 
+exit 
+
+// Sensitivity/Specificity trafeoff
+
+estimates restore full_model
+
+lsens, genprob(pr) genspec(spec) gensens(sens) replace
+
+browse pr spec sens
+
 /*Area under Receiver/Operator Characteristic Curve */
 
 lroc, name("lroc1")
@@ -289,6 +309,5 @@ predict xb_full, xb
 roccomp f2evratt xb_full xb_ses, graph summary name("roc2")
 
 graph export roc_curve.pdf , replace name("roc2")  ///
-
 
 exit
