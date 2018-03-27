@@ -1,804 +1,3472 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  16 MAR 2018 12:59
-entering extended mode
- restricted \write18 enabled.
- file:line:error style messages enabled.
- %&-line parsing enabled.
-**\input logistic.tex
-(./logistic.tex (/usr/local/texlive/2015/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/size12.clo
-File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
-)
-\c@part=\count79
-\c@section=\count80
-\c@subsection=\count81
-\c@subsubsection=\count82
-\c@paragraph=\count83
-\c@subparagraph=\count84
-\c@figure=\count85
-\c@table=\count86
-\abovecaptionskip=\skip41
-\belowcaptionskip=\skip42
-\bibindent=\dimen102
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/geometry/geometry.sty
-Package: geometry 2010/09/12 v5.6 Page Geometry
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks14
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is detected.
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ifvtex.sty
-Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
-Package ifvtex Info: VTeX not detected.
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-)
-\Gm@cnth=\count87
-\Gm@cntv=\count88
-\c@Gm@tempcnt=\count89
-\Gm@bindingoffset=\dimen103
-\Gm@wd@mp=\dimen104
-\Gm@odd@mp=\dimen105
-\Gm@even@mp=\dimen106
-\Gm@layoutwidth=\dimen107
-\Gm@layoutheight=\dimen108
-\Gm@layouthoffset=\dimen109
-\Gm@layoutvoffset=\dimen110
-\Gm@dimlist=\toks15
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2013/01/14 v2.14 AMS math features
-\@mathmargin=\skip43
-
-For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
-Package: amstext 2000/06/29 v2.01
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks16
-\ex@=\dimen111
-))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen112
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty
-Package: amsopn 1999/12/14 v2.01 operator names
-)
-\inf@bad=\count90
-LaTeX Info: Redefining \frac on input line 210.
-\uproot@=\count91
-\leftroot@=\count92
-LaTeX Info: Redefining \overline on input line 306.
-\classnum@=\count93
-\DOTSCASE@=\count94
-LaTeX Info: Redefining \ldots on input line 378.
-LaTeX Info: Redefining \dots on input line 381.
-LaTeX Info: Redefining \cdots on input line 466.
-\Mathstrutbox@=\box26
-\strutbox@=\box27
-\big@size=\dimen113
-LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
-\macc@depth=\count95
-\c@MaxMatrixCols=\count96
-\dotsspace@=\muskip10
-\c@parentequation=\count97
-\dspbrk@lvl=\count98
-\tag@help=\toks17
-\row@=\count99
-\column@=\count100
-\maxfields@=\count101
-\andhelp@=\toks18
-\eqnshift@=\dimen114
-\alignsep@=\dimen115
-\tagshift@=\dimen116
-\tagwidth@=\dimen117
-\totwidth@=\dimen118
-\lineht@=\dimen119
-\@envbody=\toks19
-\multlinegap=\skip44
-\multlinetaggap=\skip45
-\mathdisplay@stack=\toks20
-LaTeX Info: Redefining \[ on input line 2665.
-LaTeX Info: Redefining \] on input line 2666.
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/stata.sty
-Package: stata 2013/10/23 v1.34 LaTeX package for Stata code
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/alltt.sty
-Package: alltt 1997/06/16 v2.0g defines alltt environment
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/calc.sty
-Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count102
-\calc@Bcount=\count103
-\calc@Adimen=\dimen120
-\calc@Bdimen=\dimen121
-\calc@Askip=\skip46
-\calc@Bskip=\skip47
-LaTeX Info: Redefining \setlength on input line 80.
-LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count104
-\calc@Cskip=\skip48
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ifthen.sty
-Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
-)
-\st@box=\box28
-\st@box@wd=\dimen122
-\st@box@ht=\dimen123
-\st@box@dp=\dimen124
-\stsyndent=\skip49
-\streswidth=\skip50
-\st@parindent=\skip51
-\stexamplehskip=\skip52
-\sttechhskip=\skip53
-\st@ttbox@box=\box29
-\st@ttbox@framesep=\dimen125
-\ttboxIndent=\dimen126
-\ttboxWd=\dimen127
-\st@ttbox@boxwd=\dimen128
-\st@box=\box30
-\st@emptywidth=\skip54
-\st@linesize=\skip55
-\st@maxdepth=\skip56
-\st@maxheight=\skip57
-\st@mbdepth=\skip58
-\st@mtdepth=\skip59
-\st@xheight=\skip60
-\st@xwidth=\skip61
-\st@N=\count105
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2014/10/28 v1.0p Standard LaTeX Graphics (DPC,SPQR)
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/trig.sty
-Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/graphics.cfg
-File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
-)
-Package graphics Info: Driver file: pdftex.def on input line 94.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
-File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty
-Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
-Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
-)
-\Gread@gobject=\count106
-))
-\Gin@req@height=\dimen129
-\Gin@req@width=\dimen130
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/natbib/bibentry.sty
-Package: bibentry 2007/10/30 1.5 (PWD)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/ccaption/ccaption.sty
-Package: ccaption 2011/08/07 v3.2c Extended captioning and new floats
-\@contcwidth=\skip62
-\@contindw=\skip63
-\abovelegendskip=\skip64
-\belowlegendskip=\skip65
-\c@newflo@tctr=\count107
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fourier.sty
-Package: fourier 2005/01/01 1.4 fourier-GUTenberg package
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.def
-File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
-LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
-))
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/textcomp.sty
-Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
-Package textcomp Info: Sub-encoding information:
-(textcomp)               5 = only ISO-Adobe without \textcurrency
-(textcomp)               4 = 5 + \texteuro
-(textcomp)               3 = 4 + \textohm
-(textcomp)               2 = 3 + \textestimated + \textcurrency
-(textcomp)               1 = TS1 - \textcircled - \t
-(textcomp)               0 = TS1 (full)
-(textcomp)             Font families with sub-encoding setting implement
-(textcomp)             only a restricted character set as indicated.
-(textcomp)             Family '?' is the default used for unknown fonts.
-(textcomp)             See the documentation for details.
-Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1enc.def
-File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
-)
-LaTeX Info: Redefining \oldstylenums on input line 334.
-Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
-Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
-Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
-Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
-Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
-Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
-Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
-Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
-Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
-Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
-Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
-Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
-Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
-Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
-Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
-Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
-Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
-Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
-Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
-Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
-Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
-Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
-Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
-Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
-
-Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
-Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
-Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
-Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
-Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
-Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
-Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
-Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
-Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
-Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
-Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
-Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
-Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
-Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
-Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
-Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
-Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
-Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
-Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
-Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
-Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
-Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
-Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
-Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
-Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
-Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
-Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
-Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
-Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
-Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
-Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
-Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
-Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
-Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
-Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
-Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
-Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fourier-orns.sty
-Package: fourier-orns 2004/01/30 1.1 fourier-ornaments package
-)
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 50.
-LaTeX Font Info:    Encoding `OT1' has changed to `T1' for symbol font
-(Font)              `operators' in the math version `normal' on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> T1/futs/m/n on input line 50.
-LaTeX Font Info:    Encoding `OT1' has changed to `T1' for symbol font
-(Font)              `operators' in the math version `bold' on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> T1/futs/m/n on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  T1/futs/m/n --> T1/futs/b/n on input line 51.
-LaTeX Font Info:    Redeclaring symbol font `letters' on input line 59.
-LaTeX Font Info:    Encoding `OML' has changed to `FML' for symbol font
-(Font)              `letters' in the math version `normal' on input line 59.
-LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
-(Font)                  OML/cmm/m/it --> FML/futmi/m/it on input line 59.
-LaTeX Font Info:    Encoding `OML' has changed to `FML' for symbol font
-(Font)              `letters' in the math version `bold' on input line 59.
-LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
-(Font)                  OML/cmm/b/it --> FML/futmi/m/it on input line 59.
-\symotherletters=\mathgroup4
-LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
-(Font)                  FML/futmi/m/it --> FML/futmi/b/it on input line 61.
-LaTeX Font Info:    Overwriting symbol font `otherletters' in version `bold'
-(Font)                  FML/futm/m/it --> FML/futm/b/it on input line 62.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 64.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 65.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 66.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 67.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 68.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 69.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 70.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 71.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 72.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 73.
-LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 113.
-LaTeX Font Info:    Encoding `OMS' has changed to `FMS' for symbol font
-(Font)              `symbols' in the math version `normal' on input line 113.
-LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
-(Font)                  OMS/cmsy/m/n --> FMS/futm/m/n on input line 113.
-LaTeX Font Info:    Encoding `OMS' has changed to `FMS' for symbol font
-(Font)              `symbols' in the math version `bold' on input line 113.
-LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
-(Font)                  OMS/cmsy/b/n --> FMS/futm/m/n on input line 113.
-LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 114.
-LaTeX Font Info:    Encoding `OMX' has changed to `FMX' for symbol font
-(Font)              `largesymbols' in the math version `normal' on input line 1
-14.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
-(Font)                  OMX/cmex/m/n --> FMX/futm/m/n on input line 114.
-LaTeX Font Info:    Encoding `OMX' has changed to `FMX' for symbol font
-(Font)              `largesymbols' in the math version `bold' on input line 114
-.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
-(Font)                  OMX/cmex/m/n --> FMX/futm/m/n on input line 114.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 115.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> T1/futs/bx/n on input line 115.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> T1/futs/bx/n on input line 115.
-LaTeX Font Info:    Redeclaring math alphabet \mathrm on input line 116.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 117.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> T1/futs/m/it on input line 117.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> T1/futs/m/it on input line 117.
-LaTeX Font Info:    Redeclaring math alphabet \mathcal on input line 118.
-LaTeX Font Info:    Redeclaring math symbol \parallel on input line 134.
-LaTeX Font Info:    Redeclaring math symbol \hbar on input line 148.
-LaTeX Font Info:    Redeclaring math symbol \varkappa on input line 186.
-LaTeX Font Info:    Redeclaring math symbol \varvarrho on input line 187.
-LaTeX Font Info:    Redeclaring math delimiter \Vert on input line 210.
-LaTeX Font Info:    Redeclaring math delimiter \vert on input line 215.
-LaTeX Font Info:    Redeclaring math delimiter \lvert on input line 217.
-LaTeX Font Info:    Redeclaring math delimiter \rvert on input line 219.
-LaTeX Font Info:    Redeclaring math delimiter \lVert on input line 221.
-LaTeX Font Info:    Redeclaring math delimiter \rVert on input line 223.
-LaTeX Font Info:    Redeclaring math delimiter \Downarrow on input line 225.
-LaTeX Font Info:    Redeclaring math delimiter \backslash on input line 227.
-LaTeX Font Info:    Redeclaring math delimiter \rangle on input line 229.
-LaTeX Font Info:    Redeclaring math delimiter \langle on input line 231.
-LaTeX Font Info:    Redeclaring math delimiter \rbrace on input line 233.
-LaTeX Font Info:    Redeclaring math delimiter \lbrace on input line 235.
-LaTeX Font Info:    Redeclaring math delimiter \rceil on input line 237.
-LaTeX Font Info:    Redeclaring math delimiter \lceil on input line 239.
-LaTeX Font Info:    Redeclaring math delimiter \rfloor on input line 241.
-LaTeX Font Info:    Redeclaring math delimiter \lfloor on input line 243.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 247.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 248.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 249.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 250.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 251.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 252.
-LaTeX Font Info:    Redeclaring math accent \check on input line 253.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 254.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 255.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 256.
-\symUfutm=\mathgroup5
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-Package: hobsub-hyperref 2012/05/28 v1.13 Bundle oberdiek, subset hyperref (HO)
-
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-Package: hobsub-generic 2012/05/28 v1.13 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2012/05/28 v1.13 Construct package bundles (HO)
-Package hobsub Info: Skipping package `infwarerr' (already loaded).
-Package hobsub Info: Skipping package `ltxcmds' (already loaded).
-Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-Package hobsub Info: Skipping package `ifvtex' (already loaded).
-Package: intcalc 2007/09/27 v1.1 Expandable calculations with integers (HO)
-Package hobsub Info: Skipping package `ifpdf' (already loaded).
-Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
-Package etexcmds Info: Could not find \expanded.
-(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
-(etexcmds)             that some package has redefined \expanded.
-(etexcmds)             In the latter case, load this package earlier.
-Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
-Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
-Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
-)
-Package pdftexcmds Info: LuaTeX not detected.
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-Package: pdfescape 2011/11/25 v1.13 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2012/04/08 v1.3 Expandable calculations on big integers (HO
-)
-Package: bitset 2011/01/30 v1.1 Handle bit-vector datatype (HO)
-Package: uniquecounter 2011/01/30 v1.2 Provide unlimited unique counter (HO)
-)
-Package hobsub Info: Skipping package `hobsub' (already loaded).
-Package: letltxmacro 2010/09/02 v1.4 Let assignment for LaTeX macros (HO)
-Package: hopatch 2012/05/28 v1.2 Wrapper for package hooks (HO)
-Package: xcolor-patch 2011/01/30 xcolor patch
-Package: atveryend 2011/06/30 v1.8 Hooks at the very end of document (HO)
-Package atveryend Info: \enddocument detected (standard20110627).
-Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
-Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
-Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/auxhook.sty
-Package: auxhook 2011/03/04 v1.3 Hooks for auxiliary files (HO)
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
-)
-\@linkdim=\dimen131
-\Hy@linkcounter=\count108
-\Hy@pagecounter=\count109
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2012/11/06 v6.83m Hyperref: PDFDocEncoding definition (HO)
-)
-\Hy@SavedSpaceFactor=\count110
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/hyperref.cfg
-File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
-)
-Package hyperref Info: Option `colorlinks' set `true' on input line 4319.
-Package hyperref Info: Hyper figures OFF on input line 4443.
-Package hyperref Info: Link nesting OFF on input line 4448.
-Package hyperref Info: Hyper index ON on input line 4451.
-Package hyperref Info: Plain pages OFF on input line 4458.
-Package hyperref Info: Backreferencing OFF on input line 4463.
-Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4688.
-\c@Hy@tempcnt=\count111
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip11
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
-LaTeX Info: Redefining \url on input line 5041.
-\XeTeXLinkMargin=\dimen132
-\Fld@menulength=\count112
-\Field@Width=\dimen133
-\Fld@charsize=\dimen134
-Package hyperref Info: Hyper figures OFF on input line 6295.
-Package hyperref Info: Link nesting OFF on input line 6300.
-Package hyperref Info: Hyper index ON on input line 6303.
-Package hyperref Info: backreferencing OFF on input line 6310.
-Package hyperref Info: Link coloring ON on input line 6313.
-Package hyperref Info: Link coloring with OCG OFF on input line 6320.
-Package hyperref Info: PDF/A mode OFF on input line 6325.
-LaTeX Info: Redefining \ref on input line 6365.
-LaTeX Info: Redefining \pageref on input line 6369.
-\Hy@abspage=\count113
-\c@Item=\count114
-\c@Hfootnote=\count115
-)
-
-Package hyperref Message: Driver (autodetected): hpdftex.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2012/11/06 v6.83m Hyperref driver for pdfTeX
-\Fld@listcount=\count116
-\c@bookmark@seq@number=\count117
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
-82.
-)
-\Hy@SectionHShift=\skip66
-)
-(/usr/local/texlive/2015/texmf-dist/tex/latex/natbib/natbib.sty
-Package: natbib 2010/09/13 8.31b (PWD, AO)
-\bibhang=\skip67
-\bibsep=\skip68
-LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count118
-)
-(./logistic.aux)
-\openout1 = `logistic.aux'.
-
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for FML/futm/m/it on input line 18.
-LaTeX Font Info:    Try loading font information for FML+futm on input line 18.
-
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fmlfutm.fd
-File: fmlfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futm.
-)
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for FMS/futm/m/n on input line 18.
-LaTeX Font Info:    Try loading font information for FMS+futm on input line 18.
-
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fmsfutm.fd
-File: fmsfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FMS/futm.
-)
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for FMX/futm/m/n on input line 18.
-LaTeX Font Info:    Try loading font information for FMX+futm on input line 18.
-
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fmxfutm.fd
-File: fmxfutm.fd futm-extension
-)
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 18.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd
-File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Try loading font information for T1+futs on input line 18.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/t1futs.fd
-File: t1futs.fd 2004/03/02 Fontinst v1.926 font definitions for T1/futs.
-)
-*geometry* driver: auto-detecting
-*geometry* detected driver: pdftex
-*geometry* verbose mode - [ preamble ] result:
-* driver: pdftex
-* paper: <default>
-* layout: <same size as paper>
-* layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: 
-* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
-* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
-* \paperwidth=614.295pt
-* \paperheight=794.96999pt
-* \textwidth=469.75502pt
-* \textheight=650.43001pt
-* \oddsidemargin=0.0pt
-* \evensidemargin=0.0pt
-* \topmargin=-37.0pt
-* \headheight=12.0pt
-* \headsep=25.0pt
-* \topskip=12.0pt
-* \footskip=30.0pt
-* \marginparwidth=44.0pt
-* \marginparsep=10.0pt
-* \columnsep=10.0pt
-* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
-* \hoffset=0.0pt
-* \voffset=0.0pt
-* \mag=1000
-* \@twocolumnfalse
-* \@twosidefalse
-* \@mparswitchfalse
-* \@reversemarginfalse
-* (1in=72.27pt=25.4mm, 1cm=28.453pt)
-
-(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count119
-\scratchdimen=\dimen135
-\scratchbox=\box31
-\nofMPsegments=\count120
-\nofMParguments=\count121
-\everyMPshowfont=\toks21
-\MPscratchCnt=\count122
-\MPscratchDim=\dimen136
-\MPnumerator=\count123
-\makeMPintoPDFobject=\count124
-\everyMPtoPDFconversion=\toks22
-) (/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
-)
-Package grfext Info: Graphics extension search list:
-(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 452.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
-))
-\AtBeginShipoutBox=\box32
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/color.sty
-Package: color 2014/10/28 v1.1a Standard LaTeX Color (DPC)
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/color.cfg
-File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
-)
-Package color Info: Driver file: pdftex.def on input line 142.
-)
-Package hyperref Info: Link coloring ON on input line 18.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
-
-(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
-)
-\c@section@level=\count125
-)
-LaTeX Info: Redefining \ref on input line 18.
-LaTeX Info: Redefining \pageref on input line 18.
-LaTeX Info: Redefining \nameref on input line 18.
-
-(./logistic.out) (./logistic.out)
-\@outlinefile=\write3
-\openout3 = `logistic.out'.
-
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <12> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 32.
-LaTeX Font Info:    Try loading font information for TS1+futs on input line 51.
-
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/ts1futs.fd
-File: ts1futs.fd 2004/03/26 Fontinst v1.926 font definitions for TS1/futs.
-)
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 68.
-LaTeX Font Info:    Try loading font information for FML+futmi on input line 76
-.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/fourier/fmlfutmi.fd
-File: fmlfutmi.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futmi.
-)
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 11.03998pt on input line 76.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 8.27998pt on input line 76.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 6.43999pt on input line 76.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 11.03998pt on input line 76.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 8.27998pt on input line 76.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 6.43999pt on input line 76.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <9> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 77.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <7> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 77.
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 84.
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 87.
- [1
-
-{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<lpm.pdf, id=106, 397.485pt x 289.08pt>
-File: lpm.pdf Graphic file (type pdf)
- <use lpm.pdf>
-Package pdftex.def Info: lpm.pdf used on input line 118.
-(pdftex.def)             Requested size: 469.75502pt x 341.64957pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 127.
-[2] [3 <./lpm.pdf>] [4] [5] [6] [7]
-<logit_basic.pdf, id=146, 397.485pt x 289.08pt>
-File: logit_basic.pdf Graphic file (type pdf)
- <use logit_basic.pdf>
-Package pdftex.def Info: logit_basic.pdf used on input line 481.
-(pdftex.def)             Requested size: 469.75502pt x 341.64957pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<logit_race.pdf, id=147, 397.485pt x 289.08pt>
-File: logit_race.pdf Graphic file (type pdf)
- <use logit_race.pdf>
-Package pdftex.def Info: logit_race.pdf used on input line 494.
-(pdftex.def)             Requested size: 469.75502pt x 341.64957pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[8] [9 <./logit_basic.pdf>] [10 <./logit_race.pdf>] [11]
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 13.24796pt on input line 658.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 9.19998pt on input line 658.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 7.35999pt on input line 658.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <10> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 658.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <8> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 658.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 13.24796pt on input line 658.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 9.19998pt on input line 658.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 7.35999pt on input line 658.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 658.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `superscript' on input line 658.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 658.
-
-[12] <roc_curve.pdf, id=191, 397.485pt x 289.08pt>
-File: roc_curve.pdf Graphic file (type pdf)
- <use roc_curve.pdf>
-Package pdftex.def Info: roc_curve.pdf used on input line 786.
-(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 791.
- [13]
-[14 <./roc_curve.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 791.
- (./logistic.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 791.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 791.
-
-
-Package rerunfilecheck Warning: File `logistic.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `logistic.out':
-(rerunfilecheck)             Before: B5134A8B8A9C107A654073CFDB811CF4;1513
-(rerunfilecheck)             After:  4A1816DD56745BD02B5E89EEA3924DF7;1539.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 791.
- ) 
-Here is how much of TeX's memory you used:
- 8064 strings out of 493089
- 114249 string characters out of 6134842
- 212329 words of memory out of 5000000
- 11356 multiletter control sequences out of 15000+600000
- 94548 words of font info for 98 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 29i,6n,32p,248b,562s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/tex
-live/2015/texmf-dist/fonts/type1/public/fourier/fourier-mlit.pfb></usr/local/te
-xlive/2015/texmf-dist/fonts/type1/public/fourier/fourier-ms.pfb></usr/local/tex
-live/2015/texmf-dist/fonts/type1/adobe/utopia/putb8a.pfb></usr/local/texlive/20
-15/texmf-dist/fonts/type1/adobe/utopia/putr8a.pfb></usr/local/texlive/2015/texm
-f-dist/fonts/type1/adobe/utopia/putri8a.pfb></usr/local/texlive/2015/texmf-dist
-/fonts/type1/public/cm-super/sftt0800.pfb></usr/local/texlive/2015/texmf-dist/f
-onts/type1/public/cm-super/sftt1200.pfb>
-Output written on logistic.pdf (14 pages, 2247216 bytes).
-PDF statistics:
- 252 PDF objects out of 1000 (max. 8388607)
- 214 compressed objects within 3 object streams
- 43 named destinations out of 1000 (max. 500000)
- 205 words of extra memory for PDF output out of 10000 (max. 10000000)
-
-. exit, clear
+------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_2017/central/lessons/s2-11-binary_dv/logistic.log
+  log type:  text
+ opened on:  27 Mar 2018, 15:25:12
+
+. 
+. /* PhD Practicum, Spring 2018 */
+. /* Regression models for binary data*/
+. /* Will Doyle*/
+. /* 3/16/18 */
+. 
+. clear
+
+. 
+. set more off
+
+. 
+. graph drop _all
+
+. 
+. global ddir "../../data/"
+
+. 
+. use ${ddir}attend, clear
+
+. 
+. describe
+
+Contains data from ../../data/attend.dta
+  obs:        16,289                          
+ vars:            28                          11 Apr 2013 10:46
+ size:       961,051                          
+------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+------------------------------------------------------------------------------------------------
+stu_id          long    %12.0f                Student ID
+f2evratt        byte    %12.0f     F2EVRATT   Whether has ever attended a postsecondary
+                                                institution - composite
+sch_id          int     %8.0g                 school id
+strat_id        int     %8.0g                 stratum
+psu             byte    %8.0g      psu        primary sampling unit
+f1sch_id        int     %8.0g                 link to first follow-up school
+f1univ1         int     %8.0g      f1univ1    sample member status in by and f1 rounds
+f1univ2a        byte    %8.0g      f1univ2a   base year status and how sample member entered f1
+                                                sample
+f1univ2b        byte    %8.0g      f1univ2b   sample member f1 status
+g10cohrt        byte    %8.0g      g10cohrt   sophomore cohort member in 2001-2002 school year
+g12cohrt        byte    %8.0g      g12cohrt   f1 senior cohort member
+bystuwt         float   %9.0g                 student weight
+bysex           byte    %8.0g      bysex      sex-composite
+byrace          byte    %8.0g      byrace     student^s race/ethnicity-composite
+bydob_p         long    %12.0g                student^s year and month of birth
+bypared         byte    %8.0g      bypared    parents^ highest level of education
+bymothed        byte    %8.0g      bymothed   mother^s highest level of education-composite
+byfathed        byte    %8.0g      byfathed   father^s highest level of education-composite
+byincome        byte    %8.0g      byincome   total family income from all sources
+                                                2001-composite
+byses1          float   %9.0g                 socio-economic status composite, v.1
+byses2          float   %9.0g                 socio-economic status composite, v.2
+bystexp         byte    %8.0g      bystexp    how far in school student thinks will
+                                                get-composite
+bynels2m        float   %9.0g                 els-nels 1992 scale equated sophomore math score
+bynels2r        float   %9.0g                 els-nels 1992 scale equated sophomore reading
+                                                score
+f1qwt           float   %9.0g                 questionnaire weight for f1
+f1pnlwt         float   %9.0g                 panel weight, by and f1 (2002 and 2004)
+f1psepln        byte    %8.0g      f1psepln   f1 post-secondary plans right after high school
+_merge          byte    %23.0g     _merge     
+------------------------------------------------------------------------------------------------
+Sorted by: 
+
+. 
+. /* Missing data*/
+. 
+. foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
+  2.               foreach i of numlist -3 -4 -8 -9 { /* Start inner loop */
+  3.                      replace `myvar'=. if `myvar'== `i'
+  4.                                             }  /* End inner loop */
+  5.                                           } /* End outer loop */
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(108 real changes made, 108 to missing)
+(1,691 real changes made, 1,691 to missing)
+(359 real changes made, 359 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(3,825 real changes made, 3,825 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(171 real changes made, 171 to missing)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(276 real changes made, 276 to missing)
+(53 real changes made, 53 to missing)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(171 real changes made, 171 to missing)
+(37 real changes made, 37 to missing)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(171 real changes made, 171 to missing)
+(40 real changes made, 40 to missing)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(171 real changes made, 171 to missing)
+(57 real changes made, 57 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1,164 real changes made, 1,164 to missing)
+(785 real changes made, 785 to missing)
+(47 real changes made, 47 to missing)
+
+. 
+. 
+. /* Recodes */
+.   
+. local race_names amind asian black hispanic_race hispanic_norace multiracial white
+
+. 
+. tab(byrace), gen(race_)
+
+     student^s race/ethnicity-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+amer. indian/alaska native, non-hispani |        131        0.85        0.85
+asian, hawaii/pac. islander,non-hispani |      1,465        9.56       10.41
+black or african american, non-hispanic |      2,027       13.23       23.64
+            hispanic, no race specified |        998        6.51       30.15
+               hispanic, race specified |      1,229        8.02       38.17
+              multiracial, non-hispanic |        740        4.83       43.00
+                    white, non-hispanic |      8,735       57.00      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,325      100.00
+
+. 
+. local i=1
+
+. 
+. foreach val of local race_names{
+  2.   rename race_`i' `val'
+  3.   local i=`i'+1
+  4. }
+
+. 
+. gen hispanic=hispanic_race==1|hispanic_norace==1
+
+. 
+. label variable byincome "Income"
+
+. label variable amind "American Indian/AK Native"
+
+. label variable asian "Asian/ PI"
+
+. label variable black "African American"
+
+. label variable hispanic "Hispanic"
+
+. label variable white "White"
+
+. label variable multiracial "Multiracial"
+
+. 
+. local race amind asian black hispanic multiracial 
+
+. 
+. 
+. /* Set locals */
+. 
+. local y f2evratt
+
+. 
+. local ses byses1
+
+. 
+. local demog amind asian black hispanic multiracial bysex
+
+. 
+. local tests bynels2m bynels2r
+
+. 
+. local gtype pdf
+
+. 
+. /* Linear Probability Model */
+. 
+. reg `y' `ses' `demog' `tests'
+
+      Source |       SS           df       MS      Number of obs   =    13,284
+-------------+----------------------------------   F(9, 13274)     =    374.14
+       Model |  496.008461         9  55.1120512   Prob > F        =    0.0000
+    Residual |  1955.28354    13,274  .147301759   R-squared       =    0.2023
+-------------+----------------------------------   Adj R-squared   =    0.2018
+       Total |  2451.29201    13,283  .184543552   Root MSE        =     .3838
+
+------------------------------------------------------------------------------
+    f2evratt |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      byses1 |   .1230284   .0051494    23.89   0.000     .1129347     .133122
+       amind |  -.0799666   .0375121    -2.13   0.033    -.1534955   -.0064376
+       asian |   .1061966   .0118984     8.93   0.000     .0828741    .1295192
+       black |   .0664432   .0107626     6.17   0.000     .0453469    .0875395
+    hispanic |   .0224763    .010479     2.14   0.032     .0019359    .0430167
+ multiracial |   -.045084   .0158417    -2.85   0.004    -.0761361    -.014032
+       bysex |   .0863008   .0067759    12.74   0.000     .0730191    .0995824
+    bynels2m |   .0069647   .0003931    17.72   0.000     .0061943    .0077352
+    bynels2r |   .0047414   .0005583     8.49   0.000      .003647    .0058357
+       _cons |   .1329982   .0183363     7.25   0.000     .0970564      .16894
+------------------------------------------------------------------------------
+
+. 
+. graph twoway scatter `y' `ses' , msize(tiny) 
+
+. 
+. predict e, resid
+(3,005 missing values generated)
+
+. 
+. // Scatterplot of residuaals: holy heteroscedastic
+. graph twoway scatter  `ses' e, msize(tiny)
+
+. 
+. // Can always use robust ses
+. reg `y' `ses' `demog' `tests', vce(robust)
+
+Linear regression                               Number of obs     =     13,284
+                                                F(9, 13274)       =     408.19
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2023
+                                                Root MSE          =      .3838
+
+------------------------------------------------------------------------------
+             |               Robust
+    f2evratt |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      byses1 |   .1230284   .0051319    23.97   0.000     .1129691    .1330876
+       amind |  -.0799666   .0453305    -1.76   0.078    -.1688208    .0088877
+       asian |   .1061966   .0105472    10.07   0.000     .0855226    .1268707
+       black |   .0664432   .0117838     5.64   0.000     .0433454    .0895411
+    hispanic |   .0224763     .01161     1.94   0.053     -.000281    .0452335
+ multiracial |   -.045084   .0166198    -2.71   0.007    -.0776612   -.0125069
+       bysex |   .0863008   .0067757    12.74   0.000     .0730194    .0995821
+    bynels2m |   .0069647   .0004003    17.40   0.000       .00618    .0077495
+    bynels2r |   .0047414    .000568     8.35   0.000      .003628    .0058547
+       _cons |   .1329982   .0195842     6.79   0.000     .0946104    .1713861
+------------------------------------------------------------------------------
+
+. 
+. // Save this for later
+. estimates store lpm
+
+. 
+. /* Generate predicted probabilites over range of ses*/
+. 
+. local x byses1
+
+. 
+. sum `x', detail
+
+            socio-economic status composite, v.1
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%        -1.54          -2.11
+ 5%        -1.18          -2.11
+10%         -.95          -1.97       Obs              15,325
+25%          -.5          -1.97       Sum of Wgt.      15,325
+
+50%          .04                      Mean           .0426499
+                        Largest       Std. Dev.      .7429194
+75%          .59            1.8
+90%         1.05            1.8       Variance       .5519293
+95%         1.26           1.81       Skewness      -.0235649
+99%         1.55           1.82       Kurtosis       2.354114
+
+. 
+. local no_steps=20
+
+. 
+. local mymin=r(min)
+
+. local mymax=r(max)
+
+. local diff=`mymax'-`mymin'
+
+. local step=`diff'/`no_steps'
+
+.     
+. margins , predict(xb) ///
+>     at((mean) _continuous ///
+>         (min) `demog' ///
+>         `x'=(`mymin'(`step')`mymax') ///          
+>        ) ///
+>       post
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict(xb)
+
+1._at        : byses1          =       -2.11
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .4243374   .0138351    30.67   0.000     .3972186    .4514562
+          2  |   .4485125   .0129295    34.69   0.000     .4231688    .4738562
+          3  |   .4726876   .0120403    39.26   0.000     .4490869    .4962882
+          4  |   .4968626   .0111713    44.48   0.000     .4749653    .5187599
+          5  |   .5210377   .0103277    50.45   0.000      .500794    .5412814
+          6  |   .5452128   .0095162    57.29   0.000     .5265597    .5638658
+          7  |   .5693878   .0087458    65.10   0.000     .5522449    .5865308
+          8  |   .5935629   .0080283    73.93   0.000     .5778264    .6092995
+          9  |    .617738   .0073791    83.71   0.000     .6032738    .6322021
+         10  |   .6419131   .0068179    94.15   0.000      .628549    .6552772
+         11  |   .6660881   .0063679   104.60   0.000     .6536061    .6785701
+         12  |   .6902632   .0060539   114.02   0.000     .6783966    .7021298
+         13  |   .7144383   .0058978   121.14   0.000     .7028778    .7259988
+         14  |   .7386134    .005912   124.93   0.000      .727025    .7502017
+         15  |   .7627884   .0060953   125.14   0.000     .7508407    .7747361
+         16  |   .7869635   .0064334   122.33   0.000     .7743532    .7995738
+         17  |   .8111386   .0069034   117.50   0.000     .7976069    .8246703
+         18  |   .8353136   .0074807   111.66   0.000     .8206505    .8499768
+         19  |   .8594887   .0081423   105.56   0.000     .8435286    .8754488
+         20  |   .8836638   .0088695    99.63   0.000     .8662783    .9010492
+         21  |   .9078389   .0096474    94.10   0.000     .8889286    .9267491
+------------------------------------------------------------------------------
+
+. 
+. // Grab results for plotting    
+. 
+. // Predicted values
+. mat yhat=e(b)
+
+. 
+. mat li yhat
+
+yhat[1,21]
+            1.         2.         3.         4.         5.         6.         7.         8.
+          _at        _at        _at        _at        _at        _at        _at        _at
+y1  .42433742  .44851248  .47268756  .49686263  .52103771  .54521277  .56938785  .59356292
+
+            9.        10.        11.        12.        13.        14.        15.        16.
+          _at        _at        _at        _at        _at        _at        _at        _at
+y1  .61773799  .64191307  .66608814  .69026321  .71443828  .73861335  .76278843   .7869635
+
+           17.        18.        19.        20.        21.
+          _at        _at        _at        _at        _at
+y1  .81113857  .83531365  .85948872   .8836638  .90783886
+
+. 
+. mat yhat=yhat'
+
+. 
+. // Key independent variable
+. mat allx=e(at)
+
+. 
+. mat myx=allx[1...,1]
+
+. 
+. //put key iv in memory
+. svmat myx
+
+. 
+. 
+. // Put predicted values in memory
+. svmat yhat, names("yhat_lpm")
+
+. 
+. // Plot results
+. graph twoway line yhat_lpm myx1, name("LPM") ytitle("Pr(Attend)") xtitle("SES") 
+
+. 
+. graph export lpm.pdf, replace name("LPM")
+(file /Users/doylewr/practicum_2017/central/lessons/s2-11-binary_dv/lpm.pdf written in PDF forma
+> t)
+
+. 
+. /*Logistic Function*/
+. 
+. graph drop _all
+
+. 
+. local k=.25 /*Scale*/
+
+. local x0=0 /*Location*/
+
+. 
+. graph twoway function y=1/(1+exp((-`k')*(x-`x0'))),range(-2 2) name("Logit")
+
+. 
+. /*Logistic Regression */
+. 
+. // Most general: glm
+. glm `y' `ses' `demog' `tests', family(binomial) link(logit) /*Logit model */
+
+Iteration 0:   log likelihood = -5993.9873  
+Iteration 1:   log likelihood = -5882.7372  
+Iteration 2:   log likelihood = -5881.8941  
+Iteration 3:   log likelihood = -5881.8937  
+
+Generalized linear models                         No. of obs      =     13,284
+Optimization     : ML                             Residual df     =     13,274
+                                                  Scale parameter =          1
+Deviance         =  11763.78742                   (1/df) Deviance =   .8862278
+Pearson          =  12895.93374                   (1/df) Pearson  =   .9715183
+
+Variance function: V(u) = u*(1-u/1)               [Binomial]
+Link function    : g(u) = ln(u/(1-u))             [Logit]
+
+                                                  AIC             =   .8870662
+Log likelihood   = -5881.893711                   BIC             =  -114263.8
+
+------------------------------------------------------------------------------
+             |                 OIM
+    f2evratt |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      byses1 |   .9044975   .0375964    24.06   0.000     .8308099    .9781851
+       amind |  -.2907767   .2208319    -1.32   0.188    -.7235993     .142046
+       asian |   1.024892   .0997533    10.27   0.000     .8293791    1.220405
+       black |   .4880563   .0687739     7.10   0.000     .3532619    .6228507
+    hispanic |   .3010217   .0673856     4.47   0.000     .1689483     .433095
+ multiracial |   -.290723   .1021569    -2.85   0.004    -.4909468   -.0904992
+       bysex |   .5852037   .0470378    12.44   0.000     .4930113    .6773961
+    bynels2m |   .0461185    .002718    16.97   0.000     .0407913    .0514457
+    bynels2r |   .0308627   .0037971     8.13   0.000     .0234205    .0383049
+       _cons |  -2.684406    .124637   -21.54   0.000     -2.92869   -2.440122
+------------------------------------------------------------------------------
+
+. 
+. 
+. // Can also use probit, uses cdf of normal dist    
+. glm `y' `ses' `demog' `tests', family(binomial) link(probit) /*Probit Model */
+
+Iteration 0:   log likelihood = -5978.0284  
+Iteration 1:   log likelihood =  -5878.115  
+Iteration 2:   log likelihood = -5878.0383  
+Iteration 3:   log likelihood = -5878.0383  
+
+Generalized linear models                         No. of obs      =     13,284
+Optimization     : ML                             Residual df     =     13,274
+                                                  Scale parameter =          1
+Deviance         =  11756.07668                   (1/df) Deviance =   .8856469
+Pearson          =  13406.23809                   (1/df) Pearson  =   1.009962
+
+Variance function: V(u) = u*(1-u/1)               [Binomial]
+Link function    : g(u) = invnorm(u)              [Probit]
+
+                                                  AIC             =   .8864857
+Log likelihood   = -5878.038342                   BIC             =  -114271.5
+
+------------------------------------------------------------------------------
+             |                 OIM
+    f2evratt |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      byses1 |   .5214156   .0212996    24.48   0.000     .4796692    .5631621
+       amind |  -.1781082   .1305367    -1.36   0.172    -.4339554     .077739
+       asian |   .5517663   .0544573    10.13   0.000     .4450319    .6585007
+       black |   .2699883   .0401898     6.72   0.000     .1912179    .3487588
+    hispanic |   .1510589   .0391104     3.86   0.000      .074404    .2277139
+ multiracial |  -.1672064   .0598836    -2.79   0.005    -.2845761   -.0498366
+       bysex |    .337614    .027022    12.49   0.000     .2846519    .3905762
+    bynels2m |   .0264463    .001554    17.02   0.000     .0234004    .0294921
+    bynels2r |   .0177605   .0021853     8.13   0.000     .0134773    .0220437
+       _cons |  -1.522873    .071699   -21.24   0.000    -1.663401   -1.382346
+------------------------------------------------------------------------------
+
+. 
+. 
+. // Simpler version of logit model 
+. logit `y' `ses' `demog' `tests' 
+
+Iteration 0:   log likelihood = -7383.1405  
+Iteration 1:   log likelihood = -5998.4224  
+Iteration 2:   log likelihood = -5882.6198  
+Iteration 3:   log likelihood = -5881.8938  
+Iteration 4:   log likelihood = -5881.8937  
+
+Logistic regression                             Number of obs     =     13,284
+                                                LR chi2(9)        =    3002.49
+                                                Prob > chi2       =     0.0000
+Log likelihood = -5881.8937                     Pseudo R2         =     0.2033
+
+------------------------------------------------------------------------------
+    f2evratt |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      byses1 |   .9044976   .0375964    24.06   0.000     .8308101    .9781852
+       amind |  -.2907766   .2208319    -1.32   0.188    -.7235993     .142046
+       asian |   1.024893   .0997533    10.27   0.000     .8293798    1.220406
+       black |   .4880564   .0687739     7.10   0.000      .353262    .6228508
+    hispanic |   .3010218   .0673856     4.47   0.000     .1689485    .4330951
+ multiracial |  -.2907231   .1021569    -2.85   0.004    -.4909469   -.0904993
+       bysex |   .5852038   .0470378    12.44   0.000     .4930114    .6773962
+    bynels2m |   .0461185    .002718    16.97   0.000     .0407913    .0514457
+    bynels2r |   .0308627   .0037971     8.13   0.000     .0234205    .0383049
+       _cons |  -2.684406    .124637   -21.54   0.000     -2.92869   -2.440122
+------------------------------------------------------------------------------
+
+. 
+. est store full_model
+
+. 
+. gen mysample=e(sample)
+
+. 
+. /* Generating marginal effects */
+. 
+. margins, dydx(*) /*for all coefficients, default is to hold others at mean */
+
+Average marginal effects                        Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict()
+dy/dx w.r.t. : byses1 amind asian black hispanic multiracial bysex bynels2m bynels2r
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      byses1 |   .1295129   .0050031    25.89   0.000     .1197071    .1393188
+       amind |  -.0416356   .0316113    -1.32   0.188    -.1035926    .0203213
+       asian |    .146752   .0141156    10.40   0.000     .1190861     .174418
+       black |   .0698837   .0097859     7.14   0.000     .0507036    .0890637
+    hispanic |   .0431026   .0096314     4.48   0.000     .0242253    .0619799
+ multiracial |   -.041628   .0146135    -2.85   0.004      -.07027    -.012986
+       bysex |    .083794    .006603    12.69   0.000     .0708524    .0967355
+    bynels2m |   .0066036    .000375    17.61   0.000     .0058685    .0073387
+    bynels2r |   .0044192   .0005392     8.20   0.000     .0033623     .005476
+------------------------------------------------------------------------------
+
+. 
+. /*Margins for range of ses */
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+.     
+. margins , predict(pr) ///
+>     at((mean) _continuous ///
+>         (min) `demog' ///
+>         `x'=(`mymin'(`step')`mymax') ///          
+>        ) ///
+>       post
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .2794533   .0180381    15.49   0.000     .2440994    .3148073
+          2  |      .3166   .0179507    17.64   0.000     .2814174    .3517827
+          3  |   .3562432   .0175417    20.31   0.000     .3218622    .3906243
+          4  |   .3979597   .0168178    23.66   0.000     .3649974     .430922
+          5  |   .4412132   .0158117    27.90   0.000     .4102228    .4722037
+          6  |   .4853777   .0145822    33.29   0.000     .4567972    .5139582
+          7  |   .5297717   .0132105    40.10   0.000     .5038797    .5556637
+          8  |   .5736996   .0117937    48.64   0.000     .5505843    .5968149
+          9  |   .6164945   .0104347    59.08   0.000     .5960429    .6369461
+         10  |   .6575577   .0092279    71.26   0.000     .6394714     .675644
+         11  |   .6963894   .0082435    84.48   0.000     .6802324    .7125464
+         12  |   .7326083   .0075108    97.54   0.000     .7178875    .7473292
+         13  |   .7659587   .0070099   109.27   0.000     .7522195    .7796979
+         14  |   .7963059   .0066825   119.16   0.000     .7832086    .8094033
+         15  |   .8236243   .0064552   127.59   0.000     .8109723    .8362764
+         16  |   .8479783    .006264   135.37   0.000     .8357011    .8602556
+         17  |   .8695023   .0060648   143.37   0.000     .8576156    .8813891
+         18  |     .88838   .0058342   152.27   0.000     .8769452    .8998149
+         19  |   .9048258   .0055647   162.60   0.000     .8939191    .9157325
+         20  |   .9190692   .0052589   174.77   0.000      .908762    .9293764
+         21  |   .9313428   .0049245   189.12   0.000     .9216909    .9409946
+------------------------------------------------------------------------------
+
+. 
+. // Get predictions    
+. mat yhat=e(b)
+
+. 
+. mat yhat=yhat'
+
+. 
+. svmat yhat, names(yhat_logit)
+
+. 
+. graph twoway line yhat_lpm yhat_logit myx1, ///
+>     name("Logistic") ///
+>     ytitle("Pr(Attend)") ///
+>     xtitle("SES") ///
+>     legend(order(1 "LPM" 2 "Logit") )
+
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+.           
+. graph export logit_basic.pdf, replace name("Logistic")
+(file /Users/doylewr/practicum_2017/central/lessons/s2-11-binary_dv/logit_basic.pdf written in P
+> DF format)
+
+. 
+. drop yhat_*
+
+. 
+. // What about marginsplot? <sigh> <eyeroll>    
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+. 
+. margins , predict(pr) ///
+>     at((mean) _continuous ///
+>         (min) `demog' ///
+>         `x'=(`mymin'(`step')`mymax') ///          
+>        ) ///
+>            post
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .2794533   .0180381    15.49   0.000     .2440994    .3148073
+          2  |      .3166   .0179507    17.64   0.000     .2814174    .3517827
+          3  |   .3562432   .0175417    20.31   0.000     .3218622    .3906243
+          4  |   .3979597   .0168178    23.66   0.000     .3649974     .430922
+          5  |   .4412132   .0158117    27.90   0.000     .4102228    .4722037
+          6  |   .4853777   .0145822    33.29   0.000     .4567972    .5139582
+          7  |   .5297717   .0132105    40.10   0.000     .5038797    .5556637
+          8  |   .5736996   .0117937    48.64   0.000     .5505843    .5968149
+          9  |   .6164945   .0104347    59.08   0.000     .5960429    .6369461
+         10  |   .6575577   .0092279    71.26   0.000     .6394714     .675644
+         11  |   .6963894   .0082435    84.48   0.000     .6802324    .7125464
+         12  |   .7326083   .0075108    97.54   0.000     .7178875    .7473292
+         13  |   .7659587   .0070099   109.27   0.000     .7522195    .7796979
+         14  |   .7963059   .0066825   119.16   0.000     .7832086    .8094033
+         15  |   .8236243   .0064552   127.59   0.000     .8109723    .8362764
+         16  |   .8479783    .006264   135.37   0.000     .8357011    .8602556
+         17  |   .8695023   .0060648   143.37   0.000     .8576156    .8813891
+         18  |     .88838   .0058342   152.27   0.000     .8769452    .8998149
+         19  |   .9048258   .0055647   162.60   0.000     .8939191    .9157325
+         20  |   .9190692   .0052589   174.77   0.000      .908762    .9293764
+         21  |   .9313428   .0049245   189.12   0.000     .9216909    .9409946
+------------------------------------------------------------------------------
+
+. 
+. marginsplot, recastci(rarea) recast(line)
+
+  Variables that uniquely identify margins: byses1
+
+. 
+. // By Math scores
+. 
+. logit `y' bynels2m
+
+Iteration 0:   log likelihood = -7687.7151  
+Iteration 1:   log likelihood = -6711.5031  
+Iteration 2:   log likelihood = -6664.7477  
+Iteration 3:   log likelihood = -6664.6394  
+Iteration 4:   log likelihood = -6664.6394  
+
+Logistic regression                             Number of obs     =     13,803
+                                                LR chi2(1)        =    2046.15
+                                                Prob > chi2       =     0.0000
+Log likelihood = -6664.6394                     Pseudo R2         =     0.1331
+
+------------------------------------------------------------------------------
+    f2evratt |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    bynels2m |   .0722825   .0017577    41.12   0.000     .0688376    .0757274
+       _cons |  -1.985564   .0742452   -26.74   0.000    -2.131082   -1.840046
+------------------------------------------------------------------------------
+
+. 
+. predict yhat, pr
+(313 missing values generated)
+
+. 
+. graph twoway line yhat bynels2m
+
+.         
+. drop yhat
+
+.                 
+. /* Margins for range of ses, all races */
+. 
+. foreach myrace of local race{
+  2. drop myx1
+  3. 
+. estimates restore full_model
+  4. 
+. margins , predict(pr) ///
+>     at((mean) _continuous ///
+>         (min) `demog' ///
+>         `x'=(`mymin'(`step')`mymax') ///
+>         `myrace'=1 ///
+>        ) ///
+>       post
+  5.     
+. mat yhat=e(b)
+  6. 
+. mat yhat=yhat'
+  7. 
+. svmat yhat, names("yhat_`myrace'")
+  8. 
+. // Key independent variable
+. mat allx=e(at)
+  9. 
+. mat myx=allx[1...,1]
+ 10. 
+. //put key iv in memory
+. svmat myx
+ 11. 
+. }
+(results full_model are active now)
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           1
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .2247928   .0404067     5.56   0.000     .1455971    .3039884
+          2  |   .2572678   .0438782     5.86   0.000     .1712681    .3432676
+          3  |   .2926633   .0471171     6.21   0.000     .2003156    .3850111
+          4  |   .3307599   .0499835     6.62   0.000      .232794    .4287258
+          5  |   .3712131   .0523388     7.09   0.000     .2686309    .4737952
+          6  |   .4135564   .0540576     7.65   0.000     .3076054    .5195074
+          7  |   .4572177   .0550421     8.31   0.000     .3493372    .5650982
+          8  |   .5015462   .0552328     9.08   0.000      .393292    .6098005
+          9  |   .5458505   .0546165     9.99   0.000     .4388041    .6528969
+         10  |   .5894404   .0532282    11.07   0.000     .4851151    .6937657
+         11  |   .6316697   .0511465    12.35   0.000     .5314244    .7319149
+         12  |   .6719725   .0484845    13.86   0.000     .5769447    .7670004
+         13  |   .7098908    .045377    15.64   0.000     .6209536    .7988281
+         14  |   .7450887   .0419667    17.75   0.000     .6628355    .8273419
+         15  |   .7773555   .0383919    20.25   0.000     .7021088    .8526023
+         16  |   .8065981   .0347769    23.19   0.000     .7384367    .8747595
+         17  |   .8328259   .0312256    26.67   0.000     .7716249     .894027
+         18  |   .8561313   .0278191    30.77   0.000     .8016069    .9106558
+         19  |   .8766689   .0246155    35.61   0.000     .8284233    .9249145
+         20  |   .8946355   .0216522    41.32   0.000      .852198     .937073
+         21  |   .9102527   .0189486    48.04   0.000      .873114    .9473913
+------------------------------------------------------------------------------
+(results full_model are active now)
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           0 (min)
+               asian           =           1
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .5194197   .0289653    17.93   0.000     .4626488    .5761906
+          2  |   .5635179   .0275686    20.44   0.000     .5094843    .6175514
+          3  |   .6066341   .0258889    23.43   0.000     .5558927    .6573754
+          4  |   .6481505   .0240123    26.99   0.000     .6010872    .6952138
+          5  |    .687542   .0220264    31.21   0.000     .6443711     .730713
+          6  |   .7243987   .0200118    36.20   0.000     .6851764     .763621
+          7  |   .7584354   .0180362    42.05   0.000      .723085    .7937858
+          8  |   .7894901   .0161515    48.88   0.000     .7578337    .8211464
+          9  |    .817513   .0143924    56.80   0.000     .7893045    .8457216
+         10  |   .8425496   .0127785    65.93   0.000     .8175042     .867595
+         11  |   .8647196    .011317    76.41   0.000     .8425387    .8869005
+         12  |    .884197   .0100058    88.37   0.000     .8645861    .9038079
+         13  |   .9011905   .0088367   101.98   0.000     .8838709    .9185102
+         14  |   .9159275   .0077985   117.45   0.000     .9006427    .9312122
+         15  |   .9286405   .0068783   135.01   0.000     .9151593    .9421216
+         16  |    .939558   .0060634   154.96   0.000     .9276739     .951442
+         17  |   .9488971   .0053419   177.63   0.000     .9384271     .959367
+         18  |   .9568594    .004703   203.46   0.000     .9476416    .9660772
+         19  |   .9636287   .0041373   232.92   0.000     .9555198    .9717376
+         20  |   .9693698   .0036362   266.59   0.000      .962243    .9764966
+         21  |   .9742289   .0031926   305.15   0.000     .9679715    .9804863
+------------------------------------------------------------------------------
+(results full_model are active now)
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           1
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |    .387195   .0231133    16.75   0.000     .3418938    .4324961
+          2  |   .4301143   .0225707    19.06   0.000     .3858765    .4743522
+          3  |   .4741105   .0217051    21.84   0.000     .4315693    .5166516
+          4  |   .5185123   .0205672    25.21   0.000     .4782012    .5588233
+          5  |   .5626236   .0192262    29.26   0.000      .524941    .6003063
+          6  |   .6057663   .0177609    34.11   0.000     .5709556     .640577
+          7  |   .6473211   .0162508    39.83   0.000     .6154701     .679172
+          8  |   .6867606   .0147668    46.51   0.000     .6578182     .715703
+          9  |   .7236724   .0133641    54.15   0.000     .6974794    .7498655
+         10  |   .7577688   .0120779    62.74   0.000     .7340965    .7814411
+         11  |   .7888853   .0109238    72.22   0.000      .767475    .8102956
+         12  |   .8169701   .0099005    82.52   0.000     .7975656    .8363747
+         13  |   .8420668    .008995    93.62   0.000      .824437    .8596966
+         14  |   .8642938    .008189   105.54   0.000     .8482436    .8803441
+         15  |   .8838243   .0074637   118.42   0.000     .8691957    .8984529
+         16  |   .9008664   .0068026   132.43   0.000     .8875336    .9141992
+         17  |   .9156471   .0061933   147.85   0.000     .9035086    .9277857
+         18  |   .9283992   .0056273   164.98   0.000       .91737    .9394284
+         19  |   .9393512   .0050994   184.21   0.000     .9293566    .9493459
+         20  |   .9487205   .0046068   205.94   0.000     .9396913    .9577497
+         21  |   .9567091   .0041481   230.64   0.000      .948579    .9648392
+------------------------------------------------------------------------------
+(results full_model are active now)
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           1
+               multiracial     =           0 (min)
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |    .343857   .0205635    16.72   0.000     .3035532    .3841608
+          2  |   .3849904    .020354    18.91   0.000     .3450973    .4248836
+          3  |   .4278361   .0198597    21.54   0.000     .3889117    .4667604
+          4  |    .471792   .0191143    24.68   0.000     .4343287    .5092554
+          5  |   .5161899   .0181699    28.41   0.000     .4805775    .5518023
+          6  |   .5603335   .0170913    32.78   0.000     .5268352    .5938319
+          7  |    .603543   .0159468    37.85   0.000     .5722878    .6347982
+          8  |   .6451948   .0147992    43.60   0.000     .6161889    .6742007
+          9  |   .6847563   .0136975    49.99   0.000     .6579098    .7116029
+         10  |   .7218087    .012672    56.96   0.000     .6969721    .7466453
+         11  |   .7560575   .0117341    64.43   0.000      .733059     .779056
+         12  |   .7873321     .01088    72.36   0.000     .7660076    .8086566
+         13  |   .8155753   .0100965    80.78   0.000     .7957865     .835364
+         14  |   .8408259   .0093673    89.76   0.000     .8224664    .8591854
+         15  |   .8631992   .0086779    99.47   0.000     .8461908    .8802077
+         16  |   .8828659   .0080181   110.11   0.000     .8671507    .8985811
+         17  |   .9000327   .0073821   121.92   0.000      .885564    .9145013
+         18  |    .914926   .0067683   135.18   0.000     .9016604    .9281915
+         19  |   .9277785   .0061775   150.19   0.000     .9156708    .9398861
+         20  |   .9388192   .0056123   167.28   0.000     .9278193     .949819
+         21  |   .9482661   .0050755   186.83   0.000     .9383183     .958214
+------------------------------------------------------------------------------
+(results full_model are active now)
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           1
+               bysex           =           1 (min)
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .2248021   .0223561    10.06   0.000      .180985    .2686192
+          2  |   .2572781   .0236533    10.88   0.000     .2109185    .3036377
+          3  |   .2926744   .0247523    11.82   0.000     .2441608     .341188
+          4  |   .3307718   .0256047    12.92   0.000     .2805874    .3809561
+          5  |   .3712256   .0261714    14.18   0.000     .3199305    .4225206
+          6  |   .4135694   .0264268    15.65   0.000     .3617738     .465365
+          7  |    .457231   .0263617    17.34   0.000     .4055631    .5088989
+          8  |   .5015596   .0259844    19.30   0.000     .4506312     .552488
+          9  |   .5458638   .0253195    21.56   0.000     .4962385    .5954891
+         10  |   .5894534   .0244047    24.15   0.000      .541621    .6372858
+         11  |   .6316821    .023286    27.13   0.000     .5860423    .6773219
+         12  |   .6719844    .022013    30.53   0.000     .6288397     .715129
+         13  |   .7099019   .0206343    34.40   0.000     .6694594    .7503443
+         14  |   .7450989   .0191945    38.82   0.000     .7074784    .7827194
+         15  |   .7773648   .0177321    43.84   0.000     .7426104    .8121192
+         16  |   .8066065   .0162789    49.55   0.000     .7747003    .8385126
+         17  |   .8328334     .01486    56.05   0.000     .8037084    .8619584
+         18  |   .8561379   .0134943    63.44   0.000     .8296896    .8825862
+         19  |   .8766747   .0121957    71.88   0.000     .8527716    .9005778
+         20  |   .8946405   .0109737    81.53   0.000     .8731325    .9161486
+         21  |   .9102571   .0098341    92.56   0.000     .8909825    .9295316
+------------------------------------------------------------------------------
+
+. 
+. graph twoway line yhat_* myx, ///
+>     name("All_Races") ///
+>     ytitle("Pr(Attend)") ///
+>     xtitle("SES") ///
+>     legend(order(1 "Native American" ///
+>     2 "Asian" ///
+>     3 "Black" ///
+>     4 "Hispanic" ///
+>     5 "Multiracial") )
+
+.     
+. graph export logit_race.pdf, replace name("All_Races")
+(file /Users/doylewr/practicum_2017/central/lessons/s2-11-binary_dv/logit_race.pdf written in PD
+> F format)
+
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+. 
+. drop yhat_*
+
+. 
+. /* Margins for range of ses, all races */
+. sum bynels2m, detail 
+
+      els-nels 1992 scale equated sophomore math score
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%        18.42          14.71
+ 5%        22.61          14.85
+10%         26.3          14.97       Obs              15,976
+25%       34.995             15       Sum of Wgt.      15,976
+
+50%        45.79                      Mean           45.35621
+                        Largest       Std. Dev.       13.5337
+75%        55.92          78.76
+90%        62.91          78.99       Variance       183.1611
+95%        66.54          79.16       Skewness      -.0774106
+99%        72.47          79.27       Kurtosis       2.187238
+
+. 
+. foreach myscore of num 35(10)55{
+  2. 
+. drop myx1
+  3. 
+. estimates restore full_model
+  4. 
+. margins , predict(pr) ///
+>     at((mean) _continuous ///
+>         (min) `demog' ///
+>         `x'=(`mymin'(`step')`mymax') ///
+>                 bysex=2 ///
+>         bynels2m=`myscore' ///
+>        ) ///
+>       post
+  5.     
+. mat yhat=e(b)
+  6. 
+. mat yhat=yhat'
+  7. 
+. svmat yhat, names("yhat_`myscore'")
+  8. 
+. // Key independent variable
+. mat allx=e(at)
+  9. 
+. mat myx=allx[1...,1]
+ 10. 
+. //put key iv in memory
+. svmat myx
+ 11. 
+. }
+(results full_model are active now)
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          35
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .2941704     .01816    16.20   0.000     .2585775    .3297633
+          2  |   .3323709   .0180311    18.43   0.000     .2970306    .3677113
+          3  |   .3729113   .0176013    21.19   0.000     .3384134    .4074093
+          4  |   .4153205   .0168883    24.59   0.000       .38222    .4484209
+          5  |   .4590222   .0159346    28.81   0.000      .427791    .4902534
+          6  |   .5033635   .0148057    34.00   0.000     .4743449     .532382
+          7  |   .5476519   .0135839    40.32   0.000     .5210279    .5742759
+          8  |   .5911984   .0123589    47.84   0.000     .5669754    .6154214
+          9  |   .6333593   .0112148    56.48   0.000     .6113787    .6553399
+         10  |   .6735728   .0102163    65.93   0.000     .6535493    .6935963
+         11  |   .7113856   .0093968    75.70   0.000     .6929682     .729803
+         12  |   .7464669    .008754    85.27   0.000     .7293094    .7636244
+         13  |   .7786111   .0082553    94.32   0.000      .762431    .7947912
+         14  |   .8077296   .0078528   102.86   0.000     .7923384    .8231207
+         15  |   .8338355   .0074987   111.20   0.000     .8191384    .8485327
+         16  |   .8570243    .007156   119.76   0.000     .8429988    .8710499
+         17  |   .8774527   .0068018   129.00   0.000     .8641213     .890784
+         18  |   .8953187   .0064261   139.33   0.000     .8827239    .9079136
+         19  |   .9108448   .0060279   151.10   0.000     .8990302    .9226593
+         20  |   .9242628   .0056124   164.68   0.000     .9132627    .9352629
+         21  |   .9358037   .0051872   180.41   0.000     .9256371    .9459704
+------------------------------------------------------------------------------
+(results full_model are active now)
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          45
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .3979463   .0206006    19.32   0.000     .3575698    .4383227
+          2  |   .4411993   .0196051    22.50   0.000     .4027741    .4796246
+          3  |   .4853636   .0182919    26.53   0.000     .4495121    .5212151
+          4  |   .5297577   .0167317    31.66   0.000     .4969641    .5625513
+          5  |   .5736858   .0150141    38.21   0.000     .5442588    .6031129
+          6  |   .6164812    .013239    46.57   0.000     .5905333    .6424291
+          7  |    .657545   .0115069    57.14   0.000     .6349919    .6800981
+          8  |   .6963775    .009909    70.28   0.000     .6769562    .7157987
+          9  |   .7325973   .0085177    86.01   0.000     .7159029    .7492918
+         10  |   .7659486   .0073783   103.81   0.000     .7514875    .7804097
+         11  |   .7962968   .0065013   122.48   0.000     .7835545    .8090391
+         12  |   .8236161   .0058617   140.51   0.000     .8121275    .8351048
+         13  |   .8479711   .0054066   156.84   0.000     .8373743    .8585679
+         14  |    .869496   .0050732   171.39   0.000     .8595526    .8794393
+         15  |   .8883744   .0048052   184.88   0.000     .8789565    .8977924
+         16  |   .9048209   .0045622   198.33   0.000     .8958793    .9137626
+         17  |    .919065   .0043205   212.72   0.000     .9105969    .9275331
+         18  |   .9313392   .0040697   228.85   0.000     .9233627    .9393156
+         19  |   .9418696   .0038075   247.37   0.000      .934407    .9493322
+         20  |   .9508702   .0035366   268.87   0.000     .9439387    .9578018
+         21  |   .9585386   .0032616   293.89   0.000      .952146    .9649311
+------------------------------------------------------------------------------
+(results full_model are active now)
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bysex           =           2
+               bynels2m        =          55
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .5117866   .0231909    22.07   0.000     .4663333      .55724
+          2  |   .5559865   .0214099    25.97   0.000     .5140239    .5979491
+          3  |   .5993177   .0194163    30.87   0.000     .5612624     .637373
+          4  |   .6411494   .0173137    37.03   0.000     .6072152    .6750836
+          5  |    .680939   .0152039    44.79   0.000     .6511399    .7107381
+          6  |   .7182554   .0131781    54.50   0.000     .6924267     .744084
+          7  |   .7527918   .0113097    66.56   0.000     .7306253    .7749584
+          8  |   .7843657     .00965    81.28   0.000     .7654521    .8032794
+          9  |   .8129092   .0082271    98.81   0.000     .7967844    .8290341
+         10  |   .8384526   .0070465   118.99   0.000     .8246418    .8522634
+         11  |   .8611044   .0060935   141.31   0.000     .8491613    .8730475
+         12  |   .8810307   .0053385   165.03   0.000     .8705674     .891494
+         13  |   .8984355    .004743   189.43   0.000     .8891395    .9077315
+         14  |   .9135439   .0042668   214.10   0.000     .9051811    .9219067
+         15  |   .9265885   .0038745   239.15   0.000     .9189945    .9341824
+         16  |   .9377988   .0035384   265.04   0.000     .9308638    .9447339
+         17  |   .9473945    .003239   292.50   0.000     .9410462    .9537429
+         18  |     .95558   .0029643   322.36   0.000     .9497701      .96139
+         19  |   .9625422   .0027076   355.49   0.000     .9572354    .9678491
+         20  |   .9684492   .0024656   392.78   0.000     .9636167    .9732817
+         21  |   .9734504   .0022371   435.15   0.000     .9690658    .9778349
+------------------------------------------------------------------------------
+
+. 
+. graph twoway line yhat_* myx, ///
+>     name("test_scores") ///
+>     ytitle("Pr(Attend)") ///
+>     xtitle("SES") ///
+>     legend(order(1 "Low Math Scores" ///
+>     2 "Median Test Scores" ///
+>     3 "High Test Scores"))
+
+.  
+. exit 
+
+end of do-file
+
+
+. browse yhat_*
+

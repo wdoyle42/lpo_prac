@@ -69,7 +69,7 @@ outmoded (yet making a comeback) linear probability model, and logistic regressi
 
 In this class we'll consider a model which predicts the binary outcome
 of college attendance as a function of ses, demographics, and test
-scores. To start, we could esimtate this using good old OLS and
+scores. To start, we could estimate this using good old OLS and
 see what happens. This is known as a \textit{linear probability
   model}.
 
@@ -219,7 +219,7 @@ you should use a model for a binary variable.
 A notable exception to analysts preferring a nonlinear model for a
 binary dependent variable would be Angrist and Pischke, who say ``The
 upshot of this discussion is that while a nonlinear model may fit the
-CEF (cnoditional expectation function) for LDVS (lmitied dependent
+CEF (conditional expectation function) for LDVS (limited dependent
 variables) more closely than a linear model, when it comes to marginal
 effects, this probably matters little. This optimistic conclusion is
 not a theorem, but . .  it seems to be fairly robustly true.''
@@ -276,7 +276,7 @@ The other important thing to know about the logit model is that it is
 estimated via maximum likelihood. This is in contrast to OLS, which we
 estimate via direct computation. You could, given the time and the
 willingness, sit down and compute the estimates for an OLS model (I
-have! It's . . . .  fun?) . For a MLE model, we use a likelihood
+have! It's . . . .  fun?). For a MLE model, we use a likelihood
 function which gives us the likelihood of the \emph{data} given a
 certain set of proposed parameters. The computer then adjusts the
 estimates of the parameters using a certain algorithm, checks to see
@@ -357,7 +357,7 @@ In Stata, marginal effects can be computed quickly using the
 \texttt{margins} command. Running this for all variables with the
 \texttt{dydx} option will give you the marginal effect of each
 covariate, interpreted as a change in probability of the outcome for a
-one unit change in the indepndent variable, holding all other
+one unit change in the independent variable, holding all other
 variables constant. 
 
 
@@ -413,7 +413,7 @@ generate margins for a series of values of SES:
 
 \begin{stlog}
 
-. /* Generate predicted probabilites over range of ses*/
+. /* Generate predicted probabilities over range of ses*/
 . 
 . local x byses1
 

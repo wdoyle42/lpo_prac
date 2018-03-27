@@ -73,7 +73,7 @@ graph twoway scatter `y' `ses' , msize(tiny)
 
 predict e, resid
 
-graph twoway scatter  `ses' e, msize(tiny)
+graph twoway scatter  e `ses' , msize(tiny)
 
 reg `y' `ses' `demog' `tests', vce(robust)
 

@@ -59,7 +59,7 @@ local y f2evratt
 
 local ses byses1
 
-local demog  amind asian black hispanic multiracial bysex
+local demog amind asian black hispanic multiracial bysex
 
 local tests bynels2m bynels2r
 
@@ -114,15 +114,14 @@ mat yhat=yhat'
 // Key independent variable
 mat allx=e(at)
 
-mat li allx
-
 mat myx=allx[1...,1]
-
-// Put predicted values in memory
-svmat yhat, names("yhat_lpm")
 
 //put key iv in memory
 svmat myx
+
+
+// Put predicted values in memory
+svmat yhat, names("yhat_lpm")
 
 // Plot results
 graph twoway line yhat_lpm myx1, name("LPM") ytitle("Pr(Attend)") xtitle("SES") 
@@ -204,16 +203,18 @@ marginsplot, recastci(rarea) recast(line)
 
 // By Math scores
 
-logit `y' bynelsem
+logit `y' bynels2m
 
 predict yhat, pr
 
 graph twoway line yhat bynels2m
-    
-	
+    	
+drop yhat
+		
 /* Margins for range of ses, all races */
 
 foreach myrace of local race{
+drop myx1
 
 estimates restore full_model
 
@@ -224,14 +225,21 @@ margins , predict(pr) ///
         `myrace'=1 ///
        ) ///
       post
-
     
 mat yhat=e(b)
 
 mat yhat=yhat'
 
 svmat yhat, names("yhat_`myrace'")
-    
+
+// Key independent variable
+mat allx=e(at)
+
+mat myx=allx[1...,1]
+
+//put key iv in memory
+svmat myx
+
 }
 
 graph twoway line yhat_* myx, ///
@@ -248,6 +256,51 @@ graph export logit_race.pdf, replace name("All_Races")
 
 estimates restore full_model
 
+drop yhat_*
+
+/* Margins for range of ses, all races */
+sum bynels2m, detail 
+
+foreach myscore of num 35(10)55{
+
+drop myx1
+
+estimates restore full_model
+
+margins , predict(pr) ///
+    at((mean) _continuous ///
+        (min) `demog' ///
+        `x'=(`mymin'(`step')`mymax') ///
+		bysex=2 ///
+        bynels2m=`myscore' ///
+       ) ///
+      post
+    
+mat yhat=e(b)
+
+mat yhat=yhat'
+
+svmat yhat, names("yhat_`myscore'")
+
+// Key independent variable
+mat allx=e(at)
+
+mat myx=allx[1...,1]
+
+//put key iv in memory
+svmat myx
+
+}
+
+graph twoway line yhat_* myx, ///
+    name("test_scores") ///
+    ytitle("Pr(Attend)") ///
+    xtitle("SES") ///
+    legend(order(1 "Low Math Scores" ///
+    2 "Median Test Scores" ///
+    3 "High Test Scores"))
+ 
+exit 
 // Other functions
 
 listcoef /*Display odds ratios from model in memory */
