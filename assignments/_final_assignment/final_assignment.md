@@ -4,7 +4,7 @@
 
 Replication File Assignment
 
-Your replication archive for your study is due 4/29/16. The file should be submitted to me via Brightspace in zip format, with all of the following components:
+Your replication archive for your study is due 4/22/18. The file should be submitted to me via Brightspace in zip format, with all of the following components:
 1. Every replication fileshould include a "readme" ̇document, helpfully titled  "readme.txt" The document should be in a platform neutral format, such as plaintext or pdf. This
 should contain a description of all of the other files, including instructions on how to use the files included. DO NOT USE MICROSOFT WORD FORMAT FOR THIS DOCUMENT.
 
