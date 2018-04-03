@@ -1,6 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  10 MAY 2017 11:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  3 APR 2018 12:25
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
 **\input poly.tex
 (./poly.tex (/usr/local/texlive/2015/texmf-dist/tex/latex/base/article.cls
@@ -579,7 +580,7 @@ LaTeX Warning: Float too large for page by 202.68127pt on input line 196.
 
 [6
 
-] [7] <unorder_first.pdf, id=47, 397.485pt x 289.08pt>
+] [7] <unorder_first.pdf, id=43, 397.485pt x 289.08pt>
 File: unorder_first.pdf Graphic file (type pdf)
 
 <use unorder_first.pdf>
@@ -608,10 +609,10 @@ l/texlive/2015/texmf-dist/fonts/type1/public/fourier/fourier-ms.pfb></usr/local
 e/2015/texmf-dist/fonts/type1/adobe/utopia/putbi8a.pfb></usr/local/texlive/2015
 /texmf-dist/fonts/type1/adobe/utopia/putr8a.pfb></usr/local/texlive/2015/texmf-
 dist/fonts/type1/adobe/utopia/putri8a.pfb>
-Output written on poly.pdf (8 pages, 106929 bytes).
+Output written on poly.pdf (8 pages, 133859 bytes).
 PDF statistics:
- 90 PDF objects out of 1000 (max. 8388607)
- 66 compressed objects within 1 object stream
+ 86 PDF objects out of 1000 (max. 8388607)
+ 62 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
