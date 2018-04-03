@@ -1,13 +1,12 @@
 
-version 13 /* Can set version here, use the most recent as default */
+version 14 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 
 log using "limited.log",replace /*Open up new log */
 
 /* Models for Limited and Count Variables*/
 /* Will Doyle */
-/* 170511 */
-
+/* 2018-04-03 */
 
 clear
 
