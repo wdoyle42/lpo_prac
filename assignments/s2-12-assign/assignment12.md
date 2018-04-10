@@ -1,6 +1,6 @@
 ## Assignment 12
 
-#Using the plans dataset with the ps attendance followup, complete the following steps
+Using the plans dataset with the ps attendance followup, complete the following steps
 
 1. Using an ordinal probit model, estimate the impact of college plans on level of attendance, with 0= no attendance, 1= less than four year, and 2= four year attendance. Include a reasonable set of controls.
 
