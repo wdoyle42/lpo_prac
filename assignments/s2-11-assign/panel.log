@@ -1,0 +1,1018 @@
+----------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_2017/central/assignments/s2-11-a
+> ssign/panel.log
+  log type:  text
+ opened on:  10 Apr 2018, 12:39:39
+
+. 
+. graph drop _all
+
+. 
+. /* Binary outcomes */
+. /* Assignment 11 follow up*/
+. /* Will Doyle */
+. /* 2018-03-25 */
+. /* Practicum Folder */
+. 
+. 
+. /* Use the Mroz data to answer the following questions about female 
+> employment. */
+. 
+. use ../../data/mroz.dta, clear
+
+. 
+. tab inlf
+
+   =1 if in |
+  lab frce, |
+       1975 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |        325       43.16       43.16
+          1 |        428       56.84      100.00
+------------+-----------------------------------
+      Total |        753      100.00
+
+. 
+. tab inlf kidslt6, row
+
++----------------+
+| Key            |
+|----------------|
+|   frequency    |
+| row percentage |
++----------------+
+
+  =1 if in |
+ lab frce, |              # kids < 6 years
+      1975 |         0          1          2          3 |     Total
+-----------+--------------------------------------------+----------
+         0 |       231         72         19          3 |       325 
+           |     71.08      22.15       5.85       0.92 |    100.00 
+-----------+--------------------------------------------+----------
+         1 |       375         46          7          0 |       428 
+           |     87.62      10.75       1.64       0.00 |    100.00 
+-----------+--------------------------------------------+----------
+     Total |       606        118         26          3 |       753 
+           |     80.48      15.67       3.45       0.40 |    100.00 
+
+
+. 
+. local y inlf
+
+. 
+. local x c.educ
+
+. 
+. local w_chars age repwage exper
+
+. 
+. local h_chars c.huswage
+
+. 
+. local kids kidslt6 kidsge6
+
+. 
+. /* 1. Run a logit model predicting labor force participation based o
+> n characteristics of the woman and of the children. */
+. 
+. 
+. eststo basic_model:logit `y' `x' `w_chars' `h_chars' `kids'
+
+Iteration 0:   log likelihood =  -514.8732  
+Iteration 1:   log likelihood = -281.58261  
+Iteration 2:   log likelihood = -251.08408  
+Iteration 3:   log likelihood = -246.07261  
+Iteration 4:   log likelihood = -245.99748  
+Iteration 5:   log likelihood = -245.99746  
+
+Logistic regression                             Number of obs     =   
+>      753
+                                                LR chi2(7)        =   
+>   537.75
+                                                Prob > chi2       =   
+>   0.0000
+Log likelihood = -245.99746                     Pseudo R2         =   
+>   0.5222
+
+----------------------------------------------------------------------
+> --------
+        inlf |      Coef.   Std. Err.      z    P>|z|     [95% Conf. I
+> nterval]
+-------------+--------------------------------------------------------
+> --------
+        educ |   .2270008   .0569846     3.98   0.000      .115313    
+> .3386886
+         age |  -.0663232   .0182538    -3.63   0.000       -.1021   -
+> .0305463
+     repwage |    1.42457   .1362958    10.45   0.000     1.157435    
+> 1.691705
+       exper |   .0705961   .0162453     4.35   0.000     .0387559    
+> .1024363
+     huswage |  -.0470973   .0280924    -1.68   0.094    -.1021574    
+> .0079628
+     kidslt6 |  -1.205168   .2715673    -4.44   0.000     -1.73743   -
+> .6729059
+     kidsge6 |  -.0086508   .0924961    -0.09   0.925    -.1899398    
+> .1726383
+       _cons |  -.9917289   1.090405    -0.91   0.363    -3.128884    
+> 1.145426
+----------------------------------------------------------------------
+> --------
+
+.                                             
+. 
+. /* 1. Generate the marginal effects for all of the variables, holdin
+> g other predictors at their means. */
+. 
+. estimates restore basic_model
+(results basic_model are active now)
+
+. 
+. margins, dydx(*)
+
+Average marginal effects                        Number of obs     =   
+>      753
+Model VCE    : OIM
+
+Expression   : Pr(inlf), predict()
+dy/dx w.r.t. : educ age repwage exper huswage kidslt6 kidsge6
+
+----------------------------------------------------------------------
+> --------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. I
+> nterval]
+-------------+--------------------------------------------------------
+> --------
+        educ |   .0236277   .0056809     4.16   0.000     .0124933    
+> .0347622
+         age |  -.0069033   .0018325    -3.77   0.000     -.010495   -
+> .0033117
+     repwage |   .1482786   .0095367    15.55   0.000     .1295869    
+> .1669702
+       exper |   .0073481   .0015943     4.61   0.000     .0042234    
+> .0104728
+     huswage |  -.0049022   .0029012    -1.69   0.091    -.0105884    
+>  .000784
+     kidslt6 |  -.1254417   .0268637    -4.67   0.000    -.1780935    
+>  -.07279
+     kidsge6 |  -.0009004   .0096278    -0.09   0.925    -.0197707    
+> .0179698
+----------------------------------------------------------------------
+> --------
+
+. 
+. 
+. /* 1. In comments in the do file, explain why the estimates of an in
+> dependent variable’s relationship to the outcome are not constant ac
+> ross population. */
+. 
+. 
+. 
+. /* 1. Generate the predicted probability of working for a range of m
+> other’s years of education. Create a plot or table for these predict
+> ed probabilities. */
+. 
+. sum `x', detail
+
+                     years of schooling
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            6              5
+ 5%            8              5
+10%           10              5       Obs                 753
+25%           12              5       Sum of Wgt.         753
+
+50%           12                      Mean           12.28685
+                        Largest       Std. Dev.      2.280246
+75%           13             17
+90%           16             17       Variance       5.199521
+95%           17             17       Skewness        .021034
+99%           17             17       Kurtosis       3.744087
+
+. 
+. local mymin=r(min)
+
+. local mymax=r(max)
+
+. local step=1
+
+. 
+. estimates restore basic_model
+(results basic_model are active now)
+
+. 
+. 
+. margins , predict(pr) ///
+>     at((mean) _continuous ///
+>               kidslt6=1 ///
+>        kidsge6=1 ///
+>         `x'=(`mymin'(`step')`mymax') ///          
+>        ) ///
+> 
+
+Adjusted predictions                            Number of obs     =   
+>      753
+Model VCE    : OIM
+
+Expression   : Pr(inlf), predict(pr)
+
+1._at        : educ            =           5
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+2._at        : educ            =           6
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+3._at        : educ            =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+4._at        : educ            =           8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+5._at        : educ            =           9
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+6._at        : educ            =          10
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+7._at        : educ            =          11
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+8._at        : educ            =          12
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+9._at        : educ            =          13
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+10._at       : educ            =          14
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+11._at       : educ            =          15
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+12._at       : educ            =          16
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+13._at       : educ            =          17
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               huswage         =    7.482179 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+----------------------------------------------------------------------
+> --------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. I
+> nterval]
+-------------+--------------------------------------------------------
+> --------
+         _at |
+          1  |   .2976301   .1064036     2.80   0.005     .0890829    
+> .5061773
+          2  |    .347146   .1052993     3.30   0.001     .1407633    
+> .5535288
+          3  |   .4002059    .101603     3.94   0.000     .2010676    
+> .5993442
+          4  |   .4557147   .0957264     4.76   0.000     .2680944    
+>  .643335
+          5  |   .5123461   .0884132     5.79   0.000     .3390594    
+> .6856327
+          6  |   .5686622   .0806075     7.05   0.000     .4106744    
+>   .72665
+          7  |   .6232571   .0732296     8.51   0.000     .4797296    
+> .7667845
+          8  |   .6748923    .066921    10.08   0.000     .5437296    
+>  .806055
+          9  |   .7226004   .0618741    11.68   0.000     .6013294    
+> .8438714
+         10  |   .7657377   .0578585    13.23   0.000     .6523371    
+> .8791383
+         11  |   .8039865   .0544271    14.77   0.000     .6973114    
+> .9106617
+         12  |   .8373171   .0511528    16.37   0.000     .7370595    
+> .9375747
+         13  |   .8659252   .0477634    18.13   0.000     .7723107    
+> .9595397
+----------------------------------------------------------------------
+> --------
+
+.     
+. marginsplot, recastci(rarea) recast(line)
+
+  Variables that uniquely identify margins: educ
+
+.     
+. 
+. /* 1. Generated the predicted probability of working for range of mo
+> ther’s years of education interacted with husband’s wage. Create a p
+> lot or table to explain the relationship you observe. */
+. 
+. eststo int_model:logit `y' `x' `x'#`h_chars' `w_chars' `kids'
+
+Iteration 0:   log likelihood =  -514.8732  
+Iteration 1:   log likelihood = -281.59536  
+Iteration 2:   log likelihood = -251.23595  
+Iteration 3:   log likelihood = -246.17139  
+Iteration 4:   log likelihood = -246.09383  
+Iteration 5:   log likelihood = -246.09381  
+
+Logistic regression                             Number of obs     =   
+>      753
+                                                LR chi2(7)        =   
+>   537.56
+                                                Prob > chi2       =   
+>   0.0000
+Log likelihood = -246.09381                     Pseudo R2         =   
+>   0.5220
+
+----------------------------------------------------------------------
+> --------
+        inlf |      Coef.   Std. Err.      z    P>|z|     [95% Conf. I
+> nterval]
+-------------+--------------------------------------------------------
+> --------
+        educ |   .2511377   .0635736     3.95   0.000     .1265358    
+> .3757396
+             |
+      c.educ#|
+   c.huswage |  -.0034192   .0021007    -1.63   0.104    -.0075365    
+> .0006982
+             |
+         age |  -.0663798   .0182505    -3.64   0.000    -.1021502   -
+> .0306095
+     repwage |   1.423867   .1363332    10.44   0.000     1.156658    
+> 1.691075
+       exper |   .0708629   .0162425     4.36   0.000     .0390283    
+> .1026976
+     kidslt6 |  -1.202677   .2714397    -4.43   0.000    -1.734689   -
+> .6706648
+     kidsge6 |  -.0080295   .0924595    -0.09   0.931    -.1892468    
+> .1731877
+       _cons |  -1.317841    1.11553    -1.18   0.237    -3.504241    
+> .8685583
+----------------------------------------------------------------------
+> --------
+
+. 
+. sum huswage, detail
+
+                 husband's hourly wage, 1975
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%       1.0898          .4121
+ 5%       2.2442          .5128
+10%       3.1111          .5494       Obs                 753
+25%       4.7883          .5843       Sum of Wgt.         753
+
+50%       6.9758                      Mean           7.482179
+                        Largest       Std. Dev.      4.230559
+75%       9.1667         26.578
+90%       12.164         29.644       Variance       17.89763
+95%       14.583         40.441       Skewness       2.267192
+99%       21.786         40.509       Kurtosis       14.50451
+
+. 
+. local huswages 4.8 7 9.2
+
+. local j 1
+
+. 
+. foreach wagelevel of local huswages{
+  2. 
+. estimates restore int_model
+  3.     
+. margins , predict(pr) ///
+>     at((mean) _continuous ///
+>          kidslt6=1 ///
+>          kidsge6=1 ///
+>          huswage=`wagelevel' ///
+>         `x'=(`mymin'(`step')`mymax') ///          
+>        ) post 
+  4. 
+. 
+.     mat yhat=e(b)'
+  5. 
+.     svmat yhat,names(pred`j')
+  6. 
+.     if `j'==1{
+  7.         mat allx=e(at)
+  8.         mat myx=allx[1...,1]
+  9.         svmat myx
+ 10.         }
+ 11. 
+.     mat drop yhat
+ 12.     
+.     local j=`j'+1
+ 13. }
+(results int_model are active now)
+
+Adjusted predictions                            Number of obs     =   
+>      753
+Model VCE    : OIM
+
+Expression   : Pr(inlf), predict(pr)
+
+1._at        : educ            =           5
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+2._at        : educ            =           6
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+3._at        : educ            =           7
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+4._at        : educ            =           8
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+5._at        : educ            =           9
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+6._at        : educ            =          10
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+7._at        : educ            =          11
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+8._at        : educ            =          12
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+9._at        : educ            =          13
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+10._at       : educ            =          14
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+11._at       : educ            =          15
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+12._at       : educ            =          16
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+13._at       : educ            =          17
+               huswage         =         4.8
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+----------------------------------------------------------------------
+> --------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. I
+> nterval]
+-------------+--------------------------------------------------------
+> --------
+         _at |
+          1  |   .3118533   .1076519     2.90   0.004     .1008595    
+> .5228471
+          2  |   .3643013   .1058196     3.44   0.001     .1568986    
+> .5717039
+          3  |   .4201841   .1013031     4.15   0.000     .2216337    
+> .6187344
+          4  |   .4781908   .0946752     5.05   0.000     .2926309    
+> .6637507
+          5  |   .5367918    .086843     6.18   0.000     .3665827    
+> .7070009
+          6  |   .5943938     .07885     7.54   0.000     .4398507    
+> .7489369
+          7  |   .6495098   .0715931     9.07   0.000     .5091899    
+> .7898297
+          8  |    .700905   .0655607    10.69   0.000     .5724083    
+> .8294017
+          9  |   .7476913   .0607375    12.31   0.000      .628648    
+> .8667345
+         10  |   .7893584   .0567452    13.91   0.000     .6781399    
+>  .900577
+         11  |   .8257482   .0531109    15.55   0.000     .7216528    
+> .9298435
+         12  |   .8569903   .0494766    17.32   0.000     .7600178    
+> .9539627
+         13  |   .8834217   .0456715    19.34   0.000     .7939072    
+> .9729363
+----------------------------------------------------------------------
+> --------
+(results int_model are active now)
+
+Adjusted predictions                            Number of obs     =   
+>      753
+Model VCE    : OIM
+
+Expression   : Pr(inlf), predict(pr)
+
+1._at        : educ            =           5
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+2._at        : educ            =           6
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+3._at        : educ            =           7
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+4._at        : educ            =           8
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+5._at        : educ            =           9
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+6._at        : educ            =          10
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+7._at        : educ            =          11
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+8._at        : educ            =          12
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+9._at        : educ            =          13
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+10._at       : educ            =          14
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+11._at       : educ            =          15
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+12._at       : educ            =          16
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+13._at       : educ            =          17
+               huswage         =           7
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+----------------------------------------------------------------------
+> --------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. I
+> nterval]
+-------------+--------------------------------------------------------
+> --------
+         _at |
+          1  |   .3038396    .107098     2.84   0.005     .0939314    
+> .5137478
+          2  |   .3539145    .105609     3.35   0.001     .1469246    
+> .5609044
+          3  |   .4074124   .1015287     4.01   0.000     .2084199    
+> .6064049
+          4  |   .4631994   .0953193     4.86   0.000     .2763769    
+> .6500218
+          5  |    .519923     .08777     5.92   0.000      .347897    
+>  .691949
+          6  |   .5761377   .0798499     7.22   0.000     .4196348    
+> .7326406
+          7  |   .6304485   .0724734     8.70   0.000     .4884032    
+> .7724939
+          8  |   .6816457   .0662441    10.29   0.000     .5518097    
+> .8114818
+          9  |   .7288012   .0613001    11.89   0.000     .6086552    
+> .8489471
+         10  |   .7713152   .0573656    13.45   0.000     .6588806    
+> .8837497
+         11  |    .808912   .0539746    14.99   0.000     .7031236    
+> .9147003
+         12  |   .8415971   .0507052    16.60   0.000     .7422166    
+> .9409776
+         13  |   .8695928   .0473011    18.38   0.000     .7768843    
+> .9623013
+----------------------------------------------------------------------
+> --------
+(results int_model are active now)
+
+Adjusted predictions                            Number of obs     =   
+>      753
+Model VCE    : OIM
+
+Expression   : Pr(inlf), predict(pr)
+
+1._at        : educ            =           5
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+2._at        : educ            =           6
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+3._at        : educ            =           7
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+4._at        : educ            =           8
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+5._at        : educ            =           9
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+6._at        : educ            =          10
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+7._at        : educ            =          11
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+8._at        : educ            =          12
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+9._at        : educ            =          13
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+10._at       : educ            =          14
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+11._at       : educ            =          15
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+12._at       : educ            =          16
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+13._at       : educ            =          17
+               huswage         =         9.2
+               age             =    42.53785 (mean)
+               repwage         =    1.849734 (mean)
+               exper           =    10.63081 (mean)
+               kidslt6         =           1
+               kidsge6         =           1
+
+----------------------------------------------------------------------
+> --------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. I
+> nterval]
+-------------+--------------------------------------------------------
+> --------
+         _at |
+          1  |   .2959433   .1066826     2.77   0.006     .0868492    
+> .5050375
+          2  |   .3436638    .105648     3.25   0.001     .1365976    
+>   .55073
+          3  |   .3947646   .1021796     3.86   0.000     .1944962    
+>  .595033
+          4  |   .4482741   .0966444     4.64   0.000     .2588546    
+> .6376937
+          5  |   .5030087   .0897097     5.61   0.000      .327181    
+> .6788364
+          6  |   .5576713   .0822353     6.78   0.000      .396493    
+> .7188496
+          7  |   .6109716   .0750835     8.14   0.000     .4638106    
+> .7581325
+          8  |   .6617448    .068891     9.61   0.000     .5267209    
+> .7967687
+          9  |   .7090472   .0638997    11.10   0.000     .5838061    
+> .8342882
+         10  |   .7522116   .0599473    12.55   0.000      .634717    
+> .8697061
+         11  |   .7908611   .0566305    13.97   0.000     .6798674    
+> .9018548
+         12  |   .8248856   .0535238    15.41   0.000     .7199809    
+> .9297903
+         13  |   .8543938   .0503266    16.98   0.000     .7557555    
+> .9530321
+----------------------------------------------------------------------
+> --------
+
+. 
+. graph twoway line pred* myx , ///
+>     xtitle("Woman's Years of Education") ///
+>     ytitle("Pr(in Labor Force)") ///
+>     legend(order( 1 "Husband w/ Low Wage" 2 "Husband Median Wage" 3 
+> "Husband High Wage"))
+
+. 
+. 
+. 
+. 
+. /* 1. Does including characteristics related to the husband’s educat
+> ion significantly increase model fit from your preferred model? Comp
+> are predictions of these two models graphically using the ROC. */
+. 
+. eststo full_model:logit `y' `x' `x'#`h_chars' `w_chars' `kids' hused
+> uc  
+
+Iteration 0:   log likelihood =  -514.8732  
+Iteration 1:   log likelihood = -281.58115  
+Iteration 2:   log likelihood =  -251.1359  
+Iteration 3:   log likelihood = -246.07635  
+Iteration 4:   log likelihood = -245.99788  
+Iteration 5:   log likelihood = -245.99786  
+
+Logistic regression                             Number of obs     =   
+>      753
+                                                LR chi2(8)        =   
+>   537.75
+                                                Prob > chi2       =   
+>   0.0000
+Log likelihood = -245.99786                     Pseudo R2         =   
+>   0.5222
+
+----------------------------------------------------------------------
+> --------
+        inlf |      Coef.   Std. Err.      z    P>|z|     [95% Conf. I
+> nterval]
+-------------+--------------------------------------------------------
+> --------
+        educ |   .2662304   .0724569     3.67   0.000     .1242175    
+> .4082433
+             |
+      c.educ#|
+   c.huswage |  -.0031711    .002163    -1.47   0.143    -.0074104    
+> .0010683
+             |
+         age |  -.0673847   .0184016    -3.66   0.000    -.1034512   -
+> .0313181
+     repwage |    1.42044   .1362602    10.42   0.000     1.153375    
+> 1.687505
+       exper |   .0707718   .0162406     4.36   0.000     .0389409    
+> .1026027
+     kidslt6 |  -1.203653   .2717188    -4.43   0.000    -1.736212   -
+> .6710938
+     kidsge6 |  -.0074378   .0924856    -0.08   0.936    -.1887063    
+> .1738307
+     huseduc |  -.0224151   .0511686    -0.44   0.661    -.1227037    
+> .0778736
+       _cons |  -1.199572   1.147384    -1.05   0.296    -3.448403    
+> 1.049258
+----------------------------------------------------------------------
+> --------
+
+. 
+. 
+. est restore int_model
+(results int_model are active now)
+
+. 
+. predict xb_int, xb
+
+. 
+. est restore full_model
+(results full_model are active now)
+
+. 
+. predict xb_full, xb
+
+.  
+. roccomp inlf xb_full xb_int, graph summary name("roc2")
+
+                              ROC                    -Asymptotic Norma
+> l--
+                   Obs       Area     Std. Err.      [95% Conf. Interv
+> al]
+----------------------------------------------------------------------
+> ---
+xb_full            753     0.9247       0.0097        0.90565     0.94
+> 367
+xb_int             753     0.9245       0.0097        0.90553     0.94
+> 351
+----------------------------------------------------------------------
+> ---
+Ho: area(xb_full) = area(xb_int)
+    chi2(1) =     0.09       Prob>chi2 =   0.7667
+
+. 
+. 
+. exit
+
+end of do-file
+
+
