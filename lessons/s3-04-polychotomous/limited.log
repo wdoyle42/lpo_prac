@@ -1,0 +1,1206 @@
+-------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_2017/central/lessons/s3-04-polychotomous/limite
+> d.log
+  log type:  text
+ opened on:  10 Apr 2018, 14:30:51
+
+. 
+. /* Models for Limited and Count Variables*/
+. /* Will Doyle */
+. /* 2018-04-03 */
+. 
+. clear
+
+. 
+. clear mata /* Clears any fluff that might be in mata */
+
+. 
+. estimates clear /* Clears any estimates hanging around */
+
+. 
+. set more off /*Get rid of annoying "more" feature */
+
+. 
+. graph drop _all
+
+. 
+. global ddir "../../data/"
+
+. 
+. /*Controls*/
+. 
+. local coding=1
+
+. local order_analysis=0
+
+. local multi_analysis=1
+
+. local auc=0
+
+. 
+. /*Locals for analysis*/
+. local y first_inst
+
+. 
+. local test bynels2m bynels2r
+
+. 
+. local race amind asian black hispanic multiracial
+
+. 
+. local pared bypared_nohs bypared_2yrnodeg bypared_2yr bypared_some4 bypared_masters
+>  bypared_phd 
+
+. 
+. local income  byses1
+
+. 
+. local plan_outcomes "No Plans" "CC/Votech" "Bachelors or More"
+
+. 
+. if `coding'==1{
+. 
+.   use "${ddir}plans.dta", clear
+. 
+. foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
+  2.               foreach i of numlist -4 -8 -9 { /* Start inner loop */
+  3.                      replace `myvar'=. if `myvar'== `i'
+  4.                                             }  /* End inner loop */
+  5.                                           } /* End outer loop */
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(3,782 real changes made, 3,782 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(53 real changes made, 53 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(37 real changes made, 37 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(40 real changes made, 40 to missing)
+(648 real changes made, 648 to missing)
+(171 real changes made, 171 to missing)
+(57 real changes made, 57 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(648 real changes made, 648 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1,131 real changes made, 1,131 to missing)
+(781 real changes made, 781 to missing)
+(46 real changes made, 46 to missing)
+. 
+. local race_names amind asian black hispanic_no hispanic_race multiracial white
+. 
+. tab(byrace), gen(race_)
+
+     student^s race/ethnicity-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+amer. indian/alaska native, non-hispani |        130        0.85        0.85
+asian, hawaii/pac. islander,non-hispani |      1,460        9.58       10.44
+black or african american, non-hispanic |      2,019       13.25       23.69
+            hispanic, no race specified |        994        6.52       30.21
+               hispanic, race specified |      1,220        8.01       38.22
+              multiracial, non-hispanic |        735        4.82       43.04
+                    white, non-hispanic |      8,678       56.96      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,236      100.00
+. 
+. local i=1
+. 
+. foreach val of local race_names{
+  2.   rename race_`i' `val'
+  3.   local i=`i'+1
+  4. }
+. 
+. label variable byincome "Income"
+. label variable amind "American Indian/AK Native"
+. label variable asian "Asian/ PI"
+. label variable black "African American"
+. label variable white "White"
+. label variable multiracial "Multiracial"
+. 
+. 
+. gen hispanic=0
+. replace hispanic=1 if hispanic_no==1|hispanic_race==1
+(2,214 real changes made)
+. replace hispanic=. if byrace==.
+(924 real changes made, 924 to missing)
+. 
+. label variable hispanic "Hispanic"
+. 
+. local plan_names noplan dontknow votech cc fouryr earlygrad
+. 
+. tab(f1psepln), gen(plan_)
+
+   f1 post-secondary plans right after |
+                           high school |      Freq.     Percent        Cum.
+---------------------------------------+-----------------------------------
+                don^t plan to continue |        207        1.46        1.46
+don^t know or planning but unspecified |        834        5.87        7.33
+vocational, technical, or trade school |        986        6.94       14.27
+            two-year community college |      2,894       20.38       34.65
+       four-year college or university |      8,955       63.05       97.70
+early hs grad attending postsec school |        326        2.30      100.00
+---------------------------------------+-----------------------------------
+                                 Total |     14,202      100.00
+. 
+. local i=1
+. 
+. foreach val of local plan_names{
+  2.   rename plan_`i' `val'
+  3.   local i=`i'+1
+  4. }
+. 
+. 
+. label variable noplan "Plans: No plans"
+. label variable dontknow "Plans: Don't know"
+. label variable votech "Plans: Voc/Tech School"
+. label variable cc "Plans: Comm Coll"
+. label variable fouryr "Four Year"
+. label variable earlygrad "Early Graduation"
+. 
+. /* Plans for those who have them */
+. 
+. gen order_plan=.
+(16,160 missing values generated)
+. replace order_plan=1 if noplan==1| dontknow==1
+(1,041 real changes made)
+.   replace order_plan=2 if votech==1|cc==1
+(3,880 real changes made)
+.   replace order_plan=3 if fouryr==1
+(8,955 real changes made)
+. 
+. label define orderplan 1 "No Plans/DK" 2 "Votech/CC" 3 "Four Year"
+. 
+.  label values order_plan orderplan
+.   
+. local pareds bymothed byfathed bypared
+. 
+. local ed_names nohs hs 2yrnodeg 2yr some4  4yrgrad masters phd
+. 
+. foreach pared of local pareds{
+  2. 
+. tab(`pared'), gen(`pared'_)
+  3. 
+. local i=1
+  4. 
+. foreach val of local ed_names{
+  5.   rename `pared'_`i' `pared'_`val'
+  6.   local i=`i'+1
+  7. }
+  8. 
+. label variable `pared'_nohs "Less than HS"
+  9. label variable `pared'_hs "HS/GED"
+ 10. label variable `pared'_2yr "CC" 
+ 11. label variable `pared'_some4 "Four year attend"
+ 12. label variable `pared'_4yrgrad "Bachelor's"
+ 13. label variable `pared'_masters "Master's"
+ 14. label variable `pared'_phd "PhD"
+ 15. }
+
+              mother^s highest level of |
+                    education-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |      1,935       12.65       12.65
+      graduated from high school or ged |      4,117       26.91       39.55
+      attended 2-year school, no degree |      1,849       12.08       51.64
+           graduated from 2-year school |      1,620       10.59       62.22
+     attended college, no 4-year degree |      1,589       10.38       72.61
+                 graduated from college |      2,820       18.43       91.04
+completed master^s degree or equivalent |      1,060        6.93       97.97
+completed phd, md, other advanced degre |        311        2.03      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,301      100.00
+
+              father^s highest level of |
+                    education-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |      2,039       13.34       13.34
+      graduated from high school or ged |      4,314       28.23       41.57
+      attended 2-year school, no degree |      1,438        9.41       50.97
+           graduated from 2-year school |      1,194        7.81       58.79
+     attended college, no 4-year degree |      1,417        9.27       68.06
+                 graduated from college |      2,735       17.89       85.95
+completed master^s degree or equivalent |      1,282        8.39       94.34
+completed phd, md, other advanced degre |        865        5.66      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,284      100.00
+
+    parents^ highest level of education |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+             did not finish high school |        942        6.16        6.16
+      graduated from high school or ged |      3,044       19.89       26.05
+      attended 2-year school, no degree |      1,663       10.87       36.91
+           graduated from 2-year school |      1,597       10.44       47.35
+     attended college, no 4-year degree |      1,758       11.49       58.83
+                 graduated from college |      3,466       22.65       81.48
+completed master^s degree or equivalent |      1,785       11.66       93.15
+completed phd, md, other advanced degre |      1,049        6.85      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,304      100.00
+. 
+. tab bystexp,gen(exp_)
+
+  how far in school student thinks will |
+                          get-composite |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+                           {don^t know} |      1,450        9.52        9.52
+       less than high school graduation |        128        0.84       10.36
+     high school graduation or ged only |        983        6.45       16.81
+attend or complete 2-year college/schoo |        879        5.77       22.58
+attend college, 4-year degree incomplet |        561        3.68       26.26
+                  graduate from college |      5,416       35.55       61.81
+   obtain master^s degree or equivalent |      3,153       20.69       82.50
+obtain phd, md, or other advanced degre |      2,666       17.50      100.00
+----------------------------------------+-----------------------------------
+                                  Total |     15,236      100.00
+. 
+. gen female=bysex==2
+. replace female=. if bysex==.
+(819 real changes made, 819 to missing)
+. 
+. replace bynels2m=bynels2m/100
+(15,884 real changes made)
+. 
+. replace bynels2r=bynels2r/100  
+(15,884 real changes made)
+. 
+. // recode bystexp
+. 
+. recode bystexp (-1/1=1) (2=2) (3/4=3) (5/7=4), gen(exp_new)
+(13246 differences between bystexp and exp_new)
+. 
+. //drop _merge  
+. 
+. merge 1:1 stu_id using "${ddir}attend_type.dta" , nogen
+(label F2PS1SEC already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                            37
+        from master                         0  
+        from using                         37  
+
+    matched                            16,160  
+    -----------------------------------------
+. 
+. //limited outcomes: number of applications and credits earned 
+. 
+. merge 1:1 stu_id using "${ddir}limited.dta"
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                            16,197  (_merge==3)
+    -----------------------------------------
+. 
+. foreach myvar of varlist f2ps1sec{ /* Start outer loop */
+  2.               foreach i of numlist -3 -4 -8 -9 { /* Start inner loop */
+  3.                      replace `myvar'=. if `myvar'== `i'
+  4.                                             }  /* End inner loop */
+  5.                                           } /* End outer loop */
+(3,613 real changes made, 3,613 to missing)
+(1,691 real changes made, 1,691 to missing)
+(359 real changes made, 359 to missing)
+(50 real changes made, 50 to missing)
+. 
+.   
+. recode f2ps1sec (1=1) (2=2) (4=3) (3=4) (5/9=4), gen(first_inst)
+(4171 differences between f2ps1sec and first_inst)
+. 
+. replace first_inst=. if first_inst<0  
+(0 real changes made)
+. 
+.   label define sector 1 "Public 4 Year" 2 "Private 4 Year" 3 "Public 2 Year"  4 "Ot
+> her"
+. 
+.   label values first_inst sector
+.   
+.  tab first_inst f2ps1sec
+
+     RECODE of |
+      f2ps1sec |
+    (Sector of |
+         first |
+ postsecondary |       Sector of first postsecondary institution
+  institution) | Public, 4  Private n  Private f  Public, 2  Private n |     Total
+---------------+-------------------------------------------------------+----------
+ Public 4 Year |     4,178          0          0          0          0 |     4,178 
+Private 4 Year |         0      2,135          0          0          0 |     2,135 
+ Public 2 Year |         0          0          0      3,465          0 |     3,465 
+         Other |         0          0        176          0         42 |       706 
+---------------+-------------------------------------------------------+----------
+         Total |     4,178      2,135        176      3,465         42 |    10,484 
+
+
+     RECODE of |
+      f2ps1sec |
+    (Sector of |
+         first |
+ postsecondary |  Sector of first postsecondary institution
+  institution) | Private f  Public, l  Private n  Private f |     Total
+---------------+--------------------------------------------+----------
+ Public 4 Year |         0          0          0          0 |     4,178 
+Private 4 Year |         0          0          0          0 |     2,135 
+ Public 2 Year |         0          0          0          0 |     3,465 
+         Other |       184        114         25        165 |       706 
+---------------+--------------------------------------------+----------
+         Total |       184        114         25        165 |    10,484 
+
+.   
+. save apps_credits.dta, replace
+(note: file apps_credits.dta not found)
+file apps_credits.dta saved
+.   
+. }
+
+. 
+. else{
+.   use apps_credits.dta, clear 
+.   }
+
+. 
+. 
+. /*Analysis*/
+. 
+.   if `order_analysis'==1{
+. reg order_plan female `test' `race' `pared' `income'
+. 
+. eststo oprob_1:oprobit order_plan female `test' 
+. eststo oprob_2:oprobit order_plan female `test' `race' `pared' 
+. eststo oprob_3:oprobit order_plan female `test' `race' `pared' `income'
+. 
+. esttab oprob_* using raw_oprobit.rtf, ///
+>     not ///
+>     nostar ///
+>     b(2) ///
+>     se(2) ///
+>     aic ///
+>     replace
+. 
+. local cut1=_b[cut1:_cons]
+. local cut2=_b[cut2:_cons]
+. 
+. margins, predict(xb)  at(female=(0/1)) atmeans post /* Z in wooldridge*/
+. 
+. mat linpred=e(b)
+. scalar male_pred=linpred[1,1]
+. scalar female_pred=linpred[1,2]
+.         
+. graph twoway (function y=normalden(x,female_pred,1),range(-3 6)) ///
+>              (function y=normalden(x,male_pred,1), range(-3 6)), ///
+>              xline(`cut1',lpattern(dash)) /// 
+>              xline(`cut2',lpattern(dash)) ///
+>              legend(order(1 "LP for Women" 2 "LP for Men")) ///
+>              note("") title("") ///
+>              xtitle("Linear Prediction") ///
+>              text(.3 -2 "No Plans", size(vsmall)) ///
+>              text(.35 .9 "Votech/CC", size(vsmall)) ///
+>              text(.3 4.2 "Four Year", size(vsmall))
+.               
+. graph export "linear.pdf", replace
+. 
+. estimates restore oprob_3
+. 
+.     margins ,at(female=(0/1)) predict(outcome(1)) atmeans
+.     margins ,at(female=(0/1)) predict(outcome(2)) atmeans
+.     margins ,at(female=(0/1)) predict(outcome(3)) atmeans
+. 
+. /*Marginal Effects*/
+. 
+.  estimates restore oprob_3
+.  eststo marg1_ord:margins, dydx(`test' `race' `pared' `income') predict(outcome(1))
+>  post
+.  estimates restore oprob_3
+.  eststo marg2_ord:margins, dydx(`test' `race' `pared' `income') predict(outcome(2))
+>  post
+.  estimates restore oprob_3
+.  eststo marg3_ord:margins, dydx(`test' `race' `pared' `income') predict(outcome(3))
+>  post
+. 
+. esttab marg?_ord using marg_ord.rtf, ///
+>     not ///
+>     nostar ///
+>     ci(2) ///
+>     b(2) ///
+>     replace    
+. 
+.         
+. forvalues j= 1/3{
+  2. 
+. estimates restore oprob_3
+  3. 
+. margins,  predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7) (min) `race' `pa
+> red'  (mean) bynels2r byses1  )  post
+  4. 
+. // If you want to use marginsplot: 
+. marginsplot, recastci(rarea) recast(line) name("outcome_`j'")
+  5. 
+. mat t=J(7,3,.) /* Empty matrix */
+  6. 
+. mat a = (.1\.2\.3\.4\.5\.6\.7)   /*"at values"*/
+  7. 
+. mat myb=r(b) /*Estimated marginal effects */
+  8. mat myvc=r(V) /* variance/covariance */
+  9. mat myvar=vecdiag(myvc) /* Variances of marginal effects */
+ 10. mat myse=J(1,7,.) /*Empty matrix for standard errors */
+ 11. 
+. /*Sqrt of variances = standard errors */
+.   
+. forvalues i=1/7{
+ 12.   mat myse[1,`i']=sqrt(myvar[1,`i'])
+ 13. }
+ 14.   
+. forvalues i=1/7 {
+ 15.   mat t[`i',1] = myb[1,`i']                      /*Probabilities */
+ 16.   mat t[`i',2] = myb[1,`i'] - 1.96*myse[1,`i']   /* Lower bound of ci */
+ 17.   mat t[`i',3] = myb[1,`i'] + 1.96*myse[1,`i']   /* Upper bound of ci */
+ 18. }
+ 19. 
+. 
+. mat t=t,a   /*Combine with "at" values */
+ 20. 
+. mat li t
+ 21. 
+. mat colnames t = prob ll ul at
+ 22. 
+. svmat t, names(col) /*Converts matrix into data */
+ 23. 
+. // local outcome `: word `j' of `plan_outcomes' '
+. 
+. twoway (rarea ll ul at,  fcolor(emidblue) fintensity(25) lwidth(none)  )(line prob 
+> at), nodraw legend(off)  ///
+>        xtitle("Math Score" ) ytitle("Pr y=m") title("Outcome=`j'") ///
+>          yscale(range(0 1)) ylabel(0(.1)1)  scheme(s1color)
+ 24.          
+. graph save "order_plan_`j'.gph", replace
+ 25. 
+. drop prob ll ul at
+ 26. 
+. }/*End loop over outcomes*/
+. 
+. graph combine order_plan_1.gph order_plan_2.gph order_plan_3.gph, ///
+>   rows(1)
+.   
+. graph export  "order.pdf", replace
+. 
+. eststo exp_oprob_1: oprobit exp_new female `test' `race' `pared' `income'
+. 
+. forvalues j= 1/4{
+  2. 
+. estimates restore exp_oprob_1
+  3. 
+. margins, predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7) (min) `race' `par
+> ed'  (mean) bynels2r byses1  )  post
+  4. 
+. // If you want to use marginsplot: 
+. marginsplot, recastci(rarea) recast(line) name("exp_outcome_`j'")
+  5. 
+. graph save "exp_outcome_`j'.gph", replace
+  6. }
+. 
+. graph combine exp_outcome_1.gph exp_outcome_2.gph exp_outcome_3.gph exp_outcome_4.g
+> ph, ///
+>   rows(1)
+. 
+. 
+. /* Class exercise: work with student expectations */
+. 
+. } // End order analysis section
+
+. 
+. 
+. /********************************************************************************/
+. /* Multinomial Logit */
+. /********************************************************************************/ 
+>    
+. 
+. if `multi_analysis'==1{
+. 
+. eststo multi_plan:mlogit order_plan female `test' `race' `pared' `income', baseoutc
+> ome(2)
+
+Iteration 0:   log likelihood = -10795.133  
+Iteration 1:   log likelihood = -9232.2716  
+Iteration 2:   log likelihood = -9155.1652  
+Iteration 3:   log likelihood = -9154.7261  
+Iteration 4:   log likelihood =  -9154.726  
+
+Multinomial logistic regression                 Number of obs     =     13,055
+                                                LR chi2(18)       =    3280.81
+                                                Prob > chi2       =     0.0000
+Log likelihood =  -9154.726                     Pseudo R2         =     0.1520
+
+------------------------------------------------------------------------------
+  order_plan |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+No_Plans_DK  |
+      female |  -.7298571   .0787362    -9.27   0.000    -.8841772    -.575537
+    bynels2m |  -.5693789   .4356478    -1.31   0.191    -1.423233    .2844752
+    bynels2r |  -2.089814   .6189481    -3.38   0.001     -3.30293    -.876698
+       amind |   .5941904   .3040481     1.95   0.051    -.0017329    1.190114
+       asian |  -.4914305   .1586856    -3.10   0.002    -.8024486   -.1804124
+       black |  -.4378783   .1231843    -3.55   0.000    -.6793151   -.1964415
+    hispanic |  -.4580229   .1068138    -4.29   0.000     -.667374   -.2486717
+ multiracial |   .0871577    .165466     0.53   0.598    -.2371498    .4114651
+      byses1 |  -.1871771   .0602799    -3.11   0.002    -.3053236   -.0690306
+       _cons |  -.1796313   .1542585    -1.16   0.244    -.4819723    .1227098
+-------------+----------------------------------------------------------------
+Votech_CC    |  (base outcome)
+-------------+----------------------------------------------------------------
+Four_Year    |
+      female |    .328227   .0448741     7.31   0.000     .2402753    .4161787
+    bynels2m |   4.317657   .2595219    16.64   0.000     3.809004    4.826311
+    bynels2r |   3.696425   .3625315    10.20   0.000     2.985877    4.406974
+       amind |   .6684994   .2448003     2.73   0.006     .1886997    1.148299
+       asian |   .6954649   .0837601     8.30   0.000     .5312982    .8596317
+       black |    .941817    .071493    13.17   0.000     .8016933    1.081941
+    hispanic |   .1824104   .0665128     2.74   0.006     .0520476    .3127732
+ multiracial |    .112396   .1072461     1.05   0.295    -.0978025    .3225944
+      byses1 |   .6572451   .0347866    18.89   0.000     .5890647    .7254255
+       _cons |  -2.581626   .1054738   -24.48   0.000    -2.788351   -2.374902
+------------------------------------------------------------------------------
+. 
+. 
+. estimates restore multi_plan
+(results multi_plan are active now)
+. margins, dydx(`test' `race' `pared' `income') predict(outcome(1)) post
+
+Average marginal effects                        Number of obs     =     13,055
+Model VCE    : OIM
+
+Expression   : Pr(order_plan==No_Plans_DK), predict(outcome(1))
+dy/dx w.r.t. : bynels2m bynels2r amind asian black hispanic multiracial byses1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    bynels2m |   -.178828   .0256735    -6.97   0.000    -.2291472   -.1285088
+    bynels2r |  -.2539161   .0368392    -6.89   0.000    -.3261195   -.1817127
+       amind |   .0152445   .0171212     0.89   0.373    -.0183123    .0488014
+       asian |  -.0539544   .0095429    -5.65   0.000    -.0726581   -.0352506
+       black |  -.0587443   .0073646    -7.98   0.000    -.0731787   -.0443099
+    hispanic |  -.0348597   .0064924    -5.37   0.000    -.0475846   -.0221349
+ multiracial |   .0017612   .0097984     0.18   0.857    -.0174433    .0209657
+      byses1 |  -.0335453   .0035805    -9.37   0.000     -.040563   -.0265276
+------------------------------------------------------------------------------
+. estimates restore multi_plan
+(results multi_plan are active now)
+. margins, dydx(`test' `race' `pared' `income') predict(outcome(2)) post
+
+Average marginal effects                        Number of obs     =     13,055
+Model VCE    : OIM
+
+Expression   : Pr(order_plan==Votech_CC), predict(outcome(2))
+dy/dx w.r.t. : bynels2m bynels2r amind asian black hispanic multiracial byses1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    bynels2m |  -.6013501   .0418289   -14.38   0.000    -.6833333   -.5193668
+    bynels2r |  -.4670796   .0597579    -7.82   0.000    -.5842029   -.3499563
+       amind |  -.1134391   .0398664    -2.85   0.004    -.1915759   -.0353024
+       asian |  -.0849514   .0140518    -6.05   0.000    -.1124925   -.0574103
+       black |  -.1218264   .0116617   -10.45   0.000    -.1446829   -.0989698
+    hispanic |  -.0124742   .0108112    -1.15   0.249    -.0336638    .0087155
+ multiracial |   -.018693   .0176414    -1.06   0.289    -.0532695    .0158836
+      byses1 |  -.0885442   .0055801   -15.87   0.000    -.0994811   -.0776074
+------------------------------------------------------------------------------
+. estimates restore multi_plan
+(results multi_plan are active now)
+. margins, dydx(`test' `race' `pared' `income') predict(outcome(3)) post
+
+Average marginal effects                        Number of obs     =     13,055
+Model VCE    : OIM
+
+Expression   : Pr(order_plan==Four_Year), predict(outcome(3))
+dy/dx w.r.t. : bynels2m bynels2r amind asian black hispanic multiracial byses1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    bynels2m |   .7801781   .0414563    18.82   0.000     .6989253    .8614308
+    bynels2r |   .7209957   .0592458    12.17   0.000      .604876    .8371154
+       amind |   .0981946   .0397006     2.47   0.013     .0203829    .1760063
+       asian |   .1389058   .0139438     9.96   0.000     .1115763    .1662352
+       black |   .1805706   .0116267    15.53   0.000     .1577827    .2033585
+    hispanic |   .0473339   .0112597     4.20   0.000     .0252654    .0694024
+ multiracial |   .0169317   .0178209     0.95   0.342    -.0179966    .0518601
+      byses1 |   .1220895   .0055007    22.20   0.000     .1113083    .1328707
+------------------------------------------------------------------------------
+. 
+. 
+. forvalues j= 1/3{
+  2. estimates restore multi_plan  
+  3. margins, predict(outcome(`j'))  at(bynels2m=(.1 .2 .3 .4 .5 .6 .7)  (min) `race'
+>  `pared'  (mean) bynels2r byses1  )  post
+  4. 
+. mat t=J(7,3,.)
+  5. 
+. mat a = (.1\.2\.3\.4\.5\.6\.7)                   
+  6. 
+. mat myb=r(b)
+  7. mat myvc=r(V)
+  8. mat myvar=vecdiag(myvc)
+  9. mat myse=J(1,7,.)
+ 10. forvalues i=1/7{
+ 11.   mat myse[1,`i']=sqrt(myvar[1,`i'])
+ 12. }
+ 13.   
+. forvalues i=1/7 {
+ 14.   mat t[`i',1] = myb[1,`i']                      
+ 15.   mat t[`i',2] = myb[1,`i'] - 1.96*myse[1,`i']   
+ 16.   mat t[`i',3] = myb[1,`i'] + 1.96*myse[1,`i']   
+ 17. } 
+ 18. 
+. mat t=t,a                                          
+ 19. 
+. mat li t
+ 20. 
+. mat colnames t = prob ll ul at                     
+ 21. svmat t, names(col)   
+ 22.   
+. twoway (rarea ll ul at)(line prob at), legend(off)  ///
+>        xtitle("Math Score" ) ytitle("Pr y=m") title("Outcome `j'") ///
+>          yscale(range(0 1)) scheme(s1mono) ylabel(0(.1)1)
+ 23.          
+. graph save "unorder_plan_`j'.gph", replace
+ 24. 
+. drop prob ll ul at 
+ 25. 
+. 
+. }/*End loop over outcomes*/
+(results multi_plan are active now)
+
+Predictive margins                              Number of obs     =     13,055
+Model VCE    : OIM
+
+Expression   : Pr(order_plan==No_Plans_DK), predict(outcome(1))
+
+1._at        : bynels2m        =          .1
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+2._at        : bynels2m        =          .2
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+3._at        : bynels2m        =          .3
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+4._at        : bynels2m        =          .4
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+5._at        : bynels2m        =          .5
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+6._at        : bynels2m        =          .6
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+7._at        : bynels2m        =          .7
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .1717222   .0215887     7.95   0.000     .1294091    .2140353
+          2  |   .1448092   .0140637    10.30   0.000     .1172448    .1723736
+          3  |   .1169772   .0081554    14.34   0.000     .1009929    .1329616
+          4  |   .0901262   .0043736    20.61   0.000     .0815541    .0986983
+          5  |   .0661984   .0032031    20.67   0.000     .0599204    .0724763
+          6  |   .0465237   .0034025    13.67   0.000     .0398549    .0531925
+          7  |    .031494   .0034292     9.18   0.000     .0247728    .0382152
+------------------------------------------------------------------------------
+
+t[7,4]
+           c1         c2         c3         c1
+r1  .17172218  .12940832  .21403604         .1
+r2  .14480923  .11724432  .17237414         .2
+r3  .11697723  .10099261  .13296185         .3
+r4  .09012619  .08155394  .09869843         .4
+r5  .06619835  .05992028  .07247642         .5
+r6   .0465237  .03985477  .05319262         .6
+r7  .03149399  .02477269   .0382153         .7
+(file unorder_plan_1.gph saved)
+(results multi_plan are active now)
+
+Predictive margins                              Number of obs     =     13,055
+Model VCE    : OIM
+
+Expression   : Pr(order_plan==Votech_CC), predict(outcome(2))
+
+1._at        : bynels2m        =          .1
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+2._at        : bynels2m        =          .2
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+3._at        : bynels2m        =          .3
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+4._at        : bynels2m        =          .4
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+5._at        : bynels2m        =          .5
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+6._at        : bynels2m        =          .6
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+7._at        : bynels2m        =          .7
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .5692719    .024554    23.18   0.000     .5211469    .6173969
+          2  |   .5037044   .0179806    28.01   0.000     .4684631    .5389456
+          3  |   .4266232   .0119871    35.59   0.000     .4031289    .4501174
+          4  |   .3446466   .0072667    47.43   0.000     .3304041    .3588892
+          5  |   .2656572    .005832    45.55   0.000     .2542267    .2770877
+          6  |   .1962096   .0070589    27.80   0.000     .1823744    .2100448
+          7  |   .1398146   .0080025    17.47   0.000       .12413    .1554991
+------------------------------------------------------------------------------
+
+t[7,4]
+           c1         c2         c3         c1
+r1  .56927186  .52114597  .61739775         .1
+r2  .50370438  .46846249  .53894627         .2
+r3  .42662317  .40312847  .45011787         .3
+r4  .34464665  .33040383  .35888947         .4
+r5  .26565718  .25422649  .27708787         .5
+r6  .19620961  .18237414  .21004508         .6
+r7  .13981459  .12412975  .15549943         .7
+(file unorder_plan_2.gph saved)
+(results multi_plan are active now)
+
+Predictive margins                              Number of obs     =     13,055
+Model VCE    : OIM
+
+Expression   : Pr(order_plan==Four_Year), predict(outcome(3))
+
+1._at        : bynels2m        =          .1
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+2._at        : bynels2m        =          .2
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+3._at        : bynels2m        =          .3
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+4._at        : bynels2m        =          .4
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+5._at        : bynels2m        =          .5
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+6._at        : bynels2m        =          .6
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+7._at        : bynels2m        =          .7
+               bynels2r        =    .3039457 (mean)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               byses1          =     .085627 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |    .259006   .0177383    14.60   0.000     .2242395    .2937724
+          2  |   .3514864   .0158457    22.18   0.000     .3204294    .3825434
+          3  |   .4563996   .0119552    38.18   0.000     .4329679    .4798313
+          4  |   .5652272   .0077035    73.37   0.000     .5501285    .5803258
+          5  |   .6681445   .0062877   106.26   0.000     .6558207    .6804682
+          6  |   .7572667   .0077916    97.19   0.000     .7419955    .7725379
+          7  |   .8286914   .0089574    92.51   0.000     .8111353    .8462476
+------------------------------------------------------------------------------
+
+t[7,4]
+           c1         c2         c3         c1
+r1  .25900596  .22423886  .29377306         .1
+r2   .3514864  .32042882  .38254397         .2
+r3   .4563996  .43296744  .47983176         .3
+r4  .56522717  .55012827  .58032606         .4
+r5  .66814447  .65582048  .68046845         .5
+r6   .7572667  .74199526  .77253813         .6
+r7  .82869142  .81113494  .84624789         .7
+(file unorder_plan_3.gph saved)
+. 
+. 
+. graph combine unorder_plan_1.gph unorder_plan_2.gph unorder_plan_3.gph,  ///
+>   rows(1)
+. 
+. 
+. graph export "unorder.pdf", replace
+(file /Users/doylewr/practicum_2017/central/lessons/s3-04-polychotomous/unorder.pdf w
+> ritten in PDF format)
+. 
+. 
+. /* Multinomial Logit: better application, first institution attended */
+. 
+. eststo multi_first1: mlogit first_inst female `test' ,baseoutcome(1)
+
+Iteration 0:   log likelihood = -12367.346  
+Iteration 1:   log likelihood = -11268.083  
+Iteration 2:   log likelihood = -11244.265  
+Iteration 3:   log likelihood = -11244.164  
+Iteration 4:   log likelihood = -11244.164  
+
+Multinomial logistic regression                 Number of obs     =      9,999
+                                                LR chi2(9)        =    2246.36
+                                                Prob > chi2       =     0.0000
+Log likelihood = -11244.164                     Pseudo R2         =     0.0908
+
+--------------------------------------------------------------------------------
+    first_inst |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+Public_4_Year  |  (base outcome)
+---------------+----------------------------------------------------------------
+Private_4_Year |
+        female |   .0367156   .0559228     0.66   0.511    -.0728912    .1463224
+      bynels2m |   .3069276   .3322801     0.92   0.356    -.3443294    .9581846
+      bynels2r |   2.722214   .4663623     5.84   0.000     1.808161    3.636267
+         _cons |  -1.814538   .1557995   -11.65   0.000    -2.119899   -1.509177
+---------------+----------------------------------------------------------------
+Public_2_Year  |
+        female |  -.1712331   .0516336    -3.32   0.001    -.2724331   -.0700331
+      bynels2m |  -4.918807   .2915451   -16.87   0.000    -5.490225   -4.347389
+      bynels2r |  -4.376586   .4047634   -10.81   0.000    -5.169907   -3.583264
+         _cons |   3.643385   .1215868    29.97   0.000      3.40508    3.881691
+---------------+----------------------------------------------------------------
+Other          |
+        female |  -.2860006   .0892797    -3.20   0.001    -.4609857   -.1110155
+      bynels2m |  -7.854394   .5086241   -15.44   0.000    -8.851279   -6.857509
+      bynels2r |  -3.601004   .7070603    -5.09   0.000    -4.986817   -2.215192
+         _cons |   3.096321    .183864    16.84   0.000     2.735954    3.456687
+--------------------------------------------------------------------------------
+. eststo multi_first2: mlogit first_inst female `test' `race' `pared',baseoutcome(1) 
+
+Iteration 0:   log likelihood = -12367.346  
+Iteration 1:   log likelihood = -11201.031  
+Iteration 2:   log likelihood = -11170.876  
+Iteration 3:   log likelihood = -11170.701  
+Iteration 4:   log likelihood = -11170.701  
+
+Multinomial logistic regression                 Number of obs     =      9,999
+                                                LR chi2(24)       =    2393.29
+                                                Prob > chi2       =     0.0000
+Log likelihood = -11170.701                     Pseudo R2         =     0.0968
+
+--------------------------------------------------------------------------------
+    first_inst |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+Public_4_Year  |  (base outcome)
+---------------+----------------------------------------------------------------
+Private_4_Year |
+        female |    .040365    .056044     0.72   0.471    -.0694792    .1502093
+      bynels2m |   .4975255   .3451129     1.44   0.149    -.1788833    1.173934
+      bynels2r |   2.388184   .4749868     5.03   0.000     1.457227     3.31914
+         amind |   .3428061    .411397     0.83   0.405    -.4635173    1.149129
+         asian |   -.391956   .0940986    -4.17   0.000    -.5763858   -.2075261
+         black |  -.0512077   .0980348    -0.52   0.601    -.2433524     .140937
+      hispanic |  -.1590097   .1054579    -1.51   0.132    -.3657034     .047684
+   multiracial |   .1252309   .1313551     0.95   0.340    -.1322203    .3826821
+         _cons |  -1.748417   .1702339   -10.27   0.000     -2.08207   -1.414765
+---------------+----------------------------------------------------------------
+Public_2_Year  |
+        female |  -.1774135   .0519091    -3.42   0.001    -.2791534   -.0756736
+      bynels2m |  -5.221104   .3031189   -17.22   0.000    -5.815206   -4.627001
+      bynels2r |  -4.664913   .4139371   -11.27   0.000    -5.476215   -3.853612
+         amind |   .1013196   .3510835     0.29   0.773    -.5867914    .7894307
+         asian |  -.2200875   .0844009    -2.61   0.009    -.3855102   -.0546648
+         black |  -.7034615   .0851856    -8.26   0.000    -.8704221   -.5365008
+      hispanic |   .2100665   .0822946     2.55   0.011     .0487721    .3713609
+   multiracial |   .0070284   .1265321     0.06   0.956      -.24097    .2550269
+         _cons |   3.964235   .1376255    28.80   0.000     3.694494    4.233976
+---------------+----------------------------------------------------------------
+Other          |
+        female |   -.285775   .0894957    -3.19   0.001    -.4611833   -.1103668
+      bynels2m |  -7.633643   .5272715   -14.48   0.000    -8.667076   -6.600209
+      bynels2r |  -3.968498   .7199394    -5.51   0.000    -5.379553   -2.557443
+         amind |   .4852025   .4837784     1.00   0.316    -.4629858    1.433391
+         asian |  -.6475993   .1830486    -3.54   0.000    -1.006368   -.2888307
+         black |   -.269159   .1277513    -2.11   0.035     -.519547    -.018771
+      hispanic |   .3926894   .1272488     3.09   0.002     .1432864    .6420925
+   multiracial |    .253827   .2076579     1.22   0.222     -.153175    .6608291
+         _cons |   3.135369   .2135922    14.68   0.000     2.716736    3.554002
+--------------------------------------------------------------------------------
+. eststo multi_first3: mlogit first_inst female `test' `race' `pared' `income' ,baseo
+> utcome(1) 
+
+Iteration 0:   log likelihood = -12367.346  
+Iteration 1:   log likelihood = -11035.631  
+Iteration 2:   log likelihood = -10989.796  
+Iteration 3:   log likelihood = -10989.499  
+Iteration 4:   log likelihood = -10989.499  
+
+Multinomial logistic regression                 Number of obs     =      9,999
+                                                LR chi2(27)       =    2755.69
+                                                Prob > chi2       =     0.0000
+Log likelihood = -10989.499                     Pseudo R2         =     0.1114
+
+--------------------------------------------------------------------------------
+    first_inst |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+---------------+----------------------------------------------------------------
+Public_4_Year  |  (base outcome)
+---------------+----------------------------------------------------------------
+Private_4_Year |
+        female |   .0595574   .0563457     1.06   0.291    -.0508782     .169993
+      bynels2m |   .1473588   .3474508     0.42   0.671    -.5336323      .82835
+      bynels2r |   1.882024   .4801011     3.92   0.000     .9410431    2.823005
+         amind |   .4370516   .4133439     1.06   0.290    -.3730876    1.247191
+         asian |  -.3437611   .0946654    -3.63   0.000    -.5293017   -.1582204
+         black |   .0151332   .0987073     0.15   0.878    -.1783296    .2085959
+      hispanic |  -.0659289   .1065098    -0.62   0.536    -.2746842    .1428265
+   multiracial |   .1461184   .1318821     1.11   0.268    -.1123658    .4046026
+        byses1 |   .3591807   .0446747     8.04   0.000     .2716199    .4467414
+         _cons |  -1.566786   .1707335    -9.18   0.000    -1.901418   -1.232155
+---------------+----------------------------------------------------------------
+Public_2_Year  |
+        female |  -.2183517   .0524334    -4.16   0.000    -.3211193   -.1155841
+      bynels2m |  -4.935261    .306656   -16.09   0.000    -5.536295   -4.334226
+      bynels2r |    -4.0194   .4205003    -9.56   0.000    -4.843565   -3.195234
+         amind |  -.0362313   .3530791    -0.10   0.918    -.7282537     .655791
+         asian |  -.3522002   .0864202    -4.08   0.000    -.5215806   -.1828197
+         black |  -.8274856   .0866383    -9.55   0.000    -.9972935   -.6576776
+      hispanic |   .0385533   .0844573     0.46   0.648    -.1269799    .2040865
+   multiracial |  -.0106933   .1271454    -0.08   0.933    -.2598938    .2385071
+        byses1 |  -.4634702   .0400405   -11.58   0.000    -.5419482   -.3849921
+         _cons |    3.76377   .1393219    27.01   0.000     3.490704    4.036836
+---------------+----------------------------------------------------------------
+Other          |
+        female |  -.3562899   .0904133    -3.94   0.000    -.5334968   -.1790831
+      bynels2m |  -7.250673   .5330307   -13.60   0.000    -8.295394   -6.205952
+      bynels2r |  -3.043055   .7302684    -4.17   0.000    -4.474355   -1.611755
+         amind |   .2548587   .4886137     0.52   0.602    -.7028065    1.212524
+         asian |  -.8781577   .1867395    -4.70   0.000     -1.24416    -.512155
+         black |  -.4688237   .1303832    -3.60   0.000    -.7243701   -.2132773
+      hispanic |   .1027197   .1323432     0.78   0.438    -.1566682    .3621077
+   multiracial |   .2233942    .208945     1.07   0.285    -.1861304    .6329188
+        byses1 |  -.7162264   .0706406   -10.14   0.000    -.8546794   -.5777734
+         _cons |   2.846793   .2177939    13.07   0.000     2.419925    3.273661
+--------------------------------------------------------------------------------
+. 
+. 
+. esttab multi_first* using multi_first.tex, ///
+>     not ///
+>     b(2) ///
+>     se(2) ///
+>     aic ///
+>     replace
+(output written to multi_first.tex)
+. 
+. 
+. estimates restore multi_first3
+(results multi_first3 are active now)
+. margins, dydx(`test' `race' `pared' `income') predict(outcome(1)) post
+
+Average marginal effects                        Number of obs     =      9,999
+Model VCE    : OIM
+
+Expression   : Pr(first_inst==Public_4_Year), predict(outcome(1))
+dy/dx w.r.t. : bynels2m bynels2r amind asian black hispanic multiracial byses1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+    bynels2m |   .6631729   .0557934    11.89   0.000     .5538198    .7725261
+    bynels2r |   .3196643   .0788316     4.06   0.000     .1651572    .4741714
+       amind |  -.0419931   .0703973    -0.60   0.551    -.1799692     .095983
+       asian |   .0875263   .0157331     5.56   0.000       .05669    .1183626
+       black |    .097752   .0161079     6.07   0.000      .066181    .1293229
+    hispanic |   .0000186   .0169311     0.00   0.999    -.0331658    .0332031
+ multiracial |  -.0168474   .0233342    -0.72   0.470    -.0625816    .0288868
+      byses1 |    .030522     .00729     4.19   0.000     .0162339    .0448102
+------------------------------------------------------------------------------
+. estimates restore multi_first3
+(results multi_first3 are active now)

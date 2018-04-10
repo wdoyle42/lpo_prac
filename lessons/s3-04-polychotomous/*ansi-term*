@@ -1,0 +1,174 @@
+bash-3.2$ pwd
+/Users/doylewr/practicum_2017/central/lessons/s3-04-polychotomous
+bash-3.2$ git add .
+bash-3.2$ git commit -m "updated"
+[master b83b5ae] updated
+ 3 files changed, 6 insertions(+), 5 deletions(-)
+ rewrite lessons/s3-04-polychotomous/poly.pdf (89%)
+ rewrite lessons/s3-04-polychotomous/poly.synctex.gz (98%)
+bash-3.2$ git push
+To https://github.com/lpoprac/central
+ ! [rejected]        master -> master (fetch first)
+error: failed to push some refs to 'https://github.com/lpoprac/central'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+bash-3.2$ git pull
+remote: Counting objects: 10, done.
+remote: Compressing objects: 100% (8/8), done.
+remote: Total 10 (delta 6), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (10/10), done.
+From https://github.com/lpoprac/central
+   3a14968..bf7a566  master     -> origin/master
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Merge branch 'master' of https://github.com/lpoprac/central
+
+Catching upMerge branch 'master' of https://github.com/lpoprac/central
+
+# Please enter a commit message to explain why this merge is necessary,
+# especially if it merges an updated upstream into a topic branch.
+#
+# Lines starting with '#' will be ignored, and an empty message aborts
+# the commit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-uu-:**-F1  MERGE_MSG      All L1     (Fundamental)-----------------------------------------------------------------
+C-c-
