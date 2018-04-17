@@ -22,10 +22,12 @@ global ddir "../../data/"
 
 /*Controls*/
 
-local coding=1
+local coding=0
 local order_analysis=0
 local multi_analysis=1
-local auc=0
+local multi_ses_race=0
+local auc=1
+local compare=1
 
 /*Locals for analysis*/
 local y first_inst
@@ -323,7 +325,7 @@ graph combine exp_outcome_1.gph exp_outcome_2.gph exp_outcome_3.gph exp_outcome_
 
 if `multi_analysis'==1{
 
-eststo multi_plan:mlogit order_plan female `test' `race' `pared' `income', baseoutcome(2)
+eststo multi_plan:mlogit order_plan female `test' `race' `pared' `income', baseoutcome(1)
 
 
 estimates restore multi_plan
@@ -449,13 +451,117 @@ drop prob ll ul at
 
 }/*End loop over outcomes*/
 
-graph combine unorder_first_1.gph ///
+/*graph combine unorder_first_1.gph ///
               unorder_first_2.gph ///
               unorder_first_3.gph ///        
               unorder_first_4.gph, ///
               rows(2)
+*/
+//graph export unorder_first.pdf,replace
+} /*end multi analysis section*/
 
-graph export unorder_first.pdf,replace
+if `multi_ses_race'==1{
+/* By Race and SES */
+
+/*Locals for analysis*/
+local y first_inst
+
+local test bynels2m bynels2r
+
+local race_non amind asian black hispanic multiracial
+
+local pared bypared_nohs bypared_2yrnodeg bypared_2yr bypared_some4 bypared_masters bypared_phd 
+
+local income  byses1
+
+local plan_outcomes "No Plans" "CC/Votech" "Bachelors or More"
+
+eststo multi_first3: mlogit first_inst female `test' `race_non' `pared' `income' ,baseoutcome(1) 
+
+sum byses1, detail
+
+local no_steps=20
+scalar no_steps=20
+local mymin=r(min)
+local mymax=r(max)
+local diff=`mymax'-`mymin'
+local step=`diff'/`no_steps'
+
+local select_race white black hispanic    
+
+foreach myrace of local select_race{
+
+forvalues j= 1/4{
+
+estimates restore multi_first3
+
+if "`myrace'"=="white"{
+estimates restore multi_first3
+margins, predict(outcome(`j')) at((min) `race_non' `pared'  (mean) bynels2r bynels2m byses=(`mymin'(`step')`mymax'))  post
+}
+else{
+estimates restore multi_first3
+
+margins, predict(outcome(`j')) at((min) `race_non' `pared'  (mean) bynels2r bynels2m byses=(`mymin'(`step')`mymax') `myrace'=1)  post
+}
+
+mat myb=r(b)
+
+mat li myb
+
+/* Matrix with 3 columns, 1 for prediction, 2 for lb/ub*/
+mat t=J(21,3,.)
+
+/* Standard Errors */
+mat myvc=r(V)
+mat myvar=vecdiag(myvc)
+mat myse=J(1,21,.)
+forvalues i=1/21{
+  mat myse[1,`i']=sqrt(myvar[1,`i'])
+}
+
+/*Populate matrix*/  
+forvalues i=1/21 {
+/*Predictions*/
+  mat t[`i',1] = myb[1,`i']                      
+  /*Lower bound*/
+  mat t[`i',2] = myb[1,`i'] - 1.96*myse[1,`i']   
+  /* Upper bound*/
+  mat t[`i',3] = myb[1,`i'] + 1.96*myse[1,`i']
+} 
+
+
+mat allx=e(at)
+
+mat a=allx[1...,15]
+
+mat t=t,a                                          
+
+mat li t
+
+mat colnames t = prob ll ul at
+
+svmat t, names(col_`j'_`myrace')   
+
+} /* end outcome loop*/
+
+} /*end race loop*/
+
+
+foreach i of numlist 1/4{
+graph twoway line col_`i'_*1 col_1_white4, ///
+legend(order(1 "White" 2 "Black" 3 "Hispanic")) name(multi_out_`i', replace) ///
+xtitle("SES") ytitle("Pr(Attend)") 
+graph save multi_out_`i'.gph, replace 
+}
+
+grc1leg2 "multi_out_1.gph" "multi_out_2.gph" "multi_out_3.gph" "multi_out_4.gph", ///
+legendfrom("multi_out_1.gph") ///
+rows(1) ///
+name(multi,replace) ///
+xcommon ycommon
+
+}/* end section on complex predictions */
 
 
 /* AUC for mlogit */
@@ -464,6 +570,17 @@ graph export unorder_first.pdf,replace
 estimates restore multi_first3
 if `auc'==1{    
 mlogitroc first_inst female `test' `race' `pared' `income'
+}
+
+/* Comparing Models */
+if `compare'==1{
+estimates restore oprob_3
+
+estat ic
+
+estimates restore multi_plan
+
+estat ic
 }
 
 }/* end multi analysis section */
