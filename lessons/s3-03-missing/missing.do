@@ -1,12 +1,11 @@
-version 13 /* Can set version here, use the most recent as default */
+version 14 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
-
 
 log using "mvn.log",replace /*Open up new log */
 
-/*Techniques for handling missing data */
+    /*Techniques for handling missing data */
 /* Will Doyle */
-/* 170508 */
+/* 180417 */
 /* Practicum Folder */
 
 clear
@@ -169,7 +168,6 @@ replace
   
 
 if `imputation'==1 {
-
 
 local mice=0
 
