@@ -6,7 +6,7 @@ log using "match.log",replace /*Open up new log */
 /* Matching Examples */
 /* Following Zhao, 2004 examples of difft kinds of matching */
 /* Will Doyle */
-/* 160509 */
+/* 180507 */
 /* Practicum Folder */
 
 
@@ -73,6 +73,16 @@ tab  `t' `y' ,row
  addplot(kdensity byses1 if `t'==0, lpattern(dash))  ///
  legend(order(1 "Treated"  2 "Untreated")) 
 
+
+/* Using teffects structure*/
+teffects psmatch (`y') (`t' `controls')
+
+tebalance summarize
+
+mat balance=r(table)
+
+estout matrix(balance) using balance.rtf, replace
+
  
 /* Balance on various covariates */
 
@@ -86,6 +96,8 @@ ttest `y' ,by(`t')
 
 reg `y' `t' `controls', vce(robust)
 
+
+/* Full matching Table */
 
 
 /* Propensity Score Matching: 1 to 1 */
@@ -108,7 +120,7 @@ psgraph
             atet 
          
 
-/*Replciate psmatch2*/
+/*Replciate psmatch2, almost*/
 
 teffects psmatch (`y') (`t' `controls', probit), atet
 
@@ -119,8 +131,6 @@ teffects psmatch (`y') (`t' `controls', probit), atet
     nn(4) 
 
  	
-
-
 /* Propensity Score Matching: 1 to 4 */
   psmatch2 `t'   ///
          `controls', ///
@@ -134,7 +144,8 @@ teffects psmatch (`y') (`t' `controls', probit), atet
 
 reg `y' `t' [iweight=_weight]
  
- 
+
+
 /*Regression on balanced sample */
     
 reg `y' `t' `controls' [iweight=_weight] 
@@ -249,7 +260,6 @@ pstest _pscore `controls', treated(`t') both
 
 pstest _pscore `controls' , both
 
-/*Using sensatt */
 
 /* Teffects -- Nearest Neighbor matching, 4 neighboring units */
     teffects nnmatch (`y' `controls')  ///
@@ -261,14 +271,12 @@ pstest _pscore `controls' , both
    teffects aipw (`y' `controls') ///
     (`t' `controls') 
 
-
 	
 predict pscore, ps
 
 gen pscore_weight=.
 replace pscore_weight=1/pscore if `t'==1
 replace pscore_weight=pscore/(1-pscore) if `t'==0
-
 
 preserve
 sample 1000, count
@@ -278,6 +286,10 @@ graph twoway (scatter pscore bynels2m [w=pscore_weight] if `t'==1, msize(vtiny) 
 legend (order(1 "PS, CC Attend" 2 "PS, 4yr Attend")) ytitle("Propensity Score")
 
 restore
+
+
+/*Using sensatt */
+
 
 /*Similar confounders */
 
@@ -330,10 +342,6 @@ matrix rownames results="p1=25" "50" "75"
 matrix colnames results="p0=25" "50" "75"
 
 mat li results
-
-exit 
-
-   
 
 
 log close
