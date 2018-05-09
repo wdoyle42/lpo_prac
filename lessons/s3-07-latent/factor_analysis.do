@@ -1,13 +1,12 @@
-version 12 /* Can set version here, use the most recent as default */
+version 15 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 log using "factor.log",replace /*Open up new log */
 
 /* Factor Analysis */
 /* Factor analysis and postsestimation via various techniques*/
 /* Will Doyle */
-/* 150506 */
+/* 180509 */
 /* Practicum Folder */  
-
 
 clear
 
@@ -16,7 +15,6 @@ clear mata /* Clears any fluff that might be in mata */
 estimates clear /* Clears any estimates hanging around */
 
 set more off /*Get rid of annoying "more" feature */
-
 
 /* Load in public opininon data */
 
@@ -198,7 +196,23 @@ eststo admin_ml
 
 /*Cluster Analysis */
 
+cluster kmeans `students', k(2)
+
+
+tab _clus_1 college
+
+graph hbar college female democrat , over(_clus_1) asyvars
+
+cluster kmeans `admins', k(2)
+
+tab _clus_2 college
+
+graph hbar college female democrat , over(_clus_2) asyvars
+
+exit 
+
 /*Postestimation*/
+
 
 estimates restore student_ml
 

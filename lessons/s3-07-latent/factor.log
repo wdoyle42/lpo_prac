@@ -1,0 +1,1017 @@
+---------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/practicum_2017/central/lessons/s3-07-latent/factor.log
+  log type:  text
+ opened on:   9 May 2018, 10:57:09
+
+. 
+. /* Factor Analysis */
+. /* Factor analysis and postsestimation via various techniques*/
+. /* Will Doyle */
+. /* 180509 */
+. /* Practicum Folder */  
+. 
+. clear
+
+. 
+. clear mata /* Clears any fluff that might be in mata */
+
+. 
+. estimates clear /* Clears any estimates hanging around */
+
+. 
+. set more off /*Get rid of annoying "more" feature */
+
+. 
+. /* Load in public opininon data */
+. 
+. use hed, clear
+(Written by R.              )
+
+. 
+. renvars *, lower
+
+. 
+. /* Q35-42, students */
+. /* 35 How important is the following in terms of what students should get: a sense of
+>  maturity */
+. 
+. /* 36 Citizenship */
+. 
+. /* 37 Specific expertise in career */
+. 
+. /* 38  An ability to get along with different people */
+. 
+. /* 39  Top notch writing and speaking */
+. 
+. /* 40 Problem solving */
+. 
+. /* 41 Exposure to great writers and thinkers */
+. 
+. /* 42 High tech skills */
+. 
+. 
+. 
+. /* Q 44-54 Admins */
+. 
+. 
+. /* 44 Diverse students */
+. 
+. /* 45 Control costs */
+. 
+. /* 46 Control behavior of students */
+. 
+. /* 47 Lower dropouts */
+. 
+. /* 48 Ensure students work hard */
+. 
+. /* 49 Attract best professors */
+. 
+. /* 50 Keep tuition down */
+. 
+. /* 51 Find ways to help K-12 */
+. 
+. /* 52 Provide career counseling */
+. 
+. /* 53 Support extra currricular activities */
+. 
+. /* 54 Provide extra help for students who fall behind */
+. 
+. 
+.     
+. 
+. /* Recoding */
+. 
+. 
+.   
+. foreach myvar of varlist q35-q42{
+  2.   replace `myvar'=. if `myvar'>3
+  3. }
+(15 real changes made, 15 to missing)
+(18 real changes made, 18 to missing)
+(24 real changes made, 24 to missing)
+(17 real changes made, 17 to missing)
+(15 real changes made, 15 to missing)
+(29 real changes made, 29 to missing)
+(23 real changes made, 23 to missing)
+(11 real changes made, 11 to missing)
+
+. 
+. 
+. foreach myvar of varlist q44-q57{
+  2.   replace `myvar'=. if `myvar'>4
+  3.          }
+(13 real changes made, 13 to missing)
+(10 real changes made, 10 to missing)
+(9 real changes made, 9 to missing)
+(13 real changes made, 13 to missing)
+(10 real changes made, 10 to missing)
+(10 real changes made, 10 to missing)
+(13 real changes made, 13 to missing)
+(10 real changes made, 10 to missing)
+(9 real changes made, 9 to missing)
+(10 real changes made, 10 to missing)
+(11 real changes made, 11 to missing)
+(708 real changes made, 708 to missing)
+(9 real changes made, 9 to missing)
+(10 real changes made, 10 to missing)
+
+. 
+. 
+. tab qs2, gen(race_)
+
+                          QS2 |      Freq.     Percent        Cum.
+------------------------------+-----------------------------------
+                     Hispanic |        100        9.85        9.85
+                        White |        744       73.30       83.15
+    African-American or Black |        107       10.54       93.69
+                        Asian |         12        1.18       94.88
+  Or something else (SPECIFY) |         21        2.07       96.95
+[VOLUNTEERED] Native American |         12        1.18       98.13
+      [DO NOT READ] Dont Know |          2        0.20       98.33
+        [DO NOT READ] Refused |         17        1.67      100.00
+------------------------------+-----------------------------------
+                        Total |      1,015      100.00
+
+. 
+. rename race_1 hispanic
+
+. 
+. rename race_2 white
+
+. 
+. rename race_3 black
+
+. 
+. rename race_4 asian
+
+. 
+. rename race_5 other
+
+. 
+. rename race_6 native_am
+
+. 
+. 
+. 
+. tab q116, gen(inc_)
+
+                              Q116 |      Freq.     Percent        Cum.
+-----------------------------------+-----------------------------------
+                     Under $15,000 |         82        8.08        8.08
+Over $15,000 but less than $25,000 |        151       14.88       22.96
+Over $25,000 but less than $35,000 |        168       16.55       39.51
+Over $35,000 but less than $50,000 |        198       19.51       59.01
+Over $50,000 but less than $75,000 |        156       15.37       74.38
+                      Over $75,000 |        134       13.20       87.59
+           [DO NOT READ] Dont Know |         32        3.15       90.74
+      [DO NOT READ] Not Applicable |          6        0.59       91.33
+             [DO NOT READ] Refused |         88        8.67      100.00
+-----------------------------------+-----------------------------------
+                             Total |      1,015      100.00
+
+. 
+. rename inc_1 inc_lt15
+
+. rename inc_2 inc_1525
+
+. rename inc_3 inc_2535
+
+. rename inc_4 inc_3550
+
+. rename inc_5 inc_5075
+
+. rename inc_6 inc75p
+
+. 
+. 
+. tab q103, gen(educ_)
+
+                             Q103 |      Freq.     Percent        Cum.
+----------------------------------+-----------------------------------
+            Less than high school |         78        7.68        7.68
+             High school graduate |        319       31.43       39.11
+                     Trade school |         46        4.53       43.65
+          Some college, no degree |        172       16.95       60.59
+Associates degree/two-year degree |         90        8.87       69.46
+         Four-year college degree |        186       18.33       87.78
+     Graduate/Professional degree |        111       10.94       98.72
+     [DO NOT READ] Not Applicable |          2        0.20       98.92
+            [DO NOT READ] Refused |         11        1.08      100.00
+----------------------------------+-----------------------------------
+                            Total |      1,015      100.00
+
+. 
+. rename educ_1 lths
+
+. rename educ_2 hs
+
+. rename educ_3 trade
+
+. rename educ_4 somecoll
+
+. rename educ_5 aa
+
+. rename educ_6 college
+
+. rename educ_7 grad
+
+. 
+. tab sex, gen(sex_)
+
+        SEX |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       Male |        498       49.06       49.06
+     Female |        517       50.94      100.00
+------------+-----------------------------------
+      Total |      1,015      100.00
+
+. 
+. rename sex_1 male
+
+. rename sex_2 female
+
+. 
+. tab q112, gen(party_)
+
+                        Q112 |      Freq.     Percent        Cum.
+-----------------------------+-----------------------------------
+                  Republican |        284       27.98       27.98
+                    Democrat |        310       30.54       58.52
+                 Independent |        238       23.45       81.97
+              Something else |        128       12.61       94.58
+     [DO NOT READ] Dont Know |         26        2.56       97.14
+[DO NOT READ] Not Applicable |          8        0.79       97.93
+       [DO NOT READ] Refused |         21        2.07      100.00
+-----------------------------+-----------------------------------
+                       Total |      1,015      100.00
+
+. 
+. rename party_2 democrat
+
+. 
+. local students q35-q42
+
+. 
+. local admins q44-q54
+
+. 
+. 
+. /*Correlations */
+. 
+. corr `students'
+(obs=949)
+
+             |      q35      q36      q37      q38      q39      q40      q41      q42
+-------------+------------------------------------------------------------------------
+         q35 |   1.0000
+         q36 |   0.2025   1.0000
+         q37 |   0.2287   0.1378   1.0000
+         q38 |   0.2950   0.2032   0.2150   1.0000
+         q39 |   0.1675   0.1304   0.1545   0.1688   1.0000
+         q40 |   0.2498   0.2007   0.1892   0.2578   0.3100   1.0000
+         q41 |   0.1603   0.1991   0.1276   0.1439   0.2689   0.2368   1.0000
+         q42 |   0.2128   0.1511   0.2146   0.1922   0.1383   0.1853   0.0924   1.0000
+
+
+. 
+. corr `admins'
+(obs=996)
+
+             |      q44      q45      q46      q47      q48      q49      q50      q51
+-------------+------------------------------------------------------------------------
+         q44 |   1.0000
+         q45 |   0.1453   1.0000
+         q46 |   0.1237   0.2693   1.0000
+         q47 |   0.1714   0.1727   0.1733   1.0000
+         q48 |   0.1775   0.2273   0.2905   0.2025   1.0000
+         q49 |   0.1896   0.2293   0.2090   0.1711   0.2276   1.0000
+         q50 |   0.1661   0.3436   0.2430   0.1886   0.1701   0.1772   1.0000
+         q51 |   0.2470   0.2101   0.2531   0.1793   0.2234   0.2131   0.2216   1.0000
+         q52 |   0.1344   0.1834   0.1942   0.1342   0.1726   0.2630   0.2276   0.1597
+         q53 |   0.1835   0.1641   0.1500   0.1747   0.1084   0.1480   0.1219   0.2176
+         q54 |   0.2990   0.1928   0.1953   0.2357   0.3009   0.2084   0.2504   0.2438
+
+             |      q52      q53      q54
+-------------+---------------------------
+         q52 |   1.0000
+         q53 |   0.2074   1.0000
+         q54 |   0.2455   0.1905   1.0000
+
+
+. 
+. /* Scales */
+. 
+. alpha `students' , item gen(student_scale)
+
+Test scale = mean(unstandardized items)
+
+                                                            average
+                             item-test     item-rest       interitem
+Item         |  Obs  Sign   correlation   correlation     covariance      alpha
+-------------+-----------------------------------------------------------------
+q35          | 1000    +       0.5461        0.3708        .0602512      0.6084
+q36          |  997    +       0.5368        0.3093        .0597893      0.6259
+q37          |  991    +       0.5262        0.3261        .0608763      0.6197
+q38          |  998    +       0.5452        0.3703         .060138      0.6089
+q39          | 1000    +       0.5473        0.3449        .0595326      0.6150
+q40          |  986    +       0.5860        0.4203        .0577949      0.5973
+q41          |  992    +       0.5470        0.3126        .0589905      0.6253
+q42          | 1004    +       0.4970        0.2874        .0625437      0.6280
+-------------+-----------------------------------------------------------------
+Test scale   |                                             .0599882      0.6471
+-------------------------------------------------------------------------------
+
+. 
+. alpha `admins', item gen(admin_scale)
+
+Test scale = mean(unstandardized items)
+
+                                                            average
+                             item-test     item-rest       interitem
+Item         |  Obs  Sign   correlation   correlation     covariance      alpha
+-------------+-----------------------------------------------------------------
+q44          | 1002    +       0.5108        0.3438        .0855209      0.7143
+q45          | 1005    +       0.5139        0.3964        .0883072      0.7076
+q46          | 1006    +       0.5369        0.3883        .0847294      0.7069
+q47          | 1002    +       0.5224        0.3353         .084023      0.7180
+q48          | 1005    +       0.5351        0.3919        .0851064      0.7065
+q49          | 1005    +       0.4957        0.3740        .0889322      0.7100
+q50          | 1002    +       0.5321        0.3918        .0854238      0.7066
+q51          | 1005    +       0.5575        0.4076        .0831295      0.7040
+q52          | 1006    +       0.4888        0.3518        .0883809      0.7122
+q53          | 1005    +       0.4621        0.3111        .0892785      0.7179
+q54          | 1004    +       0.5836        0.4551         .082942      0.6980
+-------------+-----------------------------------------------------------------
+Test scale   |                                             .0859792      0.7286
+-------------------------------------------------------------------------------
+
+. 
+. 
+. /*Factor analysis*/
+. 
+. /*Iterated principal factors*/
+. 
+. factor `students', ipf factor(3)
+(obs=949)
+
+Factor analysis/correlation                      Number of obs    =        949
+    Method: iterated principal factors           Retained factors =          3
+    Rotation: (unrotated)                        Number of params =         21
+
+    --------------------------------------------------------------------------
+         Factor  |   Eigenvalue   Difference        Proportion   Cumulative
+    -------------+------------------------------------------------------------
+        Factor1  |      1.65621      1.28327            0.7610       0.7610
+        Factor2  |      0.37294      0.22571            0.1714       0.9324
+        Factor3  |      0.14724      0.09293            0.0677       1.0000
+        Factor4  |      0.05431      0.04166            0.0250       1.0250
+        Factor5  |      0.01265      0.01427            0.0058       1.0308
+        Factor6  |     -0.00162      0.01586           -0.0007       1.0301
+        Factor7  |     -0.01748      0.03045           -0.0080       1.0220
+        Factor8  |     -0.04793            .           -0.0220       1.0000
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(28) =  699.30 Prob>chi2 = 0.0000
+
+Factor loadings (pattern matrix) and unique variances
+
+    -----------------------------------------------------------
+        Variable |  Factor1   Factor2   Factor3 |   Uniqueness 
+    -------------+------------------------------+--------------
+             q35 |   0.4975    0.2074   -0.0173 |      0.7092  
+             q36 |   0.3944    0.0846    0.2372 |      0.7810  
+             q37 |   0.4015    0.1525   -0.1199 |      0.8011  
+             q38 |   0.4817    0.1869   -0.0111 |      0.7329  
+             q39 |   0.5137   -0.4362   -0.1472 |      0.5241  
+             q40 |   0.5352   -0.0799    0.0057 |      0.7071  
+             q41 |   0.4117   -0.2013    0.2037 |      0.7485  
+             q42 |   0.3743    0.1655   -0.1139 |      0.8195  
+    -----------------------------------------------------------
+
+. 
+. eststo student_ipf
+
+. 
+. rotate, orthogonal
+
+Factor analysis/correlation                      Number of obs    =        949
+    Method: iterated principal factors           Retained factors =          3
+    Rotation: orthogonal varimax (Kaiser off)    Number of params =         21
+
+    --------------------------------------------------------------------------
+         Factor  |     Variance   Difference        Proportion   Cumulative
+    -------------+------------------------------------------------------------
+        Factor1  |      0.97219      0.11807            0.4467       0.4467
+        Factor2  |      0.85413      0.50405            0.3925       0.8392
+        Factor3  |      0.35008            .            0.1609       1.0000
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(28) =  699.30 Prob>chi2 = 0.0000
+
+Rotated factor loadings (pattern matrix) and unique variances
+
+    -----------------------------------------------------------
+        Variable |  Factor1   Factor2   Factor3 |   Uniqueness 
+    -------------+------------------------------+--------------
+             q35 |   0.4881    0.1594    0.1648 |      0.7092  
+             q36 |   0.2662    0.1229    0.3647 |      0.7810  
+             q37 |   0.4124    0.1662    0.0346 |      0.8011  
+             q38 |   0.4617    0.1633    0.1649 |      0.7329  
+             q39 |   0.1031    0.6799    0.0544 |      0.5241  
+             q40 |   0.3156    0.3904    0.2020 |      0.7071  
+             q41 |   0.0957    0.3543    0.3418 |      0.7485  
+             q42 |   0.4006    0.1382    0.0301 |      0.8195  
+    -----------------------------------------------------------
+
+Factor rotation matrix
+
+    -----------------------------------------
+                 | Factor1  Factor2  Factor3 
+    -------------+---------------------------
+         Factor1 |  0.6925   0.6213   0.3666 
+         Factor2 |  0.6698  -0.7425  -0.0069 
+         Factor3 | -0.2679  -0.2503   0.9303 
+    -----------------------------------------
+
+. 
+. rotate, promax(3)
+
+Factor analysis/correlation                      Number of obs    =        949
+    Method: iterated principal factors           Retained factors =          3
+    Rotation: oblique promax (Kaiser off)        Number of params =         21
+
+    --------------------------------------------------------------------------
+         Factor  |     Variance   Proportion    Rotated factors are correlated
+    -------------+------------------------------------------------------------
+        Factor1  |      1.40973       0.6478
+        Factor2  |      1.11554       0.5126
+        Factor3  |      1.03797       0.4769
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(28) =  699.30 Prob>chi2 = 0.0000
+
+Rotated factor loadings (pattern matrix) and unique variances
+
+    -----------------------------------------------------------
+        Variable |  Factor1   Factor2   Factor3 |   Uniqueness 
+    -------------+------------------------------+--------------
+             q35 |   0.5009   -0.0304    0.0903 |      0.7092  
+             q36 |   0.1911   -0.1056    0.3953 |      0.7810  
+             q37 |   0.4467    0.0588   -0.0602 |      0.8011  
+             q38 |   0.4693   -0.0190    0.0956 |      0.7329  
+             q39 |  -0.0110    0.7071   -0.0224 |      0.5241  
+             q40 |   0.2480    0.2568    0.1504 |      0.7071  
+             q41 |  -0.0430    0.2098    0.3784 |      0.7485  
+             q42 |   0.4389    0.0328   -0.0605 |      0.8195  
+    -----------------------------------------------------------
+
+Factor rotation matrix
+
+    -----------------------------------------
+                 | Factor1  Factor2  Factor3 
+    -------------+---------------------------
+         Factor1 |  0.9013   0.7649   0.7662 
+         Factor2 |  0.4029  -0.6152  -0.1452 
+         Factor3 | -0.1590  -0.1908   0.6259 
+    -----------------------------------------
+
+. 
+. factor `admins', ipf factor(3)
+(obs=996)
+
+Factor analysis/correlation                      Number of obs    =        996
+    Method: iterated principal factors           Retained factors =          3
+    Rotation: (unrotated)                        Number of params =         30
+
+    Beware: solution is a Heywood case
+            (i.e., invalid or boundary values of uniqueness)
+
+    --------------------------------------------------------------------------
+         Factor  |   Eigenvalue   Difference        Proportion   Cumulative
+    -------------+------------------------------------------------------------
+        Factor1  |      2.51331      1.44823            0.6465       0.6465
+        Factor2  |      1.06508      0.75585            0.2740       0.9205
+        Factor3  |      0.30923      0.18567            0.0795       1.0000
+        Factor4  |      0.12356      0.02690            0.0318       1.0318
+        Factor5  |      0.09666      0.06203            0.0249       1.0567
+        Factor6  |      0.03464      0.01002            0.0089       1.0656
+        Factor7  |      0.02461      0.02618            0.0063       1.0719
+        Factor8  |     -0.00156      0.04408           -0.0004       1.0715
+        Factor9  |     -0.04565      0.02942           -0.0117       1.0598
+       Factor10  |     -0.07507      0.08224           -0.0193       1.0405
+       Factor11  |     -0.15730            .           -0.0405       1.0000
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(55) = 1302.29 Prob>chi2 = 0.0000
+
+Factor loadings (pattern matrix) and unique variances
+
+    -----------------------------------------------------------
+        Variable |  Factor1   Factor2   Factor3 |   Uniqueness 
+    -------------+------------------------------+--------------
+             q44 |   0.3808    0.1833    0.2790 |      0.7435  
+             q45 |   0.4600    0.2116   -0.3091 |      0.6481  
+             q46 |   0.4449    0.1179   -0.1542 |      0.7644  
+             q47 |   0.3635    0.1366    0.0686 |      0.8445  
+             q48 |   0.8788   -0.8516   -0.0036 |     -0.4974  
+             q49 |   0.4126    0.1577    0.0005 |      0.8049  
+             q50 |   0.4378    0.2511   -0.2111 |      0.7007  
+             q51 |   0.4402    0.1904    0.0790 |      0.7637  
+             q52 |   0.3819    0.1915   -0.0027 |      0.8174  
+             q53 |   0.3210    0.2031    0.1239 |      0.8404  
+             q54 |   0.4998    0.1639    0.2029 |      0.6821  
+    -----------------------------------------------------------
+
+. 
+. eststo admin_ipf
+
+. 
+. rotate, orthogonal
+
+Factor analysis/correlation                      Number of obs    =        996
+    Method: iterated principal factors           Retained factors =          3
+    Rotation: orthogonal varimax (Kaiser off)    Number of params =         30
+
+    Beware: solution is a Heywood case
+            (i.e., invalid or boundary values of uniqueness)
+
+    --------------------------------------------------------------------------
+         Factor  |     Variance   Difference        Proportion   Cumulative
+    -------------+------------------------------------------------------------
+        Factor1  |      1.73520      0.61770            0.4464       0.4464
+        Factor2  |      1.11750      0.08259            0.2875       0.7338
+        Factor3  |      1.03491            .            0.2662       1.0000
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(55) = 1302.29 Prob>chi2 = 0.0000
+
+Rotated factor loadings (pattern matrix) and unique variances
+
+    -----------------------------------------------------------
+        Variable |  Factor1   Factor2   Factor3 |   Uniqueness 
+    -------------+------------------------------+--------------
+             q44 |   0.1242    0.1015    0.4804 |      0.7435  
+             q45 |   0.1584    0.5617    0.1063 |      0.6481  
+             q46 |   0.2165    0.4009    0.1674 |      0.7644  
+             q47 |   0.1470    0.2137    0.2970 |      0.8445  
+             q48 |   1.2220    0.0480    0.0436 |     -0.4974  
+             q49 |   0.1651    0.2971    0.2821 |      0.8049  
+             q50 |   0.1142    0.5022    0.1847 |      0.7007  
+             q51 |   0.1598    0.2740    0.3683 |      0.7637  
+             q52 |   0.1194    0.2998    0.2801 |      0.8174  
+             q53 |   0.0692    0.1861    0.3467 |      0.8404  
+             q54 |   0.2195    0.2075    0.4761 |      0.6821  
+    -----------------------------------------------------------
+
+Factor rotation matrix
+
+    -----------------------------------------
+                 | Factor1  Factor2  Factor3 
+    -------------+---------------------------
+         Factor1 |  0.6802   0.5316   0.5046 
+         Factor2 | -0.7330   0.4951   0.4665 
+         Factor3 | -0.0018  -0.6872   0.7265 
+    -----------------------------------------
+
+. 
+. rotate, promax(3)
+
+Factor analysis/correlation                      Number of obs    =        996
+    Method: iterated principal factors           Retained factors =          3
+    Rotation: oblique promax (Kaiser off)        Number of params =         30
+
+    Beware: solution is a Heywood case
+            (i.e., invalid or boundary values of uniqueness)
+
+    --------------------------------------------------------------------------
+         Factor  |     Variance   Proportion    Rotated factors are correlated
+    -------------+------------------------------------------------------------
+        Factor1  |      2.01196       0.5175
+        Factor2  |      1.95517       0.5029
+        Factor3  |      1.81567       0.4671
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(55) = 1302.29 Prob>chi2 = 0.0000
+
+Rotated factor loadings (pattern matrix) and unique variances
+
+    -----------------------------------------------------------
+        Variable |  Factor1   Factor2   Factor3 |   Uniqueness 
+    -------------+------------------------------+--------------
+             q44 |   0.6019   -0.1422   -0.0178 |      0.7435  
+             q45 |  -0.1134    0.6685   -0.0028 |      0.6481  
+             q46 |   0.0406    0.4215    0.0808 |      0.7644  
+             q47 |   0.3023    0.1067    0.0236 |      0.8445  
+             q48 |   0.0067   -0.0105    1.2249 |     -0.4974  
+             q49 |   0.2441    0.2233    0.0253 |      0.8049  
+             q50 |   0.0209    0.5483   -0.0528 |      0.7007  
+             q51 |   0.3714    0.1449    0.0040 |      0.7637  
+             q52 |   0.2413    0.2298   -0.0215 |      0.8174  
+             q53 |   0.3841    0.0457   -0.0614 |      0.8404  
+             q54 |   0.5460   -0.0051    0.0545 |      0.6821  
+    -----------------------------------------------------------
+
+Factor rotation matrix
+
+    -----------------------------------------
+                 | Factor1  Factor2  Factor3 
+    -------------+---------------------------
+         Factor1 |  0.3731   0.3769  -0.6940 
+         Factor2 |  0.3688  -0.3999  -0.0084 
+         Factor3 |  0.8514   0.8355   0.7199 
+    -----------------------------------------
+
+. 
+. /*Principal components */
+. 
+. factor `students', pcf factor(3)
+(obs=949)
+
+Factor analysis/correlation                      Number of obs    =        949
+    Method: principal-component factors          Retained factors =          2
+    Rotation: (unrotated)                        Number of params =         15
+
+    --------------------------------------------------------------------------
+         Factor  |   Eigenvalue   Difference        Proportion   Cumulative
+    -------------+------------------------------------------------------------
+        Factor1  |      2.37332      1.32899            0.2967       0.2967
+        Factor2  |      1.04433      0.15760            0.1305       0.4272
+        Factor3  |      0.88673      0.06601            0.1108       0.5380
+        Factor4  |      0.82072      0.03128            0.1026       0.6406
+        Factor5  |      0.78943      0.06295            0.0987       0.7393
+        Factor6  |      0.72649      0.02910            0.0908       0.8301
+        Factor7  |      0.69739      0.03579            0.0872       0.9173
+        Factor8  |      0.66160            .            0.0827       1.0000
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(28) =  699.30 Prob>chi2 = 0.0000
+
+Factor loadings (pattern matrix) and unique variances
+
+    -------------------------------------------------
+        Variable |  Factor1   Factor2 |   Uniqueness 
+    -------------+--------------------+--------------
+             q35 |   0.5971    0.2762 |      0.5672  
+             q36 |   0.4945   -0.0220 |      0.7550  
+             q37 |   0.5099    0.3493 |      0.6180  
+             q38 |   0.5857    0.2566 |      0.5911  
+             q39 |   0.5378   -0.4898 |      0.4708  
+             q40 |   0.6332   -0.2249 |      0.5485  
+             q41 |   0.4970   -0.5601 |      0.4393  
+             q42 |   0.4816    0.4190 |      0.5925  
+    -------------------------------------------------
+
+. 
+. eststo student_pcf
+
+. 
+. rotate, orthogonal
+
+Factor analysis/correlation                      Number of obs    =        949
+    Method: principal-component factors          Retained factors =          2
+    Rotation: orthogonal varimax (Kaiser off)    Number of params =         15
+
+    --------------------------------------------------------------------------
+         Factor  |     Variance   Difference        Proportion   Cumulative
+    -------------+------------------------------------------------------------
+        Factor1  |      1.80645      0.19525            0.2258       0.2258
+        Factor2  |      1.61120            .            0.2014       0.4272
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(28) =  699.30 Prob>chi2 = 0.0000
+
+Rotated factor loadings (pattern matrix) and unique variances
+
+    -------------------------------------------------
+        Variable |  Factor1   Factor2 |   Uniqueness 
+    -------------+--------------------+--------------
+             q35 |   0.6326    0.1808 |      0.5672  
+             q36 |   0.3601    0.3397 |      0.7550  
+             q37 |   0.6143    0.0685 |      0.6180  
+             q38 |   0.6112    0.1882 |      0.5911  
+             q39 |   0.0874    0.7222 |      0.4708  
+             q40 |   0.3326    0.5838 |      0.5485  
+             q41 |   0.0106    0.7488 |      0.4393  
+             q42 |   0.6383   -0.0027 |      0.5925  
+    -------------------------------------------------
+
+Factor rotation matrix
+
+    --------------------------------
+                 | Factor1  Factor2 
+    -------------+------------------
+         Factor1 |  0.7573          
+         Factor2 |  0.6531  -0.7573 
+    --------------------------------
+
+. 
+. rotate, promax(3)
+
+Factor analysis/correlation                      Number of obs    =        949
+    Method: principal-component factors          Retained factors =          2
+    Rotation: oblique promax (Kaiser off)        Number of params =         15
+
+    --------------------------------------------------------------------------
+         Factor  |     Variance   Proportion    Rotated factors are correlated
+    -------------+------------------------------------------------------------
+        Factor1  |      2.07529       0.2594
+        Factor2  |      1.83942       0.2299
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(28) =  699.30 Prob>chi2 = 0.0000
+
+Rotated factor loadings (pattern matrix) and unique variances
+
+    -------------------------------------------------
+        Variable |  Factor1   Factor2 |   Uniqueness 
+    -------------+--------------------+--------------
+             q35 |   0.6404    0.0427 |      0.5672  
+             q36 |   0.3206    0.2743 |      0.7550  
+             q37 |   0.6418   -0.0716 |      0.6180  
+             q38 |   0.6163    0.0555 |      0.5911  
+             q39 |  -0.0410    0.7421 |      0.4708  
+             q40 |   0.2459    0.5386 |      0.5485  
+             q41 |  -0.1279    0.7882 |      0.4393  
+             q42 |   0.6807   -0.1525 |      0.5925  
+    -------------------------------------------------
+
+Factor rotation matrix
+
+    --------------------------------
+                 | Factor1  Factor2 
+    -------------+------------------
+         Factor1 |  0.8808   0.7735 
+         Factor2 |  0.4736  -0.6338 
+    --------------------------------
+
+. 
+. factor `admins', pcf factor(3)
+(obs=996)
+
+Factor analysis/correlation                      Number of obs    =        996
+    Method: principal-component factors          Retained factors =          2
+    Rotation: (unrotated)                        Number of params =         21
+
+    --------------------------------------------------------------------------
+         Factor  |   Eigenvalue   Difference        Proportion   Cumulative
+    -------------+------------------------------------------------------------
+        Factor1  |      3.03856      2.00936            0.2762       0.2762
+        Factor2  |      1.02920      0.09328            0.0936       0.3698
+        Factor3  |      0.93592      0.04465            0.0851       0.4549
+        Factor4  |      0.89127      0.03500            0.0810       0.5359
+        Factor5  |      0.85626      0.00990            0.0778       0.6137
+        Factor6  |      0.84637      0.06253            0.0769       0.6907
+        Factor7  |      0.78384      0.05839            0.0713       0.7619
+        Factor8  |      0.72545      0.04702            0.0660       0.8279
+        Factor9  |      0.67843      0.05725            0.0617       0.8896
+       Factor10  |      0.62118      0.02767            0.0565       0.9460
+       Factor11  |      0.59352            .            0.0540       1.0000
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(55) = 1302.29 Prob>chi2 = 0.0000
+
+Factor loadings (pattern matrix) and unique variances
+
+    -------------------------------------------------
+        Variable |  Factor1   Factor2 |   Uniqueness 
+    -------------+--------------------+--------------
+             q44 |   0.4805    0.5265 |      0.4919  
+             q45 |   0.5526   -0.4407 |      0.5004  
+             q46 |   0.5455   -0.3724 |      0.5638  
+             q47 |   0.4711    0.1730 |      0.7482  
+             q48 |   0.5472   -0.1030 |      0.6900  
+             q49 |   0.5264   -0.0549 |      0.7199  
+             q50 |   0.5481   -0.3563 |      0.5727  
+             q51 |   0.5560    0.1491 |      0.6686  
+             q52 |   0.4997   -0.0443 |      0.7484  
+             q53 |   0.4344    0.3867 |      0.6617  
+             q54 |   0.5986    0.2738 |      0.5667  
+    -------------------------------------------------
+
+. 
+. eststo admin_pcf
+
+. 
+. rotate, orthogonal
+
+Factor analysis/correlation                      Number of obs    =        996
+    Method: principal-component factors          Retained factors =          2
+    Rotation: orthogonal varimax (Kaiser off)    Number of params =         21
+
+    --------------------------------------------------------------------------
+         Factor  |     Variance   Difference        Proportion   Cumulative
+    -------------+------------------------------------------------------------
+        Factor1  |      2.11937      0.17097            0.1927       0.1927
+        Factor2  |      1.94840            .            0.1771       0.3698
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(55) = 1302.29 Prob>chi2 = 0.0000
+
+Rotated factor loadings (pattern matrix) and unique variances
+
+    -------------------------------------------------
+        Variable |  Factor1   Factor2 |   Uniqueness 
+    -------------+--------------------+--------------
+             q44 |  -0.0021    0.7128 |      0.4919  
+             q45 |   0.7051    0.0492 |      0.5004  
+             q46 |   0.6537    0.0946 |      0.5638  
+             q47 |   0.2300    0.4460 |      0.7482  
+             q48 |   0.4727    0.2943 |      0.6900  
+             q49 |   0.4249    0.3156 |      0.7199  
+             q50 |   0.6447    0.1083 |      0.5727  
+             q51 |   0.3087    0.4859 |      0.6686  
+             q52 |   0.3980    0.3053 |      0.7484  
+             q53 |   0.0584    0.5787 |      0.6617  
+             q54 |   0.2558    0.6065 |      0.5667  
+    -------------------------------------------------
+
+Factor rotation matrix
+
+    --------------------------------
+                 | Factor1  Factor2 
+    -------------+------------------
+         Factor1 |  0.7366   0.6764 
+         Factor2 | -0.6764   0.7366 
+    --------------------------------
+
+. 
+. rotate, promax(3)
+
+Factor analysis/correlation                      Number of obs    =        996
+    Method: principal-component factors          Retained factors =          2
+    Rotation: oblique promax (Kaiser off)        Number of params =         21
+
+    --------------------------------------------------------------------------
+         Factor  |     Variance   Proportion    Rotated factors are correlated
+    -------------+------------------------------------------------------------
+        Factor1  |      2.60862       0.2371
+        Factor2  |      2.48725       0.2261
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(55) = 1302.29 Prob>chi2 = 0.0000
+
+Rotated factor loadings (pattern matrix) and unique variances
+
+    -------------------------------------------------
+        Variable |  Factor1   Factor2 |   Uniqueness 
+    -------------+--------------------+--------------
+             q44 |  -0.2292    0.8027 |      0.4919  
+             q45 |   0.7745   -0.1573 |      0.5004  
+             q46 |   0.7024   -0.0907 |      0.5638  
+             q47 |   0.1158    0.4325 |      0.7482  
+             q48 |   0.4360    0.1885 |      0.6900  
+             q49 |   0.3757    0.2270 |      0.7199  
+             q50 |   0.6880   -0.0726 |      0.5727  
+             q51 |   0.1913    0.4536 |      0.6686  
+             q52 |   0.3488    0.2235 |      0.7484  
+             q53 |  -0.1186    0.6335 |      0.6617  
+             q54 |   0.0936    0.6053 |      0.5667  
+    -------------------------------------------------
+
+Factor rotation matrix
+
+    --------------------------------
+                 | Factor1  Factor2 
+    -------------+------------------
+         Factor1 |  0.8866   0.8518 
+         Factor2 | -0.4626   0.5238 
+    --------------------------------
+
+. 
+. /*Via maximum likelihood */  
+. 
+.   factor `students', ml factor(3)
+(obs=949)
+Iteration 0:   log likelihood = -29.559081
+Iteration 1:   log likelihood = -2.5809681
+Iteration 2:   log likelihood = -2.2833716
+Iteration 3:   log likelihood = -2.2690829
+Iteration 4:   log likelihood = -2.2681242
+Iteration 5:   log likelihood = -2.2680494
+Iteration 6:   log likelihood = -2.2680434
+
+Factor analysis/correlation                      Number of obs    =        949
+    Method: maximum likelihood                   Retained factors =          3
+    Rotation: (unrotated)                        Number of params =         21
+                                                 Schwarz's BIC    =      148.5
+    Log likelihood = -2.268043                   (Akaike's) AIC   =    46.5361
+
+    --------------------------------------------------------------------------
+         Factor  |   Eigenvalue   Difference        Proportion   Cumulative
+    -------------+------------------------------------------------------------
+        Factor1  |      1.64836      1.26417            0.7553       0.7553
+        Factor2  |      0.38419      0.23423            0.1760       0.9313
+        Factor3  |      0.14996            .            0.0687       1.0000
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(28) =  699.30 Prob>chi2 = 0.0000
+    LR test:   3 factors vs. saturated:  chi2(7)  =    4.51 Prob>chi2 = 0.7195
+
+Factor loadings (pattern matrix) and unique variances
+
+    -----------------------------------------------------------
+        Variable |  Factor1   Factor2   Factor3 |   Uniqueness 
+    -------------+------------------------------+--------------
+             q35 |   0.4797    0.2484   -0.0338 |      0.7070  
+             q36 |   0.3797    0.1386    0.2284 |      0.7845  
+             q37 |   0.3876    0.1721   -0.1195 |      0.8059  
+             q38 |   0.4666    0.2282   -0.0295 |      0.7293  
+             q39 |   0.5536   -0.4084   -0.1010 |      0.5165  
+             q40 |   0.5397   -0.0309    0.0191 |      0.7074  
+             q41 |   0.4227   -0.1448    0.2376 |      0.7438  
+             q42 |   0.3601    0.1812   -0.1204 |      0.8230  
+    -----------------------------------------------------------
+
+. 
+. eststo student_ml
+
+. 
+.   factor `admins', ml factor(3)
+(obs=996)
+Iteration 0:   log likelihood = -55.372443
+Iteration 1:   log likelihood = -28.523025
+Iteration 2:   log likelihood = -26.255166
+Iteration 3:   log likelihood = -25.643021
+Iteration 4:   log likelihood = -25.565488
+Iteration 5:   log likelihood = -25.564671
+Iteration 6:   log likelihood = -25.564631
+Iteration 7:   log likelihood = -25.564629
+
+Factor analysis/correlation                      Number of obs    =        996
+    Method: maximum likelihood                   Retained factors =          3
+    Rotation: (unrotated)                        Number of params =         30
+                                                 Schwarz's BIC    =    258.242
+    Log likelihood = -25.56463                   (Akaike's) AIC   =    111.129
+
+    Beware: solution is a Heywood case
+            (i.e., invalid or boundary values of uniqueness)
+
+    --------------------------------------------------------------------------
+         Factor  |   Eigenvalue   Difference        Proportion   Cumulative
+    -------------+------------------------------------------------------------
+        Factor1  |      1.47129     -0.14945            0.4320       0.4320
+        Factor2  |      1.62074      1.30675            0.4758       0.9078
+        Factor3  |      0.31399            .            0.0922       1.0000
+    --------------------------------------------------------------------------
+    LR test: independent vs. saturated:  chi2(55) = 1302.29 Prob>chi2 = 0.0000
+    LR test:   3 factors vs. saturated:  chi2(25) =   50.80 Prob>chi2 = 0.0017
+    (tests formally not valid because a Heywood case was encountered)
+
+Factor loadings (pattern matrix) and unique variances
+
+    -----------------------------------------------------------
+        Variable |  Factor1   Factor2   Factor3 |   Uniqueness 
+    -------------+------------------------------+--------------
+             q44 |   0.1775    0.3806    0.2854 |      0.7422  
+             q45 |   0.2273    0.4621   -0.3051 |      0.6417  
+             q46 |   0.2905    0.3626   -0.1451 |      0.7631  
+             q47 |   0.2025    0.3305    0.0763 |      0.8439  
+             q48 |   1.0000   -0.0000   -0.0000 |      0.0000  
+             q49 |   0.2276    0.3748    0.0112 |      0.8076  
+             q50 |   0.1701    0.4873   -0.2013 |      0.6931  
+             q51 |   0.2234    0.4206    0.0867 |      0.7656  
+             q52 |   0.1726    0.3879    0.0137 |      0.8196  
+             q53 |   0.1084    0.3606    0.1302 |      0.8413  
+             q54 |   0.3009    0.4316    0.2175 |      0.6759  
+    -----------------------------------------------------------
+
+. 
+. eststo admin_ml
+
+. 
+. /*Cluster Analysis */
+. 
+. cluster kmeans `students', k(2)
+cluster name: _clus_1
+
+. 
+. 
+. tab _clus_1 college
+
+           |    q103==Four-year
+           |    college degree
+   _clus_1 |         0          1 |     Total
+-----------+----------------------+----------
+         1 |       431        110 |       541 
+         2 |       337         71 |       408 
+-----------+----------------------+----------
+     Total |       768        181 |       949 
+
+
+. 
+. graph hbar college female democrat , over(_clus_1) asyvars
+
+. 
+. cluster kmeans `admins', k(2)
+cluster name: _clus_2
+
+. 
+. tab _clus_2 college
+
+           |    q103==Four-year
+           |    college degree
+   _clus_2 |         0          1 |     Total
+-----------+----------------------+----------
+         1 |       471         89 |       560 
+         2 |       340         96 |       436 
+-----------+----------------------+----------
+     Total |       811        185 |       996 
+
+
+. 
+. graph hbar college female democrat , over(_clus_2) asyvars
+
+. 
+. exit 
+
+end of do-file
+
+
