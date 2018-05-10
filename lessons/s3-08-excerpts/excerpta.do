@@ -17,6 +17,8 @@ graph drop _all
 
 global ddir "../../data/"
 
+global ttype rtf
+
 use ${ddir}attend, clear
 
 describe
@@ -60,6 +62,14 @@ gen expect_college=.
 replace expect_college=1 if bystexp>=5 & bystexp <.
 replace expect_college=0 if bystexp>0 &bystexp <5
 
+
+
+// next new recoded student expectations
+recode f1psepln (1/2 = 1) (3/4 = 2) (5 = 3) (6 = .) (. = .), gen(newpln)
+label var newpln "PS Plans"
+label define newpln 1 "No plans" 2 "VoTech/CC" 3 "4 yr"
+label values newpln newpln
+
 // Grouping variable for test scores
 egen test_group=cut(bynels2m), group(4)
 
@@ -82,18 +92,23 @@ local controls "`ses' `race' `sex' `tests'"
 
 // Conditional Means: Tables and Plots
 
-
 // bar plots 
 
-graph hbar bynels2m bynels2r [pw=bystuwt], ///
-		over(bystexp, sort(bynels2m) descending) ///
-		ytitle("Test Scores") ///
+graph hbar f2evratt [pw=bystuwt], ///
+		over(byinc) ///
+		ytitle("College Attendance") ///
 		legend(order(1 "Math Scores" 2 "Reading Scores"))  ///
 		blabel(bar,format(%9.2f)) ///
 		bar(1, color(orange*.5)) bar(2, color(blue*.5))
+ 		
+//		, sort(bynels2m) descending)
+
 
 //  cross table of categorical
-estpost svy: tabulate byrace2 newpln, row percent se
+
+svyset psu [pw=bystuwt],strat(strat_id) singleunit(scaled)
+
+estpost svy: tabulate byrace newpln, row percent se 
 
 eststo racetab
 
@@ -105,11 +120,58 @@ esttab racetab using race_tab.$ttype, ///
     nonotes ///
     varlabels(`e(labels)') ///
     eqlabels(`e(eqlabels)')
-		
+
+	
+
 		
 // Interactions: how to interpret, table and plot
 
 /// Margins after interactions
+
+
+ssc install nnest
+
+bcuse wage2, clear
+
+label variable wage "Wages from work in last month"
+
+label variable hours "Weekly hours"
+
+label variable IQ "IQ test"
+
+label variable KWW "Knowledge of world of work"
+
+label variable educ "Years of education"
+
+label variable tenure "Months in current job"
+
+label variable age "Age"
+
+label variable married "Married"
+
+label variable black "African-American"
+
+label variable south "South"
+
+label variable urban "Urban"
+
+label variable sibs "No. Siblings"
+
+label variable brthord "Birth order"
+
+label variable meduc "Mother's years of school"
+
+label variable feduc "Father's years of education"
+
+label variable lwage "ln Wage"
+
+renvars *, lower
+
+save wage2, replace
+
+gen black_marry=black*married
+  
+eststo black_marry: reg lwage hours age educ i.black##i.married iq meduc south urban
 
 estimates replay black_marry 
 
@@ -139,6 +201,7 @@ egen mycount=fill(1(1)`no_predict')
 
 graph twoway bar mypred1 mycount in 1/4, barw(.6) base(0) ytick(100(100)1000) ylabel(0(100)1000) 
   
+
 estimates restore black_marry
 
 margins , predict(stdp) at((mean) _all black=(1 0) married=(0 1) south=1 urban=1) post nose
@@ -147,12 +210,13 @@ mat mystdp=e(b)'
 
 svmat mystdp
 
+local sigtail .025
+
 gen ub_log=mypred11+ (invttail(`mydf',`sigtail')*mystdp)
 gen lb_log=mypred11- (invttail(`mydf',`sigtail')*mystdp)
 
 gen ub=exp(ub_log)
 gen lb=exp(lb_log)
-
 
 graph twoway (bar mypred1 mycount if mycount==1, barw(.6) base(0) ytick(100(100)1000) ylabel(0(100)1000)) ///
               (bar mypred1 mycount if mycount==2, barw(.6) base(0) ytick(100(100)1000) ylabel(0(100)1000)) ///
@@ -160,8 +224,8 @@ graph twoway (bar mypred1 mycount if mycount==1, barw(.6) base(0) ytick(100(100)
                 (bar mypred1 mycount if mycount==4, barw(.6) base(0) ytick(100(100)1000) ylabel(0(100)1000)) ///
                     (rcap ub lb mycount in 1/`no_predict'), ///
                         xlabel(1 "Unmarried, Black" 2 "Married, Black" 3 "Unmarried, White" 4 "Married, White") ytitle("Predicted Wages")   xtitle("") legend(off)
-				
-       
+
+						
 /* Clear out prediction variables */    
 drop mypred*
 drop mystdp*
@@ -169,7 +233,7 @@ drop ub*
 drop lb*
 drop mycount    
 
-
+eststo age_educ : reg lwage hours c.age##c.educ black married iq meduc south urban 
 						
 /* Working with continuous vs. Continuous interactions */
 sum age, detail
@@ -316,6 +380,8 @@ matrix colnames reg_results="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th
 
 
 // Matching and Missing Data
+
+
 
 
 exit 
