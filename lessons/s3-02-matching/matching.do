@@ -1,4 +1,4 @@
-version 13 /* Can set version here, use the most recent as default */
+version 15 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 
 log using "match.log",replace /*Open up new log */
@@ -66,23 +66,14 @@ local controls  byses1  bynels2m bynels2r amind asian black hispanic white  byse
     
 tab  `t' `y' ,row 
 
-
 /*Examining possible selection bias */
 
  kdensity byses1 if `t'==1, ///
  addplot(kdensity byses1 if `t'==0, lpattern(dash))  ///
  legend(order(1 "Treated"  2 "Untreated")) 
 
-
 /* Using teffects structure*/
 teffects psmatch (`y') (`t' `controls')
-
-tebalance summarize
-
-mat balance=r(table)
-
-estout matrix(balance) using balance.rtf, replace
-
  
 /* Balance on various covariates */
 
@@ -90,11 +81,13 @@ ttest byses1, by(`t')
 
 ttest bynels2m, by(`t')
 
+
 /*Naive Estimate */
 
 ttest `y' ,by(`t')
 
 reg `y' `t' `controls', vce(robust)
+
 
 
 /* Full matching Table */
@@ -105,9 +98,10 @@ reg `y' `t' `controls', vce(robust)
          `controls', ///
          outcome(`y') ///
          neighbor(1) ///
-         caliper(.25) ///
+         caliper(.05) ///
          noreplacement /// /* This gives 1 to 1 */
          common
+
          
 pstest `controls', treated(`t')  both
 
@@ -117,19 +111,61 @@ psgraph
 /* Teffects -- PS matching, 1 to 1 */
     teffects psmatch (`y') (`t' `controls'), ///
         nn(1) ///
+		caliper(.25) ///
             atet 
          
 
 /*Replciate psmatch2, almost*/
 
-teffects psmatch (`y') (`t' `controls', probit), atet
+teffects psmatch (`y') (`t' `controls', probit) , nn(1) atet caliper(.25)
+
+tebalance summarize
+
+mat balance=r(table)
+
+estout matrix(balance) using balance.rtf, replace
+
 
 		 
 /* Teffects -- Nearest Neighbor matching, 4 neighboring units */
     teffects nnmatch (`y' `controls')  ///
     (`t'), ///
     nn(4) 
+	
+/*use teffects to estimate difference, algorithm: ps matching, 5 nn, .15 calipers */ 
+teffects psmatch (`y') (`t' `controls', probit) , nn(5) atet caliper(.15)
 
+/* use teffects to estimate difference, algorithm: nn matching on mahalanobis metric 5 nn, .2 caliper width */	
+
+teffects nnmatch (`y'  `controls') (`t') , nn(5)   atet 
+
+/* use teffects to exactly match on race and gender	 */
+teffects nnmatch (`y' `controls' ) (`t'),  ///
+ematch( amind asian black hispanic white bysex ) 
+
+
+/* use psmatch2 estimate via ps matching, 5 nn .15 caliper, */
+
+	
+ 	
+/* Propensity Score Matching: 1 to 4 */
+  psmatch2 `t'   ///
+         `controls', ///
+         outcome(`y') ///
+         neighbor(5) ///
+         caliper(.15) 
+
+		 
+/* Plotting Kdensity based on the psmatch weights */		 
+
+local k=2		 
+gen fwt=round(10^(`k')*_weight,1)
+
+local t cc
+kdensity byses1 if `t'==1 [fweight=fwt], /// 
+addplot(kdensity byses1 if `t'==0 [fweight=fwt])
+		 
+	
  	
 /* Propensity Score Matching: 1 to 4 */
   psmatch2 `t'   ///
@@ -137,14 +173,12 @@ teffects psmatch (`y') (`t' `controls', probit), atet
          outcome(`y') ///
          neighbor(4) ///
          caliper(.25) 
-
-
+		 
 
 /*How this gets results */
 
 reg `y' `t' [iweight=_weight]
  
-
 
 /*Regression on balanced sample */
     
@@ -288,6 +322,7 @@ legend (order(1 "PS, CC Attend" 2 "PS, 4yr Attend")) ytitle("Propensity Score")
 restore
 
 
+
 /*Using sensatt */
 
 
@@ -300,7 +335,7 @@ sensatt `y' /// /*Outcome*/
        alg(attnd) ///
        p(black) ///
        reps(100)
-
+	   
 	   
 /*"Killer" confounders */
 
@@ -315,16 +350,16 @@ foreach prob1 of local probs{
 
   local row=1
   foreach prob2 of local probs{
-
+  
 
 sensatt `y' /// /*Outcome*/
         `t' /// /*Treatment */
        `controls' , ///  /*varlist */
        alg(attnd) ///
-       p11(`prob1') ///
+       p11(`prob2') ///
        p10(`prob1') ///
        p01(`prob2') ///
-       p00(`prob2') ///
+       p00(`prob1') ///
        reps(50) 
 
 di "`row',`column'"
