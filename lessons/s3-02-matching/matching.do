@@ -70,8 +70,11 @@ tab  `t' `y' ,row
 
  kdensity byses1 if `t'==1, ///
  addplot(kdensity byses1 if `t'==0, lpattern(dash))  ///
- legend(order(1 "Treated"  2 "Untreated")) 
+ legend(order(1 "Treated"  2 "Untreated")) ///
+ title("Unmatched Sample")
 
+graph save balance_ses_unmatch.gph, replace 
+ 
 /* Using teffects structure*/
 teffects psmatch (`y') (`t' `controls')
  
@@ -158,14 +161,21 @@ ematch( amind asian black hispanic white bysex )
 		 
 /* Plotting Kdensity based on the psmatch weights */		 
 
-local k=2		 
+local k=1		 
 gen fwt=round(10^(`k')*_weight,1)
 
 local t cc
 kdensity byses1 if `t'==1 [fweight=fwt], /// 
-addplot(kdensity byses1 if `t'==0 [fweight=fwt])
+	addplot(kdensity byses1 if `t'==0 [fweight=fwt]) ///
+	name(balance_ses_match) ///
+	legend(order(1 "Treated"  2 "Untreated")) ///
+	title("Matched Sample")
+ 
+graph save balance_ses_match.gph, replace
 		 
-	
+grc1leg2 balance_ses_unmatch.gph balance_ses_match.gph
+
+exit 		 
  	
 /* Propensity Score Matching: 1 to 4 */
   psmatch2 `t'   ///
@@ -281,6 +291,7 @@ pstest _pscore `controls', treated(`t') both
  addplot(kdensity _pscore if `t'==0, lpattern(dash))  ///
  legend(order(1 "Treated"  2 "Untreated")) 
  
+graph save balance_ses_unmatch.gph 
 
 /* Propensity Score Matching: Calipers on propensity score and Mahalonobis metric */
   psmatch2 `t' ///
