@@ -2,9 +2,9 @@
 
 ##Leadership, Policy and Organizations
 
-##Class Number 3921
+##Class Number 9951
 
-##Fall 2014
+##Fall 2018
 
 #Assignment 1
 
@@ -44,8 +44,7 @@ data:
 -  PISA [http://pisa2012.acer.edu.au/downloads.php](http://pisa2012.acer.edu.au/downloads.php)
   
 You will need your selected dataset to complete assignments for the course. The first assignment
-based on these will be due in two weeks.
-This assignment is due on Monday night before our next class. The file should be named as
+based on these will be due in two weeks. The file should be named as
 follows:
 
   `assignment1_<lastname>.docx`
