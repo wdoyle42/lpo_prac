@@ -1,5 +1,5 @@
 ---
-title: Semester 2, Assignment 1
+title: Semester 1, Assignment 2
 ---
 
 For this assignment, you'll need to use the California school district
@@ -21,8 +21,6 @@ value labels for each school size as follows:
 5. Create another graphic showing the relationship between
 expenditures per student and math scores by district size.
 
-Upload a well-documented and well-organized do file, with the proper
-name to your github repo by the deadline. Remember proper
-naming conventions for files submitted. 
+Upload a well-documented and well-organized do file, and upload it to brightspace. Remember proper naming conventions for files submitted. 
 
 <br>
