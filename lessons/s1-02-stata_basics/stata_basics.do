@@ -6,7 +6,7 @@ log using "stata_basics.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 2012-09-04 
-// LAST: 2017-09-4
+// LAST: 2018-09-05
 
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
@@ -84,8 +84,7 @@ recode inc_q (0 = 1 "First Quartile") ///
     (1 = 2 "2nd Quartile") ///
     (2 = 3 "3rd Quartile") ///
     (3 = 4 "4th Quartile"), gen(new_inc_q)
-
-exit 	
+	
 	
 // compute new variable
 
