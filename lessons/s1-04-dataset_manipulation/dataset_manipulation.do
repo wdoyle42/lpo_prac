@@ -6,7 +6,7 @@ log using "dataset_manipulation.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 9 September 2012
-// LAST: 18 Sep 2017
+// LAST: 19 Sep 2018
 
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
