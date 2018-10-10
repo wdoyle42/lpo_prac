@@ -7,7 +7,7 @@ log using "sampling_part2.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 18 October 2014
-// LAST: 9 October 2017
+// LAST: 10 October 2018
      
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
@@ -40,7 +40,7 @@ svy: mean age height weight
 webuse nhanes2brr, clear
 
 // svyset automagically
-svyset, brrweight(c1ty*)
+svyset, brrweight(brr*)
 
 // compute mean using svy pre-command and brr weights
 svy: mean age height weight
@@ -118,7 +118,6 @@ mean bynels2m, over(byrace)
 
 svy: mean bynels2m, over(byrace) 
 
-
 use ../../data/plans.dta, clear
 
 sample 50
@@ -126,11 +125,6 @@ sample 50
 svyset psu [pw=f1pnlwt],strata(strat_id)
 
 svydes 
-
-exit 
-
-
-// Using HSLS
 
 
 
@@ -141,6 +135,9 @@ exit
 
 //ECLS Manual p. 7-11, 9-12, exhibit 9-2
 
-// ELS Manual p. 81, 87 (BRR), 
+// ELS Manual p. 81, 87 (BRR), https://nces.ed.gov/pubs2014/2014364.pdf
 
-// HSLS Manual 
+
+
+// HSLS Manual https://nces.ed.gov/pubs2018/2018140.pdf
+p. 
