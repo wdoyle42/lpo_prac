@@ -3,18 +3,17 @@ set linesize 90
 log using "cleaning.log", replace    // open new log
 
 // NAME: Data cleaning
-// FILE: lecture9_cleaning.do
+// FILE: cleaning.do
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 15 October 2014
-// LAST: 24 Ocotber 2017
+// LAST: 17 Ocotber 2018
   
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
 
 // load CA school data with problems
 use caschool_problem, replace
-
 
 // label data
 
