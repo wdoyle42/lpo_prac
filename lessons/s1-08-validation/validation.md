@@ -264,6 +264,6 @@ Now that we have a clean table to look at, is this the same as [Table 2 on page 
 
 <br><br>
 
-*Init: 25 August 2015; Updated: 17 October 2017*
+*Init: 25 August 2015; Updated: 23 October 2018*
 
 <br>
