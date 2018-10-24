@@ -7,7 +7,7 @@ log using "validation.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 22 October 2014
-// LAST: 15 October 2017
+// LAST: 23 October 2018
      
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
