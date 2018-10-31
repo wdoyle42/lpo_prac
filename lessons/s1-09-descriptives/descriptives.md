@@ -1,6 +1,6 @@
 Descriptives
 ================
-LPO 9951 | Fall 2017
+LPO 9951 | Fall 2018
 
 #### PURPOSE
 

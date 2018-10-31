@@ -7,7 +7,7 @@ log using "descriptives.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 6 November 2013
-// LAST: 31 October 2017
+// LAST: 31 October 2018
 
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature
