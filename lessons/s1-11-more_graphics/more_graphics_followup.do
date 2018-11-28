@@ -32,33 +32,84 @@ catplot bystexp, name(cat1)
 // Using over
 catplot bystexp, over(bysex) name(cat2, replace) blabel(bar,format(%9.2f)) percent
 
+recode bystexp (-1=-1 "Don't Know") ///
+				(1=1 "Less than HS") ///
+				(2=2 "HS/GED") ///
+				(3=3 "2 yr") ///
+				(4=4 "4 yr/ not graduate") ///
+				(5=5 "Bachelor's") ///
+				(6=6 "Master's") ///
+				(7=7 "PhD/Advanced"), ///				
+				gen(bystexp2)
+
+la var bystexp2 " "				
+				
+recode bysex(1=1 "Male") ///
+			(2=2 "Female"), ///
+			gen(bysex2)
+	
+
+// Using over
+catplot bystexp2 [iw=bystuwt], over(bysex2) ///
+				name(cat2, replace) ///
+				blabel(bar,format(%9.1f)) ///
+				percent ///
+				ytitle("")  ///
+				note("")
+
+graph export expectations1.png	, replace	
+
+
 // Yvars trick
-catplot bystexp, over(bysex) asyvars
+catplot bystexp2, over(bysex2) /// 
+				asyvars ///
+				bar(1, bcolor(blue*.5)) ///
+				bar(2, bcolor(yellow*.5)) ///
+				bar(3, bcolor(green*.5)) ///
+				bar(4, bcolor(orange*.5)) ///
+				bar(5, bcolor(purple*.5)) ///
+				bar(6, bcolor(gray*.5)) ///
+				bar(7, bcolor(red*.5)) ///				
+				bar(8, bcolor(mint*.5)) ///
+				percent 
+				
+set scheme economist
+
+catplot bystexp2, over(bysex2) /// 
+				asyvars 
+
+set scheme s1color				
 
 //QE: Create a catplot for plans by ses quartile, using asyvars
-
 
 egen ses_q=cut(byses1), group(4)
 
 catplot f1psepln, over(ses_q) asyvars name(cat_ses_q)
  
+la var f1psepln " "
+ 
 local quartiles First Second Third Fourth
-/*
 local i=0
 foreach quart of local quartiles {
 catplot f1psepln if ses_q==`i', ///
 					asyvars ///
 					blabel(bar,format(%9.0f)) ///
 					percent ///
-					name(cat_ses`i') ///
-					title("`quart'")
+					name(cat_ses`i',replace) ///
+					title("`quart'") ///
+					ytitle("") ///
+					yscale(range(0(10)100)) ///
+					ylabel(0(10)100)
 					
 graph save cat_ses`i', replace
 local i=`i'+1
 }
 
 graph combine cat_ses0.gph cat_ses1.gph cat_ses2.gph cat_ses3.gph, rows(2)
-*/
+
+grc1leg2 cat_ses0.gph cat_ses1.gph cat_ses2.gph cat_ses3.gph, rows(2)  
+
+exit 
 
 // Ordering
 catplot bystexp , var1opts(sort(1) descending)
