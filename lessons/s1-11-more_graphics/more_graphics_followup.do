@@ -109,35 +109,35 @@ graph combine cat_ses0.gph cat_ses1.gph cat_ses2.gph cat_ses3.gph, rows(2)
 
 grc1leg2 cat_ses0.gph cat_ses1.gph cat_ses2.gph cat_ses3.gph, rows(2)  
 
-exit 
-
+ 
 // Ordering
-catplot bystexp , var1opts(sort(1) descending)
+catplot bystexp2 , var1opts(sort(1) descending)
 
 // yvars, again
 catplot bystexp , var1opts(sort(1) descending) asyvars
 
+
 // recast
 
-catplot bystexp , var1opts(sort(1) descending) recast(dot)
+catplot bystexp2 , var1opts(sort(1) descending) recast(dot)
 
 
 //QE plans by sex, recast to dot
 
-
-catplot f1psepln , over(bysex) var2opts(sort(1) descending) recast(dot)
+catplot f1psepln , over(bysex) var2opts(sort(1) descending) recast(dot) 
 
 //Ciplot
 
-ciplot bynels2m , by(bystexp)
+ciplot bynels2m , by(bystexp2)
 
-ciplot bynels2r, by(f1psepln) msymbol(circle) xlabel(,angle(45) labsize(vsmall)) 
+ciplot bynels2r, by(f1psepln) msymbol(circle) xlabel( , angle(45) labsize(vsmall)) /// 
+			ytitle(" Math Scores")  horiz 
 
 //QE: Change to reading scores by plans and use better points
 
 // Cibar
 
-cibar bynels2m, over1(bystexp) over2(bysex) ciopts(msize(*0))
+cibar bynels2m, over1(bystexp2) over2(bysex2) ciopts(msize(*0)) 
 
 // Collapse trick
 
@@ -154,7 +154,6 @@ replace fouryr=1 if f2ps1sec==1|f2ps1sec==3
 replace fouryr=. if f2ps1sec==. 
 
 graph twoway scatter foury byses1		
-
 
 xtile byses_p =byses1, nquantiles(100)
 
@@ -180,7 +179,6 @@ graph twoway scatter mean_two bynels2m_p [w=total_two], msymbol(circle_hollow) n
 
 restore 
 
-
 gen math2=round(bynels2m)
 
 preserve
@@ -188,5 +186,20 @@ preserve
 collapse (mean) mean_four=fouryr (count) total_four=fouryr, by(math2)
 
 graph twoway scatter mean_four math2 [w=total_four], msymbol(circle_hollow) msize(*.5) name(coll_attend3, replace)
+
+restore
+
+gen read2=round(bynels2r)
+
+preserve
+
+collapse (mean) mean_two=twoyr (count) total_two=twoyr, by(read2)
+
+graph twoway scatter mean_two read2 [w=total_two], ///
+			msymbol(circle_hollow) ///
+			msize(*.5)  ///
+			name(coll_attend3, replace) ///
+			ytitle("Proportion Attending Two Year") ///
+			xtitle("Reading Score (rounded)")
 
 restore
