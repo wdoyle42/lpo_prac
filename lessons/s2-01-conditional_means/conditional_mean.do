@@ -6,8 +6,7 @@ log using "cond_mean.log",replace /*Open up new log */
 /* Conditional Means*/
 /* Making the link between conditional means and regression */
 /* Will Doyle */
-/* 2018-01-09 */
-/* Github Repo:  */
+/* 2019-01-08 */
 
 clear matrix
 
@@ -47,11 +46,19 @@ local income byses1
 
 /*Coding    */
 
-local coding=1
-    
+local coding=0
+
+local analysis=1    
 
 /**************************************************/
 
+/*Notation:
+y for dependent variable
+
+x for "key" independent variable: treatment 
+
+z for "controls" 
+*/
 
 /**************************************************/
 /* Coding */
@@ -92,7 +99,6 @@ replace hispanic=. if byrace==.
 
 label variable hispanic "Hispanic"
 
-local plan_names noplan dontknow votech cc fouryr earlygrad
 
 recode byrace (4/5=4) (6=5) (7=6) (.=.), gen(byrace2)
 
@@ -106,10 +112,12 @@ replace urm=1 if byrace2==1 | byrace2==2 | byrace2==3 | byrace2==5
   
 tab(f1psepln), gen(plan_)
 
+local plan_names noplan dontknow votech cc fouryr earlygrad
+
 local i=1
 
 foreach val of local plan_names{
-  rename plan_`i' `val'
+  rename plan_`i' `val' 
   local i=`i'+1
 }
 
@@ -168,9 +176,9 @@ replace female=. if bysex==.
 
 lab var female "Female"
 
-replace bynels2m=bynels2m/100
+replace bynels2m=bynels2m
 
-replace bynels2r=bynels2r/100  
+replace bynels2r=bynels2r  
   
 recode f2ps1sec (1=1) (2=2) (4=3) (3=4) (5/9=4), gen(first_inst)
 
@@ -195,6 +203,11 @@ else use ${ddir}plans2.dta, clear
 /*Analysis*/
 /**************************************************/
 
+/* Expected value: E(y|x) */
+
+
+if `analysis'==1{
+
 //Using the mean as a prediction
 
 scalar drop _all
@@ -202,7 +215,6 @@ scalar drop _all
 sort byses1
 
 graph twoway scatter bynels2m byses1, msize(vtiny)
-
 
 /* Predict using the mean */
 egen uncond_mean=mean(bynels2m)
@@ -222,7 +234,7 @@ scalar uncond_mean_rmse=sqrt(uncond_mean_mse)
 
 graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
     (line uncond_mean byses1,lcolor(blue)), legend(order(2 "Unconditional Mean"))
-
+	
 graph export "uncond_mean.`gtype'", replace
 
 // OR . . . 
@@ -231,7 +243,6 @@ reg bynels2m
 
 scalar li uncond_mean_rmse
 
-
 //Above average vs. below average 
 
 // Generate prediction
@@ -239,6 +250,7 @@ scalar li uncond_mean_rmse
 egen sesq2=cut(byses1), group(2)
 
 egen cond_mean2=mean(bynels2m), by(sesq2)
+
 
 // Get residual
 gen cond_mean2_error=bynels2m-cond_mean2
@@ -259,7 +271,6 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
               legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups") )
 
 graph export "cond_mean2.`gtype'", replace
-
 
 
 // Or . . .
@@ -292,6 +303,8 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
              legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups" 4 "Conditional Mean, 4 Groups") )
 
 graph export "cond_mean4.`gtype'", replace
+
+exit 
 
 egen read_mean4=mean(bynels2r), by(sesq4)
 
@@ -366,21 +379,31 @@ graph export "horiz10.`gtype'", replace
 			 
 restore
 
+/* Conditional Mean: Lowess (Non parametric) approach*/
+
+lowess bynels2m byses1, bwidth(.2) nograph generate(lowess_predict)
+
+/* install rmse */
+
+rmse bynels2m lowess_predict
+
+graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
+             (line uncond_mean byses1,lcolor(blue)) ///
+             (line cond_mean2 byses1,lcolor(orange)) ///
+             (line cond_mean4 byses1,lcolor(yellow)) ///
+             (line lowess_predict byses1,lcolor(red)), ///        
+             legend(order(2 "Unconditional Mean" 3 "Condtional Mean, 2 groups" 4 "Conditional Mean, 4 Groups" 5 "Lowess Prediction") )
+exit
+
 /*Conditional Mean: Regression*/
 
 reg bynels2m byses1
 
 predict reg_predict
 
-predict reg_error, residual
+rmse bynels2m reg_predict
 
-gen reg_error_sq=reg_error*reg_error
-
-quietly sum reg_error_sq
-
-scalar reg_mse=r(mean)
-
-scalar reg_rmse=sqrt(reg_mse)
+scalar reg_rmse=r(reg_predict) 
 
 graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
              (line uncond_mean byses1,lcolor(blue)) ///
@@ -392,7 +415,7 @@ graph twoway (scatter bynels2m byses1,msize(vtiny) mcolor(black)) ///
 graph export "regress.`gtype'", replace
 
 scalar li
-
+} /* end analysis section */
 exit 
 
 
