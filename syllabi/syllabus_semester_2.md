@@ -17,7 +17,7 @@ William R. Doyle
 
 Office: 207D Payne
 
-Office Hours: Mondays and Wednesdays, 3-5 pm or by appointment
+Office Hours: Mondays and Wednesdays, 2-5 pm or by appointment
 
 Email: <w.doyle@vanderbilt.edu>
 
@@ -124,9 +124,9 @@ Tuesday, January 29 Properties of OLS estimator
 
 *Readings*
 
-Chen et al chapter 1 \[<http://www.ats.ucla.edu/stat/stata/webbooks/reg/chapter1/statareg1.htm>\]
+Chen et al chapter 1 [http://www.ats.ucla.edu/stat/stata/webbooks/reg/chapter1/statareg1.htm]
 
-Adkins, L. & Gade, M. (2012) "Monte Carlo Experiments Using Stata: A Primer with Examples."\[<http://www.learneconometrics.com/pdf/MCstata/MCstata.pdf>\]
+Adkins, L. & Gade, M. (2012) "Monte Carlo Experiments Using Stata: A Primer with Examples." [http://www.learneconometrics.com/pdf/MCstata/MCstata.pdf]
 
 *Assignments*
 
@@ -141,9 +141,9 @@ Long, Chapter 7
 
 Baum, Chapter 5
 
-Estout documentation: \[<http://repec.org/bocode/e/estout/documentation.html>\]
+Estout documentation: [http://repec.org/bocode/e/estout/documentation.html]
 
-Outreg documentation: \[<http://repec.org/bocode/o/outreg2>\]
+Outreg documentation: [http://repec.org/bocode/o/outreg2]
 
 *Assignments*
 
@@ -154,7 +154,7 @@ Tuesday, February 12 Functional Form, model specification
 
 *Readings*
 
-Chen et al Chapter 2: \[<http://www.ats.ucla.edu/stat/stata/webbooks/reg/chapter2/statareg2.htm>\]
+Chen et al Chapter 2: [http://www.ats.ucla.edu/stat/stata/webbooks/reg/chapter2/statareg2.htm]
 
 Kennedy, P. E. (2002). Sinning in the basement: What are the rules? The ten commandments of applied econometrics. Journal of Economic Surveys, 16(4), 569-589. [Online](http://cba2.unomaha.edu/faculty/mwohar/WEB/links/Econometrics_papers/Kennedy_sinning_in_the_basement.pdf)
 
@@ -182,7 +182,7 @@ Tuesday, February 26 Interactions, marginal effects
 
 *Readings*
 
-UCLA IDRE "How can I explain a continuous by continuous interaction?" \[<http://www.ats.ucla.edu/stat/stata/faq/conconb12.htm>\]
+UCLA IDRE "How can I explain a continuous by continuous interaction?" [http://www.ats.ucla.edu/stat/stata/faq/conconb12.htm]
 
 *Assignments*
 
@@ -202,7 +202,7 @@ Hammermesh, D. (2007) Replication in Economics. NBER Working Papers 13026.
 
 *Assignments*
 
-Assignment 9 due Sunday, March 10
+Assignment 8 due Sunday, March 10
 
 Tuesday, March 19 Non-spherical errors
 --------------------------------------
@@ -213,7 +213,7 @@ Cox, Nicholas J. "Speaking Stata: Graphing model diagnostics." Stata Journal 4.4
 
 *Assignments*
 
-Assignment 10 due Sunday, March 17
+Assignment 9 due Sunday, March 17
 
 Tuesday, March 26 Limited Dependent Variables
 ---------------------------------------------
@@ -226,7 +226,7 @@ Williams, R. (2012). Using the margins command to estimate and interpret adjuste
 
 *Assignments*
 
-Assignment 11 due Sunday, March 24
+Assignment 10 due Sunday, March 24
 
 Tuesday, April 4 Panel Data
 ---------------------------
@@ -237,30 +237,30 @@ McCaffrey, D. F., Lockwood, J. R., Mihaly, K., & Sass, T. R. (2012). A review of
 
 *Assignments*
 
-Assignment 12 due Sunday, March 31
+Assignment 11 due Sunday, March 31
 
 Tuesday, April 9 Advanced Graphics
 -----------------------------------
 
 *Readings*
 
-Jann, B. (2013). Plotting regression coefficients and other estimates in Stata. University of Bern Social Sciences Working Papers, 1. (Online)\[<ftp://ftp.repec.org/opt/ReDIF/RePEc/bss/files/wp1/jann-2013-coefplot.pdf>\]
+Jann, B. (2013). Plotting regression coefficients and other estimates in Stata. University of Bern Social Sciences Working Papers, 1. (Online)[ftp://ftp.repec.org/opt/ReDIF/RePEc/bss/files/wp1/jann-2013-coefplot.pdf]
 
-Gelman, A., Pasarica, C., & Dodhia, R. (2002). Let's practice what we preach: turning tables into graphs. The American Statistician, 56(2), 121-130. (Online)\[<http://www.tandfonline.com/doi/abs/10.1198/000313002317572790>\]
+Gelman, A., Pasarica, C., & Dodhia, R. (2002). Let's practice what we preach: turning tables into graphs. The American Statistician, 56(2), 121-130. (Online)[http://www.tandfonline.com/doi/abs/10.1198/000313002317572790]
 
 *Assignments*
 
-Assignment 13 due Sunday, April 7
+Assignment 12 due Sunday, April 7
 
 Tuesday, April 16 Reporting Complex Results
 -------------------------------------------
 
 *Readings*
 
-Gallup, J. L. (2012). A programmer’s command to build formatted statistical tables. Stata Journal, 12(4), 655-673. (Online)\[<http://go.galegroup.com.proxy.library.vanderbilt.edu/ps/i.do?ty=as&v=2.1&u=tel_a_vanderbilt&it=DIourl&s=RELEVANCE&p=AONE&qt=SN~1536-867X>~~VO<sub>12SP</sub>655~~IU<sub>4&lm=DA</sub>120120000&sw=w&authCount=1\]
+Gallup, J. L. (2012). A programmer’s command to build formatted statistical tables. Stata Journal, 12(4), 655-673. (Online)[http://go.galegroup.com.proxy.library.vanderbilt.edu/ps/i.do?ty=as&v=2.1&u=tel_a_vanderbilt&it=DIourl&s=RELEVANCE&p=AONE&qt=SN~1536-867X>~~VO<sub>12SP</sub>655~~IU<sub>4&lm=DA</sub>120120000&sw=w&authCount=1]
 
 *Assignments*
 
-Assignment 14 due Sunday, April 14
+Assignment 13 due Sunday, April 14
 
-*Replication File Due 
+*Replication File Due Sunday, April 21*
