@@ -1,6 +1,6 @@
 Regression and Conditional Means
 ================
-LPO 9952 | Spring 2018
+LPO 9952 | Spring 2019
 
 Unconditional Means as a Prediction
 -----------------------------------
