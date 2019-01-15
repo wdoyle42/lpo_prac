@@ -5,7 +5,7 @@ log using "reg_basic.log",replace
 /* PhD Practicum, Spring 2018 */
 /* Getting Started with Regression */
 /* Will Doyle*/
-/* 1/23/18 */
+/* 1/15/19 */
 /* Github Repo */
 
  /*Graph type postscript */
@@ -59,17 +59,6 @@ graph export "scatter_lowess.`gtype'", replace
 
 /*Exercise: do the same with another covariate*/
 
-//local x wkhrsy
-//local xtitle "Work hours/year"
-
-graph twoway lowess `y' `x' || ///
-      scatter `y' `x', ///
-      msize(tiny) ///
-      msymbol(smcircle) ///
-      ytitle(`ytitle') ///
-      xtitle(`xtitle') ///
-      legend( order(2 "`xtitle'" 1 "Lowess fit") )
-      
 
  /*Linear fit to the data*/
     

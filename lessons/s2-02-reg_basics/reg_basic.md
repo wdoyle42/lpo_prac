@@ -1,6 +1,7 @@
+
 Basics of Regression in Stata
 ================
-LPO 9952 | Spring 2018
+LPO 9952 | Spring 2019
 
 Intro
 -----
