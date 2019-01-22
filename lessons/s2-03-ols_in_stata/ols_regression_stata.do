@@ -2,10 +2,10 @@ capture log close
 
 log using "ols_regression_stata.log",replace
 
-/* PhD Practicum, Spring 2018 */
+/* PhD Practicum, Spring 2019 */
 /* Outputting regression results*/
 /* Will Doyle*/
-/* 1/23/18 */
+/* 1/22/19 */
 /* Saved on OAK */
 
 clear
@@ -165,58 +165,6 @@ esttab *_model using `y'_models.`tab_type',     /* estout command: * indicates a
 
 // Redo table, this time include t stats instead of se and no stars!
 
-#delimit;
-
-esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
-               label                          /*Use labels for models and variables */
-               nodepvars                      /* Use my model titles */
-               b(2)                           /* b= coefficients , this gives two sig digits */
-               t(2)                         /* I do want t stats */
-			   nostar
-               r2 (2)                      /* R squared */
-               ar2 (2)                     /* Adj R squared */
-               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
-               sfmt (2 0 0 0)                /* format for scalar stats*/
-               replace                   /* replace existing file */
-               ;
-
-#delimit cr
-
-
-#delimit;
-
-esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
-               label                          /*Use labels for models and variables */
-               nodepvars                      /* Use my model titles */
-               b(2)                           /* b= coefficients , this gives two sig digits */
-               t(2)                         /* I do want t stats */
-			   nostar 
-               r2 (2)                      /* R squared */
-               ar2 (2)                     /* Adj R squared */
-               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
-               sfmt (2 0 0 0)                /* format for scalar stats*/
-               replace                   /* replace existing file */
-               ;
-
-#delimit cr
-
-
-#delimit;
-
-esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
-               label                          /*Use labels for models and variables */
-               nodepvars                      /* Use my model titles */
-               b(4)                           /* b= coefficients , this gives two sig digits */
-               ci(4)                         /* I do want confidence interval */			  
-			   nostar
-               r2 (4)                      /* R squared */
-               ar2 (4)                     /* Adj R squared */
-               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
-               sfmt (4 0 0 0)                /* format for scalar stats*/
-               replace                   /* replace existing file */
-               ;
-
-#delimit cr
 
 /// Plotting regression results
 
@@ -298,8 +246,6 @@ graph combine teach_model.gph //
          ;
 
 #delimit cr
-
-exit 
 
 graph export all_models.`gtype', replace 
 
