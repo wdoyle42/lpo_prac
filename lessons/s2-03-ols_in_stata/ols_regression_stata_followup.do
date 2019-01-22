@@ -2,10 +2,10 @@ capture log close
 
 log using "ols_regression_stata.log",replace
 
-/* PhD Practicum, Spring 2017 */
+/* PhD Practicum, Spring 2019 */
 /* Outputting regression results*/
 /* Will Doyle*/
-/* 1/24/17 */
+/* 1/22/19 */
 /* Saved on OAK */
 
 clear
@@ -34,6 +34,10 @@ gen expn_stu_k=expn_stu/1000
 
 gen comp_stu_h=comp_stu*100
 
+gen str_20=str>=20
+
+replace str_20=. if str==.
+
 /*Label variables*/
 
 label variable testsc "Combined test scores"
@@ -56,14 +60,19 @@ label variable comp_stu "Computers/Student"
 
 label variable comp_stu_h "Computers/100 Students"
 
+label variable str_20 "Avg Class Size>20"
+
+label variable read_scr "Reading Score"
 
 /*Locals for groups of variables*/
 
-local y testscr
+local y read_scr
+
+local ytitle "Reading Score"
 
 local students avginc el_pct calw_pct meal_pct
 
-local teacher str
+local teacher str str_20
 
 local finance expn_stu_k
 
@@ -71,13 +80,15 @@ local computers comp_stu_h
 
 estimates clear
 
+
 /* Setting up and outputting descriptive stats */
 
 eststo descriptives: estpost tabstat `y' `students' `teacher' `finance', ///
     statistics(mean sd) ///
-    columns(statistics) ///
-    listwise 
-    
+    columns(statistics) 
+
+
+   
 esttab descriptives using esttab_means.`tab_type' , ///
     main(mean) ///
     aux(sd) ///
@@ -86,6 +97,7 @@ esttab descriptives using esttab_means.`tab_type' , ///
     label ///
     nonumber ///
     replace 
+
 	
 /* Describing conditional mean of outcome as a function of covariates*/
 
@@ -123,33 +135,34 @@ esttab descriptives_size using esttab_means_size.`tab_type', ///
     nomtitles ///
 	collabels(none) ///
     replace 
-	
-local y read_scr
-	
-/* Three groups: low spending, moderate spending and high */
+
+/* Three groups: small class size, middle, and large */
 sum expn_stu_k, detail 
   
-gen spending=expn_stu_k<=r(p25)
+gen expend_level=expn_stu_k<=r(p25)
 
-replace spending=2 if expn_stu_k>r(p25)&expn_stu_k<=r(p75)
+local perc25=round(r(p25),0)
 
-replace spending=3 if expn_stu_k>r(p75)
+replace expend_level=2 if expn_stu_k>r(p25)&expn_stu_k<=r(p75)
 
-replace spending=. if expn_stu_k==.
+replace expend_level=3 if expn_stu_k>r(p75)
 
-label define spend 1 "Low Spending" 2 "Moderate Spending"  3 "High Spending"
+replace expend_level=. if expn_stu_k==.
 
-label values spending spend
+label define expend_levels 1 "Low Spending" 2 "Moderate Spending"  3 "High Spending"
+
+label values expend_level expend_levels
+
 
 /*Summary table */
 
-eststo descriptives_size: estpost tabstat `y' `students' `teacher' `finance', ///
-    by(spending) ///
+eststo descriptives_spending: estpost tabstat `y' `students' `teacher' `finance', ///
+    by(expend_level) ///
     statistics(mean sd) ///
     columns(statistics) ///
     listwise 
 
-esttab descriptives_size using esttab_means_size2.`tab_type', ///
+esttab descriptives_spending using esttab_means_spend.`tab_type', ///
     main(mean) ///
     aux(sd) ///
     nostar ///
@@ -160,32 +173,67 @@ esttab descriptives_size using esttab_means_size2.`tab_type', ///
     nomtitles ///
 	collabels(none) ///
     replace 
+	 
 	
 /* Estimate Models */
-local y testscr	
-
+	
 quietly reg `y' `teacher'
 estimates store teach_model, title ("Model 1")                                
 
 quietly reg `y'  `teacher' `students'
 estimates store st_tch_model, title ("Model 2")
 
-quietly reg `y' `students' `teacher' `finance'
+quietly reg `y' `teacher' `students'  `finance'
 estimates store st_tch_fin_model, title ("Model 3")
 
-quietly reg `y' `students' `teacher' `finance' `computers'
+quietly reg `y'  `teacher' `students' `finance' `computers'
 estimates store st_tch_fin_comp_model, title ("Model 4")
 
 #delimit;
 
-esttab *_model using `y'_models.`tab_type',    /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
+esttab *_model using `y'_models.`tab_type',     /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
                label                          /*Use labels for models and variables */
                nodepvars                      /* Use my model titles */
                b(2)                           /* b= coefficients , this gives two sig digits */
                se(2)                         /* I do want standard errors */
-			   nostar
                r2 (2)                      /* R squared */
                ar2 (2)                     /* Adj R squared */
+               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
+               sfmt (2 0 0 0)                /* format for scalar stats*/
+               replace                   /* replace existing file */
+               ;
+
+#delimit cr
+ 
+#delimit ;
+// Redo table, this time include t stats instead of se and no stars!
+
+esttab *_model using `y'_models_b.`tab_type',      /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
+               label                          /*Use labels for models and variables */
+               nodepvars                      /* Use my model titles */
+               b(2)                           /* b= coefficients , this gives two sig digits */
+               t(2)                         /* I do want t-stats */
+			   nostar 						/* No p value stars */
+               r2 (2)                      /* R squared */
+               ar2 (2)                     /* Adj R squared */
+               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
+               sfmt (2 0 0 0)                /* format for scalar stats*/
+               replace                   /* replace existing file */
+               ;
+
+#delimit cr
+
+#delimit ;
+// Redo table, this time include CI instead of se and 4 significant digits!
+
+esttab *_model using `y'_models_c.`tab_type',      /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
+               label                          /*Use labels for models and variables */
+               nodepvars                      /* Use my model titles */
+               b(4)                           /* b= coefficients , this gives two sig digits */
+               ci(4)                         /* I do want t-stats */
+			   nostar 						/* No p value stars */
+               r2 (4)                      /* R squared */
+               ar2 (4)                     /* Adj R squared */
                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
                sfmt (2 0 0 0)                /* format for scalar stats*/
                replace                   /* replace existing file */
@@ -199,29 +247,29 @@ esttab *_model using `y'_models.`tab_type',    /* estout command: * indicates al
 estimates restore teach_model
 
 #delimit;
-plotbeta  avginc|el_pct|calw_pct|meal_pct|str, /*Variables in regression to report */
+plotbeta  avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to report */
           labels                              /*Use Variable Labels*/
           xtitle (Parameters)                 /*Label of x axis*/
           title ("Model w/ No Covariates")    /*Title */ 
-          subtitle ("From OLS regression. Dep Var= Test Scores") /*Description */
-          xline(0,lp(dash)) /* Line at 0: if95% ci crosses, not stat sig */
+          subtitle ("From OLS regression. Dep Var= `ytitle'") /*Description */
+          xline(0,lp(dash)) /* Line at 0: if 95% ci crosses, not stat sig */
           xscale(range(-1.5 4)) /* Range of X axis*/
 		  xlabel(-4(.5)4)
 		  scale(.5)
 		  ;
 
 #delimit cr
-
+ 
 graph save teach_model, replace
 
 estimates restore st_tch_model
 
 #delimit;
-plotbeta avginc|el_pct|calw_pct|meal_pct|str, /*Variables in regression to report */
+plotbeta avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to report */
           labels                              /*Use Variable Labels*/
           xtitle (Parameters)                 /*Label of x axis*/
           title ("Model w/ Student Chars")    /*Title */ 
-          subtitle ("From OLS regression. Dep Var= Test Scores") /*Description */
+          subtitle ("From OLS regression. Dep Var= `ytitle'") /*Description */
           xline(0,lp(dash)) /* Line at 0: if95% ci crosses, not stat sig */
           xscale(range(-1.5 4)) /* Range of X axis*/
 		  xlabel(-4(.5)4)
@@ -235,11 +283,11 @@ graph save st_teach_model, replace
 estimates restore st_tch_fin_model
 
 #delimit;
-plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|str,
+plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|str_20|str,
           labels
           xtitle (Parameters)
           title ("Model w/ Spending")
-          subtitle ("From OLS regression. Dep Var= Test Scores")
+          subtitle ("From OLS regression. Dep Var= `ytitle'")
           xline(0,lp(dash))
           xscale(range(-1.4 4))
           xlabel(-4(.5)4)
@@ -251,11 +299,11 @@ graph save st_teach_fin_model,replace;
 estimates restore st_tch_fin_comp_model; 
 
 #delimit;
-plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str,
+plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str_20|str,
           labels
           xtitle (Parameters)
           title ("Full Model")
-          subtitle ("From OLS regression. Dep Var= Test Scores")
+          subtitle ("From OLS regression. Dep Var= `ytitle'")
           xline(0,lp(dash))
           xscale(range(-1.4 4))
           xlabel(-4(.5)4)
@@ -274,7 +322,6 @@ graph combine teach_model.gph //
          ;
 
 #delimit cr
-
 
 graph export all_models.`gtype', replace 
 
