@@ -5,7 +5,7 @@ log using "reg_predictlog",replace
 /* PhD Practicum, Spring 2018 */
 /* Using Prediction to Interpret Regressions */
 /* Will Doyle*/
-/* 1/30/18 */
+/* 1/29/19 */
 
 clear
 
@@ -167,7 +167,7 @@ local dfr=e(df_r)
 margins , /* init margins */
     predict(xb) /* Type of prediction */
     nose /* Don't give SE */
-    at( (mean) /* Precition at mean of all variables */
+    at( (mean) /* Prediction at mean of all variables */
     `controls' /* Set controls at mean */
     `x'=(`mymin'(.1)`mymax'))  /*range from min to max of x in steps of .1 */
      post  /* Post results in matrix form */
@@ -224,7 +224,8 @@ graph twoway line pred12 pred13 || ///
 graph export ci_predict95.`gtype', replace 
 
 drop pred11 pred12 pred13
-/*Or: Marginsplaot */
+
+/*Or: Marginsplot */
 
 estimates restore basic_controls
 
@@ -329,7 +330,6 @@ generate lb = pred12 - (`myt' * pred11) /*Prediction minus t value times SE */
 generate ub = pred12 +  (`myt' * pred11) /*Prediction plus t value times SE */
 
 /*Plot Prediction with CI*/
-
     
 graph twoway line pred12 pred13 || ///
     line lb pred13,lcolor(red) || ///
