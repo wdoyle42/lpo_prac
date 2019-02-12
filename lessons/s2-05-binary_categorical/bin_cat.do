@@ -4,7 +4,7 @@ log using "bin_cat_stata.log", replace
 
 // Working with binary and cateogrical independent variables
 // Will Doyle
-// 2018-01-29
+// 2019-02-12
 // Practicum repo on github
 
 // TOC
