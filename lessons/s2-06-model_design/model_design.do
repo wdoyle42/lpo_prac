@@ -143,8 +143,13 @@ stepwise, pr(.05): reg lwage south brthord  kww sibs feduc tenure  married black
 
 reg  lwage south brthord kww sibs feduc tenure  married black hours educ age meduc
 
+test meduc feduc
 
+test meduc=feduc
 
+test educ tenure hours
+
+exit 
  /*RESET test */
 
 reg lwage hours age educ
