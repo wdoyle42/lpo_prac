@@ -435,7 +435,6 @@ twoway line exp_pred10 exp_pred12 exp_pred14 exp_pred16 kww_levels in 1/45, ///
        legend(order(1 "10 Years" 2 "12 Years" 3 "14 Years" 4 "16 Years")) ///
 	   ytitle("Wages") xtitle("Knowledge of World of Work") name(educ_mult_kww)
 
-
 exit 
 
 
