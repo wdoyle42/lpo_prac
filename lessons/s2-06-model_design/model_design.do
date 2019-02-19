@@ -5,7 +5,7 @@ log using "model_design_do.log",replace /*Open up new log */
 
 /* Model specification, interactions, prediction and plots after interaction*/
 /* Will Doyle */
-/* 2018-01-29 */
+/* 2019-02-19 */
 /* Practicum Folder */
 
 clear
@@ -138,6 +138,11 @@ stepwise, pr(.2) : reg lwage south brthord  kww sibs feduc tenure  married black
 stepwise, pr(.05): reg lwage south brthord  kww sibs feduc tenure  married black  hours educ age meduc
 
 /*Functional Form */
+
+/* F Test */
+
+reg  lwage south brthord kww sibs feduc tenure  married black hours educ age meduc
+
 
 
  /*RESET test */
