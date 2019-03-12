@@ -36,7 +36,11 @@ local analysis=1
   
 /*3. Simulation */
 
-local simulation=1
+local simulation=0
+
+local complex_example=1
+
+
 
 /**************************************************/
 /* Globals */
@@ -191,7 +195,6 @@ local y bynels2m
 
 if `analysis==1'{
 
-
 use ${ddir}plans3.dta, clear
     
 /*Stuff we'll want later */
@@ -275,17 +278,19 @@ clear
     
 // TOC
 
+set seed 0621
+
 //1: Run CLT example
-local xbar_example=1
+local xbar_example=0
 
 //2: Run basic regression example
-local reg_example_1=1
+local reg_example_1=0
 
 //3: Run multiple regression example
 local reg_example_2=1
 
 //4: Run complex example based on data
-local complex_example=1
+local complex_example=0
     
 // Create a hypothetical situation
 
@@ -378,7 +383,6 @@ local beta_1=2
 // Generate outcome
 gen y=`beta_0'+`beta_1'*x+e
 
-
     // create a place in memory called buffer which will store a variable called xbar in a file called means.dta
 postfile buffer beta_0 beta_1 using reg_1, replace 
 
@@ -417,7 +421,7 @@ if `reg_example_2'==1{
 
 clear
     
-local my_corr=.02
+local my_corr=-.8
 
 local my_means 10 20 
 
@@ -455,7 +459,10 @@ use reg_2, clear
 kdensity beta_1, xline(`beta_1')
 
 graph export ovb.`gtype', replace
+
 }
+}
+
 
     
 /* Generating Random Variables */
@@ -508,6 +515,8 @@ mat cormat2=cormat,newcol
 mat cormat2=cormat2\0.01,.5,-.2,.5,.5,1 /*Adds a row */
 
 mat li cormat2
+
+exit 
 
 corr2data female_st plans_st race_st pared_st ses counsel_st, corr(cormat2) n(`popsize')
 
@@ -642,6 +651,8 @@ graph save monte_carlo_`effect'.gph, replace
 /* Ends loop over effect sizes */
 
 graph combine monte_carlo_5.gph monte_carlo_10.gph monte_carlo_15.gph monte_carlo_20.gph , rows(2) cols(2)
+}
+
 }
     
 exit
