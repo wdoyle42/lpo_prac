@@ -516,9 +516,8 @@ mat cormat2=cormat2\0.01,.5,-.2,.5,.5,1 /*Adds a row */
 
 mat li cormat2
 
-exit 
-
 corr2data female_st plans_st race_st pared_st ses counsel_st, corr(cormat2) n(`popsize')
+
 
 /*Specify cut in normal dist for proportion with and without characteristics*/
 
@@ -533,7 +532,7 @@ gen plans=plans_st>plancut
 
 local race_other=1-`prop_race'
 
-gen racecut=invnormal(`race_other') 
+gen racecut=invnormal(`prop_race') 
 gen race=race_st<racecut 
 
 local prop_counsel=.95
@@ -558,6 +557,7 @@ reg y female plans race pared ses counsel /* True regression */
 reg y female plans race pared ses /*OVB regression */
 
 restore
+
 
 /*Monte Carlo Study */
 
@@ -597,7 +597,9 @@ postclose `results_store'
 
 use results_file, clear
 
-kdensity plans1, xline(`plans_coeff', lcolor(blue) lstyle(dash)) addplot(kdensity plans2) legend(order(1 "True Model" 2 "OVB Model"))
+kdensity plans1, xline(`plans_coeff', lcolor(blue) lstyle(dash)) /// 
+addplot(kdensity plans2) legend(order(1 "True Model" 2 "OVB Model"))
+
 
 /*Now vary effect size*/
 
@@ -654,5 +656,13 @@ graph combine monte_carlo_5.gph monte_carlo_10.gph monte_carlo_15.gph monte_carl
 }
 
 }
-    
+ 
+/*Quick-ish Exercise Create a variable for the unobserved characteristic
+ of motivation (oh fine, grit) which is uncorrelated with other variables
+ in the model, except for plans. Loop through a series of correlations with plans
+ of .1, .25, .5, and .75. Assume it's normally distributed, and set it to be
+ standardized (mean 0 sd 1). Change its impact on math scores to range from
+ 1 to 10. What happens to your estimate of plans when this variable is excluded? 
+ */
+ 
 exit
