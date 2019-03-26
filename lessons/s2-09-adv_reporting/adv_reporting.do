@@ -1,7 +1,7 @@
 capture log close
 // LPO Practicum
 // Will Doyle
-// Spring 2018
+// Spring 2019
 // Advanced Reporting: complex tables and graphics
 
 log using adv_reporting.log, replace
