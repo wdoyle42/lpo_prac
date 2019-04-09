@@ -5,7 +5,7 @@ log using "panel.log", replace
 /* Panel data */
 /* Working with panel datasets, xt commands*/
 /* Will Doyle */
-/* 2018-03-20 */
+/* 2019-04-09 */
 /* Practicum Folder */
 
 clear
