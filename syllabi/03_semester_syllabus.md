@@ -5,9 +5,13 @@
 
 
 William R. Doyle
+
 Office: 207E Payne
+
 Office Hours: We’ll meet almost every day in May. If you need to see me at another time, let me know.
+
 w.doyle@vanderbilt.edu
+
 phone (615) 322-2904
 
 # Course Overview
