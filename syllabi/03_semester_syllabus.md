@@ -30,10 +30,11 @@ Evaluation for the course will be based on the following factors:
 *Software*
 Stata will again be the order of the day for this semester.
 
-#Schedule for Meetings
+# Schedule for Meetings
 Class will meet from 12-3 in Wyatt 122.
 
 *May 6*
+
 Polychotomous Outcomes
 
 *May 7*
@@ -41,15 +42,19 @@ Polychotomous Outcomes
 No Class
 
 *May 8*
+
 Methods for Selection Bias: Propensity Score Matching
 
 *May 9*
+
 Missing data, multiple imputation
 
 *May 10*
+
 No Class: Commencement
 
 *May 13*
+
 Event History Analysis
 
 *May 14*
@@ -57,21 +62,27 @@ Event History Analysis
 Limited Dependent Variables
 
 *May 15*
+
 Amanda Addison
 
 *May 16*
+
 Angelique Crutchfield
 
 *May 17*
+
 Hanna Kistler
 
 *May 20*
+
 Hidahis Mesa
 
 *May 21*
+
 Lauren Seymour
 
 *May 22*
+
 Code-A-Rama: We’ll hold the class all day, students can come in and ask questions any time.
 
 *May 23*
