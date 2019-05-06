@@ -59,7 +59,7 @@ No Class: Commencement
 
 *May 13*
 
-Event History Analysis
+Difference in Differences, Event History Analysis
 
 *May 14*
 
