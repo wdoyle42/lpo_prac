@@ -5,7 +5,7 @@ log using "mvn.log",replace /*Open up new log */
 
     /*Techniques for handling missing data */
 /* Will Doyle */
-/* 180417 */
+/* 190509 */
 /* Practicum Folder */
 
 clear
@@ -21,8 +21,8 @@ set more off /*Get rid of annoying "more" feature */
 /*Controls*/
 
 local coding=0
-local imputation=0
-local analysis=1
+local imputation=1
+local analysis=0
 
 /*Locals for analysis*/
 local y fouryr
