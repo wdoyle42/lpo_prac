@@ -1,17 +1,16 @@
-Vanderbilt University\
-Leadership, Policy and Organizations\
-Class Number 9951\
-Fall 2019\
+Vanderbilt University
+Leadership, Policy and Organizations
+Class Number 9951
+Fall 2019
+=====================
 
-\
 
-William R. Doyle\
-Office: 207D Payne\
-Office Hours: Tuesday and Thursday 2:30-5 or by Appointment\
-w.doyle@vanderbilt.edu\
-phone (615) 322-2904\
+William R. Doyle
+Office: 207D Payne
+Office Hours: Tuesday and Thursday 2:30-5 or by Appointment (use http://wdoyle42.youcanbook.me)
+w.doyle@vanderbilt.edu
+phone (615) 322-2904
 
-12 pt
 
 Course Overview
 ===============
@@ -89,7 +88,7 @@ you can purchase the software at greatly reduced prices. Stata SE is a
 more-powerful version of Stata that is useful for the larger datasets
 many of you may be working with.
 
-Honor Code {#sec:honor-code}
+Honor Code 
 ----------
 
 For this course, you are bound by the terms of the Peabody Honor System.
@@ -247,3 +246,4 @@ Class Presentations
 *Assignments:*
 
 Summary Papers, Do-File and Codebooks due before class, December 4.
+
