@@ -247,4 +247,3 @@ Class Presentations
 *Assignments:*
 
 Summary Papers, Do-File and Codebooks due before class, December 4.
-
