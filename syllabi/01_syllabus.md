@@ -1,6 +1,9 @@
 Vanderbilt University
+=====================
 Leadership, Policy and Organizations
+=====================
 Class Number 9951
+=====================
 Fall 2019
 =====================
 
