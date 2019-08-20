@@ -1,17 +1,21 @@
-Vanderbilt University
-=====================
-Leadership, Policy and Organizations
-=====================
-Class Number 9951
-=====================
-Fall 2019
-=====================
+## Vanderbilt University
+
+## Leadership, Policy and Organizations
+
+## Class Number 9951
+
+## Fall 2019
+
 
 
 William R. Doyle
+
 Office: 207D Payne
+
 Office Hours: Tuesday and Thursday 2:30-5 or by Appointment (use http://wdoyle42.youcanbook.me)
+
 w.doyle@vanderbilt.edu
+
 phone (615) 322-2904
 
 
