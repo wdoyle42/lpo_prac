@@ -2,11 +2,11 @@ capture log close                       // closes any logs, should they be open
 log using "stata_basics.log", replace    // open new log
 
 // NAME: Stata Basics
-// FILE: lecture2_stata_basic.do
+// FILE: stata_basics.do
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 2012-09-04 
-// LAST: 2018-09-05
+// LAST: 2019-09-05
 
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature

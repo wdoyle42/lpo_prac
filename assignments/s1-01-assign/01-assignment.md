@@ -1,12 +1,15 @@
-##Vanderbilt University
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+## Vanderbilt University
 
-##Leadership, Policy and Organizations
+## Leadership, Policy and Organizations
 
-##Class Number 9951
+## Class Number 9951
 
-##Fall 2018
-
-#Assignment 1
+# Assignment 1
 
 For this first assignment, I will ask you to describe a research question and choose a database
 to work with. We will revise your research question over the coming months, so consider this
@@ -47,6 +50,13 @@ You will need your selected dataset to complete assignments for the course. The 
 based on these will be due in two weeks. The file should be named as
 follows:
 
-  `assignment1_<lastname>.docx`
+  `01_assignment_<lastname>.docx`
   
+So, for instance, if I was completing this assignment I would name it:
+
+`01_assignment_doyle.docx`
+
+
+Notice that I have removed `<lastname>` and substituted `doyle`.  Please no upper case letters in filenames, ever. 
+
 All subsequent files to be turned in should be named the same way.

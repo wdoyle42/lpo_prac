@@ -260,6 +260,6 @@ EXERCISES
 
 <br><br>
 
-*Init: 06 June 2015; Updated: 04 September 2017*
+*Init: 06 June 2015; Updated: 04 September 2019*
 
 <br>
