@@ -1,12 +1,15 @@
 Assignment 7
 ================
-LPO 9951 | Fall 2016
+LPO 9951 | Fall 2019
 
 Complete the following steps:
 
-1.  Look at the sampling design section of the technical manual for your dataset. In no more than two paragraphs, describe the sampling procedure used.
-2.  In one paragraph, describe possible drawbacks of this sampling procedure for your proposed research.
-3.  Based on your reading of the technical manual, describe which weights you will use for your sample and why.
-4.  Next, describe why you think that these weights are important, and what might happen to your estimates should you not use them.
+1. Identify the appropriate variance estimatino technique for your dataset.
+1. Calculate the mean and standard error of ten variables from your
+   dataset without using weights or the correct variance estimation technique.
+1. Calculate the mean and standard error of ten variables from your
+   dataset using weights and the correct variance estimation technique.
+1. Describe any differences in either point estimates or variance
+   estimates between the "naive" approach and the correct approach. 
 
 <br>
