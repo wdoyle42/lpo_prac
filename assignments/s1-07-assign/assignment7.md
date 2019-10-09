@@ -4,7 +4,7 @@ LPO 9951 | Fall 2019
 
 Complete the following steps:
 
-1. Identify the appropriate variance estimatino technique for your dataset.
+1. Identify the appropriate variance estimation technique for your dataset.
 1. Calculate the mean and standard error of ten variables from your
    dataset without using weights or the correct variance estimation technique.
 1. Calculate the mean and standard error of ten variables from your
@@ -13,3 +13,4 @@ Complete the following steps:
    estimates between the "naive" approach and the correct approach. 
 
 <br>
+si-
