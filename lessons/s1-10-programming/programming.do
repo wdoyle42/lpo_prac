@@ -5,20 +5,29 @@ log using "programming.log",replace
 /* PhD Practicum */
 /* Some simple demonstrations of macros and loops */
 /* Will Doyle*/
-/* LAST: 11/6/2017 */
-/* Saved on OAK */
+/* LAST: 11/6/2019 */
+
 
 clear
 
+************************************
 /* TOC */
-
-/* Section 1: REcoding */
+/* Section 1: Recoding */
 
 local recoding=0
 
 /* Section 2: Analysis */
 
 local analysis=0
+
+************************************
+
+************************************
+/* Declare Macros */
+// set plot and table types
+global gtype png
+global ttype html
+************************************
 
 
 clear matrix
@@ -78,8 +87,11 @@ label variable hispanic "Hispanic"
 label variable white "White"
 label variable multiracial "Multiracial"
 
+
+
 save plans_b, replace
 }/*end recoding section conditional*/
+
 else{
 use plans_b, clear
 }/* end else */
@@ -103,11 +115,6 @@ local pared bypared bymothed
 
 bysort `demog': sum `y' 
 bysort `pared': sum `y'
-
-
-sum bynels2m 
-
-sum `y' 
 
 
  /* Scalar commands*/
@@ -150,7 +157,8 @@ svyset psu [pw=bystuwt], strat(strat_id)
                                             }  /* End inner loop */
                                           } /* End outer loop */
 
-
+/* Number List */
+										  
 *Simple forvalues command
 
 forvalues i= 1/10{
@@ -247,7 +255,49 @@ forvalues i =1/10 { /* Start outer loop */
     di "This is outer loop `i', inner loop `j'"
                       } /* End inner loop */
                     } /* End outer loop */
+/* Extended Example */
+use plans2, clear
 
+svyset psu [pw=bystuwt], strat(strat_id)
+
+// next new recoded student expectations
+recode f1psepln (1/2 = 1) (3/4 = 2) (5 = 3) (6 = .) (. = .), gen(newpln)
+label var newpln "PS Plans"
+label define newpln 1 "No plans" 2 "VoTech/CC" 3 "4 yr"
+label values newpln newpln
+
+// first new recoded parental education level
+recode bypared (1/2 = 1) (3/5 = 2) (6 = 3) (7/8 = 4) (. = .), gen(newpared)
+label var newpared "Parental Education"
+label define newpared 1 "HS or Less" 2 "Less than 4yr" 3 "4 yr" 4 "Advanced"
+label values newpared newpared
+
+local ivars byrace2 newpared
+
+//  cross table of categorical
+foreach ivar of local ivars{
+	estpost svy: tabulate `ivar' newpln, row percent se
+	eststo desc_`ivar'
+
+	
+shell "rm plan_tab$ttype"	
+	
+esttab desc_* using plan_tab.$ttype, ///
+    replace ///
+    nostar ///
+    nostar ///
+    unstack ///
+    nonotes ///
+    varlabels(`e(labels)') ///
+    eqlabels(`e(eqlabels)') ///
+	nomtitles ///
+	nonumbers ///
+	append
+	}
+
+
+					
+					
 }/* End analysis section */
 else{
 di "Did not run analysis"
