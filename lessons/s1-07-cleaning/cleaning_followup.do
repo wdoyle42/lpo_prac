@@ -15,9 +15,6 @@ set more off                            // turn off annoying "__more__" feature
 // load CA school data with problems
 use caschool_problem, replace
 
-
-graph drop _all
-
 // label data
 
 la data "California school district-level data from 1998" 
@@ -25,23 +22,25 @@ la data "California school district-level data from 1998"
 
 // replacing problematic variable labels 
 describe
-label variable observation_number "Unit ID"
+
+label variable observation_number "Count"
+
+la var dist_cod "District ID Code"
+
 label variable gr_span "Grade Span"
+
+la var county "County Name"
+
+la var district "District Name"
 
 // I AM MAKING AN ASSUMPTION ABOUT THIS VARIABLE//
 // WE REALLY REALLY NEED TO CHECK THIS *****  //
 
 la var teachers "Full time equivalent teachers" 
 
-//rename calw calw_pct
-
-la var calw_pct "Percent of students whose parents are enrolled in CalWorks"
-
-// CALW_PCT HAS OBSERVATIONS OVER 100, MUST FIX!! *****
+la var calw "Percent of students whose parents are enrolled in CalWorks"
 
 la var meal_pct "Percent of students eligible for free/reduced price meals" 
-
-// MEAL_PCT HAS OBSERVATIONS OVER 100, MUST FIX!! *****
 
 la var computer "Number of computers in the district" 
 
@@ -54,7 +53,7 @@ la var str "Student/Teacher Ratio"
 // I AM MAKING AN ASSUMPTION ABOUT THIS VARIABLE//
 // WE REALLY REALLY NEED TO CHECK THIS *****  //
 
-la var avginc "Average income in 1000s (maybe)" 
+la var avginc "Average income (maybe)" 
 
 la var el_pct "English language learners percent" 
 
@@ -66,21 +65,44 @@ la var math_scr "Average math score"
 
 la var foo "Unknown variable" 
 
+la var expn_stu "Expenditures per student ($)"
+
+// Recoding variables
+
+gen new_teachers=teachers
+
+replace new_teachers=. if new_teachers<0
+
+la var new_teachers "Number of teachers, recoded"
+
+// Creating new variables
+
+gen new_str= enrl_tot/new_teachers
+
+la var new_str "Student teacher ratio (calculated from data)"
+
 // LOOKING FOR OUTLIERS WITH VARIOUS PLOTS
 
 // box plot str
-graph box str, name(box_str, replace)
+graph box str, name(box_str)
 graph export  box_str.eps, name(box_str) replace
 
-// NOTE: School district 121 (Tehama) is problematic on str: doesn't match teachers/districts
+graph twoway scatter new_str str if str<30 &new_str<30
+
+// Show districts where calculated student teacher ratio does not match
+// given student teacher ratio
+browse dist_cod district enrl_tot new_teachers new_str str if new_str!=str & new_teachers<.
+
+gen new_teacher_2=new_teachers
+
+// Hawthorne actually has 420 teachers, source: www.goodsource.com
+
+replace new_teacher_2=420 if dist_cod==64592
+
 
 // histogram str
-histogram str, name(hist_str, replace)
+histogram str, name(hist_str)
 graph export  hist_str.eps, name(hist_str) replace
-
-gen str_two = enrl_tot/teacher
-
-graph twoway scatter str_two str
 
 // NOTE: student teacher ratio for observation #121 coded incorrectly (was 47.4, ratio is about 18
 // Code below replaces for this district 
@@ -90,6 +112,8 @@ replace str =enrl_tot/teachers if observation_number==121
 // Code below replaces for this district 
 replace str =enrl_tot/teachers if observation_number==301
 
+exit 
+
 // IMPOSSIBLE VALUES 
 
 // summarize calw percent
@@ -98,41 +122,16 @@ sum calw_pct
 // Remove impossible values for calworks because some schools recorded more than 100
 replace calw_pct =. if calw_pct>100
 
-// Remove impossible values for meal pct because some schools recorded more than 100
-replace meal_pct=. if meal_pct>100
-
-// Math scores must be above 0, replace other values with missing
-
-replace math_scr=. if math_scr<=0
-
-// Reading scores must be above 0, replace other values with missing
-
-replace read_scr=. if read_scr<=0
-
 // LOOKING FOR IMPLAUSIBLE VALUES WITH VARIOUS PLOTS
 
 // twoway scatter of avginc and meal_pct
 graph twoway scatter avginc meal_pct, name(sc_inc_meal)
 graph export  sc_inc_meal.eps, name(sc_inc_meal) replace
 
-// Income for these three school districts appears to be incorrect.
-// Reporting highest income in sample, with other characteristics (meal_pct,
-// calw_pct, that do not match). Recoding to missing. 
-
-
-replace avginc=. if inlist(obs,38,213,214)
-
-replace avginc=. if inlist(avginc, 45,50,55)
-
-
-//OBS 38, raisin city elementary, reports 94% eligible for free/reduced meals. 
-// Need to verify via external sources **** 
-
-
 // CHECKING CALCUATIONS
 
 // create new student teacher ratio variable
-// gen str_two = enrl_tot / teachers
+gen str_two = enrl_tot / teachers
 
 // twoway scatter of both student teacher ratio variables
 graph twoway scatter str_two str, name(sc_str_str_two)
@@ -145,15 +144,9 @@ replace teachers = . if teachers == -4
 gen str_three = enrl_tot / teachers
 
 // twoway scatter of new new and old student teacher ratio variables
-graph twoway scatter str_three str, name(sc_str_str_three,replace)
-//graph export  sc_str_str_three.eps, name(sc_str_str_three) replace
+graph twoway scatter str_three str, name(sc_str_str_three)
+graph export  sc_str_str_three.eps, name(sc_str_str_three) replace
 
-replace str_three=str if inlist(obs, 51,171)
-
-li county district enrl_tot teachers str str_three if str_three!=str & str_three!=-.
-
-// Obs 47 is problematic! ****
- 
 // LOOKING FOR DUPLICATES 
 
 // check for duplicate observations
@@ -161,9 +154,6 @@ duplicates report observation_number
 
 // check for duplicate district cod
 duplicates report dist_cod
-
-// list duplicates on dist_cod
- duplicates list dist_cod
 
 // CHECK FOR NEGATIVE VALUES, MISSING DATA
 

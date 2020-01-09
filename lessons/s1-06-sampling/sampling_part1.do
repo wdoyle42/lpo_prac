@@ -7,7 +7,7 @@ log using "sampling_part1.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 1 October 2014
-// LAST: 3 October 2017
+// LAST: 3 October 2019
      
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature

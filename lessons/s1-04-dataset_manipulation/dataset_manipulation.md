@@ -1,6 +1,6 @@
 Dataset Manipulation
 ================
-LPO 9951 | Fall 2018
+LPO 9951 | Fall 2019
 
 Dataset Manipulation
 --------------------

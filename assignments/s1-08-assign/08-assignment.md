@@ -1,13 +1,13 @@
 Assignment 08
 ================
-LPO 9951 | Fall 2018
+LPO 9951 | Fall 2019
 
-Data validation, like data cleaning, is a rather unclear term that refers to a set of techniques to ensure that the characteristics of your dataset conform with known characteristics of the same sample or a similar sample.
+Data cleaning is a way of making sure that the data are structured in a way to support the analysis. For this assignment I want you to make sure that your dataset is ready for analysis, following the steps we went through in class.
 
-The reason for validating your data is simple: you don't want to be wrong. This is a fundamental and worthwhile step to take in putting together an analysis.
-
-For this assignment, choose five variables from your dataset. You should definitely include your dependent variable or some variant as part of this set. Validate the estimates that you have of the mean and the standard error of the mean from another source. Your best bet is one of the published NCES reports. Failing that, you will need to find another published source that includes estimates of your particular variables.
-
-Create a table showing your means (or frequencies) and s.e.s for the five variables, along with the published results. If there is a discrepancy, speculate as to the cause.
+1. Check to make sure that the variable names are descriptive. 
+1. Check to make sure that the variable labels are appropriate (can they be used in a sentence)
+1. Check to make sure that the value labels are appropriate
+1. Look for exterme outliers or impossible values in single variables. Go through at least five variables. 
+1. Look for impossible or implauisable combinations of at least three pairs of variables.  
 
 <br>
