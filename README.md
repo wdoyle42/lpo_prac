@@ -1,256 +1,271 @@
-## Vanderbilt University
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+LPO 9952: Practicum
+================
 
-## Leadership, Policy and Organizations
+Vanderbilt University
+---------------------
 
-## Class Number 9951
+Human and Organizational Development
+------------------------------------
 
-## Fall 2019
+Course Number HOD 9952
+----------------------
 
-
+Spring 2020
+-----------
 
 William R. Doyle
 
 Office: 207D Payne
 
-Office Hours: Tuesday and Thursday 2:30-5 or by Appointment (use http://wdoyle42.youcanbook.me)
+Office Hours: Tuesdays and Thursdays, 1-4 pm or by appointment, use wdoyle42.youcanbook.me
 
-w.doyle@vanderbilt.edu
+Email: <w.doyle@vanderbilt.edu>
 
-phone (615) 322-2904
+Twitter: [\@wdoyle42](https://twitter.com/wdoyle42)
 
-
-Course Overview
-===============
-
-The overview includes an introduction to the course, guidelines on
-grading, and required texts.
+Phone: (615) 322-2904
 
 Introduction
-------------
+============
 
-This course is the first of a three semester series of courses designed
-to introduce you to the *practice* of research, particularly the applied
-side of quantitative research. The goal of this course to help you to
-prepare a paper that can be presented at a major research conference
-and, hopefully, submitted to a journal for publication.
-
-To accomplish this goal, you will choose from among publicly available
-datasets. You will identify a research topic, then later a research
-question. You will create a dataset using the publicly available
-sources. By the end of the semester, you will have a properly formatted
-and cleaned dataset, with auxiliary information from other sources
-included. Next semester we will analyze this dataset. By the end of May,
-you will complete a paper based on this analysis.
-
-Along the way, you will develop skills that will be helpful in future
-work using any kind of data. This class has a strong emphasis on using
-programming skills to aid in the replication of work and to simplify
-complex analyses.
+This course is the second of a three semester series of courses designed to introduce you to the practice of research, particularly the applied side of quantitative research. The goal of this course to help you to prepare a paper that can be presented at a major research conference and, hopefully, submitted to a journal for publication. This semester, we will focus on the analysis of the data that you compiled last semester. Prior to undertaking this analysis, you will have a chance to refine your research question, and you will be asked to compile a brief review of the literature in your area. Once this is complete, we will begin analyzing the data in your dataset. This will culminate in the final assignment—a replication file which will include all of the data and a program that provides publication-ready tables and figures. Your paper to be finished in May will be based on this analysis. Along the way, you will develop skills that will be helpful in future work using any kind of data. This class has a strong emphasis on using programming skills to aid in the replication of work and to simplify complex analyses.
 
 Grading
--------
+=======
 
 Evaluation for the course will be based on the following factors:
 
-*Assignments: 50%*
+*Assignments: 33%*
 
-There will be weekly assignments, which will be graded pass/fail. Late
-assignments will not be accepted. These assignments will account for
-half of your grade. Collaboration on assignments is fine, however, many
-of the assignments will ask you to work with variables and datasets of
-your own choosing.
+There will be a total of fourteen assignments, which will be graded. Late assignments will not be accepted. These assignments will account for a third of your grade. Collaboration on assignments is fine, however, many of the assignments will ask you to work with variables and datasets of your own choosing.  The lowest scoring assignment will be removed.
 
-*Summary Paper and Codebook: 50%*
+*Literature Review: 33%* I will ask you to compile a brief (no more than five page) literature review on your chosen subject. This literature review, along with a revised research question, will be due midnight, February 13.
 
-At the end of the semester, you will need to present the results of your
-data collection efforts, with a summary paper of no more than five pages
-of text, accompanied by properly formatted tables and graphics. The
-summary paper and codebook will be due on December 4. You will present
-your work to the rest of the class on December 4.
+*Replication File: 34%*
 
-Texts
------
+A replication file containing all of the data (or links to the data) for your analysis, a codebook and your Stata program to analyze this data will be due by midnight on April 29. This assignment will be evaluated based on the following factors:
 
-Baum, C (2006) *An Introduction to Modern Econometrics Using STATA*.
-College Station: STATA Press
-
-Long, J.S. (2009) *The Workflow of Data Analysis Using Stata*. College
-Station: STATA Press
-
-For this semester, both of these books are *optional*: I will recommend
-a few chapters from both as the semester progresses, but the class notes
-are the only required reading.
+-   The quality of the underlying analysis
+-   How well the replication file produces publication-ready results, including tables and graphics
+-   The clarity of the accompanying text in describing the analysis in the replication file
 
 Software
---------
+========
 
-You need to have access to a working version of Stata, (at least v
-13.0). Stata is installed on computers on Peabody campus, including
-Wyatt 132, and on stations in the Peabody library. You are not required
-to purchase Stata, but you will need to use it for class assignments.
+Stata will again be the order of the day for this semester for statistical analysis.
 
-If you do purchase Stata, you will need at least Stata IC (standard
-version). Vanderbilt has what’s called a gradplan with Stata under which
-you can purchase the software at greatly reduced prices. Stata SE is a
-more-powerful version of Stata that is useful for the larger datasets
-many of you may be working with.
+Texts
+=====
 
-Honor Code 
-----------
+The standard regression textbook for this department is:
 
-For this course, you are bound by the terms of the Peabody Honor System.
-Any breach of academic honesty, including cheating, plagiarism, or
-failing to report a known or suspected violation of the Code will be
-reported to the Honor Council. In particular, papers must assign credit
-to the sources you use. Material borrowed from another–quotations,
-paraphrases, key words, or ideas–must be credited following appropriate
-citation procedures (footnotes and bibliography). As mentioned above,
-collaboration *is* permitted on assignments but *is not* permitted on
-your summary paper and codebook.
+Wooldridge, J. M. (2016). Introductory Econometrics: A Modern Approach. Boston, MA: Cengage Learning, 6th edition.
 
-If you have any doubts, please ask me for clarification. Uncertainty
-about the application of the Honor Code does not excuse a violation.
+You should have a copy of this book-- 5th edition would also be fine.
 
-Schedule for Meetings
-=====================
+A good online resource for regression with Stata is:
 
-The schedule for all class meetings is as follows:
+Chen, X., Ender, P., Mitchell, M. and Wells, C. (2003). Regression with Stata, from <http://www.ats.ucla.edu/stat/stata/webbooks/reg/default.htm> .
 
-August 21
----------
+In addition, the following texts are recommended but not required:
 
-Intro to Stata
+Mitchell, M. N. (2012) A visual guide to Stata graphics. College Stations, TX: Stata Press, 3rd edition.
 
-August 28
----------
+Baum, C. F. (2009). An introduction to Stata programming (Vol. 2). College Station: Stata Press.
 
-*Topics*:
+Long, J. S. (2009). The workflow of data analysis using Stata. College Station: Stata Press.
 
-Getting Started with Research Questions, Introduction to literate
-programming in Stata
+Long, J.S. and Freese, J. (2006) Regression Models for Cateogrical Dependent Variables Using Stata. College Station: Stata Press
 
-September 4
------------
+All readings listed below are recommended but not required.
 
-*Topics*: STATA Basics
+Schedule
+========
 
-*Assignments:* Assignment 1 due September 1, midnight
+Class meetings will teach specific skills that are helpful for data analysts as they seek to answer questions. Class meetings will combine some instruction with hands on practice of the skill for that week.
 
-September 11
-------------
+Students are responsible for their own projects, and I expect that you will make progress toward the final assignment throughout the semester. Office hours and/or appointments are an excellent time to discuss the direction of your project and to get feedback on completed work.
 
-*Topics*:
+January 9 The Logic of Conditional Means; review of programming skills
+--------------------------------------------------------------------------------
 
-Working with publicly available datasets
+*Readings*
 
-*Assignments:* Assignment 2 due September 8, midnight
+Baum, Chapters 1-3
 
-September 18
-------------
+Mitchell, Chapter 3
 
-*Topics*:
+January 16 Linear estimators
+-------------------------------------
 
-Dataset manipulation: Collapsing, merging, bending the data to your will
+*Readings*
 
-*Assignments:* Assignment 3 due September 15, midnight
+Baum, Chapter 4
 
-September 25
-------------
+*Assignments*
 
-*Topics*: More dataset manipulation: One to many merging, many to one
-merging, appending datasets
+Assignment 1 due January 14
 
-*Assignments:* Assignment 4 due September 22, midnight
+January 23 OLS Regression in Stata
+-------------------------------------------
 
-Summary research area due
+*Readings*
 
-October 2
----------
+Chen et al chapter 1
 
-*Topics*:
+Long & Freese, Chapter 3
 
-Sampling: Simple sampling designs
+*Assignments*
 
-*Assignments:* Assignment 5 due September 29, midnight
+Assignment 2 due Sunday, January 21
 
-October 9
----------
+January 30 Properties of OLS estimator
+-----------------------------------------------
 
-*Topics*: Sampling: Complex sampling designs
+*Readings*
 
-*Assignments:* Assignment 6 due October 6, midnight
+Chen et al chapter 1 [http://www.ats.ucla.edu/stat/stata/webbooks/reg/chapter1/statareg1.htm]
 
-October 16
-----------
+Adkins, L. & Gade, M. (2012) "Monte Carlo Experiments Using Stata: A Primer with Examples." [http://www.learneconometrics.com/pdf/MCstata/MCstata.pdf]
 
-*Topics*:
+*Assignments*
 
-Data Cleaning
+Assignment 3 due January 28
 
-*Assignments:* Assignment 7 due October 13, midnight
+February 6 Inference with OLS, hypothesis testing (sigh)
+-----------------------------------------------------------------
 
-October 23
-----------
+*Readings*
 
-*Topics*:
+Long, Chapter 7
 
-Data Validation
+Baum, Chapter 5
 
-*Assignments:* Assignment 8 due October 20, midnight
+Estout documentation: [http://repec.org/bocode/e/estout/documentation.html]
 
-Revised research questions due.
+Outreg documentation: [http://repec.org/bocode/o/outreg2]
 
-October 30
-----------
+*Assignments*
 
-*Topics*:
+Assignment 4 due February 4
 
-Descriptive Statistics: Tabular and Graphical Approaches
+Tuesday, February 13 Functional Form, model specification
+---------------------------------------------------------
 
-*Assignments:*
+*Readings*
 
-Assignment 9 due October 27, midnight
+Chen et al Chapter 2: [http://www.ats.ucla.edu/stat/stata/webbooks/reg/chapter2/statareg2.htm]
 
-November 6
-----------
+Kennedy, P. E. (2002). Sinning in the basement: What are the rules? The ten commandments of applied econometrics. Journal of Economic Surveys, 16(4), 569-589. [Online](http://cba2.unomaha.edu/faculty/mwohar/WEB/links/Econometrics_papers/Kennedy_sinning_in_the_basement.pdf)
 
-*Topics*:
+*Assignments*
 
-An Introduction to Programming: Using Macros
+Assignment 5 due February 11
 
-*Assignments:*
+Literature Review due February 13
 
-Assignment 10 due November 3, midnight
+February 20 Binary variables, interactions
+---------------------------------------------------
 
-November 13
------------
+*Readings*
 
-*Topics*:
+Chen et al, Chapter 3
 
-Further graphical approaches to describing data
+UCLA IDRE,"How can I use the margins command to understand multiple interactions in regression and anova?" [Online](http://www.ats.ucla.edu/stat/stata/faq/margins_interaction.htm)
 
-Assignment 11 due November 10, midnight
+*Assignments*
 
-November 21
------------
+Assignment 6 due February 18
 
-No Class, Thanksgiving Break
+February 27 Interactions, marginal effects
+---------------------------------------------------
 
-November 20
------------
+*Readings*
 
-*Topics*:
+UCLA IDRE "How can I explain a continuous by continuous interaction?" [http://www.ats.ucla.edu/stat/stata/faq/conconb12.htm]
 
-Topic TBA: based on student work.
+*Assignments*
 
-December 4
-----------
+Assignment 7 due February 25
 
-*Topics*:
+March 5 Spring Break
+-----------------------------
 
-Class Presentations
+March 12 Replication
+-----------------------------
 
-*Assignments:*
+*Readings*
 
-Summary Papers, Do-File and Codebooks due before class, December 4.
+Long, Chapter 7
 
+Hammermesh, D. (2007) Replication in Economics. NBER Working Papers 13026.
+
+*Assignments*
+
+Assignment 8 due March 10
+
+March 19 Non-spherical errors
+--------------------------------------
+
+*Readings*
+
+Cox, Nicholas J. "Speaking Stata: Graphing model diagnostics." Stata Journal 4.4 (2004): 449-475.
+
+*Assignments*
+
+Assignment 9 due March 17
+
+March 26 Limited Dependent Variables
+---------------------------------------------
+
+*Readings*
+
+Long & Freese, Chapter 4
+
+Williams, R. (2012). Using the margins command to estimate and interpret adjusted predictions and marginal effects. Stata Journal, 12(2), 308.
+
+*Assignments*
+
+Assignment 10 due March 24
+
+April 2 Panel Data
+---------------------------
+
+*Readings*
+
+McCaffrey, D. F., Lockwood, J. R., Mihaly, K., & Sass, T. R. (2012). A review of Stata commands for fixed-effects estimation in normal linear models. Stata Journal, 12(3), 406.
+
+*Assignments*
+
+Assignment 11 due March 31
+
+Tuesday, April  9 Advanced Graphics
+-----------------------------------
+
+*Readings*
+
+Jann, B. (2013). Plotting regression coefficients and other estimates in Stata. University of Bern Social Sciences Working Papers, 1. (Online)[ftp://ftp.repec.org/opt/ReDIF/RePEc/bss/files/wp1/jann-2013-coefplot.pdf]
+
+Gelman, A., Pasarica, C., & Dodhia, R. (2002). Let's practice what we preach: turning tables into graphs. The American Statistician, 56(2), 121-130. (Online)[http://www.tandfonline.com/doi/abs/10.1198/000313002317572790]
+
+*Assignments*
+
+Assignment 12 due April 7
+
+April 16 Reporting Complex Results
+-------------------------------------------
+
+*Readings*
+
+Gallup, J. L. (2012). A programmer’s command to build formatted statistical tables. Stata Journal, 12(4), 655-673. (Online)[http://go.galegroup.com.proxy.library.vanderbilt.edu/ps/i.do?ty=as&v=2.1&u=tel_a_vanderbilt&it=DIourl&s=RELEVANCE&p=AONE&qt=SN~1536-867X>~~VO<sub>12SP</sub>655~~IU<sub>4&lm=DA</sub>120120000&sw=w&authCount=1]
+
+*Assignments*
+
+Assignment 13 due April 14
+
+*Replication File Due April 23*
