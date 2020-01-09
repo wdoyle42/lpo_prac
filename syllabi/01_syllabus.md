@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 ## Vanderbilt University
 
 ## Leadership, Policy and Organizations
@@ -5,8 +10,6 @@
 ## Class Number 9951
 
 ## Fall 2019
-
-
 
 William R. Doyle
 
@@ -114,6 +117,12 @@ about the application of the Honor Code does not excuse a violation.
 Schedule for Meetings
 =====================
 
+All course materials, including syllabi, and assignments are available at:
+
+https://github.com/wdoyle42/lpo_prac
+
+This site is updated frequently, please check it often.
+
 The schedule for all class meetings is as follows:
 
 August 21
@@ -132,9 +141,13 @@ programming in Stata
 September 4
 -----------
 
-*Topics*: STATA Basics
+*Topics*: 
 
-*Assignments:* Assignment 1 due September 1, midnight
+STATA Basics
+
+*Assignments:* 
+
+Assignment 1 due September 1, midnight
 
 September 11
 ------------
@@ -143,7 +156,9 @@ September 11
 
 Working with publicly available datasets
 
-*Assignments:* Assignment 2 due September 8, midnight
+*Assignments:* 
+
+Assignment 2 due September 8, midnight
 
 September 18
 ------------
@@ -157,10 +172,13 @@ Dataset manipulation: Collapsing, merging, bending the data to your will
 September 25
 ------------
 
-*Topics*: More dataset manipulation: One to many merging, many to one
-merging, appending datasets
+*Topics*:
 
-*Assignments:* Assignment 4 due September 22, midnight
+More dataset manipulation: One to many merging, many to one merging, appending datasets
+
+*Assignments:* 
+
+Assignment 4 due September 22, midnight
 
 Summary research area due
 
@@ -171,14 +189,20 @@ October 2
 
 Sampling: Simple sampling designs
 
-*Assignments:* Assignment 5 due September 29, midnight
+*Assignments:* 
+
+Assignment 5 due September 29, midnight
 
 October 9
 ---------
 
-*Topics*: Sampling: Complex sampling designs
+*Topics*: 
 
-*Assignments:* Assignment 6 due October 6, midnight
+Sampling: Complex sampling designs
+
+*Assignments:* 
+
+Assignment 6 due October 6, midnight
 
 October 16
 ----------
@@ -196,7 +220,9 @@ October 23
 
 Data Validation
 
-*Assignments:* Assignment 8 due October 20, midnight
+*Assignments:* 
+
+Assignment 8 due October 20, midnight
 
 Revised research questions due.
 
@@ -229,12 +255,9 @@ November 13
 
 Further graphical approaches to describing data
 
+*Assignments*
+
 Assignment 11 due November 10, midnight
-
-November 21
------------
-
-No Class, Thanksgiving Break
 
 November 20
 -----------
@@ -242,6 +265,15 @@ November 20
 *Topics*:
 
 Topic TBA: based on student work.
+
+*Assignments*
+Assignment 12 due November 17, midnight
+
+November 27
+-----------
+
+No Class, Thanksgiving Break
+
 
 December 4
 ----------
