@@ -2,10 +2,10 @@ version 13
 capture log close
 log using "reg_basic.log",replace
 
-/* PhD Practicum, Spring 2018 */
+/* PhD Practicum, Spring 2020 */
 /* Getting Started with Regression */
 /* Will Doyle*/
-/* 1/15/19 */
+/* 1/16/20 */
 /* Github Repo */
 
  /*Graph type postscript */
@@ -113,7 +113,6 @@ scalar se_beta1=_se[`x']
 
 scalar li beta1
 
-
 /*Use different confidence intervals */
 reg `y' `x', level(90)
 
@@ -123,13 +122,9 @@ predict uhat, residuals
 /*Residuals sum to 0 by definition */
 tabstat uhat, stat(sum)
 
-
-
 /*Plot residuals by x*/
 graph twoway scatter uhat `x',yline(0) msize(tiny)
 graph export "residplot.`gtype'",replace
-
-
 
 /*More complex graph*/
 graph twoway scatter uhat `x', ///
@@ -247,8 +242,6 @@ scalar li myf fstat
 corr yhat `y'
 
 scalar rsquare= e(r2)
-
-
 
 /*What is adjusted r squared? */
 
