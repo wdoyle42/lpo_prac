@@ -1,12 +1,12 @@
 ## Vanderbilt University
 ## Leadership, Policy and Organizations
 ## Class Number 9952
-## Spring 2018
+## Spring 2020
 
 **Assignment 2**
 
 Please complete the following steps, using the mroz dataset available on
-our website. The Moz datasets comes from the Panel Study of Income
+github. The Mroz datasets comes from the Panel Study of Income
 Dynamics, and was used as part of a famous study on women’s labor force
 participation. For this assignment, you will model the correlates of
 women’s labor force outcomes.
@@ -34,4 +34,3 @@ women’s labor force outcomes.
 
 Submit to me a do file that accomplishes all of the above steps. 
 
-PLEASE SUBMIT THIS AS A TXT FILE, for example: doyle_assignment2.txt
