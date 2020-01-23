@@ -1,11 +1,9 @@
 # Assignment 3
 
-Using the api dataset,(https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop) complete the following steps for each type of school: elementary,
-middle school, and high schools. Do this by creating a loop structure around the following
+Using the api dataset,(https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop) complete the following steps for three different sizes of schools: small (less than 25th percentile in enrollment), middle (middle two quartiles), large (above or equal fot 75th percentile). Do this by creating a loop structure around the following
 steps.
 
-1. Create a series of macros, one for each of the following characteristics of schools: parents,
-teachers and student.
+1. Create a series of macros, one for each of the following characteristics of schools: finance, teachers, parents
 
 2. Create a table of descriptive statistics for these variables using the esttab command.
 Make sure it is clearly labeled.
