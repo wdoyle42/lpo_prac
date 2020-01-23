@@ -1,6 +1,11 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Assignment 3
 
-Using the api dataset,(https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop) complete the following steps for three different sizes of schools: small (less than 25th percentile in enrollment), middle (middle two quartiles), large (above or equal fot 75th percentile). Do this by creating a loop structure around the following
+Using the api dataset,(https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop) complete the following steps for three different sizes of schools: small (less than 25th percentile in enrollment), middle (middle two quartiles), large (above or equal to 75th percentile). Do this by creating a loop structure around the following
 steps.
 
 1. Create a series of macros, one for each of the following characteristics of schools: finance, teachers, parents
@@ -22,5 +27,4 @@ model, with api00 as the dependent variable.
 7. Create a graphic the shows the impact of the various independent variables on the outcome
 variable. Clearly label and describe this graphic.
 
-Submit a do file that will accomplish all of these steps. Submit a word file that includes all
-of your graphics and tables.
+You'll need to submit two files, a do file that will accomplish all of these steps, and a word file that includes all of your graphics and tables.
