@@ -5,7 +5,7 @@ log using "reg_predictlog",replace
 /* PhD Practicum, Spring 2018 */
 /* Using Prediction to Interpret Regressions */
 /* Will Doyle*/
-/* 1/29/19 */
+/* 1/30/20 */
 
 clear
 
