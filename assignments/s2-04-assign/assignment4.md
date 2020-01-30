@@ -45,4 +45,4 @@ changing the student-teacher ratio in California using both prediction and forec
     results of your predictions, interpreting them for an interested
     policy audience.  Then describe the uncertainty around your forecast of increasing from the current ratio to the lower level. Make sure to include a graphic for your state legislator.
 
-Turn this in as 04_assignment_<yourlastname>.do, 04_assignment_<yourlastname>.docx, example:04_assignment_doyle.do
+Turn this in as s2_04_assignment_<yourlastname>.do, s2_04_assignment_<yourlastname>.docx, example:04_assignment_doyle.do
