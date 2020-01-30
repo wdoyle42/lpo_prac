@@ -3,10 +3,13 @@ output:
   pdf_document: default
   html_document: default
 ---
-Vanderbilt University\
-Leadership, Policy and Organizations\
-Class Number 9522\
-Spring 2020\
+Vanderbilt University
+
+Leadership, Policy and Organizations
+
+Class Number 9522
+
+Spring 2020
 
 **Assignment 4**
 
@@ -42,4 +45,4 @@ changing the student-teacher ratio in California using both prediction and forec
     results of your predictions, interpreting them for an interested
     policy audience.  Then describe the uncertainty around your forecast of increasing from the current ratio to the lower level. Make sure to include a graphic for your state legislator.
 
-
+Turn this in as 04_assignment_<yourlastname>.do, 04_assignment_<yourlastname>.docx, example:04_assignment_doyle.do
