@@ -9,6 +9,8 @@ log using "bin_cat_stata.log", replace
 
 // TOC
 
+graph drop _all
+
 local coding=1
 
 local regression=1
@@ -300,9 +302,8 @@ esttab order2 using order2.`ttype',  varwidth(50)   ///
 //than students who do plan to college, 
 // controlling for other characteristics. This results is statistically significant at conventional levels.  
 			   
-margins, predict(xb) at((mean) byses1 female=1 bypared=base order_plan=(1 2 3) ) post
+margins, predict(xb) at((mean) byses1 female=1 (base) pared order_plan=(1 2 3) ) post
 
-exit 
 
 estimates restore order2
 	 			   
@@ -313,18 +314,23 @@ margins, predict(xb) ///
 		 order_plan=(1 2 3)) ///
 		 post
 
-marginsplot, noci
-		 
-exit 
+set scheme s1color
 
+marginsplot, recast(line) recastci(rarea) ciopts(color(%10)) ///
+			 title("") ytitle("Predicted Math Scores") ///
+			 legend(order (4 "Doesn't Plan to go to College" ///
+						   5 "Plans to go to a 2 yr"  ///
+						   6 "Plans to go to a 4 yr")) 
+		 
 // Factor notation, interaction
 
 //Proper factor notation: setting base levels
-eststo order3: svy: reg `y' b3.order_plan##i.female byses1
+eststo order3: svy: reg `y' ib(3).order_plan##i.female byses1 
 
-esttab order3 using order3.`ttype', varwidth(50) ///
-    refcat(1.order_plan "College Plans, Reference=Plans to go to College:" 1.order_plan#1.female "Interaction of Plans with Female:", nolabel) ///
- interaction(" X ") ///
+esttab order2 order3 using order3.`ttype', varwidth(50) ///
+    refcat(1.order_plan "College Plans, Reference=Plans to go to College:" ///
+	1.order_plan#1.female "Interaction of Plans with Female:", nolabel) ///
+ interaction(" times ") ///
    label ///
                    nomtitles ///
                        nobaselevels ///
@@ -336,7 +342,6 @@ esttab order3 using order3.`ttype', varwidth(50) ///
                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
                sfmt (2 0 0 0)               ///
                replace                 
-
 
 // Margins to figure out what's going on
 margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1)) post
@@ -354,12 +359,16 @@ esttab . using margins.`ttype' , margin label nostar ci ///
 // Not great
 marginsplot, name(margins_1)
 
+
 // better
 
 marginsplot, recast(scatter) ciopts(recast(rspike)) name(margins_2)
 
+
 // ??
 marginsplot, recast(bar) 
+
+
 
 log close
 exit
