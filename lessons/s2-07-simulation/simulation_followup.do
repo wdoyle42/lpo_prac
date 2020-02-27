@@ -282,7 +282,7 @@ clear
 set seed 0621
 
 //1: Run CLT example
-local xbar_example=1
+local xbar_example=0
 
 //2: Run basic regression example
 local reg_example_1=0
@@ -291,7 +291,7 @@ local reg_example_1=0
 local reg_example_2=0
 
 //4: Run complex example based on data
-local complex_example=0
+local complex_example=1
     
 // Create a hypothetical situation
 
@@ -338,10 +338,9 @@ forvalues i=1/`nreps'{
 	quietly sample `sample_size', count // Keep only certain observations
 	quietly mean x // get mean
 	scalar sample_mean= _b[x] // post the first estimate to the buffer
-	tabstat x, stat(sd) save //calc sd
+	qui tabstat x, stat(sd) save //calc sd
 	mat M=r(StatTotal) //get results
 	scalar sample_sd=M[1,1] // grab result to store in scalar
-	di sample_sd
 	post buffer (sample_mean) (sample_sd) //post the first estimate to the buffer
 	restore // Go back to full dataset
 }
@@ -350,9 +349,9 @@ postclose buffer // Buffer can stop recording
 
 use means, clear
 
-exit
-
 kdensity xbar, xline(`mymean')
+
+kdensity x_sd, xline(`mysd')
 
 graph export clt.`gtype', replace
 
@@ -372,17 +371,19 @@ scalar simulate_se=M[1,1]
 
 }
 
-exit 
-
 // Run this analysis, but include the standard deviation as an element of the
 // monte carlo results
 
 // Run MC study for basic regression
 if `reg_example_1'==1{
 
+local sample_size=1000
+
 // Regression simulation: first example
 
-use x, clear
+clear
+
+drawnorm x, n(10000)
 
 // Generate error term
 local error_sd 10
@@ -395,7 +396,7 @@ local beta_0=10
 local beta_1=2
 
 // Generate outcome
-gen y=`beta_0'+`beta_1'*x+e
+gen y=`beta_0'+`beta_1'*x + e
 
     // create a place in memory called buffer which will store a variable called xbar in a file called means.dta
 postfile buffer beta_0 beta_1 using reg_1, replace 
@@ -434,16 +435,27 @@ mean beta_1
 if `reg_example_2'==1{
 
 clear
-    
-local my_corr=-.8
+
+local nreps=100
+
+local pop_size=100000
+
+local error_sd=10
+
+local my_corr=-.1
 
 local my_means 10 20 
 
 local my_sds 5 10
 
 // Create variable x based on values above
-drawnorm x1 x2, means(`my_means') sds(`my sds') corr(1,`my_corr'\`my_corr',1) n(`pop_size') cstorage(lower)
-
+drawnorm x1 x2, ///
+	means(`my_means')  ///
+	sds(`my_sds') ///
+	corr(1,`my_corr'\`my_corr',1) ///
+	n(`pop_size') ///
+	cstorage(lower)
+	
 drawnorm e, mean(0) sd(`error_sd')
 
 local beta_0=10
@@ -453,7 +465,6 @@ local beta_1=2
 local beta_2=4
 
 gen y= `beta_0'+`beta_1'*x1 +`beta_2'*x2 + e
-
     
 // create a place in memory called buffer which will store a variable called xbar in a file called means.dta
 postfile buffer beta_0 beta_1 using reg_2, replace 
@@ -462,7 +473,7 @@ forvalues i=1/`nreps'{
 	preserve // Set return state
 	quietly sample `sample_size', count // Keep only certain observations
 	quietly reg y  x1  // get parameter estimates
-	post buffer (_b[_cons]) (_b[x]) // post the estimate to the buffer
+	post buffer (_b[_cons]) (_b[x1]) // post the estimate to the buffer
 	restore // Go back to full dataset
 }
 
@@ -532,7 +543,6 @@ mat li cormat2
 
 corr2data female_st plans_st race_st pared_st ses counsel_st, corr(cormat2) n(`popsize')
 
-
 /*Specify cut in normal dist for proportion with and without characteristics*/
 
 gen femcut=invnormal(`prop_fem')    
@@ -546,14 +556,19 @@ gen plans=plans_st>plancut
 
 local race_other=1-`prop_race'
 
-gen racecut=invnormal(`prop_race') 
-gen race=race_st<racecut 
+gen racecut=invnormal(`race_other') 
+gen race=race_st>racecut 
 
 local prop_counsel=.95
     
 gen counselcut=invnormal(`prop_counsel') 
 gen counsel=counsel_st>counselcut
-    
+
+mat li cormat
+
+corr female plans race pared ses
+
+
 drawnorm e, sds(11)
 
 local effect 2
@@ -658,7 +673,12 @@ postclose `results_store'
 
 use results_file_`effect', clear
 
-kdensity plans1, xline(`plans_coeff', lcolor(black) lpattern(dash)) addplot(kdensity plans2) legend(order(1 "True Model" 2 "OVB Model"))  title("Coefficient for Counseling=`effect'")
+kdensity plans1, xline(`plans_coeff', lcolor(black) lpattern(dash)) ///
+	addplot(kdensity plans2,note("")) ///
+	legend(order(1 "True Model" 2 "OVB Model")) ///
+	xtitle("Coefficients for Plan") ///
+	title("Coefficient for Counseling=`effect'") ///
+	note("")
 
 graph save monte_carlo_`effect'.gph, replace
 
@@ -666,10 +686,10 @@ graph save monte_carlo_`effect'.gph, replace
 
 /* Ends loop over effect sizes */
 
-graph combine monte_carlo_5.gph monte_carlo_10.gph monte_carlo_15.gph monte_carlo_20.gph , rows(2) cols(2)
+grc1leg monte_carlo_5.gph monte_carlo_10.gph monte_carlo_15.gph monte_carlo_20.gph , rows(2) cols(2)
 }
 
-}
+
  
 /*Quick-ish Exercise Create a variable for the unobserved characteristic
  of motivation (oh fine, grit) which is uncorrelated with other variables
