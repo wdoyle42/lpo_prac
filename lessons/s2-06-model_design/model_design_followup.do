@@ -86,19 +86,20 @@ reg lwage hours educ age meduc
 
 reg lwage hours educ age feduc
 
-reg lwage hours educ age feduc meduc 
+reg lwage hours educ age feduc meduc // 722 obs
 
-gen analytic_sample_flag=e(sample)
+gen analytic_sample_flag=e(sample) // Casewise deletion, "Complete case analysis" 
 
-reg lwage hours educ age if analytic_sample_flag==1 
+reg lwage hours educ age if analytic_sample_flag==1   // 722 obs
 
-reg lwage hours educ age meduc if analytic_sample_flag==1 
+reg lwage hours educ age meduc if analytic_sample_flag==1  
 
 gen meduc_flag=meduc==.
 
 gen feduc_flag=feduc==.
 
 tab meduc_flag feduc_flag
+
 
 /* Quick digression: log transform */
 
@@ -112,15 +113,34 @@ di log(10)
 di log(100)
 di log(1000)
 
+
 set obs 1000
 
-egen fakenumber= fill(1(10)1000)
+//egen fakenumber= fill(1(10)1000)
+
+drawnorm fakenumber, means(10) sds(2)
+
+replace fakenumber=exp(fakenumber)
+
+hist fakenumber,name(hist1)
+
+kdensity fakenumber, name(kd1)
 
 gen log_fakenumber=log(fakenumber)
 
 graph twoway line log_fakenumber fakenumber
 
+hist log_fakenumber, name(hist2)
+
 restore
+
+gen leduc=log(educ)
+
+reg lwage hours educ age meduc if analytic_sample_flag==1 
+
+
+reg lwage hours leduc age meduc if analytic_sample_flag==1 
+
 
 /*NOOOOOOOO!!! Stepwise regression*/
 
@@ -128,9 +148,9 @@ stepwise, pr(.2): reg lwage hours educ age meduc feduc tenure south married blac
 
 stepwise, pr(.05): reg lwage hours educ age meduc feduc tenure south married black urban sibs kww iq brthord
 
-stepwise, pr(.2) : reg lwage south brthord iq kww sibs feduc tenure  married black urban hours educ age meduc
+stepwise, pr(.2) : reg lwage south brthord iq kww sibs feduc tenure  married black urban hours educ age 
 
-stepwise, pr(.05): reg lwage south brthord iq kww sibs feduc tenure  married black urban hours educ age meduc
+stepwise, pr(.05): reg lwage south brthord iq kww sibs feduc tenure  married black urban hours educ age 
   
 stepwise, pr(.2) : reg lwage south brthord  kww sibs feduc tenure  married black  hours educ age meduc
 
@@ -142,12 +162,11 @@ stepwise, pr(.05): reg lwage south brthord  kww sibs feduc tenure  married black
 
 reg lwage south brthord kww sibs feduc tenure married black hours educ age meduc
 
-test meduc feduc
+test meduc feduc 
 
 test meduc=feduc
 
 test educ tenure hours
-
 
  /*RESET test */
 
@@ -161,9 +180,15 @@ gen agesq=age^2
 
 label var agesq "Age squared"
 
-reg lwage hours educ age agesq
+reg lwage hours educ c.age##c.age
 
-test age agesq
+test age c.age#c.age
+
+margins, ///
+	predict(xb) ///
+	at( (mean) _all age=(28/38))
+
+marginsplot, recast(line) recastci(rarea) ciopts(color(%50))
 
 gen educsq=educ^2
 
@@ -173,13 +198,25 @@ reg lwage hours age educ educsq
 
 test educ educsq
 
+
 /*Preferred method */
 
-reg lwage hours age agesq educ educsq
+reg lwage hours c.age##c.age c.educ##c.educ
 
-test age agesq
+test age c.age#c.age
 
-test educ educsq
+test educ c.educ#c.educ
+
+margins ,  ///.
+	predict(xb) ///
+	at((mean) _all educ=(9/16))
+	
+
+marginsplot, recast(line) recastci(rarea) ciopts(color(%50))
+		
+
+
+exit 
 
 /* Davidson-MacKinnon Test:non-nested alternatives */
 
@@ -434,6 +471,7 @@ egen kww_levels=fill(`mymin'(1)`mymax')
 twoway line exp_pred10 exp_pred12 exp_pred14 exp_pred16 kww_levels in 1/45, ///
        legend(order(1 "10 Years" 2 "12 Years" 3 "14 Years" 4 "16 Years")) ///
 	   ytitle("Wages") xtitle("Knowledge of World of Work") name(educ_mult_kww)
+
 
 exit 
 

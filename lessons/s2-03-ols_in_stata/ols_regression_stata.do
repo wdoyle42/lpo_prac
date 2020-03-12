@@ -2,10 +2,10 @@ capture log close
 
 log using "ols_regression_stata.log",replace
 
-/* PhD Practicum, Spring 2019 */
+/* PhD Practicum, Spring 2020 */
 /* Outputting regression results*/
 /* Will Doyle*/
-/* 1/22/19 */
+/* 1/23/20 */
 /* Saved on OAK */
 
 clear
