@@ -85,26 +85,130 @@ display "`prop_plans'"
 gen plancut=invnormal(1-`prop_plans') 
 gen plans=plans_st>plancut 
 
-
 gen paredcut=invnormal(1-`prop_pared')
 gen pared= pared_st>paredcut 
 
+// Generate Error Term
 drawnorm e, sd(`sd_error')
-
-exit 
 
 ///Create the outcome variable (math scores) as a function of SES, 
 ///planning to go to college and parental education. Make this flexible such 
 //that the impact of parental education can vary.
 
+gen y=`int' + `plans_coeff'*plans +`pared_coeff'*pared+`ses_coeff'*ses+e
+
+save simulated_data, replace
+
 //Repeatedly sample from the population data you generated above, 
 //then run two regressions for each sample, one which includes parental 
-//education and one which does not. Create a graphic that shows the sampling 
-//distribution for your coeffiicent for planning to go college when you do and
+//education and one which does not. 
+
+tempname results_store
+postfile `results_store' plans1 plans2  using results_file, replace
+local j=1  
+while `j'<=100{  
+
+preserve 
+  
+quietly sample 10
+
+quietly reg y plans pared ses  /* True regression */
+
+scalar plans1=_b[plans]
+
+ /*Pulls coefficient, puts it into scalar */
+quietly reg y plans ses /*OVB regression */
+
+scalar plans2=_b[plans]
+
+post `results_store' (plans1) (plans2)
+
+di "Finishing iteration `j'"
+
+restore
+
+local j=`j'+1
+}
+postclose `results_store'
+
+// Create a graphic that shows the sampling 
+// distribution for your coeffiicent for planning to go college when you do and
 // don't control for both SES AND parental education.
+
+use results_file, clear
+
+kdensity plans1, addplot(kdensity plans2) 
+
 
 ///Now allow the impact of parental education on math scores to vary in 
 //the population. Run a Monte Carlo study that shows what happens to the 
 //sampling distribution of coefficients for planning to go college when do and 
 ///don't control for both SES and parental education when parental education
 // has differing impacts on math scores.
+
+
+/*Now vary effect size*/
+
+local effect_size -.1 -.05 .05 1
+
+local k=1
+
+foreach effect of local effect_size{
+
+use simulated_data, clear
+
+drop y
+
+gen y=`int' + `plans_coeff'*plans +`effect'*pared+`ses_coeff'*ses+e
+
+tempname results_store
+
+postfile `results_store' plans1 plans2  using results_file_`k', replace
+local j=1  
+while `j'<=100{  
+
+preserve 
+  
+quietly sample 10
+
+quietly reg y plans pared ses  /* True regression */
+
+scalar plans1=_b[plans]
+
+ /*Pulls coefficient, puts it into scalar */
+quietly reg y plans ses /*OVB regression */
+
+scalar plans2=_b[plans]
+
+post `results_store' (plans1) (plans2)
+
+di "Finishing iteration `j'"
+
+restore
+
+local j=`j'+1
+}
+postclose `results_store'
+
+use results_file_`k', clear
+
+kdensity plans1, xline(`plans_coeff', lcolor(black) lpattern(dash)) ///
+	addplot(kdensity plans2,note("")) ///
+	legend(order(1 "True Model" 2 "OVB Model")) ///
+	xtitle("Coefficients for Plan") ///
+	title("Coefficient for Plans, when Pared=`effect'") ///
+	note("")
+
+graph save monte_carlo_`k'.gph, replace
+
+local k=`k'+1
+
+} // Close loop over effect sizes
+
+
+
+grc1leg monte_carlo_1.gph ///
+monte_carlo_2.gph ///
+ monte_carlo_3.gph ///
+ monte_carlo_4.gph , rows(2) cols(2)
+
