@@ -60,12 +60,9 @@ replace expect_college=0 if bystexp>0 &bystexp <5
 // Grouping variable for test scores
 egen test_group=cut(bynels2m), group(4)
 
-// Grouping variable for SES
+
+// Grouping variable for test scores
 egen ses_group=cut(byses1), group(4)
-
-
-gen female=bysex==2
-replace female=. if bysex==. 
 
 /* Set locals */
 
@@ -75,7 +72,7 @@ local x expect_college
 
 local ses byses1
 
-local table_rows amind asian black hispanic multiracial white female
+local race amind asian black hispanic multiracial white 
 
 local sex bysex
 
@@ -89,25 +86,28 @@ local ttype rtf
 
 local mysig=.001
 
+bysort expect_college: sum amind if test_group==0
+
+ttest amind if test_group==0, by(expect_college) 
+
 // Balance test: how different is the key covariate (treatment variable) by levels of the control variables
 
-foreach test_level of numlist 0(1)4{
+foreach test_level of numlist 0(1)3{
     
 //Counter variable
 local counter=1
 
-foreach row of local table_rows{
-     
-	 if `test_level'<4{
-     quietly reg `row' `x' if test_group==`test_level'
-}
-else quietly reg `row' `x'  
+foreach race_var of local race{     
+   
+quietly reg `race_var' `x' if test_group==`test_level' // Proportion of indivduals who expect to go to college, by race and test score group
 
 scalar my_diff = round(_b[`x'], `mysig')
 
 scalar my_t =round(_b[`x']/_se[`x'],`mysig')
+
+scalar my_n=e(N)
      
-mat M= [my_diff\my_t]
+mat M= [my_diff\my_t\my_n]
 
 mat li M
 
@@ -128,34 +128,21 @@ if `counter'==1{
 mat li results_tab
 } // End loop over test scores
 
-matrix rownames results_tab="Native American" "t value" ///
-							"Asian"  "t value" /// 
-							"African American" "t value" /// 
-							"Hispanic" "t value"  /// 
-							"Multiracial" "t value"  ///
-							"White" "t value" ///
-							"Female" "t value"
+matrix rownames results_tab="Native American" "t value" "N" ///
+							"Asian"  "t value" "N" ///
+							"African American" "t value" "N" ///
+							"Hispanic" "t value" "N"  ///
+							"Multiracial" "t value" "N" ///
+							"White" "t value" "N" 
 
-matrix colnames results_tab ="Lowest Quartile" ///
-							"2nd Quartile"  ///
-							"3rd Quartile" ///
-							"4th Quartile" ///
-							"Full Sample" 
+matrix colnames results_tab ="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
 
     // Table
     
 estout matrix(results_tab) using "baseline_tab.`ttype'", style(fixed) replace
-   
-
-   
-/***************************************/
-/* THIS IS THE TEST SCORE TABLE */
-/***************************************/ 
  
   
 // Regression results
-
-matrix drop _all
 
 foreach test_level of numlist 0(1)3{
     
@@ -165,7 +152,9 @@ scalar my_coeff = round(_b[`x'], `mysig')
 
 scalar my_se =round(_se[`x'],`mysig')
 
-mat M1= [my_coeff\my_se]
+scalar my_n=round(e(N))
+    
+mat M1= [my_coeff\my_se\my_n]
     
 quietly reg `y' `x' `controls' if test_group==`test_level'
 
@@ -177,7 +166,7 @@ scalar my_n=round(e(N))
     
 mat M2= [my_coeff\my_se\my_n]
     
-mat M=(M1\M2)   
+mat M=(M1,M2)   
 
     if `test_level'==0{
         mat reg_results=M
@@ -187,21 +176,20 @@ mat M=(M1\M2)
 } // end loop over test levels    
 
     
-matrix rownames reg_results= "Expect College" "SE" "Expect College" "SE" "N"
-matrix colnames reg_results="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
-
-
-
+matrix rownames reg_results= "Expect College" "SE" "N"
+matrix colnames reg_results="Lowest Quartile"  "Lowest Quartile"  ///
+								"2nd Quartile" 	"2nd Quartile" /// 
+								"3rd Quartile" "3rd Quartile" ///
+								"4th Quartile"  "4th Quartile"  
 
 // Table
     
- estout matrix(reg_results) using "reg_resuts_test.`ttype'", style(fixed) replace
+estout matrix(reg_results) using "reg_resuts.`ttype'", style(fixed) replace
 
- mat drop _all
-/***************************************/
-/* THIS IS THE SES TABLE */
-/***************************************/ 
- 
+
+
+// Regression results, SES
+
 foreach ses_level of numlist 0(1)3{
     
 quietly reg `y' `x' if ses_group==`ses_level'
@@ -210,7 +198,9 @@ scalar my_coeff = round(_b[`x'], `mysig')
 
 scalar my_se =round(_se[`x'],`mysig')
 
-mat M1= [my_coeff\my_se]
+scalar my_n=round(e(N))
+    
+mat M1= [my_coeff\my_se\my_n]
     
 quietly reg `y' `x' `controls' if ses_group==`ses_level'
 
@@ -222,27 +212,25 @@ scalar my_n=round(e(N))
     
 mat M2= [my_coeff\my_se\my_n]
     
-mat M=(M1\M2)   
+mat M=(M1,M2)   
 
     if `ses_level'==0{
-        mat reg_results=M
+        mat reg_results_ses=M
     }
-    else mat reg_results=(reg_results,M)
+    else mat reg_results_ses=(reg_results_ses,M)
     
 } // end loop over test levels    
 
     
-matrix rownames reg_results= "Expect College" "SE" "Expect College" "SE" "N"
-matrix colnames reg_results="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
-
-
-
+matrix rownames reg_results_ses= "Expect College" "SE" "N"
+matrix colnames reg_results_ses="Lowest Quartile "  "Lowest Quartile"  ///
+								"2nd Quartile" 	"2nd Quartile" /// 
+								"3rd Quartile" "3rd Quartile" ///
+								"4th Quartile"  "4th Quartile"  
 
 // Table
     
- estout matrix(reg_results) using "reg_resuts_ses.`ttype'", style(fixed) replace
-
- 
+estout matrix(reg_results_ses) using "reg_resuts_ses.`ttype'", style(fixed) replace
 
     
 // Complex Graphics
@@ -254,7 +242,7 @@ local quartile=`test_level'+1
 graph twoway (scatter bynels2m byses1 if test_group==`test_level' & expect_college==0,msize(vtiny) color(red) mcolor(%10)) ///
              (lfit bynels2m byses1 if test_group==`test_level' & expect_college==0,lwidth(thin) lcolor(red)) /// 
              (scatter bynels2m byses1 if test_group==`test_level' & expect_college==1,msize(vtiny) color(blue)  mcolor(%10)) ///
-			(lfit  bynels2m byses1 if test_group==`test_level' & expect_college==1,lwidth(thin) color(blue)), ///
+          (lfit  bynels2m byses1 if test_group==`test_level' & expect_college==1,lwidth(thin) color(blue)), ///
 legend(order(2 "Doesn't expect to go to college" 4 "Expects to go to college")) ytitle("Test Scores")  xtitle("SES") title("Quartile=`quartile'")
 
 graph save "scatter_`quartile'.gph", replace
@@ -266,44 +254,32 @@ grc1leg2 scatter_1.gph scatter_2.gph scatter_3.gph scatter_4.gph, legendfrom("sc
 
 graph export scatter.eps, replace
 
-egen pct_math=cut(bynels2m), group(100)
-
-preserve
-collapse (mean) f2evratt, by(pct_math)
-
-graph twoway scatter f2evratt pct_math
-restore
-
-egen pct_read=cut(bynels2r), group(100)
+//Create a graphic that shows attendance in college as a function of reading test scores, 
+//for males and females, across four different SES levels.
 
 
+    
+// Complex Graphics
+
+local ses_level=0
 foreach ses_level of numlist 0(1)3{
-
 local quartile=`ses_level'+1
 
-preserve
-
-keep if ses_group==`ses_level'
-
-collapse (mean) f2evratt, by(pct_read female)
-
-graph twoway (scatter f2evratt pct_read  if female==0,msize(small) color(red) mcolor(%10)) ///
-             (lfit f2evratt pct_read  if female==0,lwidth(thin) lcolor(red)) /// 
-             (scatter f2evratt pct_read  if female==1,msize(small) color(blue)  mcolor(%10)) ///
-			(lfit  f2evratt pct_read if female==1,lwidth(thin) color(blue)), ///
-			legend(order(2 "Male" 4 "Female")) /// 
-			ytitle("Pr(Attend)")  xtitle("Reading") ///
-			title("SES Quartile=`quartile'") ///
-			ylabel(0(.2)1, format(%9.1f))
+graph twoway (scatter f2evratt bynels2r if ses_group==`ses_level' & bysex==1,msize(vtiny) color(red) mcolor(%10)) ///
+             (lfit f2evratt bynels2r if ses_group==`ses_level' & bysex==1,lwidth(thin) lcolor(red)) /// 
+             (scatter f2evratt bynels2r if ses_group==`ses_level' & bysex==2,msize(vtiny) color(blue)  mcolor(%10)) ///
+          (lfit  f2evratt bynels2r if ses_group==`ses_level' & bysex==2,lwidth(thin) color(blue)), ///
+legend(order(2 "Male" 4 "Female")) ytitle("Attend College?")  xtitle("Reading Scores") title("Quartile=`quartile'")
 
 graph save "scatter_`quartile'.gph", replace
-
-restore
 }    
 
 // Combine  all levels
 
 grc1leg2 scatter_1.gph scatter_2.gph scatter_3.gph scatter_4.gph, legendfrom("scatter_1.gph") rows(2) name(scatter,replace) xcommon ycommon
+
+graph export scatter.eps, replace
+
 
 
 exit 
