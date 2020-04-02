@@ -14,7 +14,11 @@ local x pared_bin
 
 local controls bysex byrace f1psepln 
 
+local controls_reg i.bysex i.byrace i.f1psepln 
+
 local mysig =.001
+
+egen read_q=cut(bynels2r), group(4)
 
 // Create a table of baseline equivalence, that shows whether there are 
 // significant differences among the control variables as a function of your 
@@ -45,17 +49,45 @@ if `counter'==1{
 
 } // Loop over levels of independent variable
 
-estout matrix(M_col) using "baseline_tab.html", style(scml) replace
+estout matrix(M_col) using "baseline_tab.rtf",  replace
 
 } // Loop over control variables 
-
-exit 
-
 
 
 // Run a regression across both your full sample and various subsamples, 
 //reporting the results for just your key independent variable or variables in
 // a table.
+svyset psu [pw=f1pnlwt], strat(strat_id) singleunit(scaled)
+
+
+svy:reg `y' `x' `controls_reg' 
+
+scalar my_coeff = round(_b[`x'], `mysig')
+
+scalar my_se =round(_se[`x'],`mysig')
+
+scalar my_n=round(e(N))
+
+mat results_tab= [my_coeff\my_se\my_n]
+
+    
+foreach i of numlist 0(1)3{
+
+svy:reg `y' `x' `controls_reg' if read_q==`i'
+
+scalar my_coeff = round(_b[`x'], `mysig')
+
+scalar my_se =round(_se[`x'],`mysig')
+
+scalar my_n=round(e(N))
+
+mat M=[my_coeff\my_se\my_n]
+
+mat results_tab=(results_tab,M)
+
+}
+
+exit 
 
 // Create a graphic that shows how the relationship between one of your 
 //key independent variables and your dependent variable varies by levels 
