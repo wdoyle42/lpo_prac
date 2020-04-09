@@ -161,7 +161,7 @@ graph export logit_basic.pdf, replace name("logit_basic")
 
 estimates restore full_model
 
-margins , predict(pr) ///
+quietly margins , predict(pr) ///
     at((mean) _continuous ///
         (base) _factor ///
         `x'=(`mymin'(`step')`mymax') ///
@@ -172,7 +172,7 @@ margins , predict(pr) ///
 
 marginsplot, recastci(rarea) ciopts(color(%10)) ///
 				recast(line) ///
-              xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") ///
+              xlabel(-2(.3)2) xtitle("SES") ytitle("Pr(Attend)") title("") ///
               name("logit_race")
 
 			
@@ -180,7 +180,7 @@ graph export logit_race.pdf, replace name("logit_race")
 	
 estimates restore full_model			
 
-margins , predict(pr) ///
+quietly margins , predict(pr) ///
     at((mean) _continuous ///
         (base) _factor ///
         `x'=(`mymin'(`step')`mymax') ///
