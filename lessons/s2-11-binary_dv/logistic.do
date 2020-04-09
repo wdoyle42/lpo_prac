@@ -1,14 +1,16 @@
 capture log close
 log using "logistic.log",replace
 
-/* PhD Practicum, Spring 2018 */
+/* PhD Practicum, Spring 2020 */
 /* Regression models for binary data*/
 /* Will Doyle*/
-/* 3/16/18 */
+/* 2020-04-08 */
 
 clear
 
 set more off
+
+set scheme s1color
 
 graph drop _all
 
@@ -28,29 +30,19 @@ foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
 
 
 /* Recodes */
-  
-local race_names amind asian black hispanic_race hispanic_norace multiracial white
+ 
 
-tab(byrace), gen(race_)
+recode byrace (1=1 "Native American") ///
+				(2=2 "Asian/ Pacific Islander") ///
+				(3=3 "African-American") ///
+				(4/5=4 "Hispanic") ///
+				(6=5 "Multiracial") ///				
+				(7=6 "White"), ///
+gen(byrace2) 
 
-local i=1
-
-foreach val of local race_names{
-  rename race_`i' `val'
-  local i=`i'+1
-}
-
-gen hispanic=hispanic_race==1|hispanic_norace==1
-
-label variable byincome "Income"
-label variable amind "American Indian/AK Native"
-label variable asian "Asian/ PI"
-label variable black "African American"
-label variable hispanic "Hispanic"
-label variable white "White"
-label variable multiracial "Multiracial"
-
-local race amind asian black hispanic multiracial 
+recode bysex (1=0 "Non-Female") ///
+			  (2=1 "Female"), ///
+			  gen(female)
 
 
 /* Set locals */
@@ -59,7 +51,7 @@ local y f2evratt
 
 local ses byses1
 
-local demog  amind asian black hispanic multiracial bysex
+local demog ib(freq).byrace2 ib(freq).female
 
 local tests bynels2m bynels2r
 
@@ -69,12 +61,10 @@ local gtype pdf
 
 reg `y' `ses' `demog' `tests'
 
-graph twoway scatter `y' `ses' , msize(tiny) 
+graph twoway (scatter `y' `ses',jitter(.1)   msize(tiny) ) ///
+			(lfit `y' `ses' )
 
 predict e, resid
-
-// Scatterplot of residuaals: holy heteroscedastic
-graph twoway scatter  `ses' e, msize(tiny)
 
 // Can always use robust ses
 reg `y' `ses' `demog' `tests', vce(robust)
@@ -97,36 +87,20 @@ local step=`diff'/`no_steps'
     
 margins , predict(xb) ///
     at((mean) _continuous ///
-        (min) `demog' ///
+        (base) _factor ///
         `x'=(`mymin'(`step')`mymax') ///          
        ) ///
       post
 
 // Grab results for plotting    
 
-// Predicted values
-mat yhat=e(b)
+marginsplot
 
-mat li yhat
+marginsplot, recastci(rarea) ciopts(color(gray%10)) ///
+			recast(line)  plotopts(color(blue)) ///
+			xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") name("LPM")
 
-mat yhat=yhat'
-
-// Key independent variable
-mat allx=e(at)
-
-mat li allx
-
-mat myx=allx[1...,1]
-
-// Put predicted values in memory
-svmat yhat, names("yhat_lpm")
-
-//put key iv in memory
-svmat myx
-
-// Plot results
-graph twoway line yhat_lpm myx1, name("LPM") ytitle("Pr(Attend)") xtitle("SES") 
-
+			
 graph export lpm.pdf, replace name("LPM")
 
 /*Logistic Function*/
@@ -143,10 +117,8 @@ graph twoway function y=1/(1+exp((-`k')*(x-`x0'))),range(-2 2) name("Logit")
 // Most general: glm
 glm `y' `ses' `demog' `tests', family(binomial) link(logit) /*Logit model */
 
-
 // Can also use probit, uses cdf of normal dist    
 glm `y' `ses' `demog' `tests', family(binomial) link(probit) /*Probit Model */
-
 
 // Simpler version of logit model 
 logit `y' `ses' `demog' `tests' 
@@ -157,110 +129,95 @@ gen mysample=e(sample)
 
 /* Generating marginal effects */
 
+
+estimates restore full_model
+
 margins, dydx(*) /*for all coefficients, default is to hold others at mean */
 
 /*Margins for range of ses */
 
 estimates restore full_model
-    
+
 margins , predict(pr) ///
     at((mean) _continuous ///
-        (min) `demog' ///
+        (base) _factor ///
         `x'=(`mymin'(`step')`mymax') ///          
        ) ///
       post
-
-// Get predictions    
-mat yhat=e(b)
-
-mat yhat=yhat'
-
-svmat yhat, names(yhat_logit)
-
-graph twoway line yhat_lpm yhat_logit myx1, ///
-    name("Logistic") ///
-    ytitle("Pr(Attend)") ///
-    xtitle("SES") ///
-    legend(order(1 "LPM" 2 "Logit") )
-
-estimates restore full_model
 	  
-graph export logit_basic.pdf, replace name("Logistic")
+//Marginsplot
 
-drop yhat_*
 
-// What about marginsplot? <sigh> <eyeroll>    
+marginsplot, recastci(rarea) ciopts(color(gray%10)) ///
+			recast(line)  plotopts(color(blue)) ///
+xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") name("logit_basic")
 
-estimates restore full_model
 
-margins , predict(pr) ///
-    at((mean) _continuous ///
-        (min) `demog' ///
-        `x'=(`mymin'(`step')`mymax') ///          
-       ) ///
-           post
+			
+graph export logit_basic.pdf, replace name("logit_basic")
 
-marginsplot, recastci(rarea) recast(line)
-
-// By Math scores
-
-logit `y' bynelsem
-
-predict yhat, pr
-
-graph twoway line yhat bynels2m
     
-	
 /* Margins for range of ses, all races */
 
-foreach myrace of local race{
-
 estimates restore full_model
 
 margins , predict(pr) ///
     at((mean) _continuous ///
-        (min) `demog' ///
+        (base) _factor ///
         `x'=(`mymin'(`step')`mymax') ///
-        `myrace'=1 ///
+        byrace2=(1(1)6) ///
        ) ///
       post
 
-    
-mat yhat=e(b)
 
-mat yhat=yhat'
+marginsplot, recastci(rarea) ciopts(color(%10)) ///
+				recast(line) ///
+              xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") ///
+              name("logit_race")
 
-svmat yhat, names("yhat_`myrace'")
-    
-}
+			
+graph export logit_race.pdf, replace name("logit_race")
+	
+estimates restore full_model			
 
-graph twoway line yhat_* myx, ///
-    name("All_Races") ///
-    ytitle("Pr(Attend)") ///
-    xtitle("SES") ///
-    legend(order(1 "Native American" ///
-    2 "Asian" ///
-    3 "Black" ///
-    4 "Hispanic" ///
-    5 "Multiracial") )
-    
-graph export logit_race.pdf, replace name("All_Races")
+margins , predict(pr) ///
+    at((mean) _continuous ///
+        (base) _factor ///
+        `x'=(`mymin'(`step')`mymax') ///
+        byrace2=(3 4 6) ///
+       ) ///
+      post
+
+
+marginsplot, recastci(rarea) ciopts(color(%10)) ///
+				recast(line) ///
+				xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") ///
+				legend(cols(1))
+
+				
+// Another option
 
 estimates restore full_model
+
+marginscontplot2 byses1, at1(-2(.2)2) ci				
+
+mcp2 byses1, at1(-2(.1)2) ci
+
+mcp2 byses1 byrace2, at1(-2(.1)2) ci				
 
 // Other functions
 
-listcoef /*Display odds ratios from model in memory */
-
-listcoef, reverse /* Reveres interpretation, helps with negative coefs */
-
-logistic `y' `ses' `demog' `tests'  /*Works too */
-  
 estimates restore full_model
 
+listcoef /*Display odds ratios from model in memory */
+
+logistic `y' `ses' `demog' `tests'  /*Works too */
+ 
 /* Measures of model fit: all imperfect */
 
 // Built in methods
+
+estimates restore full_model
 
 fitstat
 
