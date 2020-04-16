@@ -201,7 +201,7 @@ quietly margins , predict(pr) ///
         byrace2=(3 4 6) ///
        ) ///
       post
-
+	  
 
 	  
 marginsplot, recastci(rarea) ciopts(color(%10)) ///
@@ -212,13 +212,128 @@ marginsplot, recastci(rarea) ciopts(color(%10)) ///
 				
 // Another option
 
+//estimates restore full_model
+
+//marginscontplot2 byses1, at1(-2(.2)2) ci				
+
+//mcp2 byses1, at1(-2(.1)2) ci
+
+//mcp2 byses1 byrace2, at1(-2(.1)2) ci				
+
 estimates restore full_model
 
-marginscontplot2 byses1, at1(-2(.2)2) ci				
+local x byses1
 
-mcp2 byses1, at1(-2(.1)2) ci
+sum `x', detail
 
-mcp2 byses1 byrace2, at1(-2(.1)2) ci				
+local no_steps=20
+
+local mymin=r(min)
+local mymax=r(max)
+local diff=`mymax'-`mymin'
+local step=`diff'/`no_steps'
+    
+local z bynels2m
+
+sum `z', detail
+
+local low_z=r(p25)
+local mid_z=r(p50)
+local hi_z=r(p75)
+
+quietly margins , predict(pr) ///
+    at((mean) _continuous ///
+        (base) _factor ///
+		 byrace2=6 ///
+		 female=1 ///
+        `x'=(`mymin'(`step')`mymax') ///
+		`z'=(`low_z' `mid_z' `hi_z') ///
+       ) ///
+      post
+
+marginsplot ,name(step1, replace)
+
+marginsplot, recastci(rarea) name(step2, replace)
+
+
+marginsplot, recastci(rarea) ciopts(color(%10)) name(step3, replace)
+
+
+marginsplot, recastci(rarea) ciopts(color(%10)) ///
+				recast(line) ///
+				name(step4, replace)
+
+
+marginsplot, recastci(rarea) ciopts(color(%10)) ///
+				recast(line) ///
+				ytitle("Pr(College)") ///
+				xtitle("SES") ///
+				xlabel(-2(.3)2) ///
+				legend(order(4 "25th percentile, Math Test" ///
+							5 "Median, Math Test"  ///
+							6 "75th percentile, Math Test")) ///
+				legend(cols(1)) ///		
+				title("") ///
+				name(step5, replace)				
+	  
+	  
+
+estimates restore full_model
+
+local x byses1
+
+sum `x', detail
+
+local no_steps=20
+
+local mymin=r(min)
+local mymax=r(max)
+local diff=`mymax'-`mymin'
+local step=`diff'/`no_steps'
+    
+local z bynels2m
+
+sum `z', detail
+
+local low_z=r(p25)
+local mid_z=r(p50)
+local hi_z=r(p75)
+
+local race_levels "Native_American" "Asian_Pacific_Islander" "African-American"  "Hispanic"  "Multiracial"  "White"
+
+local i=1
+
+foreach race of local race_levels{ 
+
+estimates restore full_model
+
+quietly margins , predict(pr) ///
+    at((mean) _continuous ///
+        (base) _factor ///
+		 byrace2=`i' ///
+		 female=1 ///
+        `x'=(`mymin'(`step')`mymax') ///
+		`z'=(`low_z' `mid_z' `hi_z') ///
+       ) ///
+      post
+
+marginsplot, recastci(rarea) ciopts(color(%10)) ///
+				recast(line) ///
+				ytitle("Pr(College)") ///
+				xtitle("SES") ///
+				xlabel(-2(.3)2) ///
+				legend(order(4 "25th percentile, Math Test" ///
+							5 "Median, Math Test"  ///
+							6 "75th percentile, Math Test")) ///
+				legend(cols(1)) ///		
+				title(`race') 
+				
+graph save "prob_`i'.gph", replace				
+		
+local i=`i'+1				
+}	  
+
+
 
 // Other functions
 
