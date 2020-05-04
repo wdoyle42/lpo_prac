@@ -74,34 +74,34 @@ Limited dependent variables: censored data, count data
 
 *May 13*
 
-Student Presentation
+Student Presentations: Youjin Chung, Cara DeLoach
 
 *May 14*
 
-Student Presentation
+Student Presentations: Christine Dickason, Catherine Duggan 
 
 *May 15*
 
-Student Presentation
+Student Presentations: Divya Gopinath, Kara Mitchell
 
 *May 18*
 
-Student Presentation
+Student Presentations: Anna Moyer, Francisco Santelli
 
 *May 19*
 
-Student Presentation
+Student Presentations: Colby Woods
 
 *May 20*
 
-Student Presentation
+Code-A-Rama: Open Office Hours from 10-3 to help with coding issues
 
 *May 21*
 
-Student Presentation
+In-class conference style presentations
 
-*May 22*
 
-In-Class conference style presentations
+
+
 
 *Final Paper Due Midnight, June 12 (three weeks after last class)*
