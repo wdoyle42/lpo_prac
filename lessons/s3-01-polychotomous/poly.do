@@ -195,6 +195,8 @@ esttab oprob_* using raw_oprobit.rtf, ///
     aic ///
     replace
 
+	
+
 local cut1=_b[/:cut1]
 local cut2=_b[/:cut2]
 
@@ -214,7 +216,8 @@ graph twoway (function y=normalden(x,female_pred,1),range(-3 6)) ///
              text(.3 -2 "No Plans", size(vsmall)) ///
              text(.35 .9 "Votech/CC", size(vsmall)) ///
              text(.3 4.2 "Four Year", size(vsmall))
-              
+
+
 graph export "linear.pdf", replace
 
 estimates restore oprob_3
@@ -239,7 +242,7 @@ esttab marg?_ord using marg_ord.rtf, ///
     b(2) ///
     replace    
 
-local my_outcomes "None" "Votech/CC" "Four-Year"
+local my_outcomes `" "No Plans" "Votech/CC Plans" "Four-Year Plans" "'
 	
 local j=1	
 
@@ -249,12 +252,17 @@ estimates restore oprob_3
 
 margins,  predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7) (min) `race' `pared'  (mean) bynels2r byses1  )  post
 
+set scheme s1color
+
 // If you want to use marginsplot: 
-marginsplot, recastci(rarea) ciopts(color(%25) lwidth(0)) ///
+marginsplot, recastci(rarea) ///
+			 ciopts(color(eltblue%25) lwidth(0) ) ///
 			 recast(line) ///
-		     name("outcome_`j'") ///
-			title("`my_outcome'") ///			 
-			 //ytitle("Pr(`my_outcome')") ///
+			 plotopts(color(black)) ///
+			 title(`"`my_outcome'"') ///
+			 xtitle("Math Score") ///
+			 ytitle(`"Pr(`my_outcome')"') ///
+			 legend(off)
 			 
 			 
 graph save "order_plan_`j'.gph", replace
@@ -264,13 +272,60 @@ local j=`j'+1
 }/*End loop over outcomes*/
 
 graph combine order_plan_1.gph order_plan_2.gph order_plan_3.gph, ///
-  rows(1)
+		xcommon ycommon rows(1) 
   
 graph export  "order.pdf", replace
 
+exit
+
+drop newexp
+/*Locals for analysis*/
+local y first_inst
+
+local test bynels2m bynels2r
+
+local race amind asian black hispanic multiracial
+
+local pared bypared_nohs bypared_2yrnodeg bypared_2yr bypared_some4 bypared_masters bypared_phd 
+
+local income  byses1
+
+
+
+recode bystexp  ///
+		(-1/2=1 "HS or Less") ///
+		(3/4=2 "Less than 4 yr") ///
+		(5=3 "Four-Year") ///
+		(6/7=4 "Graduate Degree") , /// 		
+		gen(newexp)
+
+eststo oprob_3:oprobit newexp female `test' `race' `pared' `income'
+		
+	
+
+
+forvalues j = 1/4{
+
+estimates restore oprob_3
+
+margins,  predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7) (min) `race' `pared'  (mean) bynels2r byses1  )  post
+
+// If you want to use marginsplot: 
+marginsplot, recastci(rarea) ciopts(color(%25) lwidth(0)) ///
+			 recast(line) 
+			 
+			 
+graph save "order_exp_`j'.gph", replace
+
+}/*End loop over outcomes*/
+	
+graph combine order_exp_1.gph order_exp_2.gph order_exp_3.gph order_exp_4.gph, ///
+  rows(1)	
+		
+exit 
+
 } // End order analysis section
 
-exit
 
 /********************************************************************************/
 /* Multinomial Logit */
