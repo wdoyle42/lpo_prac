@@ -187,6 +187,10 @@ eststo oprob_1:oprobit order_plan female `test'
 eststo oprob_2:oprobit order_plan female `test' `race' `pared' 
 eststo oprob_3:oprobit order_plan female `test' `race' `pared' `income'
 
+local cut1=_b[/:cut1]
+local cut2=_b[/:cut2]
+
+
 esttab oprob_* using raw_oprobit.rtf, ///
     not ///
     nostar ///
@@ -195,10 +199,6 @@ esttab oprob_* using raw_oprobit.rtf, ///
     aic ///
     replace
 
-	
-
-local cut1=_b[/:cut1]
-local cut2=_b[/:cut2]
 
 margins, predict(xb)  at(female=(0/1)) atmeans post /* Z in wooldridge*/
 
@@ -217,7 +217,27 @@ graph twoway (function y=normalden(x,female_pred,1),range(-3 6)) ///
              text(.35 .9 "Votech/CC", size(vsmall)) ///
              text(.3 4.2 "Four Year", size(vsmall))
 
+			 
+estimates restore oprob_3
 
+margins, predict(xb)  at(bynels2m=(.1 .7)) atmeans post /* Z in wooldridge*/
+
+mat linpred=e(b)
+scalar high_test_pred=linpred[1,1]
+scalar low_test_pred=linpred[1,2]
+        
+graph twoway (function y=normalden(x,high_test_pred,1),range(-3 6)) ///
+             (function y=normalden(x,low_test_pred,1), range(-3 6)), ///
+             xline(`cut1',lpattern(dash)) /// 
+             xline(`cut2',lpattern(dash)) ///
+             legend(order(1 "Low Test Scores" 2 "High Test Scores")) ///
+             note("") title("") ///
+             xtitle("Linear Prediction") ///
+             text(.3 -2 "No Plans", size(vsmall)) ///
+             text(.35 .9 "Votech/CC", size(vsmall)) ///
+             text(.3 4.2 "Four Year", size(vsmall))
+			 
+			 
 graph export "linear.pdf", replace
 
 estimates restore oprob_3
@@ -226,6 +246,11 @@ estimates restore oprob_3
     margins ,at(female=(0/1)) predict(outcome(2)) atmeans
     margins ,at(female=(0/1)) predict(outcome(3)) atmeans
 
+	margins ,at(bynels2m=(.1 .7)) predict(outcome(1)) atmeans
+    margins ,at(bynels2m=(.1 .7)) predict(outcome(2)) atmeans
+    margins ,at(bynels2m=(.1 .7)) predict(outcome(3)) atmeans
+
+	
 /*Marginal Effects*/
 
  estimates restore oprob_3
@@ -242,6 +267,7 @@ esttab marg?_ord using marg_ord.rtf, ///
     b(2) ///
     replace    
 
+	
 local my_outcomes `" "No Plans" "Votech/CC Plans" "Four-Year Plans" "'
 	
 local j=1	
@@ -264,7 +290,6 @@ marginsplot, recastci(rarea) ///
 			 ytitle(`"Pr(`my_outcome')"') ///
 			 legend(off)
 			 
-			 
 graph save "order_plan_`j'.gph", replace
 
 local j=`j'+1
@@ -275,7 +300,6 @@ graph combine order_plan_1.gph order_plan_2.gph order_plan_3.gph, ///
 		xcommon ycommon rows(1) 
   
 graph export  "order.pdf", replace
-
 
 /*Locals for analysis*/
 local y first_inst
@@ -324,7 +348,46 @@ local j=`j'+1
 	
 graph combine order_exp_1.gph order_exp_2.gph order_exp_3.gph order_exp_4.gph, ///
   rows(1)	xcommon ycommon
+
 		
+local my_outcomes `" "HS or Less" "Less than Four-Year" "BA" "Graduate Degree" "'
+
+local j=1	
+		
+foreach my_outcome of local my_outcomes{
+
+estimates restore oprob_3
+
+sum byses1
+
+local mymin=r(min)
+local mymax=r(max)
+local diff=`mymax'-`mymin'
+local no_step=100
+local step=`diff'/`no_step'
+
+margins,  predict(outcome(`j')) ///
+			at(byses1=(`mymin'(`step')`mymax') ///
+			female=(0 1) (min) `race' `pared' ///
+			(mean) bynels2r bynels2m) ///
+			post
+
+marginsplot, recastci(rarea) ciopts(color(%25) lwidth(0)) ///
+			 recast(line)  ///
+			 title(`"`my_outcome'"') ///
+			 xtitle("SES") ///
+			 ytitle(`"Pr(`my_outcome')"')  ///
+			 legend(order(1 "Male" 2 "Female"))
+			 			 
+graph save "order_exp_`j'.gph", replace
+local j=`j'+1
+
+}/*End loop over outcomes*/
+	
+grc1leg combine order_exp_1.gph order_exp_2.gph order_exp_3.gph order_exp_4.gph, ///
+  rows(1) xcommon ycommon 
+ 
+  
 exit 
 
 } // End order analysis section
