@@ -22,9 +22,9 @@ global ddir "../../data/"
 
 /*Controls*/
 
-local coding=1
-local order_analysis=1
-local multi_analysis=0
+local coding=0
+local order_analysis=0
+local multi_analysis=1
 local multi_ses_race=0
 local auc=0
 local compare=0
@@ -384,11 +384,10 @@ local j=`j'+1
 
 }/*End loop over outcomes*/
 	
-grc1leg combine order_exp_1.gph order_exp_2.gph order_exp_3.gph order_exp_4.gph, ///
+grc1leg  order_exp_1.gph order_exp_2.gph order_exp_3.gph order_exp_4.gph, ///
   rows(1) xcommon ycommon 
  
   
-exit 
 
 } // End order analysis section
 
@@ -413,11 +412,11 @@ margins, dydx(`test' `race' `pared' `income') predict(outcome(3)) post
 forvalues j= 1/3{
 estimates restore multi_plan  
 margins, predict(outcome(`j'))  at(bynels2m=(.1 .2 .3 .4 .5 .6 .7)  (min) `race' `pared'  (mean) bynels2r byses1  )  post
-}
-  
+
+marginsplot, recastci(rarea) ciopts(color(%25) lwidth(0)) ///
+			 recast(line)   
            
 graph save "unorder_plan_`j'.gph", replace
-
 
 
 }/*End loop over outcomes*/
@@ -432,9 +431,10 @@ graph export "unorder.pdf", replace
 
 /* Multinomial Logit: better application, first institution attended */
 
-eststo multi_first1: mlogit first_inst female `test' ,baseoutcome(1)
+eststo multi_first1: mlogit first_inst female `test' , baseoutcome(1)
 eststo multi_first2: mlogit first_inst female `test' `race' `pared',baseoutcome(1) 
 eststo multi_first3: mlogit first_inst female `test' `race' `pared' `income' ,baseoutcome(1) 
+
 
 esttab multi_first* using multi_first.tex, ///
     not ///
@@ -454,26 +454,43 @@ estimates restore multi_first3
 margins, dydx(`test' `race' `pared' `income') predict(outcome(4)) post
 
 
-forvalues j= 1/4{
+	
+local my_outcomes `" "Public Four-Year" "Private Four-Year" "Public Two-Year" "Other" "'
+
+local j=1
+
+foreach my_outcome of local my_outcomes{
 
 estimates restore multi_first3
 
 margins, predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7)  (min) `race' `pared'  (mean) bynels2r byses1  )  post
-}
-  
-         
+
+marginsplot, recastci(rarea) ciopts(color(%25) lwidth(0)) ///
+			 recast(line)  ///
+			 title(`"`my_outcome'"') ///
+			 xtitle("Math Scores") ///
+			 ytitle(`"Pr(`my_outcome')"') ///
+			 legend(off)
+        
 graph save "unorder_first_`j'.gph", replace
 
+local j=`j'+1		
+	 
+} // Close loop over outcomes
+  
 
 }/*End loop over outcomes*/
 
-/*graph combine unorder_first_1.gph ///
+graph combine unorder_first_1.gph ///
               unorder_first_2.gph ///
               unorder_first_3.gph ///        
               unorder_first_4.gph, ///
-              rows(2)
-*/
-//graph export unorder_first.pdf,replace
+              rows(2) xcommon ycommon 
+
+graph export unorder_first.pdf,replace
+
+exit 
+
 } /*end multi analysis section*/
 
 if `multi_ses_race'==1{
