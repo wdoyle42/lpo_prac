@@ -276,9 +276,7 @@ graph combine order_plan_1.gph order_plan_2.gph order_plan_3.gph, ///
   
 graph export  "order.pdf", replace
 
-exit
 
-drop newexp
 /*Locals for analysis*/
 local y first_inst
 
@@ -290,7 +288,7 @@ local pared bypared_nohs bypared_2yrnodeg bypared_2yr bypared_some4 bypared_mast
 
 local income  byses1
 
-
+capture drop newexp
 
 recode bystexp  ///
 		(-1/2=1 "HS or Less") ///
@@ -301,26 +299,31 @@ recode bystexp  ///
 
 eststo oprob_3:oprobit newexp female `test' `race' `pared' `income'
 		
-	
+local my_outcomes `" "HS or Less" "Less than Four-Year" "BA" "Graduate Degree" "'
 
-
-forvalues j = 1/4{
+local j=1	
+		
+foreach my_outcome of local my_outcomes{
 
 estimates restore oprob_3
 
 margins,  predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7) (min) `race' `pared'  (mean) bynels2r byses1  )  post
 
-// If you want to use marginsplot: 
 marginsplot, recastci(rarea) ciopts(color(%25) lwidth(0)) ///
-			 recast(line) 
+			 recast(line)  ///
+			  title(`"`my_outcome'"') ///
+			 xtitle("Math Score") ///
+			 ytitle(`"Pr(`my_outcome')"') ///
+			 legend(off)
 			 
 			 
 graph save "order_exp_`j'.gph", replace
+local j=`j'+1
 
 }/*End loop over outcomes*/
 	
 graph combine order_exp_1.gph order_exp_2.gph order_exp_3.gph order_exp_4.gph, ///
-  rows(1)	
+  rows(1)	xcommon ycommon
 		
 exit 
 
