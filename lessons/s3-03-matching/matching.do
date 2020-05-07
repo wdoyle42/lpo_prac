@@ -6,7 +6,7 @@ log using "match.log",replace /*Open up new log */
 /* Matching Examples */
 /* Following Zhao, 2004 examples of difft kinds of matching */
 /* Will Doyle */
-/* 180507 */
+/* 2020-05-07 */
 /* Practicum Folder */
 
 
