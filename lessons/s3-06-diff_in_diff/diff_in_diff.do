@@ -10,7 +10,6 @@ gen post=year>1993
 
 gen treat_post=treat*post
 
-
 /* Four groups */
 
 gen no_treat_before=treat==0&post==0
@@ -25,21 +24,29 @@ gen treat_after=treat==1&post==1
 
 mean work if no_treat_before==1
 
-scalar mean_no_treat_before=r(b)
+mat result=e(b)
+
+scalar mean_no_treat_before=result[1,1]
 
 scalar li mean_no_treat_before
 
 mean work if no_treat_after==1
 
-scalar mean_no_treat_after=r(b)
+mat result=e(b)
+
+scalar mean_no_treat_after=result[1,1]
 
 mean work if treat_before==1
 
-scalar mean_treat_before=r(b)
+mat result=e(b)
+
+scalar mean_treat_before=result[1,1]
 
 mean work if treat_after==1
 
-scalar mean_treat_after=r(b)
+mat result=e(b)
+
+scalar mean_treat_after=result[1,1]
 
 scalar change_notreat=mean_no_treat_after-mean_no_treat_before
 
@@ -48,6 +55,8 @@ scalar change_treat=mean_treat_after-mean_treat_before
 scalar diff_diffs=change_treat-change_notreat
 
 scalar li diff_diffs
+
+exit 
 
 save eitc_new, replace
 
@@ -112,25 +121,6 @@ xtset state
 
 xtreg work treat post treat_post urate nonwhite age ed unearn i.year, fe
 
-
-
-/* Duflo et al approach */
-
-drop _I*
-  
-collapse work urate nonwhite age ed unearn , by(state year)
-
-gen post
-
-reg work urate nonwhite age ed unearn i.state i.year
-
-predict uhat, resid
-
-gen resid_treat=.
-
-replace resid_treat=resid if treat==1
-
-reg resid_treat post
 
 
 
