@@ -2,7 +2,7 @@
 output:
   pdf_document: default
   html_document: default
-  logo: [./img/pc09b.jpg]
+  logo: ./img/pc09b.jpg
 ---
 ## Vanderbilt University
 
