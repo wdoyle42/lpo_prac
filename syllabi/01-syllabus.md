@@ -74,7 +74,10 @@ your work to the rest of the class on December 4.
 Texts
 -----
 
-There are no 
+There are no required texts for this course. The course materials will
+live on the github repository,
+https://github.com/wdoyle42/lpo_prac. For each class session you'll
+need to grab the notes, do file and data for that session. 
 
 Software
 --------
