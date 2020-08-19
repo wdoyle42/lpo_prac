@@ -50,11 +50,11 @@ You will need your selected dataset to complete assignments for the course. The 
 based on these will be due in two weeks. The file should be named as
 follows:
 
-  `01_assignment_<lastname>.docx`
+  `01-assignment-<lastname>.docx`
   
 So, for instance, if I was completing this assignment I would name it:
 
-`01_assignment_doyle.docx`
+`01-assignment-doyle.docx`
 
 
 Notice that I have removed `<lastname>` and substituted `doyle`.  Please no upper case letters in filenames, ever. 
