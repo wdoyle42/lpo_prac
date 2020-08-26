@@ -15,7 +15,7 @@ William R. Doyle
 
 Office: 207D Payne
 
-Office Hours: Tuesday and Thursday 2:30-5 or by Appointment (use http://wdoyle42.youcanbook.me)
+Office Hours: Tuesday and Thursday 2:30-5 or by appointment (use http://wdoyle42.youcanbook.me)
 
 w.doyle@vanderbilt.edu
 
