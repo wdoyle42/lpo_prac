@@ -1,4 +1,3 @@
-Agenda for 2020-08-20
 # LPO 9951
 # Class Notes, 1st session
 
@@ -32,7 +31,22 @@ Think of this class as having four modalities:
 
 *Working in Zoom*
 
-Zoom as a synchronous format for a class this size generally works very well. My basic assumption is that you will have your mic muted and your video on during class, but you can interject at any time to ask me a question or ask for clarification. If you’re having connectivity issues, first of all, don’t stress. It’s okay. The synchronous part of this class is just one part. Turning off your video is fine if you need to. Cameos from other members of your household-- partners, kids, pets--- it's fine. Don't worry about it. The main thing is to minimize any distractions that might occur for other class members, which usually just comes down to muting audio and/or video. If at any time I'm doing something that isn't working, let me know.
+Zoom as a synchronous format for a class this size generally works very well. My basic assumption is that you will have your mic muted and your video on during class, but you can interject at any time to ask me a question or ask for clarification. If you’re having connectivity issues, first of all, don’t stress. It’s okay. The synchronous part of this class is just one part. Turning off your video is fine if you need to. Cameos from other members of your household-- partners, kids, pets--- it's fine. Don't worry about it. The main thing is to minimize any distractions that might occur for other class members, which usually just comes down to muting audio and/or video. If at any time I'm doing something that isn't working, let me know. Bu far my most common 
+
+*Github*
+
+In the async video I talked about git/github. You can get as deep into github as you want. It's a very useful tool for research projects, as it keeps track of changes and helps to avoid many of the classic issues of version control. There are a HUGE number of online resources for GitHub. I'm not going to spend a ton of time teaching github though. Think about GitHub as the source of most non-video content for the class: syntax, notes, and data. 
+
+*Brightspace*
+
+Brightspace is Vanderbilt's LMS. This is where you will turn in all assignments. Needless to say, no paper will exchange hands at any point during this course.
+
+*Slack*
+
+Slack is a good alternative to email for getting questions answered. I'll be active on Slack during office hours and on Monday nights. 
+
+
+
 
 
 
