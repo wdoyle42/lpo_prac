@@ -1,4 +1,4 @@
-version 13 /* Can set version here, use version 13 as default */
+version 16 /* Can set version here, use version 13 as default */
 capture log close /* Closes any logs, should they be open */
 
 // This is a comment
@@ -9,21 +9,21 @@ capture log close /* Closes any logs, should they be open */
   
 log using "introduction.log",replace /*Open up new log */ 
 
-/* Introduction to Stata */ 
-/* Provides a brief look at display, list, summarize, gen, by and if commands */
-/* Will Doyle */
-/* 8/22/18*/
-/* Saved under in-class work */
+// Introduction to Stata  
+// Provides a brief look at display, list, summarize, gen, by and if commands 
+// Will Doyle 
+// 8/25/20
+// Saved under in-class work 
 
 clear
 
-clear mata /* Clears any fluff that might be in mata */
+clear mata // Clears any fluff that might be in mata 
 
-estimates clear /* Clears any estimates hanging around */
+estimates clear // Clears any estimates hanging around 
 
-set more off /*Get rid of annoying "more" feature */ 
+set more off // Get rid of annoying "more" feature 
 
-set scheme s1mono /* My  preferred graphics scheme */
+set scheme s1color // My  preferred graphics scheme 
 
 use census     /*filename of dataset */
 
@@ -126,12 +126,13 @@ msymbol(none) mlabel(state)  mlabsize(tiny)/*Change Label Size*/
   
 
 /*Create variables for rate of marriages and divorces*/
+
 /*Which region has the highest rates of marriage and divorce in the population?*/
+
 /* What do the distributions of these two variables look like? */
 
 /*What does a scatterplot say about the possible relationship? between the two*/  
   
-
   
 log close /* close log file */
 
