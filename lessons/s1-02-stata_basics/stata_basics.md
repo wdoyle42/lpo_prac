@@ -3,7 +3,7 @@ Stata Basics
 
 *Will Doyle*
 
-*9 5 2016*
+*9 2 2020*
 
 <br>
 
@@ -129,8 +129,11 @@ command:
 
 <br>
 
+
 `describe` dataset
 ------------------
+
+Import and export delimited provide similar functionality. 
 
 Once you have your dataset in memory, you can `describe` it to get a
 quick overview of what you have:
