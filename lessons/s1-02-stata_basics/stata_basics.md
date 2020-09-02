@@ -232,7 +232,7 @@ data:
  is the number of years in residence, school is an indicator for
  whether the parent is a teacher, logptax is log property tax, vote is
  an indicator for whether they voted for a school band measure and
- logeduc is log of years of education. Create appropriate variable
+ logeduc is log spending on education. Create appropriate variable
  names and labels for a more descriptive dataset. 
 
 Labeling values within variables
