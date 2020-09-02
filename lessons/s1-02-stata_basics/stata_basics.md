@@ -224,6 +224,17 @@ data:
 
 <br>
 
+
+*Quick Exercise*  The variables are as follows--- obs is an id for
+ each observation, pub12, pub34 and pub5 are indicator variables for
+ the number of children in public school, private is an indicator
+ variable for whether the family has a child in privat4 school, years
+ is the number of years in residence, school is an indicator for
+ whether the parent is a teacher, logptax is log property tax, vote is
+ an indicator for whether they voted for a school band measure and
+ logeduc is log of years of education. Create appropriate variable
+ names and labels for a more descriptive dataset. 
+
 Labeling values within variables
 --------------------------------
 
