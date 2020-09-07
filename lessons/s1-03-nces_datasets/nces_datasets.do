@@ -116,7 +116,6 @@ global ...
 display "$datadir"
 
 
-
 /***
 ... and there you have it. 
 
@@ -144,7 +143,7 @@ use  ///
 	using "${datadir}hsls_17_student_pets_sr_v1_0.dta", ///
 	clear
 
-save "${ddir}hsls_analysis"	, replace
+save "${ddir}hsls_analysis",replace
 
 
 exit
