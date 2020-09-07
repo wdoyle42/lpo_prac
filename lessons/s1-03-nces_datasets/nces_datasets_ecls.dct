@@ -1,0 +1,8 @@
+dictionary using "ECLSK_98_99_K8_CHILD_v1_0.dat" {
+
+_column(1)     str8 CHILDID   %8s       "CHILD IDENTIFICATION NUMBER"
+_column(988)   double C1R4RSCL%6.2f     "C1 RC4 READING IRT SCALE SCORE"
+_column(994)   double C1R4RTSC%6.3f     "C1 RC4 READING T-SCORE"
+_column(1066)  long C1RRPRIN  %2.0f     "C1 PRINT FAMILIARITY"
+
+}

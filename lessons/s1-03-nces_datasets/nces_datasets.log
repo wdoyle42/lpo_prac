@@ -1,209 +1,140 @@
--------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s1-03-nces_datasets/nces_d
-> atasets.log
+       log:  /Users/doylewr/lpo_prac/lessons/s1-03-nces_datasets/nces_datasets.log
   log type:  text
- opened on:  12 Sep 2017, 11:22:57
+ opened on:   7 Sep 2020, 15:58:46
 
 . 
-. // NAME: Working with NCES datasets
-. // FILE: nces_datasets.do
-. // AUTH: Will Doyle
-. // REVS: Benjamin Skinner
-. // INIT: 3 September 2014
-. // LAST: 11 Sep 2017
 . 
-. clear all                               // clear memory
-
-. set more off                            // turn off annoying "__more__" feature
-
+. /***
+> Directory structure
+> -----------
+> 
+> Data files (particularly large ones) should be stored in their own 
+> subdirectories. While it's possible to simply dump everything in one 
+> big directory, you may find that over time, as the folder grows, 
+> it becomes very difficult to find what you need and almost impossible 
+> to share your work with others. Yes, your computer can search really well. 
+> An organized directory structure is for you, the human. 
+> Get into the habit now, and you'll be thankful later.
+> ***/
 . 
-. // set globals for entire file
-. global workdir `c(pwd)'
-
+. 
+. /***
+> Directory structures
+> ---------------
+> 
+> In programming, we many times need to move around in directories on a
+> computer. Sometimes we use fixed paths, which specify exactly where something is
+> on the computer, other times we use relative paths. An example of a fixed path 
+> would be something like:
+> 
+> ___{c 96}/Users/doylewr/lpo_prac/lessons/s1-03-nces_datasets{c 96}___
+> 
+> That path specifies the exact directory on my computer. In general, you really
+> should avoid fixed paths, because everyone's computer is different. However,
+> you might have something like a clone of a GitHub repository on your computer. 
+> Within that repository, you can specify relative paths to clarify where you
+> want the program to look. A standard directory structure for a statistical
+> programming project is something like this:
+> 
+> project_directory/
+> 
+>                 ----data/
+>                 
+>                         -----source/
+>                         
+>                         -----analysis/
+>                         
+>                 ----scripts/
+>                 
+>                 ----output/
+>                 
+>                         -----tables/
+>                         
+>                         -----graphics/
+>                         
+>                 ----paper
+> 
+> Since our code exists in the ./scripts directory, to access the source 
+> data names source_data.dta we would need to go up one level to the main 
+> project directory and then down into the source data directory. 
+> The command for this in Stata would be: 
+> 
+> ___{c 96}use ../data/source/source_data.dta{c 96}___            
+> 
+> The ___{c 96}../{c 96}___ means to go up one level. Using ___{c 96}./{c 96}___ means to go into a subdirectory, 
+> or down one level. 
+> 
+> In my github repository, I store large data files in the data directory. To
+> access that directory from the current lesson 
+> I need to go up two levels and then into the data directory, so the relative
+> path is: ___{c 96}../../data/{c 96}___. 
+> 
+> ***/
+. 
+. 
+. 
+. /***
+> Working with globals
+> ---------------
+> We're going to set the structure for ourselves using global macros. In Stata,
+> a macro is a variable that can be set to some value. There are two types of 
+> macros in Stata-- global and local. A global macro is persistent during a 
+> session (when Stata is open). A local macro is forgotten as soon as a script
+> (do file) is run. In general, I will encourage you to use local macros, as their
+> use enables better programming practices and replication. However, using 
+> global macros is a good idea for data management. 
+> 
+> First we tell Stata what a macro will represent:
+> 
+> ***/
+. 
 . global datadir "../../data/"
 
-. global auxdir "../../aux/"
-
 . 
-. // display globals
-. di "$workdir"
-/Users/doylewr/practicum_2017/central/lessons/s1-03-nces_datasets
-
-. di "$datadir"
+. /***
+> What the above means is that every time I call that macro, Stata will know I
+> means the directory in question. We can test this by asking Stata to display the
+> global ...
+> ***/
+. 
+. display "$datadir"
 ../../data/
 
 . 
-. // Educational Longitudinal Study (ELS)
-. 
-. // set globals for ELS files
-. global els_zip "ELS_2002-12_PETS_v1_0_Student_Stata_Datasets.zip"
-
-. global els_dta "els_02_12_byf3pststu_v1_0.dta"
-
-. global elssave "els_reduced.dta"
-
-. 
-. // unzip ELS file
-. cd $datadir
-/Users/doylewr/practicum_2017/central/data
-
-. unzipfile $els_zip, replace
-    inflating: els_02_12_byf3pststu_v1_0.dta
-successfully unzipped ELS_2002-12_PETS_v1_0_Student_Stata_Datasets.zip to current dir
-> ectory
-
-. cd $workdir
-/Users/doylewr/practicum_2017/central/lessons/s1-03-nces_datasets
-
-. 
-. // change delimiter to a semi-colon -1-
-. #delimit ;
-delimiter now ;
-. // keep only selected variables in ELS
-> use 
->    STU_ID
->    SCH_ID
->    STRAT_ID
->    PSU
->    F1SCH_ID
->    F1UNIV1
->    F1UNIV2A
->    F1UNIV2B
->    F2UNIV_P
->    BYSTUWT
->    F1QWT
->    F1PNLWT
->    F1TRSCWT
->    F2QTSCWT
->    F2QWT
->    F2F1WT
->    F2BYWT
->    BYS20B
->    F3BYPNLPSWT
-> using $datadir$els_dta;
-
-. // change delimiter back to carriage return
-> #delimit cr
-delimiter now cr
-. 
-. // lower all variable names using wildcard
-. renvars *, lower
-
-. 
-. // save reduced ELS dataset
-. save $datadir$elssave, replace
-file ../../data/els_reduced.dta saved
-
 . 
 . 
-. 
-. // Early Childhood Longitudinal Study - Kindergarten (ECLS-K)
-. 
-. cd $workdir
-/Users/doylewr/practicum_2017/central/lessons/s1-03-nces_datasets
-
-. 
-. // set globals for ECLS-K files
-. global ecl_zip "ECLSK_1998-99_v1_0_Stata_Datasets.zip"
-
-. global ecl_dat "ECLSK_98_99_K8_CHILD_v1_0.dat"
-
-. global ecl_dct "nces_datasets_ecls.dct"
-
-. global eclsave "eclsk_reduced.dta"
-
-.     
-. // unzip ECLS file
-. cd $datadir
-/Users/doylewr/practicum_2017/central/data
-
-. unzipfile $ecl_zip, replace
-    inflating: eclsk_98_99_k8_tch_v1_0.dta
-    inflating: eclsk_98_99_k8_child_v1_0.dat
-    inflating: eclsk_98_99_k8_sch_v1_0.dta
-successfully unzipped ECLSK_1998-99_v1_0_Stata_Datasets.zip to current directory
-
-. cd $workdir
-/Users/doylewr/practicum_2017/central/lessons/s1-03-nces_datasets
-
-. 
-. // read in ECLS file
-. infile using $datadir$ecl_dct, using($datadir$ecl_dat) clear
-
-dictionary {
-
-_column(1)     str8 CHILDID   %8s       "CHILD IDENTIFICATION NUMBER"
-_column(1418)  double C3R4RSCL%6.2f     "C3 RC4 READING IRT SCALE SCORE"
-_column(1510)  double C3R4MSCL%6.2f     "C3 RC4 MATH IRT SCALE SCORE"
-_column(4350)  long C1SPHOME  %1.0f     "C1 SPEAK SPANISH AT HOME"
-
-}
-
-(21409 observations read)
-
-. 
-. // lower all variable names using wildcard
-. renvars *, lower
-
-. 
-. // save reduced ECLS-K dataset
-. save $datadir$eclsave, replace
-file ../../data/eclsk_reduced.dta saved
-
+. /***
+> ... and there you have it. 
+> 
+> ***/
 . 
 . 
-. // High School Longitudinal Study (HSLS)
+. /***
+> Working with HSLS
+> 
+> The high school longitudinal study of 2009 tracks a set of students who began 
+> high school in 2009. It has been updated in 2012 and again in 2016.  It's a 
+> great source of information about how students navigate high school and make 
+> the transition to college or the workforce (and in many cases both).
+> 
+> HSLS can be accessed using the nces electronic codebook: 
+> https://nces.ed.gov/OnlineCodebook Once variables 
+> have been selected from the codebook, they can be accessed using the
+>  ___{c 96}use{c 96}___ . . .___{c 96}using{c 96}___
+> approach below:
+> ***/
 . 
-. // set globals for HSLS files
-. global hsls_zip "HSLS_2009_v3_0_Stata_Datasets.zip"
-
-. global hsls_dta "./HSLS_2009_v3_0_Stata_Datasets/hsls_09_student_v3_0.dta"
-
-. global hslssave "hsls_reduced.dta"
-
-. 
-. // unzip HSLS file
-. cd $datadir
-/Users/doylewr/practicum_2017/central/data
-
-. unzipfile $hsls_zip, replace
-    inflating: HSLS_2009_v3_0_Stata_Datasets/HSLS_09_SCHOOL_v1_0.dta
-    inflating: HSLS_2009_v3_0_Stata_Datasets/hsls_09_student_v3_0.dta
-successfully unzipped HSLS_2009_v3_0_Stata_Datasets.zip to current directory
-
-. cd $workdir
-/Users/doylewr/practicum_2017/central/lessons/s1-03-nces_datasets
-
-. 
-. // change delimiter to a semi-colon -2-
-. #delimit ;
-delimiter now ;
-. // keep only selected variables in HSLS
-> use 
->    STU_ID 
->    SCH_ID
->    X1NCESID
->    X1NCESID
->    W1STUDENT
->    W1PARENT
->    W1MATHTCH
->    W1SCITCH
->    S1AVID
->    X2SES 
-> using $datadir$hsls_dta;
-
-. // change delimiter back to carriage return
-> #delimit cr
-delimiter now cr
-. 
-. // lower all variable names using wildcard
-. renvars *, lower
+. use  ///
+>         STU_ID ///
+>         X1SES ///
+>         using "${datadir}hsls_17_student_pets_sr_v1_0.dta", ///
+>         clear
 
 . 
-. // save reduced HSLS dataset
-. save $datadir$hslssave, replace
-file ../../data/hsls_reduced.dta saved
+. save "${ddir}hsls_analysis"     , replace
+file hsls_analysis.dta saved
 
 . 
 . 
@@ -212,4 +143,11 @@ file ../../data/hsls_reduced.dta saved
 end of do-file
 
 
-. exit
+Warning
+your documentation has a width of 154, while your Stata has linesize of 142. markdoc automatically adjusts your document width. You can avoid
+this warning by increasing Stata's linesize or by writing shorter lines
+
+
+(markdoc created nces_datasets.md)
+
+
