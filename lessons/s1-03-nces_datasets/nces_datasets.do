@@ -53,7 +53,7 @@ Within that repository, you can specify relative paths to clarify where you
 want the program to look. A standard directory structure for a statistical
 programming project is something like this:
 
-project_directory/
+___`project_directory/
 
 		----data/
 		
@@ -69,7 +69,7 @@ project_directory/
 			
 			-----graphics/
 			
-		----paper
+		----paper`___
 
 Since our code exists in the ./scripts directory, to access the source 
 data names source_data.dta we would need to go up one level to the main 
