@@ -1,10 +1,34 @@
---------------------------------------------------------------------------------------------
-      name:  <unnamed>
-       log:  /Users/doylewr/lpo_prac/lessons/s1-03-nces_datasets/nces_datasets.log
-  log type:  text
- opened on:   9 Sep 2020, 11:07:08
-
-. 
+{smcl}
+{com}{sf}{ul off}{txt}
+{com}. /***
+> Working with NCES Datasets
+> =====
+> 
+> Will Doyle
+> =====
+> 
+> 2020-09-06
+> =====
+> 
+> Intro
+> ------
+> 
+> In this lesson we'll go over how to access and work with various NCES datasets 
+> in Stata. I diverge from the intended use from NCES, as there's a simpler 
+> way to get access to the data than the one that they lay out. 
+> 
+> ***/
+. capture log close
+{txt}
+{com}. 
+. log using "nces_datasets.log", replace
+{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/doylewr/lpo_prac/lessons/s1-03-nces_datasets/nces_datasets.log
+  {txt}log type:  {res}text
+ {txt}opened on:  {res} 9 Sep 2020, 11:07:08
+{txt}
+{com}. 
 . 
 . /***
 > Directory Structure
@@ -29,7 +53,7 @@
 > on the computer, other times we use relative paths. An example of a fixed path 
 > would be something like:
 > 
-> ___{c 96}/Users/doylewr/lpo_prac/lessons/s1-03-nces_datasets{c 96}___
+> ___{c -(}c 96{c )-}/Users/doylewr/lpo_prac/lessons/s1-03-nces_datasets{c -(}c 96{c )-}___
 > 
 > That path specifies the exact directory on my computer. In general, you really
 > should avoid fixed paths, because everyone's computer is different. However,
@@ -38,7 +62,7 @@
 > want the program to look. A standard directory structure for a statistical
 > programming project is something like this:
 > 
-> ___{c 96}project_directory/
+> ___{c -(}c 96{c )-}project_directory/
 > 
 >                 ----data/
 >                 
@@ -54,23 +78,22 @@
 >                         
 >                         -----graphics/
 >                         
->                 ----paper{c 96}___
+>                 ----paper{c -(}c 96{c )-}___
 > 
 > Since our code exists in the ./scripts directory, to access the source 
 > data names source_data.dta we would need to go up one level to the main 
 > project directory and then down into the source data directory. 
 > The command for this in Stata would be: 
 > 
-> ___{c 96}use ../data/source/source_data.dta{c 96}___            
+> ___{c -(}c 96{c )-}use ../data/source/source_data.dta{c -(}c 96{c )-}___            
 > 
-> The ___{c 96}../{c 96}___ means to go up one level. Using ___{c 96}./{c 96}___ means to go
->  into a subdirectory, 
+> The ___{c -(}c 96{c )-}../{c -(}c 96{c )-}___ means to go up one level. Using ___{c -(}c 96{c )-}./{c -(}c 96{c )-}___ means to go into a subdirectory, 
 > or down one level. 
 > 
 > In my github repository, I store large data files in the data directory. To
 > access that directory from the current lesson 
 > I need to go up two levels and then into the data directory, so the relative
-> path is: ___{c 96}../../data/{c 96}___. 
+> path is: ___{c -(}c 96{c )-}../../data/{c -(}c 96{c )-}___. 
 > 
 > ***/
 . 
@@ -92,8 +115,8 @@
 > ***/
 . 
 . global ddir "../../data/"
-
-. 
+{txt}
+{com}. 
 . /***
 > What the above means is that every time I call that macro, Stata will know I
 > means the directory in question. We can test this by asking Stata to display the
@@ -101,9 +124,9 @@
 > ***/
 . 
 . display "$ddir"
-../../data/
-
-. 
+{res}../../data/
+{txt}
+{com}. 
 . 
 . /***
 > ... and there you have it. 
@@ -122,21 +145,21 @@
 > HSLS can be accessed using the nces electronic codebook: 
 > https://nces.ed.gov/OnlineCodebook Once variables 
 > have been selected from the codebook, they can be accessed using the
->  ___{c 96}use{c 96}___ . . .___{c 96}using{c 96}___
+>  ___{c -(}c 96{c )-}use{c -(}c 96{c )-}___ . . .___{c -(}c 96{c )-}using{c -(}c 96{c )-}___
 > approach below:
 > ***/
 . 
 . use  ///
 >         STU_ID ///
 >         X1SES ///
->         using "${ddir}hsls_17_student_pets_sr_v1_0.dta", ///
+>         using "${c -(}ddir{c )-}hsls_17_student_pets_sr_v1_0.dta", ///
 >         clear
+{txt}
+{com}. 
+. save "${c -(}ddir{c )-}hsls_analysis.dta",replace
+{txt}file ../../data/hsls_analysis.dta saved
 
-. 
-. save "${ddir}hsls_analysis.dta",replace
-file ../../data/hsls_analysis.dta saved
-
-. 
+{com}. 
 . /***
 > Working with NHES
 > ------------------
@@ -156,16 +179,16 @@ file ../../data/hsls_analysis.dta saved
 > CPNNOWX ///
 > CPTYPE ///
 > CPHRS ///
-> using "${ddir}nhes_16_ecpp_v1_0.dta", clear 
-
-. 
+> using "${c -(}ddir{c )-}nhes_16_ecpp_v1_0.dta", clear 
+{txt}
+{com}. 
 . renvars *, lower
+{txt}
+{com}. 
+. save "${c -(}ddir{c )-}nhes_analsyis.dta", replace
+{txt}file ../../data/nhes_analsyis.dta saved
 
-. 
-. save "${ddir}nhes_analsyis.dta", replace
-file ../../data/nhes_analsyis.dta saved
-
-. 
+{com}. 
 . /*** 
 > PISA Datasets
 > -------------
@@ -185,9 +208,9 @@ file ../../data/nhes_analsyis.dta saved
 > PV1SCIE ///
 > PV1READ ///
 > if CNT=="JPN" | CNT=="FRA" | CNT=="USA" ///
-> using "${ddir}CY07_MSU_STU_QQQ.sav", ///
+> using "${c -(}ddir{c )-}CY07_MSU_STU_QQQ.sav", ///
 > case(lower) clear
-note: invalid string value MDA for value label labels1, skipped
+{res}{txt}note: invalid string value MDA for value label labels1, skipped
 note: no values defined for value label labels1, removed
 note: invalid string value THA for value label labels1, skipped
 note: invalid string value BRA for value label labels1, skipped
@@ -3825,13 +3848,13 @@ note: may not attach value label to string variable: no label applied
 note: may not attach value label to string variable: no label applied
 note: may not attach value label to string variable: no label applied
 note: may not attach value label to string variable: no label applied
-(4 vars, 17,255 obs)
+{res}{text}(4 vars, 17,255 obs)
 
-. 
-. save "${ddir}pisa_analysis.dta", replace
-file ../../data/pisa_analysis.dta saved
+{com}. 
+. save "${c -(}ddir{c )-}pisa_analysis.dta", replace
+{txt}file ../../data/pisa_analysis.dta saved
 
-. 
+{com}. 
 . /***
 > In-Class Work
 > --------------
@@ -3856,11 +3879,6 @@ file ../../data/pisa_analysis.dta saved
 . 
 . exit
 
-end of do-file
-
-
-Warning
-your documentation has a width of 154, while your Stata has linesize of 92. markdoc
-automatically adjusts your document width. You can avoid this warning by increasing Stata's
-linesize or by writing shorter lines
-
+{txt}end of do-file
+{smcl}
+{txt}{sf}{ul off}

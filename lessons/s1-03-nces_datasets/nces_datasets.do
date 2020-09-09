@@ -22,7 +22,7 @@ log using "nces_datasets.log", replace
 
 
 /***
-Directory structure
+Directory Structure
 -----------
 
 Data files (particularly large ones) should be stored in their own 
@@ -36,7 +36,7 @@ Get into the habit now, and you'll be thankful later.
 
 
 /***
-Directory structures
+Creating Directory Structures
 ---------------
 
 In programming, we many times need to move around in directories on a
@@ -105,7 +105,7 @@ First we tell Stata what a macro will represent:
 
 ***/
 
-global datadir "../../data/"
+global ddir "../../data/"
 
 /***
 What the above means is that every time I call that macro, Stata will know I
@@ -113,7 +113,7 @@ means the directory in question. We can test this by asking Stata to display the
 global ...
 ***/
 
-display "$datadir"
+display "$ddir"
 
 
 /***
@@ -140,10 +140,80 @@ approach below:
 use  ///
 	STU_ID ///
 	X1SES ///
-	using "${datadir}hsls_17_student_pets_sr_v1_0.dta", ///
+	using "${ddir}hsls_17_student_pets_sr_v1_0.dta", ///
 	clear
 
-save "${ddir}hsls_analysis",replace
+save "${ddir}hsls_analysis.dta",replace
+
+/***
+Working with NHES
+------------------
+The National Household Education Survey collects data on the education 
+activities of children and adults in the United States. The NHES has varying 
+emphases in different years. 
+
+Because of the different emphases, NHES will include different data files in 
+each year. It's important to know which data file a given variable comes from.
+Below, I open up the early childhood program data file and extract a few 
+variables regarding the child's participation in early childhood programs. 
+
+***/
+
+use ///
+BASMID ///
+CPNNOWX ///
+CPTYPE ///
+CPHRS ///
+using "${ddir}nhes_16_ecpp_v1_0.dta", clear 
+
+renvars *, lower
+
+save "${ddir}nhes_analsyis.dta", replace
+
+/*** 
+PISA Datasets
+-------------
+
+The program for international assessment of student learning includes teacher 
+and student questionnaires, as well as school-level data. It includes data 
+from a large number of countries, many times with regional data broken down 
+as well. The data is only available in SAS and SPSS format. Below I show how to
+access an SPSS file. Here I'm accessing math reading and science scores from the
+ cognitive file, just for three countries: USA, Japan, France
+
+***/
+
+import spss ///	
+CNT ///
+PV1MATH ///
+PV1SCIE ///
+PV1READ ///
+if CNT=="JPN" | CNT=="FRA" | CNT=="USA" ///
+using "${ddir}CY07_MSU_STU_QQQ.sav", ///
+case(lower) clear
+
+save "${ddir}pisa_analysis.dta", replace
+
+/***
+In-Class Work
+--------------
+
+Using the online codebook, download the ELS student data and create an
+analysis dataset that includes variables for student SES, Race, parental 
+education and type of postsecondary institution attended (from the 3rd follow 
+up).
+
+If you have time, calculate the average SES of students attending different 
+types of instituitions. Then calculate the proportion of students whose parents  
+have at least a bachelor's degree who attended these different types of
+instutions.
+
+See if you can create a bar graph that summarizes
+the patterns you observe. 
+
+***/
+
+
 
 
 exit
