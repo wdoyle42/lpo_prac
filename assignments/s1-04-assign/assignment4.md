@@ -5,7 +5,8 @@ files that you generated as part of assignment 3. Using these, complete
 the following steps:
 
 1.  Subset the data on gender. Create one data file for males and one
-    for females (hint: use `keep if` or `drop if`).
+    for females (hint: use `keep if` or `drop if`). If you don't have this 
+	variable choose another categorical variable with which to subset.
 2.  Merge the two datasets together, and tabulate the `_merge` variable.
     What are the results?
 3.  Now split the dataset by variables. To do this you will need to
@@ -22,7 +23,7 @@ the following steps:
     *using* dataset.
 
 Submit your results in a do file per normal procedure. Remember that
-since I don't have access to your small dataset, I need a do file that
+since I don't have access to your analysis dataset, I need a do file that
 will cleanly create the dataset from the original data and then complete
 the operations above.
 
