@@ -1,9 +1,9 @@
--------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s1-04-dataset_manipulation
-> /dataset_manipulation.log
+       log:  /Users/doylewr/lpo_prac/lessons/s1-04-dataset_manipulation/datas
+> et_manipulation.log
   log type:  text
- opened on:  19 Sep 2017, 10:43:42
+ opened on:  16 Sep 2020, 10:28:46
 
 . 
 . // NAME: Dataset manipulation
@@ -11,33 +11,60 @@
 . // AUTH: Will Doyle
 . // REVS: Benjamin Skinner
 . // INIT: 9 September 2012
-. // LAST: 18 Sep 2017
+. // LAST: 16 Sep 2020
 . 
 . clear all                               // clear memory
 
-. set more off                            // turn off annoying "__more__" feature
-
+. 
 . 
 . //Data import
 . 
-. import delimited "https://stats.idre.ucla.edu/wp-content/uploads/2016/02/hsb2-2.csv
-> ", clear
+. import delimited "https://stats.idre.ucla.edu/wp-content/uploads/2016/02/hs
+> b2-2.csv", clear
 (11 vars, 200 obs)
 
 .  
 . // Excel
 . 
 . import excel "tabn304.10.xls", cellrange(A5:L64) clear
+(12 vars, 60 obs)
 
 . 
 . // set globals for url data link and local data path
-. global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/api
-> pop"
+. global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_i
+> ntro/apipop"
 
 . 
 . // read web data into memory
 . use $urldata, clear
 
+. 
+. 
+. /***
+> Subsetting with {c 96}preserve{c 96} and {c 96}restore{c 96} 
+> ----------------------------------------
+> 
+> A feature and sometimes curse of Stata is that it can only hold one dataset
+>  in active memory at a time. As a feature, it helps you keep your work orga
+> nized and, through numerous warning messages, tries to make sure you don't 
+> lose your work by accidentally forgetting to save or mindlessly overwrittin
+> g your data. The feature feels more like a curse when you have multiple dat
+> asets that you would like to work with simultaneously or, as we will do bel
+> ow, split a single dataset into smaller parts.
+> 
+> To repeatedly subset a large dataset, there are two primary choices:
+> 1. Reload the full dataset into memory after each subset and save
+> 2. Use the {c 96}preserve{c 96} and {c 96}restore{c 96} commands
+> 
+> In the code below, notice how the {c 96}preserve{c 96} and {c 96}restore{c 
+> 96} commands bookend the {c 96}keep{c 96} command, which keeps only those o
+> bservations that fulfill the {c 96}if{c 96} statement (in this case, the ty
+> pe of school). The steps are:
+> 1. preserve dataset in memory
+> 2. subset to keep only school type that we want
+> 3. save new subset dataset
+> 4. restore old dataset
+> ***/
 . 
 . 
 . // split into three datasets: elementary, middle, and high school
@@ -51,7 +78,7 @@
 . preserve
 
 . keep if stype == 1    
-(1773 observations deleted)
+(1,773 observations deleted)
 
 . tab stype 
 
@@ -72,7 +99,7 @@ file elem.dta saved
 . preserve
 
 . keep if stype == 2                      
-(5439 observations deleted)
+(5,439 observations deleted)
 
 . save hs, replace
 file hs.dta saved
@@ -82,12 +109,25 @@ file hs.dta saved
 . 
 . // middle schools (keep this one in memory so no preserve/restore needed)
 . keep if stype == 3                      
-(5176 observations deleted)
+(5,176 observations deleted)
 
 . save middle, replace
 file middle.dta saved
 
 . 
+. /***
+> Appending Data
+> --------------
+> 
+> Appending data is done when we want to add additional *observations* to an 
+> existing dataset, using a dataset that has exactly the same variable names 
+> but different observations. Suppose you have data on high schools, middle s
+> chools, and elementary schools on a variety of performance indicators and y
+> ou'd like to merge them together. The syntax uses, appropriately enough, th
+> e {c 96}append{c 96} command, which takes the format {c 96}append <new data
+> set>{c 96} (the command assumes the first dataset is the one in memory; rem
+> ember that the middle school subset data are still in memory):
+> ***/
 . 
 . // merging via the append command
 . append using elem   
@@ -107,7 +147,9 @@ file middle.dta saved
 (label yr_rnd already defined)
 
 . 
-. /* Quick Exercise: Create a dataset that has just middle and elementary schools.
+. 
+. /* Quick Exercise: Create a dataset that has just middle and elementary sch
+> ools.
 >  Do this using first the append command and then the merge command.*/
 .  
 .  // Elementary schools in memory
@@ -143,6 +185,29 @@ file middle.dta saved
     matched                                 0  
     -----------------------------------------
 
+. 
+. /*** 
+> The `append` command will not copy over labels from the using dataset, so y
+> ou'll need to make sure they're right in the master dataset. The most commo
+> n error with an append command is to not have exactly matching variable nam
+> es.
+> ***/
+. 
+. /***
+> Merging Data
+> ------------
+> 
+> You can also use Stata's {c 96}merge{c 96} command to do an append operatio
+> n in special cases. This happens when the merging variable doesn't have rep
+> eated *observations* in the two datasets, which in turn have exactly the sa
+> me variable structure. Think of a Venn diagram where the circles contain ex
+> actly the same types of information, but don't overlap; in combining them, 
+> we've really just grown them into one bigger circle. One of the virtues of 
+> using {c 96}merge{c 96} when {c 96}append{c 96} will suffice is that you ha
+> ve access to more information about where the data came from once you're do
+> ne.
+> ***/
+. 
 .  
 . // merging via the merge command
 . 
@@ -185,6 +250,11 @@ file middle.dta saved
     -----------------------------------------
 
 . 
+. /***
+> Once you've completed the merge, you can take a look at the \_merge\_\* var
+> iables that were generated to see where the data came from.
+> ***/
+. 
 . // show merge stats for each merge
 . tab _merge_a
 
@@ -224,6 +294,22 @@ file api_1.dta saved
 file api_2.dta saved
 
 . 
+. /***
+> One-to-one merges
+> -----------------
+> 
+> A one-to-one merge is when you have exactly the same *observations* but new
+>  variables to add to the dataset. Say you have *observations* with variable
+> s split across datasets, e.g., School 1 has variables A, B, and C in datase
+> t 1 and variables X, Y, and Z in dataset two. As long as School 1 has a uni
+> que identifier---a name, an id number, etc---you can {c 96}merge{c 96} thes
+> e two datasets together so that you have access to all of the school's vari
+> ables for your analysis.
+> 
+> First, we need to subset our data again, only this time by splitting along 
+> columns (*variables*) rather than rows (*observations*):
+> ***/
+. 
 . // merging back together (api_2 in memory)
 . merge 1:1 snum using api_1
 
@@ -244,53 +330,23 @@ file api_2.dta saved
                   Total |      6,194      100.00
 
 . 
-. 
-. /* Quick Exercise: Create a dataset that has only mobility and percent tested. Next
->  create another dataset that has only the year round and percent responding variabl
-> es. 
-> Now merge these two datasets together using a one-to-one merge.*/
-. 
-. 
-. use $urldata, clear
-
-. 
-. preserve
-
-. keep snum mobility pcttest
-
-. save api_a, replace
-file api_a.dta saved
-
-. restore
-
-. 
-. preserve
-
-. keep snum yr_rnd pct_resp
-
-. save api_b, replace
-file api_b.dta saved
-
-. restore
-
-. 
-. use api_a, clear
-
-. 
-. merge 1:1 snum using api_b, nogen
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-    matched                             6,194  
-    -----------------------------------------
-
-. 
 . // collapsing data
 . 
 . // reload main dataset, since we didn't preserve it before
 . use $urldata, clear
 
+. 
+. 
+. /***
+> Collapsing data
+> ---------------
+> 
+> Collapsing data refers to summarizing data across a type and creating a new
+>  dataset as a result. Say we want to create a county-level dataset from our
+>  school data, using the average figures for the schools across a set of cha
+> racteristics. The command would look like this:
+> 
+> ***/
 . 
 . // count of unique counties in dataset
 . unique cnum
@@ -327,63 +383,18 @@ file district_enroll.dta saved
     -----------------------------------------
 
 .  
-. // give count of number of observations (should be number of unique counties)
+. // give count of number of observations (should be number of unique countie
+> s)
 . count
- 6194
+  6,194
 
-. 
-. /* Quick Exercise: Create a district level dataset that contains district 
-> level averages for the following variables:apioo api99 ell meals*/
-. 
-. 
-. use $urldata, clear
-
-. preserve
-
-. collapse (mean) /// 
->         mean_api00=api00 /// 
->         mean_api99=api99 ///
->         mean_ell=ell ///
->         mean_meals=meals ///
->         (median) ///
->         med_api00=api00 /// 
->         med_api99=api99 ///
->         med_ell=ell ///
->         med_meals=meals ///
->         , by(dnum)
-
-.         
-. save district_stuff, replace
-(note: file district_stuff.dta not found)
-file district_stuff.dta saved
-
-. 
-. restore
-
-. 
-. merge m:1 dnum using district_stuff
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-    matched                             6,194  (_merge==3)
-    -----------------------------------------
-
-. 
-. 
-. 
-. /* QE: then do the same thing using medians*/
-. 
-. 
-. /* Merge both into main dataset? */
-. 
 . 
 . 
 . // end file
 . log close                               // close log
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s1-04-dataset_manipulation
-> /dataset_manipulation.log
+       log:  /Users/doylewr/lpo_prac/lessons/s1-04-dataset_manipulation/datas
+> et_manipulation.log
   log type:  text
- closed on:  19 Sep 2017, 10:43:48
--------------------------------------------------------------------------------------
+ closed on:  16 Sep 2020, 10:28:53
+-----------------------------------------------------------------------------
