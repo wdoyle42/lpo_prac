@@ -22,7 +22,7 @@ collapsing data.
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-04-dataset_manipulation/dataset_manipulation.log
             log type:  text
-           opened on:  16 Sep 2020, 10:28:24
+           opened on:  16 Sep 2020, 10:42:31
 
           . clear all                               // clear memory
 
@@ -122,35 +122,6 @@ memory):
           (label awards already defined)
           (label yr_rnd already defined)
 
-          .  use elem, clear
-
-          .  append using middle
-          (label yr_rnd already defined)
-          (label awards already defined)
-          (label both already defined)
-          (label comp_imp already defined)
-          (label sch_wide already defined)
-          (label stype already defined)
-
-          .  use elem, clear
-
-          .  merge 1:1 snum using middle, nogen
-          (label stype already defined)
-          (label sch_wide already defined)
-          (label comp_imp already defined)
-          (label both already defined)
-          (label awards already defined)
-          (label yr_rnd already defined)
-
-              Result                           # of obs.
-              -----------------------------------------
-              not matched                         5,439
-                  from master                     4,421  
-                  from using                      1,018  
-
-              matched                                 0  
-              -----------------------------------------
-
 The `append` command will not copy over labels from the using dataset,
 so you'll need to make sure they're right in the master dataset. The
 most common error with an append command is to not have exactly matching
@@ -226,6 +197,49 @@ variables that were generated to see where the data came from.
           ------------------------+-----------------------------------
                             Total |      6,194      100.00
 
+          .  use elem, clear
+
+          .  append using middle
+          (label yr_rnd already defined)
+          (label awards already defined)
+          (label both already defined)
+          (label comp_imp already defined)
+          (label sch_wide already defined)
+          (label stype already defined)
+
+          .  use elem, clear
+
+          .  merge 1:1 snum using middle, nogen
+          (label stype already defined)
+          (label sch_wide already defined)
+          (label comp_imp already defined)
+          (label both already defined)
+          (label awards already defined)
+          (label yr_rnd already defined)
+
+              Result                           # of obs.
+              -----------------------------------------
+              not matched                         5,439
+                  from master                     4,421  
+                  from using                      1,018  
+
+              matched                                 0  
+              -----------------------------------------
+
+One-to-one merges
+-----------------
+
+A one-to-one merge is when you have exactly the same *observations* but
+new variables to add to the dataset. Say you have *observations* with
+variables split across datasets, e.g., School 1 has variables A, B, and
+C in dataset 1 and variables X, Y, and Z in dataset two. As long as
+School 1 has a unique identifier---a name, an id number, etc---you can
+`merge` these two datasets together so that you have access to all of
+the school's variables for your analysis.
+
+First, we need to subset our data again, only this time by splitting
+along columns (*variables*) rather than rows (*observations*):
+
           . use $urldata, clear
 
           . preserve
@@ -241,20 +255,6 @@ variables that were generated to see where the data came from.
 
           . save api_2, replace
           file api_2.dta saved
-
-One-to-one merges
------------------
-
-A one-to-one merge is when you have exactly the same *observations* but
-new variables to add to the dataset. Say you have *observations* with
-variables split across datasets, e.g., School 1 has variables A, B, and
-C in dataset 1 and variables X, Y, and Z in dataset two. As long as
-School 1 has a unique identifier---a name, an id number, etc---you can
-`merge` these two datasets together so that you have access to all of
-the school's variables for your analysis.
-
-First, we need to subset our data again, only this time by splitting
-along columns (*variables*) rather than rows (*observations*):
 
           . merge 1:1 snum using api_1
 
@@ -273,6 +273,11 @@ along columns (*variables*) rather than rows (*observations*):
                             Total |      6,194      100.00
 
           . use $urldata, clear
+
+*QUICK EXERCISE Create a dataset that has only mobility and percent
+tested. Next create another dataset that has only the year round and
+percent responding variables. Now merge these two datasets together
+using a one-to-one merge.*
 
 Collapsing data
 ---------------
@@ -310,11 +315,18 @@ set of characteristics. The command wo uld look like this:
           . count
             6,194
 
+QUICK EXERCISE Create a district level dataset that contains district
+level averages for the following variables:
+
+-apioo -api99 -ell -meals
+
+Then do the same thing using just district medians.
+
           . log close                               // close log
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-04-dataset_manipulation/dataset_manipulation.log
             log type:  text
-           closed on:  16 Sep 2020, 10:28:31
+           closed on:  16 Sep 2020, 10:42:37
           ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
           . exit                                  // exit script

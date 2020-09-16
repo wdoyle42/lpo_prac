@@ -3,7 +3,7 @@
        log:  /Users/doylewr/lpo_prac/lessons/s1-04-dataset_manipulation/datas
 > et_manipulation.log
   log type:  text
- opened on:  16 Sep 2020, 10:28:46
+ opened on:  16 Sep 2020, 10:42:31
 
 . 
 . // NAME: Dataset manipulation
@@ -148,44 +148,6 @@ file middle.dta saved
 
 . 
 . 
-. /* Quick Exercise: Create a dataset that has just middle and elementary sch
-> ools.
->  Do this using first the append command and then the merge command.*/
-.  
-.  // Elementary schools in memory
-.  use elem, clear
-
-.  
-.  append using middle
-(label yr_rnd already defined)
-(label awards already defined)
-(label both already defined)
-(label comp_imp already defined)
-(label sch_wide already defined)
-(label stype already defined)
-
-.  
-.  use elem, clear
-
-.  
-.  merge 1:1 snum using middle, nogen
-(label stype already defined)
-(label sch_wide already defined)
-(label comp_imp already defined)
-(label both already defined)
-(label awards already defined)
-(label yr_rnd already defined)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                         5,439
-        from master                     4,421  
-        from using                      1,018  
-
-    matched                                 0  
-    -----------------------------------------
-
-. 
 . /*** 
 > The `append` command will not copy over labels from the using dataset, so y
 > ou'll need to make sure they're right in the master dataset. The most commo
@@ -255,6 +217,9 @@ file middle.dta saved
 > iables that were generated to see where the data came from.
 > ***/
 . 
+. 
+. 
+. 
 . // show merge stats for each merge
 . tab _merge_a
 
@@ -275,6 +240,62 @@ file middle.dta saved
                   Total |      6,194      100.00
 
 . 
+. 
+. /* Quick Exercise: Create a dataset that has just middle and elementary sch
+> ools.
+>  Do this using first the append command and then the merge command.*/
+.  
+.  // Elementary schools in memory
+.  use elem, clear
+
+.  
+.  append using middle
+(label yr_rnd already defined)
+(label awards already defined)
+(label both already defined)
+(label comp_imp already defined)
+(label sch_wide already defined)
+(label stype already defined)
+
+.  
+.  use elem, clear
+
+.  
+.  merge 1:1 snum using middle, nogen
+(label stype already defined)
+(label sch_wide already defined)
+(label comp_imp already defined)
+(label both already defined)
+(label awards already defined)
+(label yr_rnd already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         5,439
+        from master                     4,421  
+        from using                      1,018  
+
+    matched                                 0  
+    -----------------------------------------
+
+. 
+. /***
+> One-to-one merges
+> -----------------
+> 
+> A one-to-one merge is when you have exactly the same *observations* but new
+>  variables to add to the dataset. Say you have *observations* with variable
+> s split across datasets, e.g., School 1 has variables A, B, and C in datase
+> t 1 and variables X, Y, and Z in dataset two. As long as School 1 has a uni
+> que identifier---a name, an id number, etc---you can {c 96}merge{c 96} thes
+> e two datasets together so that you have access to all of the school's vari
+> ables for your analysis.
+> 
+> First, we need to subset our data again, only this time by splitting along 
+> columns (*variables*) rather than rows (*observations*):
+> ***/
+. 
+. 
 . // split dataset by variables
 . use $urldata, clear
 
@@ -294,21 +315,6 @@ file api_1.dta saved
 file api_2.dta saved
 
 . 
-. /***
-> One-to-one merges
-> -----------------
-> 
-> A one-to-one merge is when you have exactly the same *observations* but new
->  variables to add to the dataset. Say you have *observations* with variable
-> s split across datasets, e.g., School 1 has variables A, B, and C in datase
-> t 1 and variables X, Y, and Z in dataset two. As long as School 1 has a uni
-> que identifier---a name, an id number, etc---you can {c 96}merge{c 96} thes
-> e two datasets together so that you have access to all of the school's vari
-> ables for your analysis.
-> 
-> First, we need to subset our data again, only this time by splitting along 
-> columns (*variables*) rather than rows (*observations*):
-> ***/
 . 
 . // merging back together (api_2 in memory)
 . merge 1:1 snum using api_1
@@ -335,6 +341,14 @@ file api_2.dta saved
 . // reload main dataset, since we didn't preserve it before
 . use $urldata, clear
 
+. 
+. 
+. /***
+> *QUICK EXERCISE
+> Create a dataset that has only mobility and percent tested. Next create ano
+> ther dataset that has only the year round and percent responding variables.
+>  Now merge these two datasets together using a one-to-one merge.*
+> ***/
 . 
 . 
 . /***
@@ -389,6 +403,19 @@ file district_enroll.dta saved
   6,194
 
 . 
+. /***
+> QUICK EXERCISE
+> Create a district level dataset that contains district level averages for t
+> he following variables:
+> 
+> -apioo
+> -api99
+> -ell
+> -meals 
+> 
+> Then do the same thing using just district medians.
+> 
+> ***/
 . 
 . // end file
 . log close                               // close log
@@ -396,5 +423,5 @@ file district_enroll.dta saved
        log:  /Users/doylewr/lpo_prac/lessons/s1-04-dataset_manipulation/datas
 > et_manipulation.log
   log type:  text
- closed on:  16 Sep 2020, 10:28:53
+ closed on:  16 Sep 2020, 10:42:37
 -----------------------------------------------------------------------------

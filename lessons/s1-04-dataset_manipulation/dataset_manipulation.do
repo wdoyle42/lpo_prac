@@ -97,18 +97,6 @@ append using elem
 append using hs
 
 
-/* Quick Exercise: Create a dataset that has just middle and elementary schools.
- Do this using first the append command and then the merge command.*/
- 
- // Elementary schools in memory
- use elem, clear
- 
- append using middle
- 
- use elem, clear
- 
- merge 1:1 snum using middle, nogen
-
 /*** 
 The `append` command will not copy over labels from the using dataset, so you'll need to make sure they're right in the master dataset. The most common error with an append command is to not have exactly matching variable names.
 ***/
@@ -133,9 +121,35 @@ merge 1:1 snum using middle, gen(_merge_b)
 Once you've completed the merge, you can take a look at the \_merge\_\* variables that were generated to see where the data came from.
 ***/
 
+
+
+
 // show merge stats for each merge
 tab _merge_a
 tab _merge_b
+
+
+/* Quick Exercise: Create a dataset that has just middle and elementary schools.
+ Do this using first the append command and then the merge command.*/
+ 
+ // Elementary schools in memory
+ use elem, clear
+ 
+ append using middle
+ 
+ use elem, clear
+ 
+ merge 1:1 snum using middle, nogen
+
+/***
+One-to-one merges
+-----------------
+
+A one-to-one merge is when you have exactly the same *observations* but new variables to add to the dataset. Say you have *observations* with variables split across datasets, e.g., School 1 has variables A, B, and C in dataset 1 and variables X, Y, and Z in dataset two. As long as School 1 has a unique identifier---a name, an id number, etc---you can `merge` these two datasets together so that you have access to all of the school's variables for your analysis.
+
+First, we need to subset our data again, only this time by splitting along columns (*variables*) rather than rows (*observations*):
+***/
+
 
 // split dataset by variables
 use $urldata, clear
@@ -147,14 +161,6 @@ restore
 keep snum full emer                     // variable set 2
 save api_2, replace
 
-/***
-One-to-one merges
------------------
-
-A one-to-one merge is when you have exactly the same *observations* but new variables to add to the dataset. Say you have *observations* with variables split across datasets, e.g., School 1 has variables A, B, and C in dataset 1 and variables X, Y, and Z in dataset two. As long as School 1 has a unique identifier---a name, an id number, etc---you can `merge` these two datasets together so that you have access to all of the school's variables for your analysis.
-
-First, we need to subset our data again, only this time by splitting along columns (*variables*) rather than rows (*observations*):
-***/
 
 // merging back together (api_2 in memory)
 merge 1:1 snum using api_1
@@ -166,6 +172,12 @@ tab _merge
 
 // reload main dataset, since we didn't preserve it before
 use $urldata, clear
+
+
+/***
+*QUICK EXERCISE
+Create a dataset that has only mobility and percent tested. Next create another dataset that has only the year round and percent responding variables. Now merge these two datasets together using a one-to-one merge.*
+***/
 
 
 /***
@@ -197,6 +209,18 @@ merge m:1 dnum using district_enroll
 // give count of number of observations (should be number of unique counties)
 count
 
+/***
+QUICK EXERCISE
+Create a district level dataset that contains district level averages for the following variables:
+
+-apioo
+-api99
+-ell
+-meals 
+
+Then do the same thing using just district medians.
+
+***/
 
 // end file
 log close                               // close log
