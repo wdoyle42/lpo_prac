@@ -1,17 +1,18 @@
--------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s1-05-more_dataset_manipul
-> ation/more_dataset_manipulation.log
+       log:  /Users/doylewr/lpo_prac/lessons/s1-05-more_dataset_manipulation/more_dataset_manipulation.log
   log type:  text
- opened on:  26 Sep 2017, 11:47:36
+ opened on:  23 Sep 2020, 10:41:25
 
+. 
+. 
 . 
 . // NAME: More dataset manipulation
 . // FILE: lecture5_more_dataset_manipulation.do
 . // AUTH: Will Doyle
 . // REVS: Benjamin Skinner
 . // INIT: 17 September 2014
-. // LAST: 25 September 2017
+. // LAST: 22 September 2020
 . 
 . clear all                               // clear memory
 
@@ -19,8 +20,7 @@
 
 . 
 . // set globals for url data link and local data path
-. global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/api
-> pop"
+. global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop"
 
 . 
 . 
@@ -53,8 +53,6 @@ file api.dta saved
 
 . drawnorm county_inc, means(30) sds(5)
 
-. drawnorm educ_spend, means(8000) sds(1000)
-
 . sort cnum
 
 . save county_data, replace
@@ -77,6 +75,21 @@ file district_data.dta saved
 . restore
 
 . 
+. /***
+> Many-to-one match merging
+> -------------------------
+> 
+> Many times we'd like to add information about a unit that is the same
+> across a grouping of units. For instance, we may want to add some county
+> data to our already existing school-level data. This really isn't much
+> different than the merging we've done before, except we need to make
+> certain that the variables are sorted correctly.
+> 
+> Let's say we have county level data that we'd like to import into our
+> school level dataset. Remember that we sorted the county data by the
+> county number (its unique id) when we created the dataset. We do the
+> same for the district data. Finally we merge the two together:
+> ***/
 . 
 . // many-to-one match merging 
 . 
@@ -95,7 +108,6 @@ file district_data.dta saved
     -----------------------------------------
 
 . 
-. 
 . // inspect many-to-one merge
 . tab _merge
 
@@ -105,25 +117,23 @@ file district_data.dta saved
 ------------------------+-----------------------------------
                   Total |      6,194      100.00
 
-. 
 . list cnum api99 county_inc if _n < 10
 
       +-------------------------+
       | cnum   api99   county~c |
       |-------------------------|
-   1. |    1     693   30.59648 |
-   2. |    1     589   30.59648 |
-   3. |    1     572   30.59648 |
-   4. |    1     732   30.59648 |
-   5. |    1     784   30.59648 |
+   1. |    1     693     37.266 |
+   2. |    1     589     37.266 |
+   3. |    1     572     37.266 |
+   4. |    1     732     37.266 |
+   5. |    1     784     37.266 |
       |-------------------------|
-   6. |    1     725   30.59648 |
-   7. |    1     765   30.59648 |
-   8. |    1     667   30.59648 |
-   9. |    1     792   30.59648 |
+   6. |    1     725     37.266 |
+   7. |    1     765     37.266 |
+   8. |    1     667     37.266 |
+   9. |    1     792     37.266 |
       +-------------------------+
 
-. 
 . 
 . // plot and save
 . onewayplot api99, by(county_inc) stack ms(oh) msize(*.1) width(1) name(api99_ow)
@@ -132,11 +142,32 @@ file district_data.dta saved
 (file api99_ow.eps written in EPS format)
 
 . 
+. /***
+> #### Quick Exercise
+> 
+> Create a (fake) county level variable for average educational
+> spending. It should be normally distributed and have a mean of 8000
+> and a standard deviation of 1000. Add this variable to a county-level
+> dataset and merge this new dataset into the api dataset.
+> ***/
 . 
-. // plot and save
-. //onewayplot api99, by(educ_spend) stack ms(oh) msize(*.1) width(1) name(api99_ow_2
-> )
 . 
+. /***
+> 
+> One-to-many match merging
+> -------------------------
+> 
+> One to many match merging is the reverse of many to one, and isn't
+> really recommended. If you have to, here's how to do it:
+> 
+> Let's say we have some district data on whether or not the principal has
+> an EdD. We can open this up and merge the api data with it, matching on
+> district number. It's generally better to have the *finer-grained*
+> dataset open in memory, and then to match the *coarser* data to that
+> one, doing a many-to-one match merge. But should you need to complete a
+> one-to-many match merge, here's an example:
+> 
+> ***/
 . 
 . // one-to-many match merging: but why?
 . 
@@ -184,18 +215,48 @@ file api.dta saved
       +--------------------+
       | dnum   api99   edd |
       |--------------------|
-   1. |    1     626     0 |
-   2. |    2     867     0 |
+   1. |    1     734     0 |
+   2. |    2     802     1 |
    3. |    3     760     0 |
-   4. |    4     717     0 |
-   5. |    5     505     0 |
+   4. |    4     737     1 |
+   5. |    5     464     0 |
       |--------------------|
-   6. |    6     721     1 |
-   7. |    7     773     0 |
-   8. |   10     399     1 |
-   9. |   12     754     0 |
+   6. |    6     651     0 |
+   7. |    7     836     1 |
+   8. |   10     399     0 |
+   9. |   12     782     0 |
       +--------------------+
 
+. 
+. /***
+> #### Quick Exercise
+> 
+> > Create a (fake) district level variable for average teacher salary. It
+> > should have a mean of 40 and a standard deviation of 5. Merge the api
+> > data into this dataset.
+> 
+> <br>
+> ***/
+. 
+. /***
+> 
+> Many-to-many match merging
+> -------------------------
+> 
+> Nope.
+> 
+> ***/
+. 
+. /***
+> Messy merge
+> -----------
+> 
+> Many merge procedures are quite messy. To simulate this, let's eliminate
+> a couple of variables from the {c 96}api{c 96} dataset and remove 10% of the
+> observations. We'll put this into a file we're pretending is the {c 96}api99{c 96} 
+> file. Next, we'll drop some data from the {c 96}api00{c 96} file. Finally, we'll
+> merge the resulting two files together.
+> ***/
 . 
 . // messy merge
 . 
@@ -225,7 +286,8 @@ file api_00.dta saved
 
 . 
 . // merge datasets
-. merge 1:1 snum using api_99 
+. merge snum using api_99, sort
+(note: you are using old merge syntax; see [D] merge for new syntax)
 (label stype already defined)
 (label sch_wide already defined)
 (label comp_imp already defined)
@@ -233,28 +295,18 @@ file api_00.dta saved
 (label awards already defined)
 (label yr_rnd already defined)
 
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                         1,092
-        from master                       546  (_merge==1)
-        from using                        546  (_merge==2)
-
-    matched                             5,029  (_merge==3)
-    -----------------------------------------
-
 . 
 . // inspect messy merge
 . tab _merge
 
-                 _merge |      Freq.     Percent        Cum.
-------------------------+-----------------------------------
-        master only (1) |        546        8.92        8.92
-         using only (2) |        546        8.92       17.84
-            matched (3) |      5,029       82.16      100.00
-------------------------+-----------------------------------
-                  Total |      6,121      100.00
+     _merge |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |        562        9.16        9.16
+          2 |        562        9.16       18.32
+          3 |      5,013       81.68      100.00
+------------+-----------------------------------
+      Total |      6,137      100.00
 
-. 
 . 
 . // code for looking at missing values, other patterns
 . 
@@ -262,31 +314,31 @@ file api_00.dta saved
 . inspect api99
 
 api99:                                          Number of Observations
---------                                    ------------------------------
-                                            Total   Integers   Nonintegers
-|          #                 Negative           -         -          -
-|          #                 Zero               -         -          -
-|      #   #   #             Positive        5575      5575          -
-|      #   #   #                            -----     -----      -----
-|      #   #   #             Total           5575      5575          -
-|  #   #   #   #   #         Missing          546
-+----------------------                     -----
-302                 966                      6121
+--------                               ---------------------------------------
+                                             Total      Integers   Nonintegers
+|          #                 Negative            -             -             -
+|          #                 Zero                -             -             -
+|      #   #   #             Positive        5,575         5,575             -
+|      #   #   #                       -----------   -----------   -----------
+|      #   #   #             Total           5,575         5,575             -
+|  #   #   #   #   #         Missing           562
++----------------------                -----------
+302                 966                      6,137
 (More than 99 unique values)
 
 . inspect api00
 
 api00:                                          Number of Observations
---------                                    ------------------------------
-                                            Total   Integers   Nonintegers
-|          #                 Negative           -         -          -
-|          #                 Zero               -         -          -
-|      #   #   #             Positive        5575      5575          -
-|      #   #   #                            -----     -----      -----
-|      #   #   #             Total           5575      5575          -
-|  #   #   #   #   #         Missing          546
-+----------------------                     -----
-346                 967                      6121
+--------                               ---------------------------------------
+                                             Total      Integers   Nonintegers
+|          #                 Negative            -             -             -
+|          #                 Zero                -             -             -
+|      #   #   #             Positive        5,575         5,575             -
+|      #   #   #                       -----------   -----------   -----------
+|      #   #   #             Total           5,575         5,575             -
+|  #   #   #   #   #         Missing           562
++----------------------                -----------
+346                 969                      6,137
 (More than 99 unique values)
 
 . 
@@ -295,8 +347,8 @@ api00:                                          Number of Observations
 
     Variable    |     Missing          Total     Percent Missing
 ----------------+-----------------------------------------------
-          api99 |         546          6,121           8.92
-          api00 |         546          6,121           8.92
+          api99 |         562          6,137           9.16
+          api00 |         562          6,137           9.16
 ----------------+-----------------------------------------------
 
 . 
@@ -304,10 +356,10 @@ api00:                                          Number of Observations
 . mvpatterns api99 api00 ell mobility
 Variable     | type     obs   mv   variable label
 -------------+----------------------------------------------
-api99        | int     5575  546   
-api00        | int     5575  546   
-ell          | byte    5575  546   english language learners
-mobility     | byte    5571  550   pct 1st year in school
+api99        | int     5575  562   
+api00        | int     5575  562   
+ell          | byte    5575  562   english language learners
+mobility     | byte    5573  564   pct 1st year in school
 ------------------------------------------------------------
 
 Patterns of missing values
@@ -315,12 +367,44 @@ Patterns of missing values
   +------------------------+
   | _pattern   _mv   _freq |
   |------------------------|
-  |     ++++     0    5025 |
-  |     .+++     1     546 |
-  |     +...     3     546 |
-  |     +++.     1       4 |
+  |     ++++     0    5011 |
+  |     .+++     1     562 |
+  |     +...     3     562 |
+  |     +++.     1       2 |
   +------------------------+
 
+. 
+. /***
+> These combined files are likely to have lots of missing data. Let's take
+> a look at some of the patterns of missing data. The first command to use
+> is called {c 96}inspect{c 96}. The results from the inspect command look like
+> this:
+> ***/
+. 
+. /***
+> This gives you a nice quick glance at the variable in question. You can
+> also use the {c 96}mdesc{c 96} command, the output of which looks like this:
+> ***/
+. 
+. 
+. 
+. /***
+> 
+> Why do we care so much about missing values? Because the missingness of
+> variable values is unlikely to be random across all observations.
+> Instead, observations with missing values for covariate *X* may have
+> different average values for covariate *Z* than those who don't have
+> missing values. These differences can greatly skew inferences we might
+> hope to make with our analyses, so it is important that we have an
+> understanding of the missingness of our data.
+> 
+> Later in the year we'll go over different approaches for dealing with missing data. For now it's important that we un
+> derstand the prevalence of missing data and its relationship with other variables. 
+> 
+> Here is a graphical example of the differences in {c 96}api99{c 96} scores between
+> districts with {c 96}ell{c 96} data and those without:
+> 
+> ***/
 . 
 . 
 . // create flag if missing ell
@@ -340,90 +424,30 @@ Patterns of missing values
 (file api99_kdens.eps written in EPS format)
 
 . 
-. use api, clear
-
+. /***
+> #### Quick Exercise
+> 
+> > Create a new dataset by dropping the meals and emergency credentials
+> > variables. Eliminate half of the data. Next create another dataset,
+> > dropping the parental education variables, and again get rid of half
+> > of the data. Merge the remaining two datasets together, then describe
+> > the patterns of missing data.
+> 
+> <br>
+> ***/
 . 
-. preserve
-
-. drop meals emer 
-
-. sample 50
-(3097 observations deleted)
-
-. save no_meals, replace
-file no_meals.dta saved
-
-. restore
-
-. 
-. drop some_col col_grad grad_sch avg_ed not_hsg hsg  
-
-. sample 50
-(3097 observations deleted)
-
-. save no_pared, replace
-file no_pared.dta saved
-
-. 
-.  
-. use no_meals, clear
-
-. merge 1:1 snum using no_pared
-(label yr_rnd already defined)
-(label awards already defined)
-(label both already defined)
-(label comp_imp already defined)
-(label sch_wide already defined)
-(label stype already defined)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                         3,110
-        from master                     1,555  (_merge==1)
-        from using                      1,555  (_merge==2)
-
-    matched                             1,542  (_merge==3)
-    -----------------------------------------
-
-. 
-. tab _merge
-
-                 _merge |      Freq.     Percent        Cum.
-------------------------+-----------------------------------
-        master only (1) |      1,555       33.43       33.43
-         using only (2) |      1,555       33.43       66.85
-            matched (3) |      1,542       33.15      100.00
-------------------------+-----------------------------------
-                  Total |      4,652      100.00
-
-. 
-. mvpatterns meals emer some_col col_grad grad_sch avg_ed not_hsg hsg
-Variable     | type     obs   mv   variable label
--------------+----------------------------------------
-meals        | byte    3097 1555   pct free meals
-emer         | byte    3096 1556   pct emer credential
-some_col     | byte    3097 1555   parent some college
-col_grad     | byte    3097 1555   parent college grad
-grad_sch     | byte    3097 1555   parent grad school
-avg_ed       | float   3002 1650   avg parent ed
-not_hsg      | byte    3097 1555   parent not hsg
-hsg          | byte    3097 1555   parent hsg
-------------------------------------------------------
-
-Patterns of missing values
-
-  +------------------------+
-  | _pattern   _mv   _freq |
-  |------------------------|
-  | ++......     6    1555 |
-  | ..++++++     2    1511 |
-  | ++++++++     0    1490 |
-  | +++++.++     1      51 |
-  | ..+++.++     3      44 |
-  |------------------------|
-  | +.++++++     1       1 |
-  +------------------------+
-
+. /***
+> Reshaping data
+> --------------
+> 
+> ### Wide to long
+> 
+> The last major type of data manipulation is known as {c 96}reshaping{c 96}. Many
+> datasets have multiple observations per unit. One way to store this type
+> of data is in a wide format, meaning each additional observation is
+> another variable. Here's some data from the Bureau of Economic Analysis
+> on quarterly income growth that's in wide format:
+> ***/
 . 
 . // reshaping: wide to long
 . 
@@ -434,11 +458,23 @@ Patterns of missing values
 . sort fips
 
 . 
+. /***
+> 
+> We want to have this data in long format, meaning that there will be
+> multiple lines per unit, each one identifying a year and a quarter. The
+> command for this is {c 96}reshape long <stub>, i(<index>) j(<time var>){c 96}. As
+> you can see after the command, each unit/year now has its own line, and
+> income is a single variable.
+> 
+> 
+> ***/
+. 
+. 
 . // reshape long
 . reshape long inc_, i(fips) j(year_quarter, string)
-(note: j = 2001q1 2001q2 2001q3 2001q4 2002q1 2002q2 2002q3 2002q4 2003q1 2003q2 2003
-> q3 2003q4 2004q1 2004q2 2004q3 2004q4 2005q1 2005q2 2005q3 2005q4 2006q1 2006q2 200
-> 6q3 2006q4 2007q1 2007q2 2007q3 2007q4 2008q1 2008q2 2008q3 2008q4 2009q1)
+(note: j = 2001q1 2001q2 2001q3 2001q4 2002q1 2002q2 2002q3 2002q4 2003q1 2003q2 2003q3 2003q4 2004q1 2004q2 2004q3 200
+> 4q4 2005q1 2005q2 2005q3 2005q4 2006q1 2006q2 2006q3 2006q4 2007q1 2007q2 2007q3 2007q4 2008q1 2008q2 2008q3 2008q4 2
+> 009q1)
 
 Data                               wide   ->   long
 -----------------------------------------------------------------------------
@@ -449,7 +485,6 @@ xij variables:
    inc_2001q1 inc_2001q2 ... inc_2009q1   ->   inc_
 -----------------------------------------------------------------------------
 
-. 
 . 
 . // create date that stata understands
 . gen date = quarterly(year_quarter, "YQ")
@@ -478,6 +513,15 @@ xij variables:
       +----------------------------------------------------+
 
 . 
+. /***
+> 
+> We can now more easily set the date in a format Stata understands and
+> take advantage of graphing commands such as {c 96}xtline{c 96}:
+> 
+> 
+> ***/
+. 
+. 
 . // organize data so we can graph it with xtline
 . xtset fips date, quarterly
        panel variable:  fips (strongly balanced)
@@ -491,9 +535,20 @@ xij variables:
 
 . 
 . // graph
-. //xtline inc_, i(areaname) t(date) name(xtline_fipsinc)
-. //graph export ${plotdir}xtline_fipsinc.eps, name(xtline_fipsinc) replace
+. xtline inc_, i(areaname) t(date) name(xtline_fipsinc)
+
+. graph export ${plotdir}xtline_fipsinc.eps, name(xtline_fipsinc) replace
+(file xtline_fipsinc.eps written in EPS format)
+
 . 
+. 
+. /***
+> ### Long to wide
+> 
+> The reverse of the above is reshaping from long to wide. To shift the
+> above dataset back, use the same command, but substitute {c 96}wide{c 96} for
+> {c 96}long{c 96}:
+> ***/
 . 
 . // reshaping: long to wide
 . 
@@ -503,9 +558,9 @@ xij variables:
 . 
 . // long to wide
 . reshape wide inc_, i(fips) j(year_quarter, string)
-(note: j = 2001q1 2001q2 2001q3 2001q4 2002q1 2002q2 2002q3 2002q4 2003q1 2003q2 2003
-> q3 2003q4 2004q1 2004q2 2004q3 2004q4 2005q1 2005q2 2005q3 2005q4 2006q1 2006q2 200
-> 6q3 2006q4 2007q1 2007q2 2007q3 2007q4 2008q1 2008q2 2008q3 2008q4 2009q1)
+(note: j = 2001q1 2001q2 2001q3 2001q4 2002q1 2002q2 2002q3 2002q4 2003q1 2003q2 2003q3 2003q4 2004q1 2004q2 2004q3 200
+> 4q4 2005q1 2005q2 2005q3 2005q4 2006q1 2006q2 2006q3 2006q4 2007q1 2007q2 2007q3 2007q4 2008q1 2008q2 2008q3 2008q4 2
+> 009q1)
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
@@ -520,2762 +575,64 @@ xij variables:
 . // list first rows
 . list if _n < 4
 
-     +----------------------------------------------------------------------------+
-  1. | fips | inc_~1q1 | inc_~1q2 | inc_~1q3  | inc_~1q4  | inc_~2q1  | inc_~2q2  |
-     |    1 |   109274 |   110408 |   110688  |   111313  |   112368  |   113461  |
-     |----------------------------------------------------------------------------|
-     | inc_~2q3 | inc_~2q4 | inc_~3q1 | inc_~3q2 | inc_~3q3 | inc_~3q4 | inc_~4q1 |
-     |   114291 |   115220 |   116690 |   117483 |   118720 |   120532 |   122976 |
-     |----------+----------+----------+----------+----------+----------+----------|
-     | inc_~4q2 | inc_~4q3 | inc_~4q4 | inc_~5q1 | inc_~5q2 | inc_~5q3 | inc_~5q4 |
-     |   125119 |   126811 |   130174 |   130665 |   132880 |   133344 |   137933 |
-     |----------+----------+----------+----------+----------+----------+----------|
-     | inc_~6q1 | inc_~6q2 | inc_~6q3 | inc_~6q4 | inc_~7q1 | inc_~7q2 | inc_~7q3 |
-     |   138491 |   140760 |   142824 |   144444 |   147643 |   149042 |   150891 |
-     |----------+----------+----------+----------+----------+----------+----------|
-     | inc_~7q4 | inc_~8q1 | inc_~8q2 | inc_~8q3 | inc_~8q4 | inc_~9q1 | areaname |
-     |   152389 |   153897 |   158468 |   157344 |   156638 |   156690 |  Alabama |
-     +----------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------------------------+
+  1. | fips | inc_~1q1 | inc_~1q2 | inc_~1q3 | inc_~1q4 | inc_~2q1 | inc_~2q2  | inc_~2q3  | inc_~2q4  | inc_~3q1  |
+     |    1 |   109274 |   110408 |   110688 |   111313 |   112368 |   113461  |   114291  |   115220  |   116690  |
+     |-------------------------------------------------------------------------------------------------------------|
+     | inc_~3q2 | inc_~3q3 | inc_~3q4 | inc_~4q1 | inc_~4q2 | inc_~4q3 | inc_~4q4 | inc_~5q1 | inc_~5q2 | inc_~5q3 |
+     |   117483 |   118720 |   120532 |   122976 |   125119 |   126811 |   130174 |   130665 |   132880 |   133344 |
+     |----------+----------+----------+----------+----------+----------+----------+----------+----------+----------|
+     | inc_~5q4 | inc_~6q1 | inc_~6q2 | inc_~6q3 | inc_~6q4 | inc_~7q1 | inc_~7q2 | inc_~7q3 | inc_~7q4 | inc_~8q1 |
+     |   137933 |   138491 |   140760 |   142824 |   144444 |   147643 |   149042 |   150891 |   152389 |   153897 |
+     |---------------------+---------------------+---------------------+---------------------+---------------------|
+     |      inc_~8q2       |      inc_~8q3       |      inc_~8q4       |      inc_~9q1       |      areaname       |
+     |        158468       |        157344       |        156638       |        156690       |       Alabama       |
+     +-------------------------------------------------------------------------------------------------------------+
 
-     +----------------------------------------------------------------------------+
-  2. | fips | inc_~1q1 | inc_~1q2 | inc_~1q3  | inc_~1q4  | inc_~2q1  | inc_~2q2  |
-     |    2 |    19620 |    20092 |    20146  |    20341  |    20462  |    20642  |
-     |----------------------------------------------------------------------------|
-     | inc_~2q3 | inc_~2q4 | inc_~3q1 | inc_~3q2 | inc_~3q3 | inc_~3q4 | inc_~4q1 |
-     |    20779 |    21006 |    20783 |    21155 |    21251 |    21550 |    21979 |
-     |----------+----------+----------+----------+----------+----------+----------|
-     | inc_~4q2 | inc_~4q3 | inc_~4q4 | inc_~5q1 | inc_~5q2 | inc_~5q3 | inc_~5q4 |
-     |    22189 |    22555 |    23015 |    23607 |    23854 |    24346 |    24700 |
-     |----------+----------+----------+----------+----------+----------+----------|
-     | inc_~6q1 | inc_~6q2 | inc_~6q3 | inc_~6q4 | inc_~7q1 | inc_~7q2 | inc_~7q3 |
-     |    25294 |    25815 |    26085 |    26535 |    26882 |    27180 |    27367 |
-     |----------+----------+----------+----------+----------+----------+----------|
-     | inc_~7q4 | inc_~8q1 | inc_~8q2 | inc_~8q3 | inc_~8q4 | inc_~9q1 | areaname |
-     |    27662 |    29105 |    29712 |    30091 |    30335 |    29371 |   Alaska |
-     +----------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------------------------+
+  2. | fips | inc_~1q1 | inc_~1q2 | inc_~1q3 | inc_~1q4 | inc_~2q1 | inc_~2q2  | inc_~2q3  | inc_~2q4  | inc_~3q1  |
+     |    2 |    19620 |    20092 |    20146 |    20341 |    20462 |    20642  |    20779  |    21006  |    20783  |
+     |-------------------------------------------------------------------------------------------------------------|
+     | inc_~3q2 | inc_~3q3 | inc_~3q4 | inc_~4q1 | inc_~4q2 | inc_~4q3 | inc_~4q4 | inc_~5q1 | inc_~5q2 | inc_~5q3 |
+     |    21155 |    21251 |    21550 |    21979 |    22189 |    22555 |    23015 |    23607 |    23854 |    24346 |
+     |----------+----------+----------+----------+----------+----------+----------+----------+----------+----------|
+     | inc_~5q4 | inc_~6q1 | inc_~6q2 | inc_~6q3 | inc_~6q4 | inc_~7q1 | inc_~7q2 | inc_~7q3 | inc_~7q4 | inc_~8q1 |
+     |    24700 |    25294 |    25815 |    26085 |    26535 |    26882 |    27180 |    27367 |    27662 |    29105 |
+     |---------------------+---------------------+---------------------+---------------------+---------------------|
+     |      inc_~8q2       |      inc_~8q3       |      inc_~8q4       |      inc_~9q1       |      areaname       |
+     |         29712       |         30091       |         30335       |         29371       |        Alaska       |
+     +-------------------------------------------------------------------------------------------------------------+
 
-     +----------------------------------------------------------------------------+
-  3. | fips | inc_~1q1 | inc_~1q2 | inc_~1q3  | inc_~1q4  | inc_~2q1  | inc_~2q2  |
-     |    4 |   137195 |   138552 |   139826  |   139842  |   142595  |   143488  |
-     |----------------------------------------------------------------------------|
-     | inc_~2q3 | inc_~2q4 | inc_~3q1 | inc_~3q2 | inc_~3q3 | inc_~3q4 | inc_~4q1 |
-     |   144410 |   146108 |   147196 |   149424 |   151205 |   154504 |   159779 |
-     |----------+----------+----------+----------+----------+----------+----------|
-     | inc_~4q2 | inc_~4q3 | inc_~4q4 | inc_~5q1 | inc_~5q2 | inc_~5q3 | inc_~5q4 |
-     |   163073 |   165946 |   170893 |   175472 |   180311 |   185625 |   188724 |
-     |----------+----------+----------+----------+----------+----------+----------|
-     | inc_~6q1 | inc_~6q2 | inc_~6q3 | inc_~6q4 | inc_~7q1 | inc_~7q2 | inc_~7q3 |
-     |   194543 |   197373 |   201417 |   204527 |   205774 |   207079 |   210275 |
-     |----------+----------+----------+----------+----------+----------+----------|
-     | inc_~7q4 | inc_~8q1 | inc_~8q2 | inc_~8q3 | inc_~8q4 | inc_~9q1 | areaname |
-     |   211284 |   212797 |   215657 |   214590 |   212970 |   211477 |  Arizona |
-     +----------------------------------------------------------------------------+
+     +-------------------------------------------------------------------------------------------------------------+
+  3. | fips | inc_~1q1 | inc_~1q2 | inc_~1q3 | inc_~1q4 | inc_~2q1 | inc_~2q2  | inc_~2q3  | inc_~2q4  | inc_~3q1  |
+     |    4 |   137195 |   138552 |   139826 |   139842 |   142595 |   143488  |   144410  |   146108  |   147196  |
+     |-------------------------------------------------------------------------------------------------------------|
+     | inc_~3q2 | inc_~3q3 | inc_~3q4 | inc_~4q1 | inc_~4q2 | inc_~4q3 | inc_~4q4 | inc_~5q1 | inc_~5q2 | inc_~5q3 |
+     |   149424 |   151205 |   154504 |   159779 |   163073 |   165946 |   170893 |   175472 |   180311 |   185625 |
+     |----------+----------+----------+----------+----------+----------+----------+----------+----------+----------|
+     | inc_~5q4 | inc_~6q1 | inc_~6q2 | inc_~6q3 | inc_~6q4 | inc_~7q1 | inc_~7q2 | inc_~7q3 | inc_~7q4 | inc_~8q1 |
+     |   188724 |   194543 |   197373 |   201417 |   204527 |   205774 |   207079 |   210275 |   211284 |   212797 |
+     |---------------------+---------------------+---------------------+---------------------+---------------------|
+     |      inc_~8q2       |      inc_~8q3       |      inc_~8q4       |      inc_~9q1       |      areaname       |
+     |        215657       |        214590       |        212970       |        211477       |       Arizona       |
+     +-------------------------------------------------------------------------------------------------------------+
 
 . 
-. unzipfile spi.zip, replace
-    inflating: SA1_1929_2016.csv
-    inflating: sa1_def.xml
-    inflating: sa1_fn.htm
-    inflating: SA25_1969_2001__ALL_AREAS.csv
-    inflating: SA25_1969_2001_AK.csv
-    inflating: SA25_1969_2001_AL.csv
-    inflating: SA25_1969_2001_AR.csv
-    inflating: SA25_1969_2001_AZ.csv
-    inflating: SA25_1969_2001_CA.csv
-    inflating: SA25_1969_2001_CO.csv
-    inflating: SA25_1969_2001_CT.csv
-    inflating: SA25_1969_2001_DC.csv
-    inflating: SA25_1969_2001_DE.csv
-    inflating: SA25_1969_2001_FL.csv
-    inflating: SA25_1969_2001_FWST.csv
-    inflating: SA25_1969_2001_GA.csv
-    inflating: SA25_1969_2001_GLAK.csv
-    inflating: SA25_1969_2001_HI.csv
-    inflating: SA25_1969_2001_IA.csv
-    inflating: SA25_1969_2001_ID.csv
-    inflating: SA25_1969_2001_IL.csv
-    inflating: SA25_1969_2001_IN.csv
-    inflating: SA25_1969_2001_KS.csv
-    inflating: SA25_1969_2001_KY.csv
-    inflating: SA25_1969_2001_LA.csv
-    inflating: SA25_1969_2001_MA.csv
-    inflating: SA25_1969_2001_MD.csv
-    inflating: SA25_1969_2001_ME.csv
-    inflating: SA25_1969_2001_MEST.csv
-    inflating: SA25_1969_2001_MI.csv
-    inflating: SA25_1969_2001_MN.csv
-    inflating: SA25_1969_2001_MO.csv
-    inflating: SA25_1969_2001_MS.csv
-    inflating: SA25_1969_2001_MT.csv
-    inflating: SA25_1969_2001_NC.csv
-    inflating: SA25_1969_2001_ND.csv
-    inflating: SA25_1969_2001_NE.csv
-    inflating: SA25_1969_2001_NENG.csv
-    inflating: SA25_1969_2001_NH.csv
-    inflating: SA25_1969_2001_NJ.csv
-    inflating: SA25_1969_2001_NM.csv
-    inflating: SA25_1969_2001_NV.csv
-    inflating: SA25_1969_2001_NY.csv
-    inflating: SA25_1969_2001_OH.csv
-    inflating: SA25_1969_2001_OK.csv
-    inflating: SA25_1969_2001_OR.csv
-    inflating: SA25_1969_2001_PA.csv
-    inflating: SA25_1969_2001_PLNS.csv
-    inflating: SA25_1969_2001_RI.csv
-    inflating: SA25_1969_2001_RKMT.csv
-    inflating: SA25_1969_2001_SC.csv
-    inflating: SA25_1969_2001_SD.csv
-    inflating: SA25_1969_2001_SEST.csv
-    inflating: SA25_1969_2001_SWST.csv
-    inflating: SA25_1969_2001_TN.csv
-    inflating: SA25_1969_2001_TX.csv
-    inflating: SA25_1969_2001_US.csv
-    inflating: SA25_1969_2001_UT.csv
-    inflating: SA25_1969_2001_VA.csv
-    inflating: SA25_1969_2001_VT.csv
-    inflating: SA25_1969_2001_WA.csv
-    inflating: SA25_1969_2001_WI.csv
-    inflating: SA25_1969_2001_WV.csv
-    inflating: SA25_1969_2001_WY.csv
-    inflating: SA25_def.xml
-    inflating: SA25_fn.htm
-    inflating: SA25N_1998_2016__ALL_AREAS.csv
-    inflating: SA25N_1998_2016_AK.csv
-    inflating: SA25N_1998_2016_AL.csv
-    inflating: SA25N_1998_2016_AR.csv
-    inflating: SA25N_1998_2016_AZ.csv
-    inflating: SA25N_1998_2016_CA.csv
-    inflating: SA25N_1998_2016_CO.csv
-    inflating: SA25N_1998_2016_CT.csv
-    inflating: SA25N_1998_2016_DC.csv
-    inflating: SA25N_1998_2016_DE.csv
-    inflating: SA25N_1998_2016_FL.csv
-    inflating: SA25N_1998_2016_FWST.csv
-    inflating: SA25N_1998_2016_GA.csv
-    inflating: SA25N_1998_2016_GLAK.csv
-    inflating: SA25N_1998_2016_HI.csv
-    inflating: SA25N_1998_2016_IA.csv
-    inflating: SA25N_1998_2016_ID.csv
-    inflating: SA25N_1998_2016_IL.csv
-    inflating: SA25N_1998_2016_IN.csv
-    inflating: SA25N_1998_2016_KS.csv
-    inflating: SA25N_1998_2016_KY.csv
-    inflating: SA25N_1998_2016_LA.csv
-    inflating: SA25N_1998_2016_MA.csv
-    inflating: SA25N_1998_2016_MD.csv
-    inflating: SA25N_1998_2016_ME.csv
-    inflating: SA25N_1998_2016_MEST.csv
-    inflating: SA25N_1998_2016_MI.csv
-    inflating: SA25N_1998_2016_MN.csv
-    inflating: SA25N_1998_2016_MO.csv
-    inflating: SA25N_1998_2016_MS.csv
-    inflating: SA25N_1998_2016_MT.csv
-    inflating: SA25N_1998_2016_NC.csv
-    inflating: SA25N_1998_2016_ND.csv
-    inflating: SA25N_1998_2016_NE.csv
-    inflating: SA25N_1998_2016_NENG.csv
-    inflating: SA25N_1998_2016_NH.csv
-    inflating: SA25N_1998_2016_NJ.csv
-    inflating: SA25N_1998_2016_NM.csv
-    inflating: SA25N_1998_2016_NV.csv
-    inflating: SA25N_1998_2016_NY.csv
-    inflating: SA25N_1998_2016_OH.csv
-    inflating: SA25N_1998_2016_OK.csv
-    inflating: SA25N_1998_2016_OR.csv
-    inflating: SA25N_1998_2016_PA.csv
-    inflating: SA25N_1998_2016_PLNS.csv
-    inflating: SA25N_1998_2016_RI.csv
-    inflating: SA25N_1998_2016_RKMT.csv
-    inflating: SA25N_1998_2016_SC.csv
-    inflating: SA25N_1998_2016_SD.csv
-    inflating: SA25N_1998_2016_SEST.csv
-    inflating: SA25N_1998_2016_SWST.csv
-    inflating: SA25N_1998_2016_TN.csv
-    inflating: SA25N_1998_2016_TX.csv
-    inflating: SA25N_1998_2016_US.csv
-    inflating: SA25N_1998_2016_UT.csv
-    inflating: SA25N_1998_2016_VA.csv
-    inflating: SA25N_1998_2016_VT.csv
-    inflating: SA25N_1998_2016_WA.csv
-    inflating: SA25N_1998_2016_WI.csv
-    inflating: SA25N_1998_2016_WV.csv
-    inflating: SA25N_1998_2016_WY.csv
-    inflating: SA25N_def.xml
-    inflating: SA25N_fn.htm
-    inflating: SA27_1969_2001__ALL_AREAS.csv
-    inflating: SA27_1969_2001_AK.csv
-    inflating: SA27_1969_2001_AL.csv
-    inflating: SA27_1969_2001_AR.csv
-    inflating: SA27_1969_2001_AZ.csv
-    inflating: SA27_1969_2001_CA.csv
-    inflating: SA27_1969_2001_CO.csv
-    inflating: SA27_1969_2001_CT.csv
-    inflating: SA27_1969_2001_DC.csv
-    inflating: SA27_1969_2001_DE.csv
-    inflating: SA27_1969_2001_FL.csv
-    inflating: SA27_1969_2001_FWST.csv
-    inflating: SA27_1969_2001_GA.csv
-    inflating: SA27_1969_2001_GLAK.csv
-    inflating: SA27_1969_2001_HI.csv
-    inflating: SA27_1969_2001_IA.csv
-    inflating: SA27_1969_2001_ID.csv
-    inflating: SA27_1969_2001_IL.csv
-    inflating: SA27_1969_2001_IN.csv
-    inflating: SA27_1969_2001_KS.csv
-    inflating: SA27_1969_2001_KY.csv
-    inflating: SA27_1969_2001_LA.csv
-    inflating: SA27_1969_2001_MA.csv
-    inflating: SA27_1969_2001_MD.csv
-    inflating: SA27_1969_2001_ME.csv
-    inflating: SA27_1969_2001_MEST.csv
-    inflating: SA27_1969_2001_MI.csv
-    inflating: SA27_1969_2001_MN.csv
-    inflating: SA27_1969_2001_MO.csv
-    inflating: SA27_1969_2001_MS.csv
-    inflating: SA27_1969_2001_MT.csv
-    inflating: SA27_1969_2001_NC.csv
-    inflating: SA27_1969_2001_ND.csv
-    inflating: SA27_1969_2001_NE.csv
-    inflating: SA27_1969_2001_NENG.csv
-    inflating: SA27_1969_2001_NH.csv
-    inflating: SA27_1969_2001_NJ.csv
-    inflating: SA27_1969_2001_NM.csv
-    inflating: SA27_1969_2001_NV.csv
-    inflating: SA27_1969_2001_NY.csv
-    inflating: SA27_1969_2001_OH.csv
-    inflating: SA27_1969_2001_OK.csv
-    inflating: SA27_1969_2001_OR.csv
-    inflating: SA27_1969_2001_PA.csv
-    inflating: SA27_1969_2001_PLNS.csv
-    inflating: SA27_1969_2001_RI.csv
-    inflating: SA27_1969_2001_RKMT.csv
-    inflating: SA27_1969_2001_SC.csv
-    inflating: SA27_1969_2001_SD.csv
-    inflating: SA27_1969_2001_SEST.csv
-    inflating: SA27_1969_2001_SWST.csv
-    inflating: SA27_1969_2001_TN.csv
-    inflating: SA27_1969_2001_TX.csv
-    inflating: SA27_1969_2001_US.csv
-    inflating: SA27_1969_2001_UT.csv
-    inflating: SA27_1969_2001_VA.csv
-    inflating: SA27_1969_2001_VT.csv
-    inflating: SA27_1969_2001_WA.csv
-    inflating: SA27_1969_2001_WI.csv
-    inflating: SA27_1969_2001_WV.csv
-    inflating: SA27_1969_2001_WY.csv
-    inflating: SA27_def.xml
-    inflating: SA27_fn.htm
-    inflating: SA27N_1998_2016__ALL_AREAS.csv
-    inflating: SA27N_1998_2016_AK.csv
-    inflating: SA27N_1998_2016_AL.csv
-    inflating: SA27N_1998_2016_AR.csv
-    inflating: SA27N_1998_2016_AZ.csv
-    inflating: SA27N_1998_2016_CA.csv
-    inflating: SA27N_1998_2016_CO.csv
-    inflating: SA27N_1998_2016_CT.csv
-    inflating: SA27N_1998_2016_DC.csv
-    inflating: SA27N_1998_2016_DE.csv
-    inflating: SA27N_1998_2016_FL.csv
-    inflating: SA27N_1998_2016_FWST.csv
-    inflating: SA27N_1998_2016_GA.csv
-    inflating: SA27N_1998_2016_GLAK.csv
-    inflating: SA27N_1998_2016_HI.csv
-    inflating: SA27N_1998_2016_IA.csv
-    inflating: SA27N_1998_2016_ID.csv
-    inflating: SA27N_1998_2016_IL.csv
-    inflating: SA27N_1998_2016_IN.csv
-    inflating: SA27N_1998_2016_KS.csv
-    inflating: SA27N_1998_2016_KY.csv
-    inflating: SA27N_1998_2016_LA.csv
-    inflating: SA27N_1998_2016_MA.csv
-    inflating: SA27N_1998_2016_MD.csv
-    inflating: SA27N_1998_2016_ME.csv
-    inflating: SA27N_1998_2016_MEST.csv
-    inflating: SA27N_1998_2016_MI.csv
-    inflating: SA27N_1998_2016_MN.csv
-    inflating: SA27N_1998_2016_MO.csv
-    inflating: SA27N_1998_2016_MS.csv
-    inflating: SA27N_1998_2016_MT.csv
-    inflating: SA27N_1998_2016_NC.csv
-    inflating: SA27N_1998_2016_ND.csv
-    inflating: SA27N_1998_2016_NE.csv
-    inflating: SA27N_1998_2016_NENG.csv
-    inflating: SA27N_1998_2016_NH.csv
-    inflating: SA27N_1998_2016_NJ.csv
-    inflating: SA27N_1998_2016_NM.csv
-    inflating: SA27N_1998_2016_NV.csv
-    inflating: SA27N_1998_2016_NY.csv
-    inflating: SA27N_1998_2016_OH.csv
-    inflating: SA27N_1998_2016_OK.csv
-    inflating: SA27N_1998_2016_OR.csv
-    inflating: SA27N_1998_2016_PA.csv
-    inflating: SA27N_1998_2016_PLNS.csv
-    inflating: SA27N_1998_2016_RI.csv
-    inflating: SA27N_1998_2016_RKMT.csv
-    inflating: SA27N_1998_2016_SC.csv
-    inflating: SA27N_1998_2016_SD.csv
-    inflating: SA27N_1998_2016_SEST.csv
-    inflating: SA27N_1998_2016_SWST.csv
-    inflating: SA27N_1998_2016_TN.csv
-    inflating: SA27N_1998_2016_TX.csv
-    inflating: SA27N_1998_2016_US.csv
-    inflating: SA27N_1998_2016_UT.csv
-    inflating: SA27N_1998_2016_VA.csv
-    inflating: SA27N_1998_2016_VT.csv
-    inflating: SA27N_1998_2016_WA.csv
-    inflating: SA27N_1998_2016_WI.csv
-    inflating: SA27N_1998_2016_WV.csv
-    inflating: SA27N_1998_2016_WY.csv
-    inflating: SA27N_def.xml
-    inflating: SA27N_fn.htm
-    inflating: SA30_1958_2016__ALL_AREAS.csv
-    inflating: SA30_1958_2016_AK.csv
-    inflating: SA30_1958_2016_AL.csv
-    inflating: SA30_1958_2016_AR.csv
-    inflating: SA30_1958_2016_AZ.csv
-    inflating: SA30_1958_2016_CA.csv
-    inflating: SA30_1958_2016_CO.csv
-    inflating: SA30_1958_2016_CT.csv
-    inflating: SA30_1958_2016_DC.csv
-    inflating: SA30_1958_2016_DE.csv
-    inflating: SA30_1958_2016_FL.csv
-    inflating: SA30_1958_2016_FWST.csv
-    inflating: SA30_1958_2016_GA.csv
-    inflating: SA30_1958_2016_GLAK.csv
-    inflating: SA30_1958_2016_HI.csv
-    inflating: SA30_1958_2016_IA.csv
-    inflating: SA30_1958_2016_ID.csv
-    inflating: SA30_1958_2016_IL.csv
-    inflating: SA30_1958_2016_IN.csv
-    inflating: SA30_1958_2016_KS.csv
-    inflating: SA30_1958_2016_KY.csv
-    inflating: SA30_1958_2016_LA.csv
-    inflating: SA30_1958_2016_MA.csv
-    inflating: SA30_1958_2016_MD.csv
-    inflating: SA30_1958_2016_ME.csv
-    inflating: SA30_1958_2016_MEST.csv
-    inflating: SA30_1958_2016_MI.csv
-    inflating: SA30_1958_2016_MN.csv
-    inflating: SA30_1958_2016_MO.csv
-    inflating: SA30_1958_2016_MS.csv
-    inflating: SA30_1958_2016_MT.csv
-    inflating: SA30_1958_2016_NC.csv
-    inflating: SA30_1958_2016_ND.csv
-    inflating: SA30_1958_2016_NE.csv
-    inflating: SA30_1958_2016_NENG.csv
-    inflating: SA30_1958_2016_NH.csv
-    inflating: SA30_1958_2016_NJ.csv
-    inflating: SA30_1958_2016_NM.csv
-    inflating: SA30_1958_2016_NV.csv
-    inflating: SA30_1958_2016_NY.csv
-    inflating: SA30_1958_2016_OH.csv
-    inflating: SA30_1958_2016_OK.csv
-    inflating: SA30_1958_2016_OR.csv
-    inflating: SA30_1958_2016_PA.csv
-    inflating: SA30_1958_2016_PLNS.csv
-    inflating: SA30_1958_2016_RI.csv
-    inflating: SA30_1958_2016_RKMT.csv
-    inflating: SA30_1958_2016_SC.csv
-    inflating: SA30_1958_2016_SD.csv
-    inflating: SA30_1958_2016_SEST.csv
-    inflating: SA30_1958_2016_SWST.csv
-    inflating: SA30_1958_2016_TN.csv
-    inflating: SA30_1958_2016_TX.csv
-    inflating: SA30_1958_2016_US.csv
-    inflating: SA30_1958_2016_UT.csv
-    inflating: SA30_1958_2016_VA.csv
-    inflating: SA30_1958_2016_VT.csv
-    inflating: SA30_1958_2016_WA.csv
-    inflating: SA30_1958_2016_WI.csv
-    inflating: SA30_1958_2016_WV.csv
-    inflating: SA30_1958_2016_WY.csv
-    inflating: SA30_def.xml
-    inflating: SA30_fn.htm
-    inflating: SA35_1929_2016__ALL_AREAS.csv
-    inflating: SA35_1929_2016_AK.csv
-    inflating: SA35_1929_2016_AL.csv
-    inflating: SA35_1929_2016_AR.csv
-    inflating: SA35_1929_2016_AZ.csv
-    inflating: SA35_1929_2016_CA.csv
-    inflating: SA35_1929_2016_CO.csv
-    inflating: SA35_1929_2016_CT.csv
-    inflating: SA35_1929_2016_DC.csv
-    inflating: SA35_1929_2016_DE.csv
-    inflating: SA35_1929_2016_FL.csv
-    inflating: SA35_1929_2016_FWST.csv
-    inflating: SA35_1929_2016_GA.csv
-    inflating: SA35_1929_2016_GLAK.csv
-    inflating: SA35_1929_2016_HI.csv
-    inflating: SA35_1929_2016_IA.csv
-    inflating: SA35_1929_2016_ID.csv
-    inflating: SA35_1929_2016_IL.csv
-    inflating: SA35_1929_2016_IN.csv
-    inflating: SA35_1929_2016_KS.csv
-    inflating: SA35_1929_2016_KY.csv
-    inflating: SA35_1929_2016_LA.csv
-    inflating: SA35_1929_2016_MA.csv
-    inflating: SA35_1929_2016_MD.csv
-    inflating: SA35_1929_2016_ME.csv
-    inflating: SA35_1929_2016_MEST.csv
-    inflating: SA35_1929_2016_MI.csv
-    inflating: SA35_1929_2016_MN.csv
-    inflating: SA35_1929_2016_MO.csv
-    inflating: SA35_1929_2016_MS.csv
-    inflating: SA35_1929_2016_MT.csv
-    inflating: SA35_1929_2016_NC.csv
-    inflating: SA35_1929_2016_ND.csv
-    inflating: SA35_1929_2016_NE.csv
-    inflating: SA35_1929_2016_NENG.csv
-    inflating: SA35_1929_2016_NH.csv
-    inflating: SA35_1929_2016_NJ.csv
-    inflating: SA35_1929_2016_NM.csv
-    inflating: SA35_1929_2016_NV.csv
-    inflating: SA35_1929_2016_NY.csv
-    inflating: SA35_1929_2016_OH.csv
-    inflating: SA35_1929_2016_OK.csv
-    inflating: SA35_1929_2016_OR.csv
-    inflating: SA35_1929_2016_PA.csv
-    inflating: SA35_1929_2016_PLNS.csv
-    inflating: SA35_1929_2016_RI.csv
-    inflating: SA35_1929_2016_RKMT.csv
-    inflating: SA35_1929_2016_SC.csv
-    inflating: SA35_1929_2016_SD.csv
-    inflating: SA35_1929_2016_SEST.csv
-    inflating: SA35_1929_2016_SWST.csv
-    inflating: SA35_1929_2016_TN.csv
-    inflating: SA35_1929_2016_TX.csv
-    inflating: SA35_1929_2016_US.csv
-    inflating: SA35_1929_2016_UT.csv
-    inflating: SA35_1929_2016_VA.csv
-    inflating: SA35_1929_2016_VT.csv
-    inflating: SA35_1929_2016_WA.csv
-    inflating: SA35_1929_2016_WI.csv
-    inflating: SA35_1929_2016_WV.csv
-    inflating: SA35_1929_2016_WY.csv
-    inflating: SA35_def.xml
-    inflating: SA35_fn.htm
-    inflating: SA40_1958_2016__ALL_AREAS.csv
-    inflating: SA40_1958_2016_AK.csv
-    inflating: SA40_1958_2016_AL.csv
-    inflating: SA40_1958_2016_AR.csv
-    inflating: SA40_1958_2016_AZ.csv
-    inflating: SA40_1958_2016_CA.csv
-    inflating: SA40_1958_2016_CO.csv
-    inflating: SA40_1958_2016_CT.csv
-    inflating: SA40_1958_2016_DC.csv
-    inflating: SA40_1958_2016_DE.csv
-    inflating: SA40_1958_2016_FL.csv
-    inflating: SA40_1958_2016_FWST.csv
-    inflating: SA40_1958_2016_GA.csv
-    inflating: SA40_1958_2016_GLAK.csv
-    inflating: SA40_1958_2016_HI.csv
-    inflating: SA40_1958_2016_IA.csv
-    inflating: SA40_1958_2016_ID.csv
-    inflating: SA40_1958_2016_IL.csv
-    inflating: SA40_1958_2016_IN.csv
-    inflating: SA40_1958_2016_KS.csv
-    inflating: SA40_1958_2016_KY.csv
-    inflating: SA40_1958_2016_LA.csv
-    inflating: SA40_1958_2016_MA.csv
-    inflating: SA40_1958_2016_MD.csv
-    inflating: SA40_1958_2016_ME.csv
-    inflating: SA40_1958_2016_MEST.csv
-    inflating: SA40_1958_2016_MI.csv
-    inflating: SA40_1958_2016_MN.csv
-    inflating: SA40_1958_2016_MO.csv
-    inflating: SA40_1958_2016_MS.csv
-    inflating: SA40_1958_2016_MT.csv
-    inflating: SA40_1958_2016_NC.csv
-    inflating: SA40_1958_2016_ND.csv
-    inflating: SA40_1958_2016_NE.csv
-    inflating: SA40_1958_2016_NENG.csv
-    inflating: SA40_1958_2016_NH.csv
-    inflating: SA40_1958_2016_NJ.csv
-    inflating: SA40_1958_2016_NM.csv
-    inflating: SA40_1958_2016_NV.csv
-    inflating: SA40_1958_2016_NY.csv
-    inflating: SA40_1958_2016_OH.csv
-    inflating: SA40_1958_2016_OK.csv
-    inflating: SA40_1958_2016_OR.csv
-    inflating: SA40_1958_2016_PA.csv
-    inflating: SA40_1958_2016_PLNS.csv
-    inflating: SA40_1958_2016_RI.csv
-    inflating: SA40_1958_2016_RKMT.csv
-    inflating: SA40_1958_2016_SC.csv
-    inflating: SA40_1958_2016_SD.csv
-    inflating: SA40_1958_2016_SEST.csv
-    inflating: SA40_1958_2016_SWST.csv
-    inflating: SA40_1958_2016_TN.csv
-    inflating: SA40_1958_2016_TX.csv
-    inflating: SA40_1958_2016_US.csv
-    inflating: SA40_1958_2016_UT.csv
-    inflating: SA40_1958_2016_VA.csv
-    inflating: SA40_1958_2016_VT.csv
-    inflating: SA40_1958_2016_WA.csv
-    inflating: SA40_1958_2016_WI.csv
-    inflating: SA40_1958_2016_WV.csv
-    inflating: SA40_1958_2016_WY.csv
-    inflating: SA40_def.xml
-    inflating: SA40_fn.htm
-    inflating: SA45_1969_2016__ALL_AREAS.csv
-    inflating: SA45_1969_2016_AK.csv
-    inflating: SA45_1969_2016_AL.csv
-    inflating: SA45_1969_2016_AR.csv
-    inflating: SA45_1969_2016_AZ.csv
-    inflating: SA45_1969_2016_CA.csv
-    inflating: SA45_1969_2016_CO.csv
-    inflating: SA45_1969_2016_CT.csv
-    inflating: SA45_1969_2016_DC.csv
-    inflating: SA45_1969_2016_DE.csv
-    inflating: SA45_1969_2016_FL.csv
-    inflating: SA45_1969_2016_FWST.csv
-    inflating: SA45_1969_2016_GA.csv
-    inflating: SA45_1969_2016_GLAK.csv
-    inflating: SA45_1969_2016_HI.csv
-    inflating: SA45_1969_2016_IA.csv
-    inflating: SA45_1969_2016_ID.csv
-    inflating: SA45_1969_2016_IL.csv
-    inflating: SA45_1969_2016_IN.csv
-    inflating: SA45_1969_2016_KS.csv
-    inflating: SA45_1969_2016_KY.csv
-    inflating: SA45_1969_2016_LA.csv
-    inflating: SA45_1969_2016_MA.csv
-    inflating: SA45_1969_2016_MD.csv
-    inflating: SA45_1969_2016_ME.csv
-    inflating: SA45_1969_2016_MEST.csv
-    inflating: SA45_1969_2016_MI.csv
-    inflating: SA45_1969_2016_MN.csv
-    inflating: SA45_1969_2016_MO.csv
-    inflating: SA45_1969_2016_MS.csv
-    inflating: SA45_1969_2016_MT.csv
-    inflating: SA45_1969_2016_NC.csv
-    inflating: SA45_1969_2016_ND.csv
-    inflating: SA45_1969_2016_NE.csv
-    inflating: SA45_1969_2016_NENG.csv
-    inflating: SA45_1969_2016_NH.csv
-    inflating: SA45_1969_2016_NJ.csv
-    inflating: SA45_1969_2016_NM.csv
-    inflating: SA45_1969_2016_NV.csv
-    inflating: SA45_1969_2016_NY.csv
-    inflating: SA45_1969_2016_OH.csv
-    inflating: SA45_1969_2016_OK.csv
-    inflating: SA45_1969_2016_OR.csv
-    inflating: SA45_1969_2016_PA.csv
-    inflating: SA45_1969_2016_PLNS.csv
-    inflating: SA45_1969_2016_RI.csv
-    inflating: SA45_1969_2016_RKMT.csv
-    inflating: SA45_1969_2016_SC.csv
-    inflating: SA45_1969_2016_SD.csv
-    inflating: SA45_1969_2016_SEST.csv
-    inflating: SA45_1969_2016_SWST.csv
-    inflating: SA45_1969_2016_TN.csv
-    inflating: SA45_1969_2016_TX.csv
-    inflating: SA45_1969_2016_US.csv
-    inflating: SA45_1969_2016_UT.csv
-    inflating: SA45_1969_2016_VA.csv
-    inflating: SA45_1969_2016_VT.csv
-    inflating: SA45_1969_2016_WA.csv
-    inflating: SA45_1969_2016_WI.csv
-    inflating: SA45_1969_2016_WV.csv
-    inflating: SA45_1969_2016_WY.csv
-    inflating: SA45_def.xml
-    inflating: SA45_fn.htm
-    inflating: SA4_1929_2016__ALL_AREAS.csv
-    inflating: SA4_1929_2016_AK.csv
-    inflating: SA4_1929_2016_AL.csv
-    inflating: SA4_1929_2016_AR.csv
-    inflating: SA4_1929_2016_AZ.csv
-    inflating: SA4_1929_2016_CA.csv
-    inflating: SA4_1929_2016_CO.csv
-    inflating: SA4_1929_2016_CT.csv
-    inflating: SA4_1929_2016_DC.csv
-    inflating: SA4_1929_2016_DE.csv
-    inflating: SA4_1929_2016_FL.csv
-    inflating: SA4_1929_2016_FWST.csv
-    inflating: SA4_1929_2016_GA.csv
-    inflating: SA4_1929_2016_GLAK.csv
-    inflating: SA4_1929_2016_HI.csv
-    inflating: SA4_1929_2016_IA.csv
-    inflating: SA4_1929_2016_ID.csv
-    inflating: SA4_1929_2016_IL.csv
-    inflating: SA4_1929_2016_IN.csv
-    inflating: SA4_1929_2016_KS.csv
-    inflating: SA4_1929_2016_KY.csv
-    inflating: SA4_1929_2016_LA.csv
-    inflating: SA4_1929_2016_MA.csv
-    inflating: SA4_1929_2016_MD.csv
-    inflating: SA4_1929_2016_ME.csv
-    inflating: SA4_1929_2016_MEST.csv
-    inflating: SA4_1929_2016_MI.csv
-    inflating: SA4_1929_2016_MN.csv
-    inflating: SA4_1929_2016_MO.csv
-    inflating: SA4_1929_2016_MS.csv
-    inflating: SA4_1929_2016_MT.csv
-    inflating: SA4_1929_2016_NC.csv
-    inflating: SA4_1929_2016_ND.csv
-    inflating: SA4_1929_2016_NE.csv
-    inflating: SA4_1929_2016_NENG.csv
-    inflating: SA4_1929_2016_NH.csv
-    inflating: SA4_1929_2016_NJ.csv
-    inflating: SA4_1929_2016_NM.csv
-    inflating: SA4_1929_2016_NV.csv
-    inflating: SA4_1929_2016_NY.csv
-    inflating: SA4_1929_2016_OH.csv
-    inflating: SA4_1929_2016_OK.csv
-    inflating: SA4_1929_2016_OR.csv
-    inflating: SA4_1929_2016_PA.csv
-    inflating: SA4_1929_2016_PLNS.csv
-    inflating: SA4_1929_2016_RI.csv
-    inflating: SA4_1929_2016_RKMT.csv
-    inflating: SA4_1929_2016_SC.csv
-    inflating: SA4_1929_2016_SD.csv
-    inflating: SA4_1929_2016_SEST.csv
-    inflating: SA4_1929_2016_SWST.csv
-    inflating: SA4_1929_2016_TN.csv
-    inflating: SA4_1929_2016_TX.csv
-    inflating: SA4_1929_2016_US.csv
-    inflating: SA4_1929_2016_UT.csv
-    inflating: SA4_1929_2016_VA.csv
-    inflating: SA4_1929_2016_VT.csv
-    inflating: SA4_1929_2016_WA.csv
-    inflating: SA4_1929_2016_WI.csv
-    inflating: SA4_1929_2016_WV.csv
-    inflating: SA4_1929_2016_WY.csv
-    inflating: SA4_def.xml
-    inflating: SA4_fn.htm
-    inflating: SA50_1948_2016__ALL_AREAS.csv
-    inflating: SA50_1948_2016_AK.csv
-    inflating: SA50_1948_2016_AL.csv
-    inflating: SA50_1948_2016_AR.csv
-    inflating: SA50_1948_2016_AZ.csv
-    inflating: SA50_1948_2016_CA.csv
-    inflating: SA50_1948_2016_CO.csv
-    inflating: SA50_1948_2016_CT.csv
-    inflating: SA50_1948_2016_DC.csv
-    inflating: SA50_1948_2016_DE.csv
-    inflating: SA50_1948_2016_FL.csv
-    inflating: SA50_1948_2016_FWST.csv
-    inflating: SA50_1948_2016_GA.csv
-    inflating: SA50_1948_2016_GLAK.csv
-    inflating: SA50_1948_2016_HI.csv
-    inflating: SA50_1948_2016_IA.csv
-    inflating: SA50_1948_2016_ID.csv
-    inflating: SA50_1948_2016_IL.csv
-    inflating: SA50_1948_2016_IN.csv
-    inflating: SA50_1948_2016_KS.csv
-    inflating: SA50_1948_2016_KY.csv
-    inflating: SA50_1948_2016_LA.csv
-    inflating: SA50_1948_2016_MA.csv
-    inflating: SA50_1948_2016_MD.csv
-    inflating: SA50_1948_2016_ME.csv
-    inflating: SA50_1948_2016_MEST.csv
-    inflating: SA50_1948_2016_MI.csv
-    inflating: SA50_1948_2016_MN.csv
-    inflating: SA50_1948_2016_MO.csv
-    inflating: SA50_1948_2016_MS.csv
-    inflating: SA50_1948_2016_MT.csv
-    inflating: SA50_1948_2016_NC.csv
-    inflating: SA50_1948_2016_ND.csv
-    inflating: SA50_1948_2016_NE.csv
-    inflating: SA50_1948_2016_NENG.csv
-    inflating: SA50_1948_2016_NH.csv
-    inflating: SA50_1948_2016_NJ.csv
-    inflating: SA50_1948_2016_NM.csv
-    inflating: SA50_1948_2016_NV.csv
-    inflating: SA50_1948_2016_NY.csv
-    inflating: SA50_1948_2016_OH.csv
-    inflating: SA50_1948_2016_OK.csv
-    inflating: SA50_1948_2016_OR.csv
-    inflating: SA50_1948_2016_PA.csv
-    inflating: SA50_1948_2016_PLNS.csv
-    inflating: SA50_1948_2016_RI.csv
-    inflating: SA50_1948_2016_RKMT.csv
-    inflating: SA50_1948_2016_SC.csv
-    inflating: SA50_1948_2016_SD.csv
-    inflating: SA50_1948_2016_SEST.csv
-    inflating: SA50_1948_2016_SWST.csv
-    inflating: SA50_1948_2016_TN.csv
-    inflating: SA50_1948_2016_TX.csv
-    inflating: SA50_1948_2016_US.csv
-    inflating: SA50_1948_2016_UT.csv
-    inflating: SA50_1948_2016_VA.csv
-    inflating: SA50_1948_2016_VT.csv
-    inflating: SA50_1948_2016_WA.csv
-    inflating: SA50_1948_2016_WI.csv
-    inflating: SA50_1948_2016_WV.csv
-    inflating: SA50_1948_2016_WY.csv
-    inflating: SA50_def.xml
-    inflating: SA50_fn.htm
-    inflating: SA51_1948_2016.csv
-    inflating: sa51_def.xml
-    inflating: sa51_fn.htm
-    inflating: SA5_1958_2001__ALL_AREAS.csv
-    inflating: SA5_1958_2001_AK.csv
-    inflating: SA5_1958_2001_AL.csv
-    inflating: SA5_1958_2001_AR.csv
-    inflating: SA5_1958_2001_AZ.csv
-    inflating: SA5_1958_2001_CA.csv
-    inflating: SA5_1958_2001_CO.csv
-    inflating: SA5_1958_2001_CT.csv
-    inflating: SA5_1958_2001_DC.csv
-    inflating: SA5_1958_2001_DE.csv
-    inflating: SA5_1958_2001_FL.csv
-    inflating: SA5_1958_2001_FWST.csv
-    inflating: SA5_1958_2001_GA.csv
-    inflating: SA5_1958_2001_GLAK.csv
-    inflating: SA5_1958_2001_HI.csv
-    inflating: SA5_1958_2001_IA.csv
-    inflating: SA5_1958_2001_ID.csv
-    inflating: SA5_1958_2001_IL.csv
-    inflating: SA5_1958_2001_IN.csv
-    inflating: SA5_1958_2001_KS.csv
-    inflating: SA5_1958_2001_KY.csv
-    inflating: SA5_1958_2001_LA.csv
-    inflating: SA5_1958_2001_MA.csv
-    inflating: SA5_1958_2001_MD.csv
-    inflating: SA5_1958_2001_ME.csv
-    inflating: SA5_1958_2001_MEST.csv
-    inflating: SA5_1958_2001_MI.csv
-    inflating: SA5_1958_2001_MN.csv
-    inflating: SA5_1958_2001_MO.csv
-    inflating: SA5_1958_2001_MS.csv
-    inflating: SA5_1958_2001_MT.csv
-    inflating: SA5_1958_2001_NC.csv
-    inflating: SA5_1958_2001_ND.csv
-    inflating: SA5_1958_2001_NE.csv
-    inflating: SA5_1958_2001_NENG.csv
-    inflating: SA5_1958_2001_NH.csv
-    inflating: SA5_1958_2001_NJ.csv
-    inflating: SA5_1958_2001_NM.csv
-    inflating: SA5_1958_2001_NV.csv
-    inflating: SA5_1958_2001_NY.csv
-    inflating: SA5_1958_2001_OH.csv
-    inflating: SA5_1958_2001_OK.csv
-    inflating: SA5_1958_2001_OR.csv
-    inflating: SA5_1958_2001_PA.csv
-    inflating: SA5_1958_2001_PLNS.csv
-    inflating: SA5_1958_2001_RI.csv
-    inflating: SA5_1958_2001_RKMT.csv
-    inflating: SA5_1958_2001_SC.csv
-    inflating: SA5_1958_2001_SD.csv
-    inflating: SA5_1958_2001_SEST.csv
-    inflating: SA5_1958_2001_SWST.csv
-    inflating: SA5_1958_2001_TN.csv
-    inflating: SA5_1958_2001_TX.csv
-    inflating: SA5_1958_2001_US.csv
-    inflating: SA5_1958_2001_UT.csv
-    inflating: SA5_1958_2001_VA.csv
-    inflating: SA5_1958_2001_VT.csv
-    inflating: SA5_1958_2001_WA.csv
-    inflating: SA5_1958_2001_WI.csv
-    inflating: SA5_1958_2001_WV.csv
-    inflating: SA5_1958_2001_WY.csv
-    inflating: SA5_def.xml
-    inflating: SA5_fn.htm
-    inflating: SA5H_1929_1957__ALL_AREAS.csv
-    inflating: SA5H_1929_1957_AK.csv
-    inflating: SA5H_1929_1957_AL.csv
-    inflating: SA5H_1929_1957_AR.csv
-    inflating: SA5H_1929_1957_AZ.csv
-    inflating: SA5H_1929_1957_CA.csv
-    inflating: SA5H_1929_1957_CO.csv
-    inflating: SA5H_1929_1957_CT.csv
-    inflating: SA5H_1929_1957_DC.csv
-    inflating: SA5H_1929_1957_DE.csv
-    inflating: SA5H_1929_1957_FL.csv
-    inflating: SA5H_1929_1957_FWST.csv
-    inflating: SA5H_1929_1957_GA.csv
-    inflating: SA5H_1929_1957_GLAK.csv
-    inflating: SA5H_1929_1957_HI.csv
-    inflating: SA5H_1929_1957_IA.csv
-    inflating: SA5H_1929_1957_ID.csv
-    inflating: SA5H_1929_1957_IL.csv
-    inflating: SA5H_1929_1957_IN.csv
-    inflating: SA5H_1929_1957_KS.csv
-    inflating: SA5H_1929_1957_KY.csv
-    inflating: SA5H_1929_1957_LA.csv
-    inflating: SA5H_1929_1957_MA.csv
-    inflating: SA5H_1929_1957_MD.csv
-    inflating: SA5H_1929_1957_ME.csv
-    inflating: SA5H_1929_1957_MEST.csv
-    inflating: SA5H_1929_1957_MI.csv
-    inflating: SA5H_1929_1957_MN.csv
-    inflating: SA5H_1929_1957_MO.csv
-    inflating: SA5H_1929_1957_MS.csv
-    inflating: SA5H_1929_1957_MT.csv
-    inflating: SA5H_1929_1957_NC.csv
-    inflating: SA5H_1929_1957_ND.csv
-    inflating: SA5H_1929_1957_NE.csv
-    inflating: SA5H_1929_1957_NENG.csv
-    inflating: SA5H_1929_1957_NH.csv
-    inflating: SA5H_1929_1957_NJ.csv
-    inflating: SA5H_1929_1957_NM.csv
-    inflating: SA5H_1929_1957_NV.csv
-    inflating: SA5H_1929_1957_NY.csv
-    inflating: SA5H_1929_1957_OH.csv
-    inflating: SA5H_1929_1957_OK.csv
-    inflating: SA5H_1929_1957_OR.csv
-    inflating: SA5H_1929_1957_PA.csv
-    inflating: SA5H_1929_1957_PLNS.csv
-    inflating: SA5H_1929_1957_RI.csv
-    inflating: SA5H_1929_1957_RKMT.csv
-    inflating: SA5H_1929_1957_SC.csv
-    inflating: SA5H_1929_1957_SD.csv
-    inflating: SA5H_1929_1957_SEST.csv
-    inflating: SA5H_1929_1957_SWST.csv
-    inflating: SA5H_1929_1957_TN.csv
-    inflating: SA5H_1929_1957_TX.csv
-    inflating: SA5H_1929_1957_US.csv
-    inflating: SA5H_1929_1957_UT.csv
-    inflating: SA5H_1929_1957_VA.csv
-    inflating: SA5H_1929_1957_VT.csv
-    inflating: SA5H_1929_1957_WA.csv
-    inflating: SA5H_1929_1957_WI.csv
-    inflating: SA5H_1929_1957_WV.csv
-    inflating: SA5H_1929_1957_WY.csv
-    inflating: SA5H_def.xml
-    inflating: SA5H_fn.htm
-    inflating: SA5N_1998_2016__ALL_AREAS.csv
-    inflating: SA5N_1998_2016_AK.csv
-    inflating: SA5N_1998_2016_AL.csv
-    inflating: SA5N_1998_2016_AR.csv
-    inflating: SA5N_1998_2016_AZ.csv
-    inflating: SA5N_1998_2016_CA.csv
-    inflating: SA5N_1998_2016_CO.csv
-    inflating: SA5N_1998_2016_CT.csv
-    inflating: SA5N_1998_2016_DC.csv
-    inflating: SA5N_1998_2016_DE.csv
-    inflating: SA5N_1998_2016_FL.csv
-    inflating: SA5N_1998_2016_FWST.csv
-    inflating: SA5N_1998_2016_GA.csv
-    inflating: SA5N_1998_2016_GLAK.csv
-    inflating: SA5N_1998_2016_HI.csv
-    inflating: SA5N_1998_2016_IA.csv
-    inflating: SA5N_1998_2016_ID.csv
-    inflating: SA5N_1998_2016_IL.csv
-    inflating: SA5N_1998_2016_IN.csv
-    inflating: SA5N_1998_2016_KS.csv
-    inflating: SA5N_1998_2016_KY.csv
-    inflating: SA5N_1998_2016_LA.csv
-    inflating: SA5N_1998_2016_MA.csv
-    inflating: SA5N_1998_2016_MD.csv
-    inflating: SA5N_1998_2016_ME.csv
-    inflating: SA5N_1998_2016_MEST.csv
-    inflating: SA5N_1998_2016_MI.csv
-    inflating: SA5N_1998_2016_MN.csv
-    inflating: SA5N_1998_2016_MO.csv
-    inflating: SA5N_1998_2016_MS.csv
-    inflating: SA5N_1998_2016_MT.csv
-    inflating: SA5N_1998_2016_NC.csv
-    inflating: SA5N_1998_2016_ND.csv
-    inflating: SA5N_1998_2016_NE.csv
-    inflating: SA5N_1998_2016_NENG.csv
-    inflating: SA5N_1998_2016_NH.csv
-    inflating: SA5N_1998_2016_NJ.csv
-    inflating: SA5N_1998_2016_NM.csv
-    inflating: SA5N_1998_2016_NV.csv
-    inflating: SA5N_1998_2016_NY.csv
-    inflating: SA5N_1998_2016_OH.csv
-    inflating: SA5N_1998_2016_OK.csv
-    inflating: SA5N_1998_2016_OR.csv
-    inflating: SA5N_1998_2016_PA.csv
-    inflating: SA5N_1998_2016_PLNS.csv
-    inflating: SA5N_1998_2016_RI.csv
-    inflating: SA5N_1998_2016_RKMT.csv
-    inflating: SA5N_1998_2016_SC.csv
-    inflating: SA5N_1998_2016_SD.csv
-    inflating: SA5N_1998_2016_SEST.csv
-    inflating: SA5N_1998_2016_SWST.csv
-    inflating: SA5N_1998_2016_TN.csv
-    inflating: SA5N_1998_2016_TX.csv
-    inflating: SA5N_1998_2016_US.csv
-    inflating: SA5N_1998_2016_UT.csv
-    inflating: SA5N_1998_2016_VA.csv
-    inflating: SA5N_1998_2016_VT.csv
-    inflating: SA5N_1998_2016_WA.csv
-    inflating: SA5N_1998_2016_WI.csv
-    inflating: SA5N_1998_2016_WV.csv
-    inflating: SA5N_1998_2016_WY.csv
-    inflating: SA5N_def.xml
-    inflating: SA5N_fn.htm
-    inflating: SA6_1958_2001__ALL_AREAS.csv
-    inflating: SA6_1958_2001_AK.csv
-    inflating: SA6_1958_2001_AL.csv
-    inflating: SA6_1958_2001_AR.csv
-    inflating: SA6_1958_2001_AZ.csv
-    inflating: SA6_1958_2001_CA.csv
-    inflating: SA6_1958_2001_CO.csv
-    inflating: SA6_1958_2001_CT.csv
-    inflating: SA6_1958_2001_DC.csv
-    inflating: SA6_1958_2001_DE.csv
-    inflating: SA6_1958_2001_FL.csv
-    inflating: SA6_1958_2001_FWST.csv
-    inflating: SA6_1958_2001_GA.csv
-    inflating: SA6_1958_2001_GLAK.csv
-    inflating: SA6_1958_2001_HI.csv
-    inflating: SA6_1958_2001_IA.csv
-    inflating: SA6_1958_2001_ID.csv
-    inflating: SA6_1958_2001_IL.csv
-    inflating: SA6_1958_2001_IN.csv
-    inflating: SA6_1958_2001_KS.csv
-    inflating: SA6_1958_2001_KY.csv
-    inflating: SA6_1958_2001_LA.csv
-    inflating: SA6_1958_2001_MA.csv
-    inflating: SA6_1958_2001_MD.csv
-    inflating: SA6_1958_2001_ME.csv
-    inflating: SA6_1958_2001_MEST.csv
-    inflating: SA6_1958_2001_MI.csv
-    inflating: SA6_1958_2001_MN.csv
-    inflating: SA6_1958_2001_MO.csv
-    inflating: SA6_1958_2001_MS.csv
-    inflating: SA6_1958_2001_MT.csv
-    inflating: SA6_1958_2001_NC.csv
-    inflating: SA6_1958_2001_ND.csv
-    inflating: SA6_1958_2001_NE.csv
-    inflating: SA6_1958_2001_NENG.csv
-    inflating: SA6_1958_2001_NH.csv
-    inflating: SA6_1958_2001_NJ.csv
-    inflating: SA6_1958_2001_NM.csv
-    inflating: SA6_1958_2001_NV.csv
-    inflating: SA6_1958_2001_NY.csv
-    inflating: SA6_1958_2001_OH.csv
-    inflating: SA6_1958_2001_OK.csv
-    inflating: SA6_1958_2001_OR.csv
-    inflating: SA6_1958_2001_PA.csv
-    inflating: SA6_1958_2001_PLNS.csv
-    inflating: SA6_1958_2001_RI.csv
-    inflating: SA6_1958_2001_RKMT.csv
-    inflating: SA6_1958_2001_SC.csv
-    inflating: SA6_1958_2001_SD.csv
-    inflating: SA6_1958_2001_SEST.csv
-    inflating: SA6_1958_2001_SWST.csv
-    inflating: SA6_1958_2001_TN.csv
-    inflating: SA6_1958_2001_TX.csv
-    inflating: SA6_1958_2001_US.csv
-    inflating: SA6_1958_2001_UT.csv
-    inflating: SA6_1958_2001_VA.csv
-    inflating: SA6_1958_2001_VT.csv
-    inflating: SA6_1958_2001_WA.csv
-    inflating: SA6_1958_2001_WI.csv
-    inflating: SA6_1958_2001_WV.csv
-    inflating: SA6_1958_2001_WY.csv
-    inflating: SA6_def.xml
-    inflating: SA6_fn.htm
-    inflating: SA6N_1998_2016__ALL_AREAS.csv
-    inflating: SA6N_1998_2016_AK.csv
-    inflating: SA6N_1998_2016_AL.csv
-    inflating: SA6N_1998_2016_AR.csv
-    inflating: SA6N_1998_2016_AZ.csv
-    inflating: SA6N_1998_2016_CA.csv
-    inflating: SA6N_1998_2016_CO.csv
-    inflating: SA6N_1998_2016_CT.csv
-    inflating: SA6N_1998_2016_DC.csv
-    inflating: SA6N_1998_2016_DE.csv
-    inflating: SA6N_1998_2016_FL.csv
-    inflating: SA6N_1998_2016_FWST.csv
-    inflating: SA6N_1998_2016_GA.csv
-    inflating: SA6N_1998_2016_GLAK.csv
-    inflating: SA6N_1998_2016_HI.csv
-    inflating: SA6N_1998_2016_IA.csv
-    inflating: SA6N_1998_2016_ID.csv
-    inflating: SA6N_1998_2016_IL.csv
-    inflating: SA6N_1998_2016_IN.csv
-    inflating: SA6N_1998_2016_KS.csv
-    inflating: SA6N_1998_2016_KY.csv
-    inflating: SA6N_1998_2016_LA.csv
-    inflating: SA6N_1998_2016_MA.csv
-    inflating: SA6N_1998_2016_MD.csv
-    inflating: SA6N_1998_2016_ME.csv
-    inflating: SA6N_1998_2016_MEST.csv
-    inflating: SA6N_1998_2016_MI.csv
-    inflating: SA6N_1998_2016_MN.csv
-    inflating: SA6N_1998_2016_MO.csv
-    inflating: SA6N_1998_2016_MS.csv
-    inflating: SA6N_1998_2016_MT.csv
-    inflating: SA6N_1998_2016_NC.csv
-    inflating: SA6N_1998_2016_ND.csv
-    inflating: SA6N_1998_2016_NE.csv
-    inflating: SA6N_1998_2016_NENG.csv
-    inflating: SA6N_1998_2016_NH.csv
-    inflating: SA6N_1998_2016_NJ.csv
-    inflating: SA6N_1998_2016_NM.csv
-    inflating: SA6N_1998_2016_NV.csv
-    inflating: SA6N_1998_2016_NY.csv
-    inflating: SA6N_1998_2016_OH.csv
-    inflating: SA6N_1998_2016_OK.csv
-    inflating: SA6N_1998_2016_OR.csv
-    inflating: SA6N_1998_2016_PA.csv
-    inflating: SA6N_1998_2016_PLNS.csv
-    inflating: SA6N_1998_2016_RI.csv
-    inflating: SA6N_1998_2016_RKMT.csv
-    inflating: SA6N_1998_2016_SC.csv
-    inflating: SA6N_1998_2016_SD.csv
-    inflating: SA6N_1998_2016_SEST.csv
-    inflating: SA6N_1998_2016_SWST.csv
-    inflating: SA6N_1998_2016_TN.csv
-    inflating: SA6N_1998_2016_TX.csv
-    inflating: SA6N_1998_2016_US.csv
-    inflating: SA6N_1998_2016_UT.csv
-    inflating: SA6N_1998_2016_VA.csv
-    inflating: SA6N_1998_2016_VT.csv
-    inflating: SA6N_1998_2016_WA.csv
-    inflating: SA6N_1998_2016_WI.csv
-    inflating: SA6N_1998_2016_WV.csv
-    inflating: SA6N_1998_2016_WY.csv
-    inflating: SA6N_def.xml
-    inflating: SA6N_fn.htm
-    inflating: SA7_1958_2001__ALL_AREAS.csv
-    inflating: SA7_1958_2001_AK.csv
-    inflating: SA7_1958_2001_AL.csv
-    inflating: SA7_1958_2001_AR.csv
-    inflating: SA7_1958_2001_AZ.csv
-    inflating: SA7_1958_2001_CA.csv
-    inflating: SA7_1958_2001_CO.csv
-    inflating: SA7_1958_2001_CT.csv
-    inflating: SA7_1958_2001_DC.csv
-    inflating: SA7_1958_2001_DE.csv
-    inflating: SA7_1958_2001_FL.csv
-    inflating: SA7_1958_2001_FWST.csv
-    inflating: SA7_1958_2001_GA.csv
-    inflating: SA7_1958_2001_GLAK.csv
-    inflating: SA7_1958_2001_HI.csv
-    inflating: SA7_1958_2001_IA.csv
-    inflating: SA7_1958_2001_ID.csv
-    inflating: SA7_1958_2001_IL.csv
-    inflating: SA7_1958_2001_IN.csv
-    inflating: SA7_1958_2001_KS.csv
-    inflating: SA7_1958_2001_KY.csv
-    inflating: SA7_1958_2001_LA.csv
-    inflating: SA7_1958_2001_MA.csv
-    inflating: SA7_1958_2001_MD.csv
-    inflating: SA7_1958_2001_ME.csv
-    inflating: SA7_1958_2001_MEST.csv
-    inflating: SA7_1958_2001_MI.csv
-    inflating: SA7_1958_2001_MN.csv
-    inflating: SA7_1958_2001_MO.csv
-    inflating: SA7_1958_2001_MS.csv
-    inflating: SA7_1958_2001_MT.csv
-    inflating: SA7_1958_2001_NC.csv
-    inflating: SA7_1958_2001_ND.csv
-    inflating: SA7_1958_2001_NE.csv
-    inflating: SA7_1958_2001_NENG.csv
-    inflating: SA7_1958_2001_NH.csv
-    inflating: SA7_1958_2001_NJ.csv
-    inflating: SA7_1958_2001_NM.csv
-    inflating: SA7_1958_2001_NV.csv
-    inflating: SA7_1958_2001_NY.csv
-    inflating: SA7_1958_2001_OH.csv
-    inflating: SA7_1958_2001_OK.csv
-    inflating: SA7_1958_2001_OR.csv
-    inflating: SA7_1958_2001_PA.csv
-    inflating: SA7_1958_2001_PLNS.csv
-    inflating: SA7_1958_2001_RI.csv
-    inflating: SA7_1958_2001_RKMT.csv
-    inflating: SA7_1958_2001_SC.csv
-    inflating: SA7_1958_2001_SD.csv
-    inflating: SA7_1958_2001_SEST.csv
-    inflating: SA7_1958_2001_SWST.csv
-    inflating: SA7_1958_2001_TN.csv
-    inflating: SA7_1958_2001_TX.csv
-    inflating: SA7_1958_2001_US.csv
-    inflating: SA7_1958_2001_UT.csv
-    inflating: SA7_1958_2001_VA.csv
-    inflating: SA7_1958_2001_VT.csv
-    inflating: SA7_1958_2001_WA.csv
-    inflating: SA7_1958_2001_WI.csv
-    inflating: SA7_1958_2001_WV.csv
-    inflating: SA7_1958_2001_WY.csv
-    inflating: SA7_def.xml
-    inflating: SA7_fn.htm
-    inflating: SA7H_1929_1957__ALL_AREAS.csv
-    inflating: SA7H_1929_1957_AK.csv
-    inflating: SA7H_1929_1957_AL.csv
-    inflating: SA7H_1929_1957_AR.csv
-    inflating: SA7H_1929_1957_AZ.csv
-    inflating: SA7H_1929_1957_CA.csv
-    inflating: SA7H_1929_1957_CO.csv
-    inflating: SA7H_1929_1957_CT.csv
-    inflating: SA7H_1929_1957_DC.csv
-    inflating: SA7H_1929_1957_DE.csv
-    inflating: SA7H_1929_1957_FL.csv
-    inflating: SA7H_1929_1957_FWST.csv
-    inflating: SA7H_1929_1957_GA.csv
-    inflating: SA7H_1929_1957_GLAK.csv
-    inflating: SA7H_1929_1957_HI.csv
-    inflating: SA7H_1929_1957_IA.csv
-    inflating: SA7H_1929_1957_ID.csv
-    inflating: SA7H_1929_1957_IL.csv
-    inflating: SA7H_1929_1957_IN.csv
-    inflating: SA7H_1929_1957_KS.csv
-    inflating: SA7H_1929_1957_KY.csv
-    inflating: SA7H_1929_1957_LA.csv
-    inflating: SA7H_1929_1957_MA.csv
-    inflating: SA7H_1929_1957_MD.csv
-    inflating: SA7H_1929_1957_ME.csv
-    inflating: SA7H_1929_1957_MEST.csv
-    inflating: SA7H_1929_1957_MI.csv
-    inflating: SA7H_1929_1957_MN.csv
-    inflating: SA7H_1929_1957_MO.csv
-    inflating: SA7H_1929_1957_MS.csv
-    inflating: SA7H_1929_1957_MT.csv
-    inflating: SA7H_1929_1957_NC.csv
-    inflating: SA7H_1929_1957_ND.csv
-    inflating: SA7H_1929_1957_NE.csv
-    inflating: SA7H_1929_1957_NENG.csv
-    inflating: SA7H_1929_1957_NH.csv
-    inflating: SA7H_1929_1957_NJ.csv
-    inflating: SA7H_1929_1957_NM.csv
-    inflating: SA7H_1929_1957_NV.csv
-    inflating: SA7H_1929_1957_NY.csv
-    inflating: SA7H_1929_1957_OH.csv
-    inflating: SA7H_1929_1957_OK.csv
-    inflating: SA7H_1929_1957_OR.csv
-    inflating: SA7H_1929_1957_PA.csv
-    inflating: SA7H_1929_1957_PLNS.csv
-    inflating: SA7H_1929_1957_RI.csv
-    inflating: SA7H_1929_1957_RKMT.csv
-    inflating: SA7H_1929_1957_SC.csv
-    inflating: SA7H_1929_1957_SD.csv
-    inflating: SA7H_1929_1957_SEST.csv
-    inflating: SA7H_1929_1957_SWST.csv
-    inflating: SA7H_1929_1957_TN.csv
-    inflating: SA7H_1929_1957_TX.csv
-    inflating: SA7H_1929_1957_US.csv
-    inflating: SA7H_1929_1957_UT.csv
-    inflating: SA7H_1929_1957_VA.csv
-    inflating: SA7H_1929_1957_VT.csv
-    inflating: SA7H_1929_1957_WA.csv
-    inflating: SA7H_1929_1957_WI.csv
-    inflating: SA7H_1929_1957_WV.csv
-    inflating: SA7H_1929_1957_WY.csv
-    inflating: SA7H_def.xml
-    inflating: SA7H_fn.htm
-    inflating: SA7N_1998_2016__ALL_AREAS.csv
-    inflating: SA7N_1998_2016_AK.csv
-    inflating: SA7N_1998_2016_AL.csv
-    inflating: SA7N_1998_2016_AR.csv
-    inflating: SA7N_1998_2016_AZ.csv
-    inflating: SA7N_1998_2016_CA.csv
-    inflating: SA7N_1998_2016_CO.csv
-    inflating: SA7N_1998_2016_CT.csv
-    inflating: SA7N_1998_2016_DC.csv
-    inflating: SA7N_1998_2016_DE.csv
-    inflating: SA7N_1998_2016_FL.csv
-    inflating: SA7N_1998_2016_FWST.csv
-    inflating: SA7N_1998_2016_GA.csv
-    inflating: SA7N_1998_2016_GLAK.csv
-    inflating: SA7N_1998_2016_HI.csv
-    inflating: SA7N_1998_2016_IA.csv
-    inflating: SA7N_1998_2016_ID.csv
-    inflating: SA7N_1998_2016_IL.csv
-    inflating: SA7N_1998_2016_IN.csv
-    inflating: SA7N_1998_2016_KS.csv
-    inflating: SA7N_1998_2016_KY.csv
-    inflating: SA7N_1998_2016_LA.csv
-    inflating: SA7N_1998_2016_MA.csv
-    inflating: SA7N_1998_2016_MD.csv
-    inflating: SA7N_1998_2016_ME.csv
-    inflating: SA7N_1998_2016_MEST.csv
-    inflating: SA7N_1998_2016_MI.csv
-    inflating: SA7N_1998_2016_MN.csv
-    inflating: SA7N_1998_2016_MO.csv
-    inflating: SA7N_1998_2016_MS.csv
-    inflating: SA7N_1998_2016_MT.csv
-    inflating: SA7N_1998_2016_NC.csv
-    inflating: SA7N_1998_2016_ND.csv
-    inflating: SA7N_1998_2016_NE.csv
-    inflating: SA7N_1998_2016_NENG.csv
-    inflating: SA7N_1998_2016_NH.csv
-    inflating: SA7N_1998_2016_NJ.csv
-    inflating: SA7N_1998_2016_NM.csv
-    inflating: SA7N_1998_2016_NV.csv
-    inflating: SA7N_1998_2016_NY.csv
-    inflating: SA7N_1998_2016_OH.csv
-    inflating: SA7N_1998_2016_OK.csv
-    inflating: SA7N_1998_2016_OR.csv
-    inflating: SA7N_1998_2016_PA.csv
-    inflating: SA7N_1998_2016_PLNS.csv
-    inflating: SA7N_1998_2016_RI.csv
-    inflating: SA7N_1998_2016_RKMT.csv
-    inflating: SA7N_1998_2016_SC.csv
-    inflating: SA7N_1998_2016_SD.csv
-    inflating: SA7N_1998_2016_SEST.csv
-    inflating: SA7N_1998_2016_SWST.csv
-    inflating: SA7N_1998_2016_TN.csv
-    inflating: SA7N_1998_2016_TX.csv
-    inflating: SA7N_1998_2016_US.csv
-    inflating: SA7N_1998_2016_UT.csv
-    inflating: SA7N_1998_2016_VA.csv
-    inflating: SA7N_1998_2016_VT.csv
-    inflating: SA7N_1998_2016_WA.csv
-    inflating: SA7N_1998_2016_WI.csv
-    inflating: SA7N_1998_2016_WV.csv
-    inflating: SA7N_1998_2016_WY.csv
-    inflating: SA7N_def.xml
-    inflating: SA7N_fn.htm
-successfully unzipped spi.zip to current directory
-
+. /***
+> #### Quick Exercise
+> 
+> > Download data on personal per capita income from 1950 to the present for all
+> > 50 states from the [Bureau of Economic
+> > Analysis](http://www.bea.gov/regional/downloadzip.cfm). Create a plot
+> > using the {c 96}xtline{c 96} command.
+> 
+> <br> <br>
+> ***/
 . 
-. insheet using SA1_1929_2016.csv, comma clear
-(95 vars, 184 obs)
-
-. 
-. keep if linecode==3
-(124 observations deleted)
-
-. 
-. local i=1929
-
-. 
-. foreach var of varlist v8-v95{
-  2. destring `var', replace
-  3. rename `var' percap_inc_`i'
-  4. local i=`i'+1
-  5. }
-v8 contains nonnumeric characters; no replace
-v9 contains nonnumeric characters; no replace
-v10 contains nonnumeric characters; no replace
-v11 contains nonnumeric characters; no replace
-v12 contains nonnumeric characters; no replace
-v13 contains nonnumeric characters; no replace
-v14 contains nonnumeric characters; no replace
-v15 contains nonnumeric characters; no replace
-v16 contains nonnumeric characters; no replace
-v17 contains nonnumeric characters; no replace
-v18 contains nonnumeric characters; no replace
-v19 contains nonnumeric characters; no replace
-v20 contains nonnumeric characters; no replace
-v21 contains nonnumeric characters; no replace
-v22 contains nonnumeric characters; no replace
-v23 contains nonnumeric characters; no replace
-v24 contains nonnumeric characters; no replace
-v25 contains nonnumeric characters; no replace
-v26 contains nonnumeric characters; no replace
-v27 contains nonnumeric characters; no replace
-v28 contains nonnumeric characters; no replace
-v29 already numeric; no replace
-v30 already numeric; no replace
-v31 already numeric; no replace
-v32 already numeric; no replace
-v33 already numeric; no replace
-v34 already numeric; no replace
-v35 already numeric; no replace
-v36 already numeric; no replace
-v37 already numeric; no replace
-v38 already numeric; no replace
-v39 already numeric; no replace
-v40 already numeric; no replace
-v41 already numeric; no replace
-v42 already numeric; no replace
-v43 already numeric; no replace
-v44 already numeric; no replace
-v45 already numeric; no replace
-v46 already numeric; no replace
-v47 already numeric; no replace
-v48 already numeric; no replace
-v49 already numeric; no replace
-v50 already numeric; no replace
-v51 already numeric; no replace
-v52 already numeric; no replace
-v53 already numeric; no replace
-v54 already numeric; no replace
-v55 already numeric; no replace
-v56 already numeric; no replace
-v57 already numeric; no replace
-v58 already numeric; no replace
-v59 already numeric; no replace
-v60 already numeric; no replace
-v61 already numeric; no replace
-v62 already numeric; no replace
-v63 already numeric; no replace
-v64 already numeric; no replace
-v65 already numeric; no replace
-v66 already numeric; no replace
-v67 already numeric; no replace
-v68 already numeric; no replace
-v69 already numeric; no replace
-v70 already numeric; no replace
-v71 already numeric; no replace
-v72 already numeric; no replace
-v73 already numeric; no replace
-v74 already numeric; no replace
-v75 already numeric; no replace
-v76 already numeric; no replace
-v77 already numeric; no replace
-v78 already numeric; no replace
-v79 already numeric; no replace
-v80 already numeric; no replace
-v81 already numeric; no replace
-v82 already numeric; no replace
-v83 already numeric; no replace
-v84 already numeric; no replace
-v85 already numeric; no replace
-v86 already numeric; no replace
-v87 already numeric; no replace
-v88 already numeric; no replace
-v89 already numeric; no replace
-v90 already numeric; no replace
-v91 already numeric; no replace
-v92 already numeric; no replace
-v93 already numeric; no replace
-v94 already numeric; no replace
-v95 already numeric; no replace
-
-. 
-. reshape long percap_inc_, i(geofips) j(year) 
-(note: j = 1929 1930 1931 1932 1933 1934 1935 1936 1937 1938 1939 1940 1941 1942 1943
->  1944 1945 1946 1947 1948 1949 1950 1951 1952 1953 1954 1955 1956 1957 1958 1959 19
-> 60 1961 1962 1963 1964 1965 1966 1967 1968 1969 1970 1971 1972 1973 1974 1975 1976 
-> 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 199
-> 3 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2
-> 010 2011 2012 2013 2014 2015 2016)
-variable percap_inc_1950 type mismatch with other percap_inc_ variables
-r(198);
-
-end of do-file
-
-r(198);
-
-. help insheet
-
-. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD37277.000000"
-
-. unzipfile spi.zip, replace
-    inflating: SA1_1929_2016.csv
-    inflating: sa1_def.xml
-    inflating: sa1_fn.htm
-    inflating: SA25_1969_2001__ALL_AREAS.csv
-    inflating: SA25_1969_2001_AK.csv
-    inflating: SA25_1969_2001_AL.csv
-    inflating: SA25_1969_2001_AR.csv
-    inflating: SA25_1969_2001_AZ.csv
-    inflating: SA25_1969_2001_CA.csv
-    inflating: SA25_1969_2001_CO.csv
-    inflating: SA25_1969_2001_CT.csv
-    inflating: SA25_1969_2001_DC.csv
-    inflating: SA25_1969_2001_DE.csv
-    inflating: SA25_1969_2001_FL.csv
-    inflating: SA25_1969_2001_FWST.csv
-    inflating: SA25_1969_2001_GA.csv
-    inflating: SA25_1969_2001_GLAK.csv
-    inflating: SA25_1969_2001_HI.csv
-    inflating: SA25_1969_2001_IA.csv
-    inflating: SA25_1969_2001_ID.csv
-    inflating: SA25_1969_2001_IL.csv
-    inflating: SA25_1969_2001_IN.csv
-    inflating: SA25_1969_2001_KS.csv
-    inflating: SA25_1969_2001_KY.csv
-    inflating: SA25_1969_2001_LA.csv
-    inflating: SA25_1969_2001_MA.csv
-    inflating: SA25_1969_2001_MD.csv
-    inflating: SA25_1969_2001_ME.csv
-    inflating: SA25_1969_2001_MEST.csv
-    inflating: SA25_1969_2001_MI.csv
-    inflating: SA25_1969_2001_MN.csv
-    inflating: SA25_1969_2001_MO.csv
-    inflating: SA25_1969_2001_MS.csv
-    inflating: SA25_1969_2001_MT.csv
-    inflating: SA25_1969_2001_NC.csv
-    inflating: SA25_1969_2001_ND.csv
-    inflating: SA25_1969_2001_NE.csv
-    inflating: SA25_1969_2001_NENG.csv
-    inflating: SA25_1969_2001_NH.csv
-    inflating: SA25_1969_2001_NJ.csv
-    inflating: SA25_1969_2001_NM.csv
-    inflating: SA25_1969_2001_NV.csv
-    inflating: SA25_1969_2001_NY.csv
-    inflating: SA25_1969_2001_OH.csv
-    inflating: SA25_1969_2001_OK.csv
-    inflating: SA25_1969_2001_OR.csv
-    inflating: SA25_1969_2001_PA.csv
-    inflating: SA25_1969_2001_PLNS.csv
-    inflating: SA25_1969_2001_RI.csv
-    inflating: SA25_1969_2001_RKMT.csv
-    inflating: SA25_1969_2001_SC.csv
-    inflating: SA25_1969_2001_SD.csv
-    inflating: SA25_1969_2001_SEST.csv
-    inflating: SA25_1969_2001_SWST.csv
-    inflating: SA25_1969_2001_TN.csv
-    inflating: SA25_1969_2001_TX.csv
-    inflating: SA25_1969_2001_US.csv
-    inflating: SA25_1969_2001_UT.csv
-    inflating: SA25_1969_2001_VA.csv
-    inflating: SA25_1969_2001_VT.csv
-    inflating: SA25_1969_2001_WA.csv
-    inflating: SA25_1969_2001_WI.csv
-    inflating: SA25_1969_2001_WV.csv
-    inflating: SA25_1969_2001_WY.csv
-    inflating: SA25_def.xml
-    inflating: SA25_fn.htm
-    inflating: SA25N_1998_2016__ALL_AREAS.csv
-    inflating: SA25N_1998_2016_AK.csv
-    inflating: SA25N_1998_2016_AL.csv
-    inflating: SA25N_1998_2016_AR.csv
-    inflating: SA25N_1998_2016_AZ.csv
-    inflating: SA25N_1998_2016_CA.csv
-    inflating: SA25N_1998_2016_CO.csv
-    inflating: SA25N_1998_2016_CT.csv
-    inflating: SA25N_1998_2016_DC.csv
-    inflating: SA25N_1998_2016_DE.csv
-    inflating: SA25N_1998_2016_FL.csv
-    inflating: SA25N_1998_2016_FWST.csv
-    inflating: SA25N_1998_2016_GA.csv
-    inflating: SA25N_1998_2016_GLAK.csv
-    inflating: SA25N_1998_2016_HI.csv
-    inflating: SA25N_1998_2016_IA.csv
-    inflating: SA25N_1998_2016_ID.csv
-    inflating: SA25N_1998_2016_IL.csv
-    inflating: SA25N_1998_2016_IN.csv
-    inflating: SA25N_1998_2016_KS.csv
-    inflating: SA25N_1998_2016_KY.csv
-    inflating: SA25N_1998_2016_LA.csv
-    inflating: SA25N_1998_2016_MA.csv
-    inflating: SA25N_1998_2016_MD.csv
-    inflating: SA25N_1998_2016_ME.csv
-    inflating: SA25N_1998_2016_MEST.csv
-    inflating: SA25N_1998_2016_MI.csv
-    inflating: SA25N_1998_2016_MN.csv
-    inflating: SA25N_1998_2016_MO.csv
-    inflating: SA25N_1998_2016_MS.csv
-    inflating: SA25N_1998_2016_MT.csv
-    inflating: SA25N_1998_2016_NC.csv
-    inflating: SA25N_1998_2016_ND.csv
-    inflating: SA25N_1998_2016_NE.csv
-    inflating: SA25N_1998_2016_NENG.csv
-    inflating: SA25N_1998_2016_NH.csv
-    inflating: SA25N_1998_2016_NJ.csv
-    inflating: SA25N_1998_2016_NM.csv
-    inflating: SA25N_1998_2016_NV.csv
-    inflating: SA25N_1998_2016_NY.csv
-    inflating: SA25N_1998_2016_OH.csv
-    inflating: SA25N_1998_2016_OK.csv
-    inflating: SA25N_1998_2016_OR.csv
-    inflating: SA25N_1998_2016_PA.csv
-    inflating: SA25N_1998_2016_PLNS.csv
-    inflating: SA25N_1998_2016_RI.csv
-    inflating: SA25N_1998_2016_RKMT.csv
-    inflating: SA25N_1998_2016_SC.csv
-    inflating: SA25N_1998_2016_SD.csv
-    inflating: SA25N_1998_2016_SEST.csv
-    inflating: SA25N_1998_2016_SWST.csv
-    inflating: SA25N_1998_2016_TN.csv
-    inflating: SA25N_1998_2016_TX.csv
-    inflating: SA25N_1998_2016_US.csv
-    inflating: SA25N_1998_2016_UT.csv
-    inflating: SA25N_1998_2016_VA.csv
-    inflating: SA25N_1998_2016_VT.csv
-    inflating: SA25N_1998_2016_WA.csv
-    inflating: SA25N_1998_2016_WI.csv
-    inflating: SA25N_1998_2016_WV.csv
-    inflating: SA25N_1998_2016_WY.csv
-    inflating: SA25N_def.xml
-    inflating: SA25N_fn.htm
-    inflating: SA27_1969_2001__ALL_AREAS.csv
-    inflating: SA27_1969_2001_AK.csv
-    inflating: SA27_1969_2001_AL.csv
-    inflating: SA27_1969_2001_AR.csv
-    inflating: SA27_1969_2001_AZ.csv
-    inflating: SA27_1969_2001_CA.csv
-    inflating: SA27_1969_2001_CO.csv
-    inflating: SA27_1969_2001_CT.csv
-    inflating: SA27_1969_2001_DC.csv
-    inflating: SA27_1969_2001_DE.csv
-    inflating: SA27_1969_2001_FL.csv
-    inflating: SA27_1969_2001_FWST.csv
-    inflating: SA27_1969_2001_GA.csv
-    inflating: SA27_1969_2001_GLAK.csv
-    inflating: SA27_1969_2001_HI.csv
-    inflating: SA27_1969_2001_IA.csv
-    inflating: SA27_1969_2001_ID.csv
-    inflating: SA27_1969_2001_IL.csv
-    inflating: SA27_1969_2001_IN.csv
-    inflating: SA27_1969_2001_KS.csv
-    inflating: SA27_1969_2001_KY.csv
-    inflating: SA27_1969_2001_LA.csv
-    inflating: SA27_1969_2001_MA.csv
-    inflating: SA27_1969_2001_MD.csv
-    inflating: SA27_1969_2001_ME.csv
-    inflating: SA27_1969_2001_MEST.csv
-    inflating: SA27_1969_2001_MI.csv
-    inflating: SA27_1969_2001_MN.csv
-    inflating: SA27_1969_2001_MO.csv
-    inflating: SA27_1969_2001_MS.csv
-    inflating: SA27_1969_2001_MT.csv
-    inflating: SA27_1969_2001_NC.csv
-    inflating: SA27_1969_2001_ND.csv
-    inflating: SA27_1969_2001_NE.csv
-    inflating: SA27_1969_2001_NENG.csv
-    inflating: SA27_1969_2001_NH.csv
-    inflating: SA27_1969_2001_NJ.csv
-    inflating: SA27_1969_2001_NM.csv
-    inflating: SA27_1969_2001_NV.csv
-    inflating: SA27_1969_2001_NY.csv
-    inflating: SA27_1969_2001_OH.csv
-    inflating: SA27_1969_2001_OK.csv
-    inflating: SA27_1969_2001_OR.csv
-    inflating: SA27_1969_2001_PA.csv
-    inflating: SA27_1969_2001_PLNS.csv
-    inflating: SA27_1969_2001_RI.csv
-    inflating: SA27_1969_2001_RKMT.csv
-    inflating: SA27_1969_2001_SC.csv
-    inflating: SA27_1969_2001_SD.csv
-    inflating: SA27_1969_2001_SEST.csv
-    inflating: SA27_1969_2001_SWST.csv
-    inflating: SA27_1969_2001_TN.csv
-    inflating: SA27_1969_2001_TX.csv
-    inflating: SA27_1969_2001_US.csv
-    inflating: SA27_1969_2001_UT.csv
-    inflating: SA27_1969_2001_VA.csv
-    inflating: SA27_1969_2001_VT.csv
-    inflating: SA27_1969_2001_WA.csv
-    inflating: SA27_1969_2001_WI.csv
-    inflating: SA27_1969_2001_WV.csv
-    inflating: SA27_1969_2001_WY.csv
-    inflating: SA27_def.xml
-    inflating: SA27_fn.htm
-    inflating: SA27N_1998_2016__ALL_AREAS.csv
-    inflating: SA27N_1998_2016_AK.csv
-    inflating: SA27N_1998_2016_AL.csv
-    inflating: SA27N_1998_2016_AR.csv
-    inflating: SA27N_1998_2016_AZ.csv
-    inflating: SA27N_1998_2016_CA.csv
-    inflating: SA27N_1998_2016_CO.csv
-    inflating: SA27N_1998_2016_CT.csv
-    inflating: SA27N_1998_2016_DC.csv
-    inflating: SA27N_1998_2016_DE.csv
-    inflating: SA27N_1998_2016_FL.csv
-    inflating: SA27N_1998_2016_FWST.csv
-    inflating: SA27N_1998_2016_GA.csv
-    inflating: SA27N_1998_2016_GLAK.csv
-    inflating: SA27N_1998_2016_HI.csv
-    inflating: SA27N_1998_2016_IA.csv
-    inflating: SA27N_1998_2016_ID.csv
-    inflating: SA27N_1998_2016_IL.csv
-    inflating: SA27N_1998_2016_IN.csv
-    inflating: SA27N_1998_2016_KS.csv
-    inflating: SA27N_1998_2016_KY.csv
-    inflating: SA27N_1998_2016_LA.csv
-    inflating: SA27N_1998_2016_MA.csv
-    inflating: SA27N_1998_2016_MD.csv
-    inflating: SA27N_1998_2016_ME.csv
-    inflating: SA27N_1998_2016_MEST.csv
-    inflating: SA27N_1998_2016_MI.csv
-    inflating: SA27N_1998_2016_MN.csv
-    inflating: SA27N_1998_2016_MO.csv
-    inflating: SA27N_1998_2016_MS.csv
-    inflating: SA27N_1998_2016_MT.csv
-    inflating: SA27N_1998_2016_NC.csv
-    inflating: SA27N_1998_2016_ND.csv
-    inflating: SA27N_1998_2016_NE.csv
-    inflating: SA27N_1998_2016_NENG.csv
-    inflating: SA27N_1998_2016_NH.csv
-    inflating: SA27N_1998_2016_NJ.csv
-    inflating: SA27N_1998_2016_NM.csv
-    inflating: SA27N_1998_2016_NV.csv
-    inflating: SA27N_1998_2016_NY.csv
-    inflating: SA27N_1998_2016_OH.csv
-    inflating: SA27N_1998_2016_OK.csv
-    inflating: SA27N_1998_2016_OR.csv
-    inflating: SA27N_1998_2016_PA.csv
-    inflating: SA27N_1998_2016_PLNS.csv
-    inflating: SA27N_1998_2016_RI.csv
-    inflating: SA27N_1998_2016_RKMT.csv
-    inflating: SA27N_1998_2016_SC.csv
-    inflating: SA27N_1998_2016_SD.csv
-    inflating: SA27N_1998_2016_SEST.csv
-    inflating: SA27N_1998_2016_SWST.csv
-    inflating: SA27N_1998_2016_TN.csv
-    inflating: SA27N_1998_2016_TX.csv
-    inflating: SA27N_1998_2016_US.csv
-    inflating: SA27N_1998_2016_UT.csv
-    inflating: SA27N_1998_2016_VA.csv
-    inflating: SA27N_1998_2016_VT.csv
-    inflating: SA27N_1998_2016_WA.csv
-    inflating: SA27N_1998_2016_WI.csv
-    inflating: SA27N_1998_2016_WV.csv
-    inflating: SA27N_1998_2016_WY.csv
-    inflating: SA27N_def.xml
-    inflating: SA27N_fn.htm
-    inflating: SA30_1958_2016__ALL_AREAS.csv
-    inflating: SA30_1958_2016_AK.csv
-    inflating: SA30_1958_2016_AL.csv
-    inflating: SA30_1958_2016_AR.csv
-    inflating: SA30_1958_2016_AZ.csv
-    inflating: SA30_1958_2016_CA.csv
-    inflating: SA30_1958_2016_CO.csv
-    inflating: SA30_1958_2016_CT.csv
-    inflating: SA30_1958_2016_DC.csv
-    inflating: SA30_1958_2016_DE.csv
-    inflating: SA30_1958_2016_FL.csv
-    inflating: SA30_1958_2016_FWST.csv
-    inflating: SA30_1958_2016_GA.csv
-    inflating: SA30_1958_2016_GLAK.csv
-    inflating: SA30_1958_2016_HI.csv
-    inflating: SA30_1958_2016_IA.csv
-    inflating: SA30_1958_2016_ID.csv
-    inflating: SA30_1958_2016_IL.csv
-    inflating: SA30_1958_2016_IN.csv
-    inflating: SA30_1958_2016_KS.csv
-    inflating: SA30_1958_2016_KY.csv
-    inflating: SA30_1958_2016_LA.csv
-    inflating: SA30_1958_2016_MA.csv
-    inflating: SA30_1958_2016_MD.csv
-    inflating: SA30_1958_2016_ME.csv
-    inflating: SA30_1958_2016_MEST.csv
-    inflating: SA30_1958_2016_MI.csv
-    inflating: SA30_1958_2016_MN.csv
-    inflating: SA30_1958_2016_MO.csv
-    inflating: SA30_1958_2016_MS.csv
-    inflating: SA30_1958_2016_MT.csv
-    inflating: SA30_1958_2016_NC.csv
-    inflating: SA30_1958_2016_ND.csv
-    inflating: SA30_1958_2016_NE.csv
-    inflating: SA30_1958_2016_NENG.csv
-    inflating: SA30_1958_2016_NH.csv
-    inflating: SA30_1958_2016_NJ.csv
-    inflating: SA30_1958_2016_NM.csv
-    inflating: SA30_1958_2016_NV.csv
-    inflating: SA30_1958_2016_NY.csv
-    inflating: SA30_1958_2016_OH.csv
-    inflating: SA30_1958_2016_OK.csv
-    inflating: SA30_1958_2016_OR.csv
-    inflating: SA30_1958_2016_PA.csv
-    inflating: SA30_1958_2016_PLNS.csv
-    inflating: SA30_1958_2016_RI.csv
-    inflating: SA30_1958_2016_RKMT.csv
-    inflating: SA30_1958_2016_SC.csv
-    inflating: SA30_1958_2016_SD.csv
-    inflating: SA30_1958_2016_SEST.csv
-    inflating: SA30_1958_2016_SWST.csv
-    inflating: SA30_1958_2016_TN.csv
-    inflating: SA30_1958_2016_TX.csv
-    inflating: SA30_1958_2016_US.csv
-    inflating: SA30_1958_2016_UT.csv
-    inflating: SA30_1958_2016_VA.csv
-    inflating: SA30_1958_2016_VT.csv
-    inflating: SA30_1958_2016_WA.csv
-    inflating: SA30_1958_2016_WI.csv
-    inflating: SA30_1958_2016_WV.csv
-    inflating: SA30_1958_2016_WY.csv
-    inflating: SA30_def.xml
-    inflating: SA30_fn.htm
-    inflating: SA35_1929_2016__ALL_AREAS.csv
-    inflating: SA35_1929_2016_AK.csv
-    inflating: SA35_1929_2016_AL.csv
-    inflating: SA35_1929_2016_AR.csv
-    inflating: SA35_1929_2016_AZ.csv
-    inflating: SA35_1929_2016_CA.csv
-    inflating: SA35_1929_2016_CO.csv
-    inflating: SA35_1929_2016_CT.csv
-    inflating: SA35_1929_2016_DC.csv
-    inflating: SA35_1929_2016_DE.csv
-    inflating: SA35_1929_2016_FL.csv
-    inflating: SA35_1929_2016_FWST.csv
-    inflating: SA35_1929_2016_GA.csv
-    inflating: SA35_1929_2016_GLAK.csv
-    inflating: SA35_1929_2016_HI.csv
-    inflating: SA35_1929_2016_IA.csv
-    inflating: SA35_1929_2016_ID.csv
-    inflating: SA35_1929_2016_IL.csv
-    inflating: SA35_1929_2016_IN.csv
-    inflating: SA35_1929_2016_KS.csv
-    inflating: SA35_1929_2016_KY.csv
-    inflating: SA35_1929_2016_LA.csv
-    inflating: SA35_1929_2016_MA.csv
-    inflating: SA35_1929_2016_MD.csv
-    inflating: SA35_1929_2016_ME.csv
-    inflating: SA35_1929_2016_MEST.csv
-    inflating: SA35_1929_2016_MI.csv
-    inflating: SA35_1929_2016_MN.csv
-    inflating: SA35_1929_2016_MO.csv
-    inflating: SA35_1929_2016_MS.csv
-    inflating: SA35_1929_2016_MT.csv
-    inflating: SA35_1929_2016_NC.csv
-    inflating: SA35_1929_2016_ND.csv
-    inflating: SA35_1929_2016_NE.csv
-    inflating: SA35_1929_2016_NENG.csv
-    inflating: SA35_1929_2016_NH.csv
-    inflating: SA35_1929_2016_NJ.csv
-    inflating: SA35_1929_2016_NM.csv
-    inflating: SA35_1929_2016_NV.csv
-    inflating: SA35_1929_2016_NY.csv
-    inflating: SA35_1929_2016_OH.csv
-    inflating: SA35_1929_2016_OK.csv
-    inflating: SA35_1929_2016_OR.csv
-    inflating: SA35_1929_2016_PA.csv
-    inflating: SA35_1929_2016_PLNS.csv
-    inflating: SA35_1929_2016_RI.csv
-    inflating: SA35_1929_2016_RKMT.csv
-    inflating: SA35_1929_2016_SC.csv
-    inflating: SA35_1929_2016_SD.csv
-    inflating: SA35_1929_2016_SEST.csv
-    inflating: SA35_1929_2016_SWST.csv
-    inflating: SA35_1929_2016_TN.csv
-    inflating: SA35_1929_2016_TX.csv
-    inflating: SA35_1929_2016_US.csv
-    inflating: SA35_1929_2016_UT.csv
-    inflating: SA35_1929_2016_VA.csv
-    inflating: SA35_1929_2016_VT.csv
-    inflating: SA35_1929_2016_WA.csv
-    inflating: SA35_1929_2016_WI.csv
-    inflating: SA35_1929_2016_WV.csv
-    inflating: SA35_1929_2016_WY.csv
-    inflating: SA35_def.xml
-    inflating: SA35_fn.htm
-    inflating: SA40_1958_2016__ALL_AREAS.csv
-    inflating: SA40_1958_2016_AK.csv
-    inflating: SA40_1958_2016_AL.csv
-    inflating: SA40_1958_2016_AR.csv
-    inflating: SA40_1958_2016_AZ.csv
-    inflating: SA40_1958_2016_CA.csv
-    inflating: SA40_1958_2016_CO.csv
-    inflating: SA40_1958_2016_CT.csv
-    inflating: SA40_1958_2016_DC.csv
-    inflating: SA40_1958_2016_DE.csv
-    inflating: SA40_1958_2016_FL.csv
-    inflating: SA40_1958_2016_FWST.csv
-    inflating: SA40_1958_2016_GA.csv
-    inflating: SA40_1958_2016_GLAK.csv
-    inflating: SA40_1958_2016_HI.csv
-    inflating: SA40_1958_2016_IA.csv
-    inflating: SA40_1958_2016_ID.csv
-    inflating: SA40_1958_2016_IL.csv
-    inflating: SA40_1958_2016_IN.csv
-    inflating: SA40_1958_2016_KS.csv
-    inflating: SA40_1958_2016_KY.csv
-    inflating: SA40_1958_2016_LA.csv
-    inflating: SA40_1958_2016_MA.csv
-    inflating: SA40_1958_2016_MD.csv
-    inflating: SA40_1958_2016_ME.csv
-    inflating: SA40_1958_2016_MEST.csv
-    inflating: SA40_1958_2016_MI.csv
-    inflating: SA40_1958_2016_MN.csv
-    inflating: SA40_1958_2016_MO.csv
-    inflating: SA40_1958_2016_MS.csv
-    inflating: SA40_1958_2016_MT.csv
-    inflating: SA40_1958_2016_NC.csv
-    inflating: SA40_1958_2016_ND.csv
-    inflating: SA40_1958_2016_NE.csv
-    inflating: SA40_1958_2016_NENG.csv
-    inflating: SA40_1958_2016_NH.csv
-    inflating: SA40_1958_2016_NJ.csv
-    inflating: SA40_1958_2016_NM.csv
-    inflating: SA40_1958_2016_NV.csv
-    inflating: SA40_1958_2016_NY.csv
-    inflating: SA40_1958_2016_OH.csv
-    inflating: SA40_1958_2016_OK.csv
-    inflating: SA40_1958_2016_OR.csv
-    inflating: SA40_1958_2016_PA.csv
-    inflating: SA40_1958_2016_PLNS.csv
-    inflating: SA40_1958_2016_RI.csv
-    inflating: SA40_1958_2016_RKMT.csv
-    inflating: SA40_1958_2016_SC.csv
-    inflating: SA40_1958_2016_SD.csv
-    inflating: SA40_1958_2016_SEST.csv
-    inflating: SA40_1958_2016_SWST.csv
-    inflating: SA40_1958_2016_TN.csv
-    inflating: SA40_1958_2016_TX.csv
-    inflating: SA40_1958_2016_US.csv
-    inflating: SA40_1958_2016_UT.csv
-    inflating: SA40_1958_2016_VA.csv
-    inflating: SA40_1958_2016_VT.csv
-    inflating: SA40_1958_2016_WA.csv
-    inflating: SA40_1958_2016_WI.csv
-    inflating: SA40_1958_2016_WV.csv
-    inflating: SA40_1958_2016_WY.csv
-    inflating: SA40_def.xml
-    inflating: SA40_fn.htm
-    inflating: SA45_1969_2016__ALL_AREAS.csv
-    inflating: SA45_1969_2016_AK.csv
-    inflating: SA45_1969_2016_AL.csv
-    inflating: SA45_1969_2016_AR.csv
-    inflating: SA45_1969_2016_AZ.csv
-    inflating: SA45_1969_2016_CA.csv
-    inflating: SA45_1969_2016_CO.csv
-    inflating: SA45_1969_2016_CT.csv
-    inflating: SA45_1969_2016_DC.csv
-    inflating: SA45_1969_2016_DE.csv
-    inflating: SA45_1969_2016_FL.csv
-    inflating: SA45_1969_2016_FWST.csv
-    inflating: SA45_1969_2016_GA.csv
-    inflating: SA45_1969_2016_GLAK.csv
-    inflating: SA45_1969_2016_HI.csv
-    inflating: SA45_1969_2016_IA.csv
-    inflating: SA45_1969_2016_ID.csv
-    inflating: SA45_1969_2016_IL.csv
-    inflating: SA45_1969_2016_IN.csv
-    inflating: SA45_1969_2016_KS.csv
-    inflating: SA45_1969_2016_KY.csv
-    inflating: SA45_1969_2016_LA.csv
-    inflating: SA45_1969_2016_MA.csv
-    inflating: SA45_1969_2016_MD.csv
-    inflating: SA45_1969_2016_ME.csv
-    inflating: SA45_1969_2016_MEST.csv
-    inflating: SA45_1969_2016_MI.csv
-    inflating: SA45_1969_2016_MN.csv
-    inflating: SA45_1969_2016_MO.csv
-    inflating: SA45_1969_2016_MS.csv
-    inflating: SA45_1969_2016_MT.csv
-    inflating: SA45_1969_2016_NC.csv
-    inflating: SA45_1969_2016_ND.csv
-    inflating: SA45_1969_2016_NE.csv
-    inflating: SA45_1969_2016_NENG.csv
-    inflating: SA45_1969_2016_NH.csv
-    inflating: SA45_1969_2016_NJ.csv
-    inflating: SA45_1969_2016_NM.csv
-    inflating: SA45_1969_2016_NV.csv
-    inflating: SA45_1969_2016_NY.csv
-    inflating: SA45_1969_2016_OH.csv
-    inflating: SA45_1969_2016_OK.csv
-    inflating: SA45_1969_2016_OR.csv
-    inflating: SA45_1969_2016_PA.csv
-    inflating: SA45_1969_2016_PLNS.csv
-    inflating: SA45_1969_2016_RI.csv
-    inflating: SA45_1969_2016_RKMT.csv
-    inflating: SA45_1969_2016_SC.csv
-    inflating: SA45_1969_2016_SD.csv
-    inflating: SA45_1969_2016_SEST.csv
-    inflating: SA45_1969_2016_SWST.csv
-    inflating: SA45_1969_2016_TN.csv
-    inflating: SA45_1969_2016_TX.csv
-    inflating: SA45_1969_2016_US.csv
-    inflating: SA45_1969_2016_UT.csv
-    inflating: SA45_1969_2016_VA.csv
-    inflating: SA45_1969_2016_VT.csv
-    inflating: SA45_1969_2016_WA.csv
-    inflating: SA45_1969_2016_WI.csv
-    inflating: SA45_1969_2016_WV.csv
-    inflating: SA45_1969_2016_WY.csv
-    inflating: SA45_def.xml
-    inflating: SA45_fn.htm
-    inflating: SA4_1929_2016__ALL_AREAS.csv
-    inflating: SA4_1929_2016_AK.csv
-    inflating: SA4_1929_2016_AL.csv
-    inflating: SA4_1929_2016_AR.csv
-    inflating: SA4_1929_2016_AZ.csv
-    inflating: SA4_1929_2016_CA.csv
-    inflating: SA4_1929_2016_CO.csv
-    inflating: SA4_1929_2016_CT.csv
-    inflating: SA4_1929_2016_DC.csv
-    inflating: SA4_1929_2016_DE.csv
-    inflating: SA4_1929_2016_FL.csv
-    inflating: SA4_1929_2016_FWST.csv
-    inflating: SA4_1929_2016_GA.csv
-    inflating: SA4_1929_2016_GLAK.csv
-    inflating: SA4_1929_2016_HI.csv
-    inflating: SA4_1929_2016_IA.csv
-    inflating: SA4_1929_2016_ID.csv
-    inflating: SA4_1929_2016_IL.csv
-    inflating: SA4_1929_2016_IN.csv
-    inflating: SA4_1929_2016_KS.csv
-    inflating: SA4_1929_2016_KY.csv
-    inflating: SA4_1929_2016_LA.csv
-    inflating: SA4_1929_2016_MA.csv
-    inflating: SA4_1929_2016_MD.csv
-    inflating: SA4_1929_2016_ME.csv
-    inflating: SA4_1929_2016_MEST.csv
-    inflating: SA4_1929_2016_MI.csv
-    inflating: SA4_1929_2016_MN.csv
-    inflating: SA4_1929_2016_MO.csv
-    inflating: SA4_1929_2016_MS.csv
-    inflating: SA4_1929_2016_MT.csv
-    inflating: SA4_1929_2016_NC.csv
-    inflating: SA4_1929_2016_ND.csv
-    inflating: SA4_1929_2016_NE.csv
-    inflating: SA4_1929_2016_NENG.csv
-    inflating: SA4_1929_2016_NH.csv
-    inflating: SA4_1929_2016_NJ.csv
-    inflating: SA4_1929_2016_NM.csv
-    inflating: SA4_1929_2016_NV.csv
-    inflating: SA4_1929_2016_NY.csv
-    inflating: SA4_1929_2016_OH.csv
-    inflating: SA4_1929_2016_OK.csv
-    inflating: SA4_1929_2016_OR.csv
-    inflating: SA4_1929_2016_PA.csv
-    inflating: SA4_1929_2016_PLNS.csv
-    inflating: SA4_1929_2016_RI.csv
-    inflating: SA4_1929_2016_RKMT.csv
-    inflating: SA4_1929_2016_SC.csv
-    inflating: SA4_1929_2016_SD.csv
-    inflating: SA4_1929_2016_SEST.csv
-    inflating: SA4_1929_2016_SWST.csv
-    inflating: SA4_1929_2016_TN.csv
-    inflating: SA4_1929_2016_TX.csv
-    inflating: SA4_1929_2016_US.csv
-    inflating: SA4_1929_2016_UT.csv
-    inflating: SA4_1929_2016_VA.csv
-    inflating: SA4_1929_2016_VT.csv
-    inflating: SA4_1929_2016_WA.csv
-    inflating: SA4_1929_2016_WI.csv
-    inflating: SA4_1929_2016_WV.csv
-    inflating: SA4_1929_2016_WY.csv
-    inflating: SA4_def.xml
-    inflating: SA4_fn.htm
-    inflating: SA50_1948_2016__ALL_AREAS.csv
-    inflating: SA50_1948_2016_AK.csv
-    inflating: SA50_1948_2016_AL.csv
-    inflating: SA50_1948_2016_AR.csv
-    inflating: SA50_1948_2016_AZ.csv
-    inflating: SA50_1948_2016_CA.csv
-    inflating: SA50_1948_2016_CO.csv
-    inflating: SA50_1948_2016_CT.csv
-    inflating: SA50_1948_2016_DC.csv
-    inflating: SA50_1948_2016_DE.csv
-    inflating: SA50_1948_2016_FL.csv
-    inflating: SA50_1948_2016_FWST.csv
-    inflating: SA50_1948_2016_GA.csv
-    inflating: SA50_1948_2016_GLAK.csv
-    inflating: SA50_1948_2016_HI.csv
-    inflating: SA50_1948_2016_IA.csv
-    inflating: SA50_1948_2016_ID.csv
-    inflating: SA50_1948_2016_IL.csv
-    inflating: SA50_1948_2016_IN.csv
-    inflating: SA50_1948_2016_KS.csv
-    inflating: SA50_1948_2016_KY.csv
-    inflating: SA50_1948_2016_LA.csv
-    inflating: SA50_1948_2016_MA.csv
-    inflating: SA50_1948_2016_MD.csv
-    inflating: SA50_1948_2016_ME.csv
-    inflating: SA50_1948_2016_MEST.csv
-    inflating: SA50_1948_2016_MI.csv
-    inflating: SA50_1948_2016_MN.csv
-    inflating: SA50_1948_2016_MO.csv
-    inflating: SA50_1948_2016_MS.csv
-    inflating: SA50_1948_2016_MT.csv
-    inflating: SA50_1948_2016_NC.csv
-    inflating: SA50_1948_2016_ND.csv
-    inflating: SA50_1948_2016_NE.csv
-    inflating: SA50_1948_2016_NENG.csv
-    inflating: SA50_1948_2016_NH.csv
-    inflating: SA50_1948_2016_NJ.csv
-    inflating: SA50_1948_2016_NM.csv
-    inflating: SA50_1948_2016_NV.csv
-    inflating: SA50_1948_2016_NY.csv
-    inflating: SA50_1948_2016_OH.csv
-    inflating: SA50_1948_2016_OK.csv
-    inflating: SA50_1948_2016_OR.csv
-    inflating: SA50_1948_2016_PA.csv
-    inflating: SA50_1948_2016_PLNS.csv
-    inflating: SA50_1948_2016_RI.csv
-    inflating: SA50_1948_2016_RKMT.csv
-    inflating: SA50_1948_2016_SC.csv
-    inflating: SA50_1948_2016_SD.csv
-    inflating: SA50_1948_2016_SEST.csv
-    inflating: SA50_1948_2016_SWST.csv
-    inflating: SA50_1948_2016_TN.csv
-    inflating: SA50_1948_2016_TX.csv
-    inflating: SA50_1948_2016_US.csv
-    inflating: SA50_1948_2016_UT.csv
-    inflating: SA50_1948_2016_VA.csv
-    inflating: SA50_1948_2016_VT.csv
-    inflating: SA50_1948_2016_WA.csv
-    inflating: SA50_1948_2016_WI.csv
-    inflating: SA50_1948_2016_WV.csv
-    inflating: SA50_1948_2016_WY.csv
-    inflating: SA50_def.xml
-    inflating: SA50_fn.htm
-    inflating: SA51_1948_2016.csv
-    inflating: sa51_def.xml
-    inflating: sa51_fn.htm
-    inflating: SA5_1958_2001__ALL_AREAS.csv
-    inflating: SA5_1958_2001_AK.csv
-    inflating: SA5_1958_2001_AL.csv
-    inflating: SA5_1958_2001_AR.csv
-    inflating: SA5_1958_2001_AZ.csv
-    inflating: SA5_1958_2001_CA.csv
-    inflating: SA5_1958_2001_CO.csv
-    inflating: SA5_1958_2001_CT.csv
-    inflating: SA5_1958_2001_DC.csv
-    inflating: SA5_1958_2001_DE.csv
-    inflating: SA5_1958_2001_FL.csv
-    inflating: SA5_1958_2001_FWST.csv
-    inflating: SA5_1958_2001_GA.csv
-    inflating: SA5_1958_2001_GLAK.csv
-    inflating: SA5_1958_2001_HI.csv
-    inflating: SA5_1958_2001_IA.csv
-    inflating: SA5_1958_2001_ID.csv
-    inflating: SA5_1958_2001_IL.csv
-    inflating: SA5_1958_2001_IN.csv
-    inflating: SA5_1958_2001_KS.csv
-    inflating: SA5_1958_2001_KY.csv
-    inflating: SA5_1958_2001_LA.csv
-    inflating: SA5_1958_2001_MA.csv
-    inflating: SA5_1958_2001_MD.csv
-    inflating: SA5_1958_2001_ME.csv
-    inflating: SA5_1958_2001_MEST.csv
-    inflating: SA5_1958_2001_MI.csv
-    inflating: SA5_1958_2001_MN.csv
-    inflating: SA5_1958_2001_MO.csv
-    inflating: SA5_1958_2001_MS.csv
-    inflating: SA5_1958_2001_MT.csv
-    inflating: SA5_1958_2001_NC.csv
-    inflating: SA5_1958_2001_ND.csv
-    inflating: SA5_1958_2001_NE.csv
-    inflating: SA5_1958_2001_NENG.csv
-    inflating: SA5_1958_2001_NH.csv
-    inflating: SA5_1958_2001_NJ.csv
-    inflating: SA5_1958_2001_NM.csv
-    inflating: SA5_1958_2001_NV.csv
-    inflating: SA5_1958_2001_NY.csv
-    inflating: SA5_1958_2001_OH.csv
-    inflating: SA5_1958_2001_OK.csv
-    inflating: SA5_1958_2001_OR.csv
-    inflating: SA5_1958_2001_PA.csv
-    inflating: SA5_1958_2001_PLNS.csv
-    inflating: SA5_1958_2001_RI.csv
-    inflating: SA5_1958_2001_RKMT.csv
-    inflating: SA5_1958_2001_SC.csv
-    inflating: SA5_1958_2001_SD.csv
-    inflating: SA5_1958_2001_SEST.csv
-    inflating: SA5_1958_2001_SWST.csv
-    inflating: SA5_1958_2001_TN.csv
-    inflating: SA5_1958_2001_TX.csv
-    inflating: SA5_1958_2001_US.csv
-    inflating: SA5_1958_2001_UT.csv
-    inflating: SA5_1958_2001_VA.csv
-    inflating: SA5_1958_2001_VT.csv
-    inflating: SA5_1958_2001_WA.csv
-    inflating: SA5_1958_2001_WI.csv
-    inflating: SA5_1958_2001_WV.csv
-    inflating: SA5_1958_2001_WY.csv
-    inflating: SA5_def.xml
-    inflating: SA5_fn.htm
-    inflating: SA5H_1929_1957__ALL_AREAS.csv
-    inflating: SA5H_1929_1957_AK.csv
-    inflating: SA5H_1929_1957_AL.csv
-    inflating: SA5H_1929_1957_AR.csv
-    inflating: SA5H_1929_1957_AZ.csv
-    inflating: SA5H_1929_1957_CA.csv
-    inflating: SA5H_1929_1957_CO.csv
-    inflating: SA5H_1929_1957_CT.csv
-    inflating: SA5H_1929_1957_DC.csv
-    inflating: SA5H_1929_1957_DE.csv
-    inflating: SA5H_1929_1957_FL.csv
-    inflating: SA5H_1929_1957_FWST.csv
-    inflating: SA5H_1929_1957_GA.csv
-    inflating: SA5H_1929_1957_GLAK.csv
-    inflating: SA5H_1929_1957_HI.csv
-    inflating: SA5H_1929_1957_IA.csv
-    inflating: SA5H_1929_1957_ID.csv
-    inflating: SA5H_1929_1957_IL.csv
-    inflating: SA5H_1929_1957_IN.csv
-    inflating: SA5H_1929_1957_KS.csv
-    inflating: SA5H_1929_1957_KY.csv
-    inflating: SA5H_1929_1957_LA.csv
-    inflating: SA5H_1929_1957_MA.csv
-    inflating: SA5H_1929_1957_MD.csv
-    inflating: SA5H_1929_1957_ME.csv
-    inflating: SA5H_1929_1957_MEST.csv
-    inflating: SA5H_1929_1957_MI.csv
-    inflating: SA5H_1929_1957_MN.csv
-    inflating: SA5H_1929_1957_MO.csv
-    inflating: SA5H_1929_1957_MS.csv
-    inflating: SA5H_1929_1957_MT.csv
-    inflating: SA5H_1929_1957_NC.csv
-    inflating: SA5H_1929_1957_ND.csv
-    inflating: SA5H_1929_1957_NE.csv
-    inflating: SA5H_1929_1957_NENG.csv
-    inflating: SA5H_1929_1957_NH.csv
-    inflating: SA5H_1929_1957_NJ.csv
-    inflating: SA5H_1929_1957_NM.csv
-    inflating: SA5H_1929_1957_NV.csv
-    inflating: SA5H_1929_1957_NY.csv
-    inflating: SA5H_1929_1957_OH.csv
-    inflating: SA5H_1929_1957_OK.csv
-    inflating: SA5H_1929_1957_OR.csv
-    inflating: SA5H_1929_1957_PA.csv
-    inflating: SA5H_1929_1957_PLNS.csv
-    inflating: SA5H_1929_1957_RI.csv
-    inflating: SA5H_1929_1957_RKMT.csv
-    inflating: SA5H_1929_1957_SC.csv
-    inflating: SA5H_1929_1957_SD.csv
-    inflating: SA5H_1929_1957_SEST.csv
-    inflating: SA5H_1929_1957_SWST.csv
-    inflating: SA5H_1929_1957_TN.csv
-    inflating: SA5H_1929_1957_TX.csv
-    inflating: SA5H_1929_1957_US.csv
-    inflating: SA5H_1929_1957_UT.csv
-    inflating: SA5H_1929_1957_VA.csv
-    inflating: SA5H_1929_1957_VT.csv
-    inflating: SA5H_1929_1957_WA.csv
-    inflating: SA5H_1929_1957_WI.csv
-    inflating: SA5H_1929_1957_WV.csv
-    inflating: SA5H_1929_1957_WY.csv
-    inflating: SA5H_def.xml
-    inflating: SA5H_fn.htm
-    inflating: SA5N_1998_2016__ALL_AREAS.csv
-    inflating: SA5N_1998_2016_AK.csv
-    inflating: SA5N_1998_2016_AL.csv
-    inflating: SA5N_1998_2016_AR.csv
-    inflating: SA5N_1998_2016_AZ.csv
-    inflating: SA5N_1998_2016_CA.csv
-    inflating: SA5N_1998_2016_CO.csv
-    inflating: SA5N_1998_2016_CT.csv
-    inflating: SA5N_1998_2016_DC.csv
-    inflating: SA5N_1998_2016_DE.csv
-    inflating: SA5N_1998_2016_FL.csv
-    inflating: SA5N_1998_2016_FWST.csv
-    inflating: SA5N_1998_2016_GA.csv
-    inflating: SA5N_1998_2016_GLAK.csv
-    inflating: SA5N_1998_2016_HI.csv
-    inflating: SA5N_1998_2016_IA.csv
-    inflating: SA5N_1998_2016_ID.csv
-    inflating: SA5N_1998_2016_IL.csv
-    inflating: SA5N_1998_2016_IN.csv
-    inflating: SA5N_1998_2016_KS.csv
-    inflating: SA5N_1998_2016_KY.csv
-    inflating: SA5N_1998_2016_LA.csv
-    inflating: SA5N_1998_2016_MA.csv
-    inflating: SA5N_1998_2016_MD.csv
-    inflating: SA5N_1998_2016_ME.csv
-    inflating: SA5N_1998_2016_MEST.csv
-    inflating: SA5N_1998_2016_MI.csv
-    inflating: SA5N_1998_2016_MN.csv
-    inflating: SA5N_1998_2016_MO.csv
-    inflating: SA5N_1998_2016_MS.csv
-    inflating: SA5N_1998_2016_MT.csv
-    inflating: SA5N_1998_2016_NC.csv
-    inflating: SA5N_1998_2016_ND.csv
-    inflating: SA5N_1998_2016_NE.csv
-    inflating: SA5N_1998_2016_NENG.csv
-    inflating: SA5N_1998_2016_NH.csv
-    inflating: SA5N_1998_2016_NJ.csv
-    inflating: SA5N_1998_2016_NM.csv
-    inflating: SA5N_1998_2016_NV.csv
-    inflating: SA5N_1998_2016_NY.csv
-    inflating: SA5N_1998_2016_OH.csv
-    inflating: SA5N_1998_2016_OK.csv
-    inflating: SA5N_1998_2016_OR.csv
-    inflating: SA5N_1998_2016_PA.csv
-    inflating: SA5N_1998_2016_PLNS.csv
-    inflating: SA5N_1998_2016_RI.csv
-    inflating: SA5N_1998_2016_RKMT.csv
-    inflating: SA5N_1998_2016_SC.csv
-    inflating: SA5N_1998_2016_SD.csv
-    inflating: SA5N_1998_2016_SEST.csv
-    inflating: SA5N_1998_2016_SWST.csv
-    inflating: SA5N_1998_2016_TN.csv
-    inflating: SA5N_1998_2016_TX.csv
-    inflating: SA5N_1998_2016_US.csv
-    inflating: SA5N_1998_2016_UT.csv
-    inflating: SA5N_1998_2016_VA.csv
-    inflating: SA5N_1998_2016_VT.csv
-    inflating: SA5N_1998_2016_WA.csv
-    inflating: SA5N_1998_2016_WI.csv
-    inflating: SA5N_1998_2016_WV.csv
-    inflating: SA5N_1998_2016_WY.csv
-    inflating: SA5N_def.xml
-    inflating: SA5N_fn.htm
-    inflating: SA6_1958_2001__ALL_AREAS.csv
-    inflating: SA6_1958_2001_AK.csv
-    inflating: SA6_1958_2001_AL.csv
-    inflating: SA6_1958_2001_AR.csv
-    inflating: SA6_1958_2001_AZ.csv
-    inflating: SA6_1958_2001_CA.csv
-    inflating: SA6_1958_2001_CO.csv
-    inflating: SA6_1958_2001_CT.csv
-    inflating: SA6_1958_2001_DC.csv
-    inflating: SA6_1958_2001_DE.csv
-    inflating: SA6_1958_2001_FL.csv
-    inflating: SA6_1958_2001_FWST.csv
-    inflating: SA6_1958_2001_GA.csv
-    inflating: SA6_1958_2001_GLAK.csv
-    inflating: SA6_1958_2001_HI.csv
-    inflating: SA6_1958_2001_IA.csv
-    inflating: SA6_1958_2001_ID.csv
-    inflating: SA6_1958_2001_IL.csv
-    inflating: SA6_1958_2001_IN.csv
-    inflating: SA6_1958_2001_KS.csv
-    inflating: SA6_1958_2001_KY.csv
-    inflating: SA6_1958_2001_LA.csv
-    inflating: SA6_1958_2001_MA.csv
-    inflating: SA6_1958_2001_MD.csv
-    inflating: SA6_1958_2001_ME.csv
-    inflating: SA6_1958_2001_MEST.csv
-    inflating: SA6_1958_2001_MI.csv
-    inflating: SA6_1958_2001_MN.csv
-    inflating: SA6_1958_2001_MO.csv
-    inflating: SA6_1958_2001_MS.csv
-    inflating: SA6_1958_2001_MT.csv
-    inflating: SA6_1958_2001_NC.csv
-    inflating: SA6_1958_2001_ND.csv
-    inflating: SA6_1958_2001_NE.csv
-    inflating: SA6_1958_2001_NENG.csv
-    inflating: SA6_1958_2001_NH.csv
-    inflating: SA6_1958_2001_NJ.csv
-    inflating: SA6_1958_2001_NM.csv
-    inflating: SA6_1958_2001_NV.csv
-    inflating: SA6_1958_2001_NY.csv
-    inflating: SA6_1958_2001_OH.csv
-    inflating: SA6_1958_2001_OK.csv
-    inflating: SA6_1958_2001_OR.csv
-    inflating: SA6_1958_2001_PA.csv
-    inflating: SA6_1958_2001_PLNS.csv
-    inflating: SA6_1958_2001_RI.csv
-    inflating: SA6_1958_2001_RKMT.csv
-    inflating: SA6_1958_2001_SC.csv
-    inflating: SA6_1958_2001_SD.csv
-    inflating: SA6_1958_2001_SEST.csv
-    inflating: SA6_1958_2001_SWST.csv
-    inflating: SA6_1958_2001_TN.csv
-    inflating: SA6_1958_2001_TX.csv
-    inflating: SA6_1958_2001_US.csv
-    inflating: SA6_1958_2001_UT.csv
-    inflating: SA6_1958_2001_VA.csv
-    inflating: SA6_1958_2001_VT.csv
-    inflating: SA6_1958_2001_WA.csv
-    inflating: SA6_1958_2001_WI.csv
-    inflating: SA6_1958_2001_WV.csv
-    inflating: SA6_1958_2001_WY.csv
-    inflating: SA6_def.xml
-    inflating: SA6_fn.htm
-    inflating: SA6N_1998_2016__ALL_AREAS.csv
-    inflating: SA6N_1998_2016_AK.csv
-    inflating: SA6N_1998_2016_AL.csv
-    inflating: SA6N_1998_2016_AR.csv
-    inflating: SA6N_1998_2016_AZ.csv
-    inflating: SA6N_1998_2016_CA.csv
-    inflating: SA6N_1998_2016_CO.csv
-    inflating: SA6N_1998_2016_CT.csv
-    inflating: SA6N_1998_2016_DC.csv
-    inflating: SA6N_1998_2016_DE.csv
-    inflating: SA6N_1998_2016_FL.csv
-    inflating: SA6N_1998_2016_FWST.csv
-    inflating: SA6N_1998_2016_GA.csv
-    inflating: SA6N_1998_2016_GLAK.csv
-    inflating: SA6N_1998_2016_HI.csv
-    inflating: SA6N_1998_2016_IA.csv
-    inflating: SA6N_1998_2016_ID.csv
-    inflating: SA6N_1998_2016_IL.csv
-    inflating: SA6N_1998_2016_IN.csv
-    inflating: SA6N_1998_2016_KS.csv
-    inflating: SA6N_1998_2016_KY.csv
-    inflating: SA6N_1998_2016_LA.csv
-    inflating: SA6N_1998_2016_MA.csv
-    inflating: SA6N_1998_2016_MD.csv
-    inflating: SA6N_1998_2016_ME.csv
-    inflating: SA6N_1998_2016_MEST.csv
-    inflating: SA6N_1998_2016_MI.csv
-    inflating: SA6N_1998_2016_MN.csv
-    inflating: SA6N_1998_2016_MO.csv
-    inflating: SA6N_1998_2016_MS.csv
-    inflating: SA6N_1998_2016_MT.csv
-    inflating: SA6N_1998_2016_NC.csv
-    inflating: SA6N_1998_2016_ND.csv
-    inflating: SA6N_1998_2016_NE.csv
-    inflating: SA6N_1998_2016_NENG.csv
-    inflating: SA6N_1998_2016_NH.csv
-    inflating: SA6N_1998_2016_NJ.csv
-    inflating: SA6N_1998_2016_NM.csv
-    inflating: SA6N_1998_2016_NV.csv
-    inflating: SA6N_1998_2016_NY.csv
-    inflating: SA6N_1998_2016_OH.csv
-    inflating: SA6N_1998_2016_OK.csv
-    inflating: SA6N_1998_2016_OR.csv
-    inflating: SA6N_1998_2016_PA.csv
-    inflating: SA6N_1998_2016_PLNS.csv
-    inflating: SA6N_1998_2016_RI.csv
-    inflating: SA6N_1998_2016_RKMT.csv
-    inflating: SA6N_1998_2016_SC.csv
-    inflating: SA6N_1998_2016_SD.csv
-    inflating: SA6N_1998_2016_SEST.csv
-    inflating: SA6N_1998_2016_SWST.csv
-    inflating: SA6N_1998_2016_TN.csv
-    inflating: SA6N_1998_2016_TX.csv
-    inflating: SA6N_1998_2016_US.csv
-    inflating: SA6N_1998_2016_UT.csv
-    inflating: SA6N_1998_2016_VA.csv
-    inflating: SA6N_1998_2016_VT.csv
-    inflating: SA6N_1998_2016_WA.csv
-    inflating: SA6N_1998_2016_WI.csv
-    inflating: SA6N_1998_2016_WV.csv
-    inflating: SA6N_1998_2016_WY.csv
-    inflating: SA6N_def.xml
-    inflating: SA6N_fn.htm
-    inflating: SA7_1958_2001__ALL_AREAS.csv
-    inflating: SA7_1958_2001_AK.csv
-    inflating: SA7_1958_2001_AL.csv
-    inflating: SA7_1958_2001_AR.csv
-    inflating: SA7_1958_2001_AZ.csv
-    inflating: SA7_1958_2001_CA.csv
-    inflating: SA7_1958_2001_CO.csv
-    inflating: SA7_1958_2001_CT.csv
-    inflating: SA7_1958_2001_DC.csv
-    inflating: SA7_1958_2001_DE.csv
-    inflating: SA7_1958_2001_FL.csv
-    inflating: SA7_1958_2001_FWST.csv
-    inflating: SA7_1958_2001_GA.csv
-    inflating: SA7_1958_2001_GLAK.csv
-    inflating: SA7_1958_2001_HI.csv
-    inflating: SA7_1958_2001_IA.csv
-    inflating: SA7_1958_2001_ID.csv
-    inflating: SA7_1958_2001_IL.csv
-    inflating: SA7_1958_2001_IN.csv
-    inflating: SA7_1958_2001_KS.csv
-    inflating: SA7_1958_2001_KY.csv
-    inflating: SA7_1958_2001_LA.csv
-    inflating: SA7_1958_2001_MA.csv
-    inflating: SA7_1958_2001_MD.csv
-    inflating: SA7_1958_2001_ME.csv
-    inflating: SA7_1958_2001_MEST.csv
-    inflating: SA7_1958_2001_MI.csv
-    inflating: SA7_1958_2001_MN.csv
-    inflating: SA7_1958_2001_MO.csv
-    inflating: SA7_1958_2001_MS.csv
-    inflating: SA7_1958_2001_MT.csv
-    inflating: SA7_1958_2001_NC.csv
-    inflating: SA7_1958_2001_ND.csv
-    inflating: SA7_1958_2001_NE.csv
-    inflating: SA7_1958_2001_NENG.csv
-    inflating: SA7_1958_2001_NH.csv
-    inflating: SA7_1958_2001_NJ.csv
-    inflating: SA7_1958_2001_NM.csv
-    inflating: SA7_1958_2001_NV.csv
-    inflating: SA7_1958_2001_NY.csv
-    inflating: SA7_1958_2001_OH.csv
-    inflating: SA7_1958_2001_OK.csv
-    inflating: SA7_1958_2001_OR.csv
-    inflating: SA7_1958_2001_PA.csv
-    inflating: SA7_1958_2001_PLNS.csv
-    inflating: SA7_1958_2001_RI.csv
-    inflating: SA7_1958_2001_RKMT.csv
-    inflating: SA7_1958_2001_SC.csv
-    inflating: SA7_1958_2001_SD.csv
-    inflating: SA7_1958_2001_SEST.csv
-    inflating: SA7_1958_2001_SWST.csv
-    inflating: SA7_1958_2001_TN.csv
-    inflating: SA7_1958_2001_TX.csv
-    inflating: SA7_1958_2001_US.csv
-    inflating: SA7_1958_2001_UT.csv
-    inflating: SA7_1958_2001_VA.csv
-    inflating: SA7_1958_2001_VT.csv
-    inflating: SA7_1958_2001_WA.csv
-    inflating: SA7_1958_2001_WI.csv
-    inflating: SA7_1958_2001_WV.csv
-    inflating: SA7_1958_2001_WY.csv
-    inflating: SA7_def.xml
-    inflating: SA7_fn.htm
-    inflating: SA7H_1929_1957__ALL_AREAS.csv
-    inflating: SA7H_1929_1957_AK.csv
-    inflating: SA7H_1929_1957_AL.csv
-    inflating: SA7H_1929_1957_AR.csv
-    inflating: SA7H_1929_1957_AZ.csv
-    inflating: SA7H_1929_1957_CA.csv
-    inflating: SA7H_1929_1957_CO.csv
-    inflating: SA7H_1929_1957_CT.csv
-    inflating: SA7H_1929_1957_DC.csv
-    inflating: SA7H_1929_1957_DE.csv
-    inflating: SA7H_1929_1957_FL.csv
-    inflating: SA7H_1929_1957_FWST.csv
-    inflating: SA7H_1929_1957_GA.csv
-    inflating: SA7H_1929_1957_GLAK.csv
-    inflating: SA7H_1929_1957_HI.csv
-    inflating: SA7H_1929_1957_IA.csv
-    inflating: SA7H_1929_1957_ID.csv
-    inflating: SA7H_1929_1957_IL.csv
-    inflating: SA7H_1929_1957_IN.csv
-    inflating: SA7H_1929_1957_KS.csv
-    inflating: SA7H_1929_1957_KY.csv
-    inflating: SA7H_1929_1957_LA.csv
-    inflating: SA7H_1929_1957_MA.csv
-    inflating: SA7H_1929_1957_MD.csv
-    inflating: SA7H_1929_1957_ME.csv
-    inflating: SA7H_1929_1957_MEST.csv
-    inflating: SA7H_1929_1957_MI.csv
-    inflating: SA7H_1929_1957_MN.csv
-    inflating: SA7H_1929_1957_MO.csv
-    inflating: SA7H_1929_1957_MS.csv
-    inflating: SA7H_1929_1957_MT.csv
-    inflating: SA7H_1929_1957_NC.csv
-    inflating: SA7H_1929_1957_ND.csv
-    inflating: SA7H_1929_1957_NE.csv
-    inflating: SA7H_1929_1957_NENG.csv
-    inflating: SA7H_1929_1957_NH.csv
-    inflating: SA7H_1929_1957_NJ.csv
-    inflating: SA7H_1929_1957_NM.csv
-    inflating: SA7H_1929_1957_NV.csv
-    inflating: SA7H_1929_1957_NY.csv
-    inflating: SA7H_1929_1957_OH.csv
-    inflating: SA7H_1929_1957_OK.csv
-    inflating: SA7H_1929_1957_OR.csv
-    inflating: SA7H_1929_1957_PA.csv
-    inflating: SA7H_1929_1957_PLNS.csv
-    inflating: SA7H_1929_1957_RI.csv
-    inflating: SA7H_1929_1957_RKMT.csv
-    inflating: SA7H_1929_1957_SC.csv
-    inflating: SA7H_1929_1957_SD.csv
-    inflating: SA7H_1929_1957_SEST.csv
-    inflating: SA7H_1929_1957_SWST.csv
-    inflating: SA7H_1929_1957_TN.csv
-    inflating: SA7H_1929_1957_TX.csv
-    inflating: SA7H_1929_1957_US.csv
-    inflating: SA7H_1929_1957_UT.csv
-    inflating: SA7H_1929_1957_VA.csv
-    inflating: SA7H_1929_1957_VT.csv
-    inflating: SA7H_1929_1957_WA.csv
-    inflating: SA7H_1929_1957_WI.csv
-    inflating: SA7H_1929_1957_WV.csv
-    inflating: SA7H_1929_1957_WY.csv
-    inflating: SA7H_def.xml
-    inflating: SA7H_fn.htm
-    inflating: SA7N_1998_2016__ALL_AREAS.csv
-    inflating: SA7N_1998_2016_AK.csv
-    inflating: SA7N_1998_2016_AL.csv
-    inflating: SA7N_1998_2016_AR.csv
-    inflating: SA7N_1998_2016_AZ.csv
-    inflating: SA7N_1998_2016_CA.csv
-    inflating: SA7N_1998_2016_CO.csv
-    inflating: SA7N_1998_2016_CT.csv
-    inflating: SA7N_1998_2016_DC.csv
-    inflating: SA7N_1998_2016_DE.csv
-    inflating: SA7N_1998_2016_FL.csv
-    inflating: SA7N_1998_2016_FWST.csv
-    inflating: SA7N_1998_2016_GA.csv
-    inflating: SA7N_1998_2016_GLAK.csv
-    inflating: SA7N_1998_2016_HI.csv
-    inflating: SA7N_1998_2016_IA.csv
-    inflating: SA7N_1998_2016_ID.csv
-    inflating: SA7N_1998_2016_IL.csv
-    inflating: SA7N_1998_2016_IN.csv
-    inflating: SA7N_1998_2016_KS.csv
-    inflating: SA7N_1998_2016_KY.csv
-    inflating: SA7N_1998_2016_LA.csv
-    inflating: SA7N_1998_2016_MA.csv
-    inflating: SA7N_1998_2016_MD.csv
-    inflating: SA7N_1998_2016_ME.csv
-    inflating: SA7N_1998_2016_MEST.csv
-    inflating: SA7N_1998_2016_MI.csv
-    inflating: SA7N_1998_2016_MN.csv
-    inflating: SA7N_1998_2016_MO.csv
-    inflating: SA7N_1998_2016_MS.csv
-    inflating: SA7N_1998_2016_MT.csv
-    inflating: SA7N_1998_2016_NC.csv
-    inflating: SA7N_1998_2016_ND.csv
-    inflating: SA7N_1998_2016_NE.csv
-    inflating: SA7N_1998_2016_NENG.csv
-    inflating: SA7N_1998_2016_NH.csv
-    inflating: SA7N_1998_2016_NJ.csv
-    inflating: SA7N_1998_2016_NM.csv
-    inflating: SA7N_1998_2016_NV.csv
-    inflating: SA7N_1998_2016_NY.csv
-    inflating: SA7N_1998_2016_OH.csv
-    inflating: SA7N_1998_2016_OK.csv
-    inflating: SA7N_1998_2016_OR.csv
-    inflating: SA7N_1998_2016_PA.csv
-    inflating: SA7N_1998_2016_PLNS.csv
-    inflating: SA7N_1998_2016_RI.csv
-    inflating: SA7N_1998_2016_RKMT.csv
-    inflating: SA7N_1998_2016_SC.csv
-    inflating: SA7N_1998_2016_SD.csv
-    inflating: SA7N_1998_2016_SEST.csv
-    inflating: SA7N_1998_2016_SWST.csv
-    inflating: SA7N_1998_2016_TN.csv
-    inflating: SA7N_1998_2016_TX.csv
-    inflating: SA7N_1998_2016_US.csv
-    inflating: SA7N_1998_2016_UT.csv
-    inflating: SA7N_1998_2016_VA.csv
-    inflating: SA7N_1998_2016_VT.csv
-    inflating: SA7N_1998_2016_WA.csv
-    inflating: SA7N_1998_2016_WI.csv
-    inflating: SA7N_1998_2016_WV.csv
-    inflating: SA7N_1998_2016_WY.csv
-    inflating: SA7N_def.xml
-    inflating: SA7N_fn.htm
-successfully unzipped spi.zip to current directory
-
-. 
-. insheet using SA1_1929_2016.csv, comma clear
-(95 vars, 184 obs)
-
-. 
-. keep if linecode==3
-(124 observations deleted)
-
-. 
-. local i=1929
-
-. 
-. foreach var of varlist v8-v95{
-  2. destring `var', replace force
-  3. rename `var' percap_inc_`i'
-  4. local i=`i'+1
-  5. }
-v8 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v9 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v10 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v11 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v12 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v13 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v14 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v15 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v16 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v17 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v18 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v19 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v20 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v21 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v22 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v23 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v24 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v25 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v26 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v27 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v28 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v29 already numeric; no replace
-v30 already numeric; no replace
-v31 already numeric; no replace
-v32 already numeric; no replace
-v33 already numeric; no replace
-v34 already numeric; no replace
-v35 already numeric; no replace
-v36 already numeric; no replace
-v37 already numeric; no replace
-v38 already numeric; no replace
-v39 already numeric; no replace
-v40 already numeric; no replace
-v41 already numeric; no replace
-v42 already numeric; no replace
-v43 already numeric; no replace
-v44 already numeric; no replace
-v45 already numeric; no replace
-v46 already numeric; no replace
-v47 already numeric; no replace
-v48 already numeric; no replace
-v49 already numeric; no replace
-v50 already numeric; no replace
-v51 already numeric; no replace
-v52 already numeric; no replace
-v53 already numeric; no replace
-v54 already numeric; no replace
-v55 already numeric; no replace
-v56 already numeric; no replace
-v57 already numeric; no replace
-v58 already numeric; no replace
-v59 already numeric; no replace
-v60 already numeric; no replace
-v61 already numeric; no replace
-v62 already numeric; no replace
-v63 already numeric; no replace
-v64 already numeric; no replace
-v65 already numeric; no replace
-v66 already numeric; no replace
-v67 already numeric; no replace
-v68 already numeric; no replace
-v69 already numeric; no replace
-v70 already numeric; no replace
-v71 already numeric; no replace
-v72 already numeric; no replace
-v73 already numeric; no replace
-v74 already numeric; no replace
-v75 already numeric; no replace
-v76 already numeric; no replace
-v77 already numeric; no replace
-v78 already numeric; no replace
-v79 already numeric; no replace
-v80 already numeric; no replace
-v81 already numeric; no replace
-v82 already numeric; no replace
-v83 already numeric; no replace
-v84 already numeric; no replace
-v85 already numeric; no replace
-v86 already numeric; no replace
-v87 already numeric; no replace
-v88 already numeric; no replace
-v89 already numeric; no replace
-v90 already numeric; no replace
-v91 already numeric; no replace
-v92 already numeric; no replace
-v93 already numeric; no replace
-v94 already numeric; no replace
-v95 already numeric; no replace
-
-. 
-. reshape long percap_inc_, i(geofips) j(year) 
-(note: j = 1929 1930 1931 1932 1933 1934 1935 1936 1937 1938 1939 1940 1941 1942 1943
->  1944 1945 1946 1947 1948 1949 1950 1951 1952 1953 1954 1955 1956 1957 1958 1959 19
-> 60 1961 1962 1963 1964 1965 1966 1967 1968 1969 1970 1971 1972 1973 1974 1975 1976 
-> 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 199
-> 3 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2
-> 010 2011 2012 2013 2014 2015 2016)
-
-Data                               wide   ->   long
------------------------------------------------------------------------------
-Number of obs.                       60   ->    5280
-Number of variables                  95   ->       9
-j variable (88 values)                    ->   year
-xij variables:
-percap_inc_1929 percap_inc_1930 ... percap_inc_2016->percap_inc_
------------------------------------------------------------------------------
-
-. 
-end of do-file
-
-. browse
-
-. insheet using SA1_1929_2016.csv, comma clear
-(95 vars, 184 obs)
-
-. 
-. browse
-
-. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD37277.000000"
-
-. 
-. insheet using SA1_1929_2016.csv, comma clear
-(95 vars, 184 obs)
-
-. 
-. keep if linecode==3
-(124 observations deleted)
-
-. 
-. local i=1929
-
-. 
-. foreach var of varlist v8-v95{
-  2. destring `var', replace force
-  3. rename `var' percap_inc_`i'
-  4. local i=`i'+1
-  5. }
-v8 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v9 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v10 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v11 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v12 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v13 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v14 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v15 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v16 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v17 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v18 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v19 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v20 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v21 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v22 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v23 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v24 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v25 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v26 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v27 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v28 contains nonnumeric characters; replaced as int
-(2 missing values generated)
-v29 already numeric; no replace
-v30 already numeric; no replace
-v31 already numeric; no replace
-v32 already numeric; no replace
-v33 already numeric; no replace
-v34 already numeric; no replace
-v35 already numeric; no replace
-v36 already numeric; no replace
-v37 already numeric; no replace
-v38 already numeric; no replace
-v39 already numeric; no replace
-v40 already numeric; no replace
-v41 already numeric; no replace
-v42 already numeric; no replace
-v43 already numeric; no replace
-v44 already numeric; no replace
-v45 already numeric; no replace
-v46 already numeric; no replace
-v47 already numeric; no replace
-v48 already numeric; no replace
-v49 already numeric; no replace
-v50 already numeric; no replace
-v51 already numeric; no replace
-v52 already numeric; no replace
-v53 already numeric; no replace
-v54 already numeric; no replace
-v55 already numeric; no replace
-v56 already numeric; no replace
-v57 already numeric; no replace
-v58 already numeric; no replace
-v59 already numeric; no replace
-v60 already numeric; no replace
-v61 already numeric; no replace
-v62 already numeric; no replace
-v63 already numeric; no replace
-v64 already numeric; no replace
-v65 already numeric; no replace
-v66 already numeric; no replace
-v67 already numeric; no replace
-v68 already numeric; no replace
-v69 already numeric; no replace
-v70 already numeric; no replace
-v71 already numeric; no replace
-v72 already numeric; no replace
-v73 already numeric; no replace
-v74 already numeric; no replace
-v75 already numeric; no replace
-v76 already numeric; no replace
-v77 already numeric; no replace
-v78 already numeric; no replace
-v79 already numeric; no replace
-v80 already numeric; no replace
-v81 already numeric; no replace
-v82 already numeric; no replace
-v83 already numeric; no replace
-v84 already numeric; no replace
-v85 already numeric; no replace
-v86 already numeric; no replace
-v87 already numeric; no replace
-v88 already numeric; no replace
-v89 already numeric; no replace
-v90 already numeric; no replace
-v91 already numeric; no replace
-v92 already numeric; no replace
-v93 already numeric; no replace
-v94 already numeric; no replace
-v95 already numeric; no replace
-
-. 
-end of do-file
-
-. browse
-
-. cd ~/volatility/scripts
-/Users/doylewr/volatility/scripts
-
-. do 2017-09-22-deltacostsubset_ad.do
-
-. capture log close                           // closes any logs, should they be open
+. // end file
+. log close                               // close log
+      name:  <unnamed>
+       log:  /Users/doylewr/lpo_prac/lessons/s1-05-more_dataset_manipulation/more_dataset_manipulation.log
+  log type:  text
+ closed on:  23 Sep 2020, 10:41:56
+-----------------------------------------------------------------------------------------------------------------------
