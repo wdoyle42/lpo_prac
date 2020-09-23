@@ -106,6 +106,21 @@ and a standard deviation of 1000. Add this variable to a county-level
 dataset and merge this new dataset into the api dataset.
 ***/
 
+preserve
+collapse (mean) api99, by(cnum)
+drawnorm fake_spend, mean(8000) sd(1000)
+sort cnum
+save county_spend, replace
+restore
+
+use api, clear
+
+sort cnum
+
+merge m:1 cnum using county_spend
+
+tab _merge
+
 
 /***
 
@@ -147,6 +162,7 @@ merge 1:m dnum using api
 tab _merge
 list dnum api99 edd if _n < 10
 
+
 /***
 #### Quick Exercise
 
@@ -156,6 +172,21 @@ list dnum api99 edd if _n < 10
 
 <br>
 ***/
+
+preserve
+collapse (mean) api99, by(dnum)
+drawnorm fake_teacher_salary, mean(40) sd(5)  
+sort dnum
+save district_spend, replace
+restore
+
+use district_spend, clear
+
+merge 1:m dnum using api 
+
+li snum dnum api99 fake_teacher_salary in 1/20
+
+
 
 /***
 
@@ -191,11 +222,15 @@ drop api99
 sample 90
 save api_00, replace
 
+
+use api_00, clear
 // merge datasets
-merge snum using api_99, sort
+merge 1:1 snum using api_99
 
 // inspect messy merge
 tab _merge
+
+exit 
 
 // code for looking at missing values, other patterns
 
