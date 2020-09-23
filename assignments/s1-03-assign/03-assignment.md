@@ -18,7 +18,7 @@ the following steps:
 5.  Repeat the `merge` command again, but this time create a result
     where the two additional (fake) observations are dropped. 
 6.  Repeat the merge, but this time only keep the observations in the
-    *master* dataset.
+    *in-memory* dataset.
 7.  Repeat the merge, but this time only keep the observations in the
     *using* dataset.
 
