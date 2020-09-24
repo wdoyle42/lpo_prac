@@ -1,9 +1,5 @@
----
-title: Assignment 5
-author: LPO 9951 | Fall 2015
-output: md_document
----
-#Assignment 5
+
+#Assignment 4
 
 
 Complete the following steps:
