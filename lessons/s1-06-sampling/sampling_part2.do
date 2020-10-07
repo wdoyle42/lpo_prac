@@ -245,7 +245,7 @@ merge 1:1 sampl using nhanes2f_s
 
 order sampl finalwgt psu stratid jkw_*
 
-browse sampl finalwgt psuid stratid jkw_*
+//browse sampl finalwgt psuid stratid jkw_*
 
 /***
 
@@ -274,6 +274,8 @@ mean birthwgtlbs
 
 // compute mean with svy bootstrap
 svy: mean birthwgtlbs
+
+//browse idnume finwgt bsrw*
 
 /***
 
@@ -314,7 +316,6 @@ design effect was 1.3. Do not use this approach, for hopefully obvious reasons.
 // Using ECLS
 
 
-
 // Using ELS
 
 use ../../data/plans.dta, clear
@@ -323,17 +324,10 @@ use ../../data/plans.dta, clear
 
 svyset psu [pw=f1pnlwt],strata(strat_id)
 
-mean bynels2m, over(byrace)
+mean bynels2m
 
-svy: mean bynels2m, over(byrace) 
+svy: mean bynels2m
 
-use ../../data/plans.dta, clear
-
-sample 50
-
-svyset psu [pw=f1pnlwt],strata(strat_id)
-
-svydes 
 
 /* BRR estimates from HSLS*/
 
@@ -349,7 +343,23 @@ svy: prop x3hscompstat
 
 /* NHES */
 
+use ../../data/nhes_example.dta, clear
 
+replace dpcolor=. if inlist(dpcolor, -8 ,-7, -6 ,-5 ,-4 ,-3 ,-2, -1)
+
+svyset epsu [pw=fewt] ,strat(estratum) singleunit(scaled)
+
+prop dpcolor
+
+svy: prop dpcolor
+
+rename fewt finalwgt
+
+svyset epsu [pw=finalwgt] , vce(brr) brrweight(fewt*)
+
+prop dpcolor
+
+svy: prop dpcolor
 
 // end file     
 log close
@@ -360,3 +370,5 @@ exit
 // ELS Manual p. 81, 87 (BRR), https://nces.ed.gov/pubs2014/2014364.pdf
 
 // HSLS Manual  https://nces.ed.gov/pubs2018/2018140.pdf 
+
+// NHES manual section 
