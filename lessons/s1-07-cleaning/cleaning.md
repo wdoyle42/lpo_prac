@@ -1,7 +1,7 @@
 Data cleaning
 =============
 
-LPO 9951 | Fall 2018
+LPO 9951 | Fall 2020
 
 <br>
 
@@ -38,7 +38,7 @@ the state of California.
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-07-cleaning/cleaning.log
             log type:  text
-           opened on:  14 Oct 2020, 11:03:08
+           opened on:  14 Oct 2020, 11:14:59
 
           . clear all                               // clear memory
 
@@ -76,15 +76,21 @@ Let's take a look at student teacher ratio using the `boxplot` and
           . graph box str, name(box_str)
 
 
-          . graph export  box_str.eps, name(box_str) replace
-          (file box_str.eps written in EPS format)
+          . graph export  box_str.png, name(box_str) replace
+          (file /Users/doylewr/lpo_prac/lessons/s1-07-cleaning/box_str.png written in PNG format)
 
           . histogram str, name(hist_str)
           (bin=20, start=14, width=1.6700001)
 
 
-          . graph export  hist_str.eps, name(hist_str) replace
-          (file hist_str.eps written in EPS format)
+          . graph export  hist_str.png, name(hist_str) replace
+          (file /Users/doylewr/lpo_prac/lessons/s1-07-cleaning/hist_str.png written in PNG format)
+
+/\*\*\*
+
+<img src = "box_str.png" />
+
+<img src = "hist_str.png" />
 
 <br>
 
@@ -140,8 +146,10 @@ reduced price lunches, `me al_pct`:
           . graph twoway scatter avginc meal_pct, name(sc_inc_meal)
 
 
-          . graph export  sc_inc_meal.eps, name(sc_inc_meal) replace
-          (file sc_inc_meal.eps written in EPS format)
+          . graph export  sc_inc_meal.png, name(sc_inc_meal) replace
+          (file /Users/doylewr/lpo_prac/lessons/s1-07-cleaning/sc_inc_meal.png written in PNG format)
+
+<img src = "sc_inc_meal.png" />
 
 #### Quick Exercise
 
@@ -173,8 +181,10 @@ student teacher ratio and then plot it against the original calculation.
           . graph twoway scatter str_two str, name(sc_str_str_two)
 
 
-          . graph export  sc_str_str_two.eps, name(sc_str_str_two) replace
-          (file sc_str_str_two.eps written in EPS format)
+          . graph export  sc_str_two.png, name(sc_str_str_two) replace
+          (file /Users/doylewr/lpo_prac/lessons/s1-07-cleaning/sc_str_two.png written in PNG format)
+
+<img src = "sc_str_two.png" />
 
 <br>
 
@@ -322,7 +332,7 @@ in the data itself.
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-07-cleaning/cleaning.log
             log type:  text
-           closed on:  14 Oct 2020, 11:03:14
+           closed on:  14 Oct 2020, 11:15:06
           ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
           . exit

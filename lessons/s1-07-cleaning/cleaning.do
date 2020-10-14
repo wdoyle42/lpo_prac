@@ -1,7 +1,7 @@
 /***
 Data cleaning
 ================
-LPO 9951 | Fall 2018
+LPO 9951 | Fall 2020
 
 <br>
 
@@ -66,13 +66,24 @@ Let's take a look at student teacher ratio using the `boxplot` and `histogram` c
 
 // box plot str
 graph box str, name(box_str)
-graph export  box_str.eps, name(box_str) replace
+graph export  box_str.png, name(box_str) replace
 
 // histogram str
 histogram str, name(hist_str)
-graph export  hist_str.eps, name(hist_str) replace
+graph export  hist_str.png, name(hist_str) replace
 
 /***
+
+/***
+
+<img src = "box_str.png" />
+
+
+<img src = "hist_str.png" />
+
+
+***/
+
 
 <br>
 
@@ -130,7 +141,16 @@ To test this, let's plot several of the variables against one another and look f
 
 // twoway scatter of avginc and meal_pct
 graph twoway scatter avginc meal_pct, name(sc_inc_meal)
-graph export  sc_inc_meal.eps, name(sc_inc_meal) replace
+graph export  sc_inc_meal.png, name(sc_inc_meal) replace
+
+
+
+/***
+
+<img src = "sc_inc_meal.png" />
+
+***/
+
 
 /***
 #### Quick Exercise
@@ -168,7 +188,15 @@ gen str_two = enrl_tot / teachers
 
 // twoway scatter of both student teacher ratio variables
 graph twoway scatter str_two str, name(sc_str_str_two)
-graph export  sc_str_str_two.eps, name(sc_str_str_two) replace
+graph export  sc_str_two.png, name(sc_str_str_two) replace
+
+
+/***
+
+<img src = "sc_str_two.png" />
+
+***/
+
 
 /***
 
