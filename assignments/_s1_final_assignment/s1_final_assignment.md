@@ -1,7 +1,7 @@
 ### Vanderbilt University
 ### Leadership, Policy and Organizations
 ### Class Number 9951
-### Fall 2019
+### Fall 2020
 # Fall Project
 
 The final project will take the form of a written description of the data to be used for your
