@@ -1,8 +1,8 @@
 ------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s1-08-validation/validation.log
+       log:  /Users/doylewr/lpo_prac/lessons/s1-08-validation/validation.log
   log type:  text
- opened on:  17 Oct 2017, 10:18:56
+ opened on:  21 Oct 2020, 11:20:03
 
 . 
 . // NAME: Data cleaning
@@ -10,15 +10,28 @@
 . // AUTH: Will Doyle
 . // REVS: Benjamin Skinner
 . // INIT: 22 October 2014
-. // LAST: 15 October 2017
+. // LAST: 21 October 2020
 .      
 . clear all                               // clear memory
 
-. set more off                            // turn off annoying "__more__" feature
+. 
+. 
+. global ddir "../../data/"
 
 . 
+. /***
+> Calculating estimates and comparing them with known results
+> -----------------------------------------------------------
+> 
+> Today, we'll use the {c 96}plans{c 96} dataset. We're going to compare our results with 
+> several tables published by NCES. Let's start with educational expectations of high scho
+> ol sophomores. We start by survey setting the data:
+> 
+> 
+> ***/
+. 
 . // load plans data
-. use plans.dta
+. use ${ddir}plans.dta
 
 . 
 . // set up data for survey commands 
@@ -32,49 +45,88 @@
         FPC 1: <zero>
 
 . 
+. /***
+> 
+> ### Account for missing data
+> 
+> The next step is to account for missing data properly:
+> 
+> ***/
+. 
 . // set up local to hold variables we wish to recode 
 . local allvar bystexp bysex byrace byses1 f1psepln 
 
 . 
-. // change values for vars in local that in (-4,-8,-9) to missing
-. foreach myvar in `allvar' {
-  2.     replace `myvar' = . if `myvar' == -4   
-  3.     replace `myvar' = . if `myvar' == -8 
-  4.     replace `myvar' = . if `myvar' == -9 
-  5. } 
-(648 real changes made, 648 to missing)
-(276 real changes made, 276 to missing)
-(0 real changes made)
-(648 real changes made, 648 to missing)
-(171 real changes made, 171 to missing)
-(0 real changes made)
-(648 real changes made, 648 to missing)
-(276 real changes made, 276 to missing)
-(0 real changes made)
-(648 real changes made, 648 to missing)
-(276 real changes made, 276 to missing)
-(0 real changes made)
-(1131 real changes made, 1131 to missing)
-(781 real changes made, 781 to missing)
-(46 real changes made, 46 to missing)
+. mvdecode `allvar', mv(-9/-2)
+     bystexp: 924 missing values generated
+       bysex: 819 missing values generated
+      byrace: 924 missing values generated
+      byses1: 924 missing values generated
+    f1psepln: 1958 missing values generated
 
+. 
+. // Recoding
+. 
+. recode bystexp (-1=8 )
+(bystexp: 1450 changes made)
+
+. 
+. // Variable and value labeling
+. 
+. label define expect 1 "Less than HS" /// 
+>                                         2 "HS/GED" ///
+>                                         3 "2 Yr" ///
+>                                         4 "Attend 4" ///
+>                                         5 "BA Degree" ///
+>                                         6 "Master's" ///
+>                                         7 "PhD" ///
+>                                         8 "Don't Know'"
+
+. 
+. label values bystexp expect     
+
+. 
+. label define race 1 "American Indian/AK Native" ///
+>                                   2 "Asian/PI" ///
+>                                   3 "African American/Black" ///
+>                                   4 "Hispanic No Race Specified" ///
+>                                   5 "Hispanic, Race Specified" ///
+>                                   6 "Multiracial, non Hispanic" ///
+>                                   7 "White" 
+
+. 
+. label values byrace race        
+
+.                           
+. /***
+> ### Get estimates
+> 
+> Next, we tabulate expectations for college and compare it to a known estimate.
+> 
+> 
+> ***/
+. 
 . 
 . // student expectations for education 
 . tab bystexp
 
-  how far in school student thinks will |
-                          get-composite |      Freq.     Percent        Cum.
-----------------------------------------+-----------------------------------
-                           {don^t know} |      1,450        9.52        9.52
-       less than high school graduation |        128        0.84       10.36
-     high school graduation or ged only |        983        6.45       16.81
-attend or complete 2-year college/schoo |        879        5.77       22.58
-attend college, 4-year degree incomplet |        561        3.68       26.26
-                  graduate from college |      5,416       35.55       61.81
-   obtain master^s degree or equivalent |      3,153       20.69       82.50
-obtain phd, md, or other advanced degre |      2,666       17.50      100.00
-----------------------------------------+-----------------------------------
-                                  Total |     15,236      100.00
+  how far in |
+      school |
+     student |
+ thinks will |
+get-composit |
+           e |      Freq.     Percent        Cum.
+-------------+-----------------------------------
+Less than HS |        128        0.84        0.84
+      HS/GED |        983        6.45        7.29
+        2 Yr |        879        5.77       13.06
+    Attend 4 |        561        3.68       16.74
+   BA Degree |      5,416       35.55       52.29
+    Master's |      3,153       20.69       72.99
+         PhD |      2,666       17.50       90.48
+ Don't Know' |      1,450        9.52      100.00
+-------------+-----------------------------------
+       Total |     15,236      100.00
 
 . 
 . svy: proportion bystexp
@@ -82,35 +134,42 @@ obtain phd, md, or other advanced degre |      2,666       17.50      100.00
 
 Survey: Proportion estimation
 
-Number of strata =     361         Number of obs    =    16160
-Number of PSUs   =     751         Population size  =  3408319
-                                   Design df        =      390
+Number of strata =     361        Number of obs   =     16,160
+Number of PSUs   =     751        Population size =  3,408,319
+                                  Design df       =        390
 
-      _prop_1: bystexp = {don^t know}
-      _prop_2: bystexp = less than high school graduation
-      _prop_3: bystexp = high school graduation or ged on
-      _prop_4: bystexp = attend or complete 2-year colleg
-      _prop_5: bystexp = attend college, 4-year degree in
-      _prop_6: bystexp = graduate from college
-      _prop_7: bystexp = obtain master^s degree or equiva
-      _prop_8: bystexp = obtain phd, md, or other advance
+      _prop_1: bystexp = Less than HS
+      _prop_2: bystexp = HS/GED
+      _prop_3: bystexp = 2 Yr
+      _prop_4: bystexp = Attend 4
+      _prop_5: bystexp = BA Degree
+      _prop_6: bystexp = Master's
+      _prop_8: bystexp = Don't Know'
 
 --------------------------------------------------------------
-             |             Linearized
+             |             Linearized            Logit
              | Proportion   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
 bystexp      |
-     _prop_1 |   .0987875   .0030196      .0930076    .1048851
-     _prop_2 |   .0094831     .00098       .007738    .0116172
-     _prop_3 |   .0724693   .0030538      .0666899    .0787074
-     _prop_4 |   .0643949   .0028925      .0589365    .0703211
-     _prop_5 |   .0389852   .0018459      .0355139    .0427808
-     _prop_6 |   .3578959   .0046507      .3488048    .3670902
-     _prop_7 |   .1971035    .004424      .1885502    .2059464
-     _prop_8 |   .1608805   .0039873      .1531947    .1688749
+     _prop_1 |   .0094831     .00098       .007738    .0116172
+     _prop_2 |   .0724693   .0030538      .0666899    .0787074
+     _prop_3 |   .0643949   .0028925      .0589365    .0703211
+     _prop_4 |   .0389852   .0018459      .0355139    .0427808
+     _prop_5 |   .3578959   .0046507      .3488048    .3670902
+     _prop_6 |   .1971035    .004424      .1885502    .2059464
+         PhD |   .1608805   .0039873      .1531947    .1688749
+     _prop_8 |   .0987875   .0030196      .0930076    .1048851
 --------------------------------------------------------------
 
 . 
+. /***
+> 
+> Once you create estimates from a command like {c 96}proportion{c 96} 
+> you can save them for later, using the {c 96}estimates store{c 96} command.
+> These can be replayed using {c 96}replay{c 96} and can be brough back into memory using 
+> {c 96}restore{c 96} 
+> 
+> ***/
 . // store estimates
 . estimates store expect_tab
 
@@ -124,32 +183,31 @@ Model expect_tab
 
 Survey: Proportion estimation
 
-Number of strata =     361         Number of obs    =    16160
-Number of PSUs   =     751         Population size  =  3408319
-                                   Design df        =      390
+Number of strata =     361        Number of obs   =     16,160
+Number of PSUs   =     751        Population size =  3,408,319
+                                  Design df       =        390
 
-      _prop_1: bystexp = {don^t know}
-      _prop_2: bystexp = less than high school graduation
-      _prop_3: bystexp = high school graduation or ged on
-      _prop_4: bystexp = attend or complete 2-year colleg
-      _prop_5: bystexp = attend college, 4-year degree in
-      _prop_6: bystexp = graduate from college
-      _prop_7: bystexp = obtain master^s degree or equiva
-      _prop_8: bystexp = obtain phd, md, or other advance
+      _prop_1: bystexp = Less than HS
+      _prop_2: bystexp = HS/GED
+      _prop_3: bystexp = 2 Yr
+      _prop_4: bystexp = Attend 4
+      _prop_5: bystexp = BA Degree
+      _prop_6: bystexp = Master's
+      _prop_8: bystexp = Don't Know'
 
 --------------------------------------------------------------
-             |             Linearized
+             |             Linearized            Logit
              | Proportion   Std. Err.     [95% Conf. Interval]
 -------------+------------------------------------------------
 bystexp      |
-     _prop_1 |   .0987875   .0030196      .0930076    .1048851
-     _prop_2 |   .0094831     .00098       .007738    .0116172
-     _prop_3 |   .0724693   .0030538      .0666899    .0787074
-     _prop_4 |   .0643949   .0028925      .0589365    .0703211
-     _prop_5 |   .0389852   .0018459      .0355139    .0427808
-     _prop_6 |   .3578959   .0046507      .3488048    .3670902
-     _prop_7 |   .1971035    .004424      .1885502    .2059464
-     _prop_8 |   .1608805   .0039873      .1531947    .1688749
+     _prop_1 |   .0094831     .00098       .007738    .0116172
+     _prop_2 |   .0724693   .0030538      .0666899    .0787074
+     _prop_3 |   .0643949   .0028925      .0589365    .0703211
+     _prop_4 |   .0389852   .0018459      .0355139    .0427808
+     _prop_5 |   .3578959   .0046507      .3488048    .3670902
+     _prop_6 |   .1971035    .004424      .1885502    .2059464
+         PhD |   .1608805   .0039873      .1531947    .1688749
+     _prop_8 |   .0987875   .0030196      .0930076    .1048851
 --------------------------------------------------------------
 
 . 
@@ -158,491 +216,134 @@ bystexp      |
 (results expect_tab are active now)
 
 . 
+. /*** 
+> Estimates can be stored using a simplified approach, using
+> `eststo` and then the name of the estimates to be stored. 
+> ***/
+. 
 . //one line version
 . 
-. eststo expect_tab: svy: proportion bystexp
-(running proportion on estimation sample)
-
-Survey: Proportion estimation
-
-Number of strata =     361         Number of obs    =    16160
-Number of PSUs   =     751         Population size  =  3408319
-                                   Design df        =      390
-
-      _prop_1: bystexp = {don^t know}
-      _prop_2: bystexp = less than high school graduation
-      _prop_3: bystexp = high school graduation or ged on
-      _prop_4: bystexp = attend or complete 2-year colleg
-      _prop_5: bystexp = attend college, 4-year degree in
-      _prop_6: bystexp = graduate from college
-      _prop_7: bystexp = obtain master^s degree or equiva
-      _prop_8: bystexp = obtain phd, md, or other advance
-
---------------------------------------------------------------
-             |             Linearized
-             | Proportion   Std. Err.     [95% Conf. Interval]
--------------+------------------------------------------------
-bystexp      |
-     _prop_1 |   .0987875   .0030196      .0930076    .1048851
-     _prop_2 |   .0094831     .00098       .007738    .0116172
-     _prop_3 |   .0724693   .0030538      .0666899    .0787074
-     _prop_4 |   .0643949   .0028925      .0589365    .0703211
-     _prop_5 |   .0389852   .0018459      .0355139    .0427808
-     _prop_6 |   .3578959   .0046507      .3488048    .3670902
-     _prop_7 |   .1971035    .004424      .1885502    .2059464
-     _prop_8 |   .1608805   .0039873      .1531947    .1688749
---------------------------------------------------------------
-
-. 
-. 
-. // save as table using esttab
-. esttab expect_tab using expect_tab.rtf, b(3) se(4) nostar ///
->     varlabels(_prop_1 "Unsure" ///
->               _prop_2 "Less than HS" ///
->               _prop_3 "HS or GED" ///
->               _prop_4 "AA/AS" ///
->               _prop_5 "Some college" ///
->               _prop_6 "BA/BS" ///
->               _prop_7 "MA/MS" ///
->               _prop_8 "PhD or Prof") ///
->     replace
-(output written to expect_tab.rtf)
-
-. 
-. 
-. // Tabulate racial/ethnic categories
-. svy: proportion byrace
-(running proportion on estimation sample)
-
-Survey: Proportion estimation
-
-Number of strata =     361         Number of obs    =    16160
-Number of PSUs   =     751         Population size  =  3408319
-                                   Design df        =      390
-
-      _prop_1: byrace = amer. indian/alaska native, non-
-      _prop_2: byrace = asian, hawaii/pac. islander,non-
-      _prop_3: byrace = black or african american, non-h
-      _prop_4: byrace = hispanic, no race specified
-      _prop_5: byrace = hispanic, race specified
-      _prop_6: byrace = multiracial, non-hispanic
-      _prop_7: byrace = white, non-hispanic
-
---------------------------------------------------------------
-             |             Linearized
-             | Proportion   Std. Err.     [95% Conf. Interval]
--------------+------------------------------------------------
-byrace       |
-     _prop_1 |   .0096181   .0019302      .0064781    .0142582
-     _prop_2 |   .0418147   .0026054      .0369819    .0472479
-     _prop_3 |   .1440328   .0065965      .1315429    .1574936
-     _prop_4 |   .0712467   .0051959      .0616832    .0821631
-     _prop_5 |   .0874755   .0060552      .0762801     .100136
-     _prop_6 |   .0433927    .002277        .03913    .0480965
-     _prop_7 |   .6024195   .0098199      .5829628    .6215577
---------------------------------------------------------------
-
-. 
-. estimates store race_tab
-
-. 
-. // save as table using esttab
-. esttab race_tab using race_tab.rtf, b(3) se(4) nostar ///
->     varlabels(_prop_1 "American Indian/Alaskan Native" ///
->               _prop_2 "Asian/ Pacific Islander" ///
->               _prop_3 "African American" ///
->               _prop_4 "Hispanic, no race specifided" ///
->               _prop_5 "Hispanic, race specified" ///
->               _prop_6 "Multiracial" ///
->               _prop_7 "White, non-Hispanic") ///
->     replace     
-(output written to race_tab.rtf)
-
-. 
-. svy: tabulate byrace bystexp, row percent       
+. eststo expect_tab: svy: tabulate bystexp
 (running tabulate on estimation sample)
 
-Number of strata   =       361                  Number of obs      =     15236
-Number of PSUs     =       751                  Population size    = 3408318.6
-                                                Design df          =       390
+Number of strata   =       361                  Number of obs     =     15,236
+Number of PSUs     =       751                  Population size   =  3,408,319
+                                                Design df         =        390
 
-------------------------------------------------------------------------------------------
-student^s |
-race/ethn |
-icity-com |              how far in school student thinks will get-composite              
-posite    | {don^t k  less tha  high sch  attend o  attend c  graduate  obtain m  obtain p
-----------+-------------------------------------------------------------------------------
- amer, in |    14.59     .4457      9.99     7.469     2.905      30.2     16.34     18.06
- asian, h |    10.01     1.104     3.363     3.207     4.165     33.54      21.2     23.42
- black or |    8.565     1.405      8.16     5.541      5.99     37.35     15.14     17.85
- hispanic |    12.79      1.26      10.5     6.849     6.581     34.14     15.47     12.42
- hispanic |    13.23     2.064      9.48     5.459     5.418     35.99      15.5     12.86
- multirac |    8.286     1.243     7.065     4.854     3.947     35.29     21.42     17.89
- white, n |    9.393     .6163     6.559      7.07     2.854     35.86     21.74      15.9
+----------------------
+how far   |
+in school |
+student   |
+thinks    |
+will      |
+get-compo |
+site      | proportion
+----------+-----------
+ Less tha |      .0095
+   HS/GED |      .0725
+     2 Yr |      .0644
+ Attend 4 |       .039
+ BA Degre |      .3579
+ Master's |      .1971
+      PhD |      .1609
+ Don't Kn |      .0988
           | 
-    Total |    9.879     .9483     7.247     6.439     3.899     35.79     19.71     16.09
-------------------------------------------------------------------------------------------
+    Total |          1
+----------------------
+  Key:  proportion  =  cell proportion
 
---------------------
-          | how far 
-          |in school
-          | student 
-          |  thinks 
-student^s |   will  
-race/ethn |get-compo
-icity-com |   site  
-posite    |    Total
-----------+---------
- amer, in |      100
- asian, h |      100
- black or |      100
- hispanic |      100
- hispanic |      100
- multirac |      100
- white, n |      100
-          | 
-    Total |      100
---------------------
-  Key:  row percentages
-
-  Pearson:
-    Uncorrected   chi2(42)        =  338.2312
-    Design-based  F(32.43, 12648.62)=    5.6934   P = 0.0000
-
-. ereturn list 
-
-scalars:
-               e(df_r) =  390
-      e(N_strata_omit) =  0
-          e(singleton) =  0
-             e(census) =  0
-             e(stages) =  1
-           e(cun_Penl) =  338.2312288743137
-             e(F_Penl) =  5.18621598395924
-           e(df1_Penl) =  30.46820138693538
-           e(df2_Penl) =  11882.5985409048
-             e(p_Penl) =  5.28746854434e-19
-           e(cun_Pear) =  338.2312288743137
-             e(F_Pear) =  5.693365528473342
-           e(df1_Pear) =  32.43235209709403
-           e(df2_Pear) =  12648.61731786667
-             e(p_Pear) =  5.17276811330e-23
-                  e(N) =  15236
-           e(N_strata) =  361
-              e(N_psu) =  751
-              e(N_pop) =  3408318.59494257
-               e(rank) =  55
-            e(cvgdeff) =  .6152124504258741
-             e(mgdeff) =  1.552793890943891
-              e(total) =  3408318.59494257
-                  e(c) =  8
-                  e(r) =  7
-            e(pun_LLW) =  9.28499577981e-28
-            e(Fun_LLW) =  7.010882769249331
-              e(p_LLW) =  1.17430358032e-23
-              e(F_LLW) =  6.273841247353888
-            e(cun_LLW) =  294.4570763084719
-             e(p_Full) =  2.08935174759e-16
-           e(df2_Full) =  390
-           e(df1_Full) =  33.05020192022872
-             e(F_Full) =  5.18621598395924
-           e(cun_Full) =  338.2312288743137
-               e(p_LR) =  2.06484049028e-22
-             e(df2_LR) =  12648.61731786667
-             e(df1_LR) =  32.43235209709403
-               e(F_LR) =  5.589759161663487
-             e(cun_LR) =  332.0761860283827
-             e(p_LRnl) =  1.69507942291e-18
-           e(df2_LRnl) =  11882.5985409048
-           e(df1_LRnl) =  30.46820138693538
-             e(F_LRnl) =  5.091838591026717
-           e(cun_LRnl) =  332.0761860283827
-
-macros:
-            e(cmdline) : "svy : tabulate byrace bystexp, row percent"
-                e(cmd) : "tabulate"
-             e(prefix) : "svy"
-            e(cmdname) : "tabulate"
-       e(marginsnotok) : "_ALL"
-          e(estat_cmd) : "svy_estat"
-             e(collab) : "label"
-             e(rowlab) : "label"
-            e(colvlab) : "how far in school student thinks will get-composite"
-             e(colvar) : "bystexp"
-            e(rowvlab) : "student^s race/ethnicity-composite"
-             e(rowvar) : "byrace"
-             e(setype) : "cell"
-            e(vcetype) : "Linearized"
-                e(vce) : "linearized"
-              e(wtype) : "pweight"
-               e(wvar) : "bystuwt"
-               e(wexp) : "= bystuwt"
-         e(singleunit) : "scaled"
-                e(su1) : "psu"
-            e(strata1) : "strat_id"
-             e(depvar) : "Mean"
-         e(properties) : "b V"
-
-matrices:
-                  e(b) :  1 x 56
-                  e(V) :  56 x 56
-          e(V_srs_col) :  8 x 8
-           e(Deft_col) :  1 x 8
-           e(Deff_col) :  1 x 8
-          e(V_srs_row) :  7 x 7
-           e(Deft_row) :  1 x 7
-           e(Deff_row) :  1 x 7
-              e(V_srs) :  56 x 56
-               e(Deft) :  1 x 56
-               e(Deff) :  1 x 56
-              e(V_col) :  8 x 8
-              e(V_row) :  7 x 7
-                e(Col) :  1 x 8
-                e(Row) :  1 x 7
-               e(Prop) :  7 x 8
-                e(Obs) :  7 x 8
-  e(_N_strata_certain) :  1 x 1
-   e(_N_strata_single) :  1 x 1
-          e(_N_strata) :  1 x 1
-
-functions:
-             e(sample)   
-
-.         
-. estpost svy: tabulate byrace bystexp, row percent
+. 
+. /***
+> 
+> ### Nicer tables
+> 
+> We get output in the console, but let's use the {c 96}eststo{c 96} and {c 96}esttab{c 96
+> } commands to store our estimates and produce nicer tables. Using {c 96}esttab{c 96} alo
+> ne, we'll get a nicely formatted table in the console. By adding {c 96}... using <file>{
+> c 96} we save an {c 96}.rtf{c 96} version of the same table. We can easily paste this ta
+> ble in a paper. 
+> ***/
+. 
+. // use estpost to output results in format that esttab likes
+. estpost svy: tabulate bystexp
 (running tabulate on estimation sample)
 
-Number of strata   =       361                  Number of obs      =     15236
-Number of PSUs     =       751                  Population size    = 3408318.6
-                                                Design df          =       390
+Number of strata   =       361                  Number of obs     =     15,236
+Number of PSUs     =       751                  Population size   =  3,408,319
+                                                Design df         =        390
 
-------------------------------------------------------------------------------------------
-student^s |
-race/ethn |
-icity-com |              how far in school student thinks will get-composite              
-posite    | {don^t k  less tha  high sch  attend o  attend c  graduate  obtain m  obtain p
-----------+-------------------------------------------------------------------------------
- amer, in |    14.59     .4457      9.99     7.469     2.905      30.2     16.34     18.06
- asian, h |    10.01     1.104     3.363     3.207     4.165     33.54      21.2     23.42
- black or |    8.565     1.405      8.16     5.541      5.99     37.35     15.14     17.85
- hispanic |    12.79      1.26      10.5     6.849     6.581     34.14     15.47     12.42
- hispanic |    13.23     2.064      9.48     5.459     5.418     35.99      15.5     12.86
- multirac |    8.286     1.243     7.065     4.854     3.947     35.29     21.42     17.89
- white, n |    9.393     .6163     6.559      7.07     2.854     35.86     21.74      15.9
+----------------------
+how far   |
+in school |
+student   |
+thinks    |
+will      |
+get-compo |
+site      | proportion
+----------+-----------
+ Less tha |      .0095
+   HS/GED |      .0725
+     2 Yr |      .0644
+ Attend 4 |       .039
+ BA Degre |      .3579
+ Master's |      .1971
+      PhD |      .1609
+ Don't Kn |      .0988
           | 
-    Total |    9.879     .9483     7.247     6.439     3.899     35.79     19.71     16.09
-------------------------------------------------------------------------------------------
-
---------------------
-          | how far 
-          |in school
-          | student 
-          |  thinks 
-student^s |   will  
-race/ethn |get-compo
-icity-com |   site  
-posite    |    Total
-----------+---------
- amer, in |      100
- asian, h |      100
- black or |      100
- hispanic |      100
- hispanic |      100
- multirac |      100
- white, n |      100
-          | 
-    Total |      100
---------------------
-  Key:  row percentages
-
-  Pearson:
-    Uncorrected   chi2(42)        =  338.2312
-    Design-based  F(32.43, 12648.62)=    5.6934   P = 0.0000
+    Total |          1
+----------------------
+  Key:  proportion  =  cell proportion
 
 saved vectors:
-             e(b) =  row percentages
-            e(se) =  standard errors of row percentages
-            e(lb) =  lower 95% confidence bounds for row percentages
-            e(ub) =  upper 95% confidence bounds for row percentages
-          e(deff) =  deff for variances of row percentages
-          e(deft) =  deft for variances of row percentages
-          e(cell) =  cell percentages
-           e(row) =  row percentages
-           e(col) =  column percentages
+             e(b) =  cell proportions
+            e(se) =  standard errors of cell proportions
+            e(lb) =  lower 95% confidence bounds for cell proportions
+            e(ub) =  upper 95% confidence bounds for cell proportions
+          e(deff) =  deff for variances of cell proportions
+          e(deft) =  deft for variances of cell proportions
+          e(cell) =  cell proportions
          e(count) =  weighted counts
            e(obs) =  number of observations
 
-row labels saved in macro e(labels)
-column labels saved in macro e(eqlabels)
+. 
+. eststo expect_tab
 
-. estimates store expect_tab2
+. 
+. // save as table using esttab
+. esttab expect_tab using expect_tab.rtf, /// 
+>                 b(3) /// /* 3 decimal points for estimates */
+>                 se(4) /// /* 4 decima points for se's */
+>                 nostar /// /* No sig tests */
+>                 nomtitles /// No column titles
+>                 nonumbers /// No column numbers
+>                 replace /* replace if file exists */
+(output written to expect_tab.rtf)
 
-. // What's stored in e()?
-. ereturn list 
-
-scalars:
-               e(rank) =  49
-              e(N_pop) =  3408318.59494257
-              e(N_psu) =  751
-           e(N_strata) =  361
-                  e(N) =  15236
-             e(p_Pear) =  5.17276811330e-23
-           e(df2_Pear) =  12648.61731786667
-           e(df1_Pear) =  32.43235209709402
-             e(F_Pear) =  5.693365528473343
-           e(cun_Pear) =  338.2312288743137
-             e(p_Penl) =  5.28746854434e-19
-           e(df2_Penl) =  11882.59854090479
-           e(df1_Penl) =  30.46820138693536
-             e(F_Penl) =  5.186215983959242
-           e(cun_Penl) =  338.2312288743137
-             e(stages) =  1
-             e(census) =  0
-          e(singleton) =  0
-      e(N_strata_omit) =  0
-               e(df_r) =  390
-              e(level) =  95
-           e(cun_LRnl) =  332.0761860283827
-             e(F_LRnl) =  5.091838591026717
-           e(df1_LRnl) =  30.46820138693536
-           e(df2_LRnl) =  11882.59854090479
-             e(p_LRnl) =  1.69507942291e-18
-             e(cun_LR) =  332.0761860283827
-               e(F_LR) =  5.589759161663488
-             e(df1_LR) =  32.43235209709402
-             e(df2_LR) =  12648.61731786667
-               e(p_LR) =  2.06484049028e-22
-           e(cun_Full) =  338.2312288743137
-             e(F_Full) =  5.186215983959242
-           e(df1_Full) =  33.0502019202287
-           e(df2_Full) =  390
-             e(p_Full) =  2.08935174759e-16
-            e(cun_LLW) =  294.4570763084718
-              e(F_LLW) =  6.273841247353886
-              e(p_LLW) =  1.17430358032e-23
-            e(Fun_LLW) =  7.010882769249329
-            e(pun_LLW) =  9.28499577981e-28
-                  e(r) =  7
-                  e(c) =  8
-              e(total) =  3408318.59494257
-             e(mgdeff) =  1.552793890943891
-            e(cvgdeff) =  .6152124504258748
-
-macros:
-    e(_estimates_name) : "expect_tab2"
-             e(subcmd) : "tabulate"
-             e(labels) : "1 `"amer. indian/alaska native, non-hispanic"' 2 `"asian, ha.."
-           e(eqlabels) : "`"{don^t know}"' `"less than high school graduation"' `"high.."
-                e(cmd) : "estpost"
-         e(properties) : "b V"
-             e(depvar) : "Ratio"
-            e(strata1) : "strat_id"
-                e(su1) : "psu"
-         e(singleunit) : "scaled"
-               e(wexp) : "= bystuwt"
-               e(wvar) : "bystuwt"
-              e(wtype) : "pweight"
-                e(vce) : "linearized"
-            e(vcetype) : "Linearized"
-             e(setype) : "row"
-             e(rowvar) : "byrace"
-            e(rowvlab) : "student^s race/ethnicity-composite"
-             e(colvar) : "bystexp"
-            e(colvlab) : "how far in school student thinks will get-composite"
-             e(rowlab) : "label"
-             e(collab) : "label"
-          e(estat_cmd) : "svy_estat"
-            e(predict) : "_no_predict"
-       e(marginsnotok) : "_ALL"
-            e(cmdname) : "tabulate"
-             e(prefix) : "svy"
-            e(cmdline) : "svy : tabulate byrace bystexp  ,   row se level(95)     perc.."
-
-matrices:
-                  e(b) :  1 x 72
-                 e(se) :  1 x 72
-                 e(lb) :  1 x 72
-                 e(ub) :  1 x 72
-               e(deff) :  1 x 72
-               e(deft) :  1 x 72
-               e(cell) :  1 x 72
-                e(col) :  1 x 72
-                e(row) :  1 x 72
-              e(count) :  1 x 72
-                e(obs) :  1 x 72
-          e(_N_strata) :  1 x 1
-   e(_N_strata_single) :  1 x 1
-  e(_N_strata_certain) :  1 x 1
-                e(Obs) :  7 x 8
-               e(Prop) :  7 x 8
-                e(Row) :  1 x 7
-                e(Col) :  1 x 8
-              e(V_row) :  7 x 7
-              e(V_col) :  8 x 8
-               e(Deff) :  1 x 56
-               e(Deft) :  1 x 56
-              e(V_srs) :  56 x 56
-           e(Deff_row) :  1 x 7
-           e(Deft_row) :  1 x 7
-          e(V_srs_row) :  7 x 7
-           e(Deff_col) :  1 x 8
-           e(Deft_col) :  1 x 8
-          e(V_srs_col) :  8 x 8
-
-functions:
-             e(sample)   
-
-.         
-. esttab expect_tab2 using expect_tab2.rtf, se  nostar replace unstack ///        
->         varlabels(`e(labels)') eqlabels(`e(eqlabels)')
-(output written to expect_tab2.rtf)
-
-.         
-.         
-. // post clean table to output window
-. esttab expect_tab, b(3) se(4) ///
->     varlabels(_prop_1 "Unsure" ///
->               _prop_2 "Less than HS" ///
->               _prop_3 "HS or GED" ///
->               _prop_4 "AA/AS" ///
->               _prop_5 "Some college" ///
->               _prop_6 "BA/BS" ///
->               _prop_7 "MA/MS" ///
->               _prop_8 "PhD or Prof")
-
-----------------------------
-                      (1)   
-               Proportion   
-----------------------------
-bystexp                     
-Unsure              0.099***
-                 (0.0030)   
-Less than HS        0.009***
-                 (0.0010)   
-HS or GED           0.072***
-                 (0.0031)   
-AA/AS               0.064***
-                 (0.0029)   
-Some college        0.039***
-                 (0.0018)   
-BA/BS               0.358***
-                 (0.0047)   
-MA/MS               0.197***
-                 (0.0044)   
-PhD or Prof         0.161***
-                 (0.0040)   
-----------------------------
-N                   16160   
-----------------------------
-Standard errors in parentheses
-* p<0.05, ** p<0.01, *** p<0.001
-
-.                           
+. 
+. /***
+> ### Validate with published data
+> 
+> Now that we have a clean table to look at, is this the same as [Table 2 on page 22 of th
+> e report](http://nces.ed.gov/pubs2005/2005338.pdf#50)? Yes. Checking the standard errors
+>  on page B-3 reveals that these were also correctly done. Now we need to check this for 
+> all of the other variables in our dataset.
+> 
+> <br>
+> 
+> #### Not-so-quick Exercise
+> 
+> > I want you to replicate [Table 34 on page 128 of NCES 2005-338](http://nces.ed.gov/pub
+> s2005/2005338.pdf#154). We'll split this up, but I want the class to come up with a sing
+> le table that has exactly the same results as the NCES document.
+> 
+> <br><br>                          
+> ***/
+. 
 . 
 . // end file     
 . log close
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s1-08-validation/validation.log
+       log:  /Users/doylewr/lpo_prac/lessons/s1-08-validation/validation.log
   log type:  text
- closed on:  17 Oct 2017, 10:18:58
+ closed on:  21 Oct 2020, 11:20:03
 ------------------------------------------------------------------------------------------
