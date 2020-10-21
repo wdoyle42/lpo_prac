@@ -208,7 +208,7 @@ Data Cleaning
 
 Assignment 7 due October 19, midnight
 
-October 28
+October 21
 ----------
 
 *Topics*:
@@ -219,9 +219,8 @@ Data Validation
 
 Assignment 8 due October 26, midnight
 
-Revised research questions due.
 
-November 4
+October 28
 ----------
 
 *Topics*:
@@ -232,7 +231,7 @@ Descriptive Statistics: Tabular and Graphical Approaches
 
 Assignment 9 due November 2, midnight
 
-November 11
+November 4
 ----------
 
 *Topics*:
@@ -243,7 +242,7 @@ An Introduction to Programming: Using Macros
 
 Assignment 10 due November 9, midnight
 
-November 18
+November 11
 -----------
 
 *Topics*:
@@ -254,11 +253,15 @@ Further graphical approaches to describing data
 
 Assignment 11 due November 16, midnight
 
+November 18
+-----------
+
+Individual consultations: schedule a time with me
+
 November 25
 -----------
 
 No Class, Thanksgiving Break
-
 
 December 2
 -----------
