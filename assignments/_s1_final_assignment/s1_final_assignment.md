@@ -48,3 +48,9 @@ of causal language here—just describe the patterns that you see.
 
 * Do File, Codebook I will also want your final Do File and a Codebook describing all of the variables
 in your analysis dataset along with this assignment.
+
+For some ideas about how to conduct a descriptive analysis please see this report: https://files-eric-ed-gov.proxy.library.vanderbilt.edu/fulltext/ED573325.pdf and check out some of the examples they cite, for example:
+
+ Engel, M., Claessens, A., & Finch, M. A. (2013). Teaching students what they already know? The
+(mis)alignment between instructional content in mathematics and student knowledge in kindergarten.
+Educational Evaluation and Policy Analysis, 35(2): 157–178. 
