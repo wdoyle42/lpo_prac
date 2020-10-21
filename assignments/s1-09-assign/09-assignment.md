@@ -1,13 +1,7 @@
 Assignment 09
 ================
-LPO 9951 | Fall 2019
+LPO 9951 | Fall 2020
 
-Data validation, like data cleaning, is a rather unclear term that refers to a set of techniques to ensure that the characteristics of your dataset conform with known characteristics of the same sample or a similar sample.
+For this assignment, please create a do file that will generate your descriptive tables and graphics as you intend to include them in the final version. Also include png files of all of the graphics, and tables in rtf format. For guidance, please consult both the final assignment itself and the example assignment. Please remember that the reason for doing descriptive statistics is to take the reader on a guided tour of the dependent variable or variables, showing how it changes as a function of other variables.
 
-The reason for validating your data is simple: you don't want to be wrong. This is a fundamental and worthwhile step to take in putting together an analysis.
-
-For this assignment, choose five variables from your dataset. You should definitely include your dependent variable or some variant as part of this set. Validate the estimates that you have of the mean and the standard error of the mean from another source. Your best bet is one of the published NCES reports. Failing that, you will need to find another published source that includes estimates of your particular variables.
-
-Create a table showing your means (or frequencies) and s.e.s for the five variables, along with the published results. If there is a discrepancy, speculate as to the cause.
-
-<br>
+For some thoughts on descriptive analyses, please see this resource: https://eric-ed-gov.proxy.library.vanderbilt.edu/?id=ED573325
