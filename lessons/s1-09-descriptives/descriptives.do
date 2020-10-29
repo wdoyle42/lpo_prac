@@ -55,7 +55,6 @@ set scheme s1color
 // open up modified plans data
 use plans2, clear
 
-
 // recode
 
 recode bypared  (1=1 "Less than HS") ///
@@ -127,9 +126,10 @@ histogram bynels2m, name(hist_bynels2m, replace)  ///
     xtitle("NELS-1992 Scale-Equated Math Score") ///    
     bin(25) /// we can try different bin widths
     percent
-
 		
 graph export hist_bynels2m.$gtype, name(hist_bynels2m) replace
+
+
 
 /***
 
@@ -140,9 +140,10 @@ At the extreme end of the histogram is the "spike" plot, which has a single line
 // spikeplot of base year math score
 spikeplot bynels2m, name(spike_bynels2m,replace) ///
     xtitle("NELS-1992 Scale-Equated Math Score") ///
-	color(blue*.5%25)
+	color(blue*.5%25) // First is intensity (*), second is opacity (%)
     
 graph export spike_bynels2m.$gtype, name(spike_bynels2m) replace
+
 
 /***
 
@@ -161,9 +162,24 @@ kdensity bynels2m, name(kd_bynels2m, replace) ///
 	kernel(gaussian) ///
     normopts(lpattern(dash) color(black)) 
 
-
- 	
 graph export kd_bynels2m.$gtype, name(kd_bynels2m) replace
+
+
+
+// kernel density plot of base year reading  score
+kdensity bynels2r, name(kd_bynels2r, replace) ///
+    xtitle("NELS Reading Scores") ///
+    n(100) ///
+    bwidth(.025) ///
+	color(bluishgray%75) ///
+	recast(area) ///
+	kernel(triangle) ///
+	note("")
+
+graph export kd_bynels2r.$gtype, name(kd_bynels2r) replace
+
+
+exit 
 
 // kernel density plots of base year math score across parental education
 kdensity bynels2m if bypared == 2, name(kd_bynels2m_cond, replace) ///

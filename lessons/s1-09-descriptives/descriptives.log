@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/descriptives.log
   log type:  text
- opened on:  28 Oct 2020, 11:16:50
+ opened on:  28 Oct 2020, 11:52:46
 
 . 
 . // NAME: Data cleaning
@@ -53,7 +53,6 @@
 . // open up modified plans data
 . use plans2, clear
 
-. 
 . 
 . // recode
 . 
@@ -155,24 +154,24 @@
 >     percent
 (bin=25, start=.1471, width=.025824)
 
-. 
 .                 
 . graph export hist_bynels2m.$gtype, name(hist_bynels2m) replace
 (file /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/hist_bynels2m.png written in PNG 
 > format)
 
 . 
-. /***
-> 
-> At the extreme end of the histogram is the "spike" plot, which has a single line for eve
-> ry level of the underlying variable.
-> 
-> ***/
+. exit 
+
+end of do-file
+
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // spikeplot of base year math score
 . spikeplot bynels2m, name(spike_bynels2m,replace) ///
 >     xtitle("NELS-1992 Scale-Equated Math Score") ///
->         color(blue*.5%25)
+>         color(blue*.5%25) // First is intensity (*), second is opacity (%)
 
 .     
 . graph export spike_bynels2m.$gtype, name(spike_bynels2m) replace
@@ -180,14 +179,12 @@
 >  format)
 
 . 
-. /***
-> 
-> Kernel density plots are a key tool for describing a continuous variable. The density of
->  the variable can be compared to standard densities for visual comparison, like in the f
-> irst plot below. Kernel density plots can be particularly illuminating when displayed ac
-> ross multiple levels of a categorical variable, as in the second plot below.
-> 
-> ***/
+end of do-file
+
+. help kdensity
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // kernel density plot of base year math score
 . kdensity bynels2m, name(kd_bynels2m, replace) ///
@@ -208,6 +205,66 @@
 > rmat)
 
 . 
+end of do-file
+
+. help spikeplot
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // kernel density plot of base year reading  score
+. kdensity bynels2r, name(kd_bynels2r, replace) ///
+>     xtitle("NELS Reading Scores") ///
+>     n(100) ///
+>     bwidth(.025) ///
+>         color(bluishgray%75) ///
+>         recast(area) ///
+>         kernel(triangle) 
+
+. 
+. graph export kd_bynels2r.$gtype, name(kd_bynels2r) replace
+(file /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/kd_bynels2r.png written in PNG fo
+> rmat)
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // kernel density plot of base year reading  score
+. kdensity bynels2r, name(kd_bynels2r, replace) ///
+>     xtitle("NELS Reading Scores") ///
+>     n(100) ///
+>     bwidth(.025) ///
+>         color(bluishgray%75) ///
+>         recast(area) ///
+>         kernel(triangle) ///
+>         note("")
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // kernel density plot of base year reading  score
+. kdensity bynels2r, name(kd_bynels2r, replace) ///
+>     xtitle("NELS Reading Scores") ///
+>     n(100) ///
+>     bwidth(.025) ///
+>         color(bluishgray%75) ///
+>         recast(area) ///
+>         kernel(triangle) ///
+>         note("") ///
+>         title("")
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
 . // kernel density plots of base year math score across parental education
 . kdensity bynels2m if bypared == 2, name(kd_bynels2m_cond, replace) ///
 >     xtitle("NELS Math Scores") ///
@@ -219,7 +276,7 @@
 >             n(100) ///
 >             bwidth(.025) ///
 >             color("98 47 117*.7%50") ///
->                         recast(area)) ///
+>                         recast(area) ) ///
 >     legend(label(1 "Parent Ed=HS") label(2 "Parent Ed=BA+")) ///
 >     note("") ///
 >     title("")
@@ -230,8 +287,12 @@
 > NG format)
 
 . 
-. 
-. // CATEGORICAL DEPENDENT VARIABLE
+end of do-file
+
+. help graph twoway scatter
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // barchart of base year student expectations
 . histogram bystexp, name(bar_bystexp) ///
@@ -247,8 +308,15 @@
 (bin=41, start=-1, width=.19512195)
 
 . 
+end of do-file
+
+. help graph bar
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
 . // Similar, but using graph bar
-. graph bar ,over(bystexp, ///
+. graph bar , over(bystexp, ///
 >                             sort(1) ///
 >                                 descending ///
 >                                 label(angle(45) labsize(small) ) ///
@@ -257,8 +325,105 @@
 >         bar(1, color(blue*.5)) ///
 >         ytitle("")
 
+. 
+end of do-file
+
+. tab byincome
+
+           Income |      Freq.     Percent        Cum.
+------------------+-----------------------------------
+             none |         80        0.50        0.50
+   $1,000 or less |        178        1.10        1.60
+    $1,001-$5,000 |        304        1.88        3.48
+   $5,001-$10,000 |        351        2.17        5.65
+  $10,001-$15,000 |        697        4.31        9.96
+  $15,001-$20,000 |        781        4.83       14.80
+  $20,001-$25,000 |        996        6.16       20.96
+  $25,001-$35,000 |      1,887       11.68       32.64
+  $35,001-$50,000 |      3,017       18.67       51.31
+  $50,001-$75,000 |      3,309       20.48       71.78
+ $75,001-$100,000 |      2,173       13.45       85.23
+$100,001-$200,000 |      1,806       11.18       96.40
+ $200,001 or more |        581        3.60      100.00
+------------------+-----------------------------------
+            Total |     16,160      100.00
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 .         
+. graph bar , over(byincome, ///
+>                             sort(1) ///
+>                                 descending ///
+>                                 label(angle(45) labsize(small) ) ///
+>                                 ) ///
+>         blabel(bar,format(%4.1f)) ///
+>         bar(1, color(blue*.5)) ///
+>         ytitle("")
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 .         
+. graph bar , over(byincome, ///
+>                                 label(angle(45) labsize(small) ) ///
+>                                 ) ///
+>         blabel(bar,format(%4.1f)) ///
+>         bar(1, color(blue*.5)) ///
+>         ytitle("")
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // Similar, but using graph bar
+. graph bar , over(bystexp, ///
+>                             sort(1) ///
+>                                 descending ///
+>                                 label(angle(45) labsize(small) ) ///
+>                                 ) ///
+>         blabel(bar,format(%4.1f)) ///
+>         bar(1, color(blue*.5)) ///
+>         ytitle("")
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // using hbar instead
+. graph hbar ,over(bystexp, ///
+>                             sort(1) ///
+>                                 descending ///
+>                                 label(labsize(small) ) ///
+>                                 ) ///
+>         blabel(bar,format(%4.1f)) ///
+>         bar(1, color(blue*.5)) ///
+>         ytitle("")      
+
+. 
+end of do-file
+
+. graph pie bystexp
+
+. graph pie , by(bystexp)
+sum of pie wedges is not positive
+sum of pie wedges is not positive
+sum of pie wedges is not positive
+sum of pie wedges is not positive
+sum of pie wedges is not positive
+sum of pie wedges is not positive
+sum of pie wedges is not positive
+sum of pie wedges is not positive
+
+. graph pie , over(bystexp)
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // using hbar instead
 . graph hbar ,over(bystexp, ///
@@ -271,32 +436,21 @@
 >         ytitle("")      
 
 .         
-.         
-. graph export bar_bystexp.$gtype, name(bar_bystexp) replace
-(file /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/bar_bystexp.png written in PNG fo
-> rmat)
+. 
+end of do-file
 
-. 
-. 
-. /***
-> 
-> Pie Charts
-> ----------
-> 
-> No. 
-> 
-> ***/
-. 
-. 
-. // BASIC DESCRIPTIVE TABLE
-. 
-. 
-. /***
-> ### Tables
-> For tables describing continuous variables, the industry standard is a table of means an
-> d standard errors or standard deviations. Below is a table of means and standard errors,
->  nicely formatted.
-> ***/
+. graph pie , over(bystexp)
+
+. help graph bar
+
+. help grah bar
+
+. help graph bar
+
+. help graph bar
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // get mean estimates using svy
 . svy: mean bynels2m bynels2r byses1 byses2 amind asian black hispanic white female
@@ -343,8 +497,11 @@ Number of PSUs   =     751        Population size =  3,210,779
 (output written to means_se.rtf)
 
 .         
-. //      ("Balanced Repeated Replicate (BRR) estimates of standard errors in parenthesese
-> )
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // use tabstat to make standard deviations for table
 . tabstat bynels2m bynels2r byses1 byses2, stat(sd) save 
@@ -377,6 +534,85 @@ Number of PSUs   =     751        Population size =  3,210,779
 (output written to means_sd.rtf)
 
 . 
+.         exit 
+
+end of do-file
+
+
+. matrix list mysd
+
+mysd[1,4]
+     bynels2m   bynels2r     byses1     byses2
+sd  .13536639  .09399866  .74296283  .75026045
+
+. estimates restore my_mean
+(results my_mean are active now)
+
+. ereturn list
+
+scalars:
+               e(rank) =  10
+               e(k_eq) =  1
+             e(stages) =  1
+                  e(N) =  15512
+             e(N_over) =  1
+           e(N_strata) =  361
+              e(N_psu) =  751
+              e(N_pop) =  3210778.976154566
+             e(census) =  0
+          e(singleton) =  0
+      e(N_strata_omit) =  0
+               e(df_r) =  390
+
+macros:
+            e(cmdline) : "svy : mean bynels2m bynels2r byses1 byses2 amind asian black.."
+                e(cmd) : "mean"
+             e(prefix) : "svy"
+            e(cmdname) : "mean"
+            e(command) : "mean bynels2m bynels2r byses1 byses2 amind asian black hispa.."
+              e(title) : "Survey: Mean estimation"
+            e(vcetype) : "Linearized"
+                e(vce) : "linearized"
+          e(estat_cmd) : "svy_estat"
+            e(varlist) : "bynels2m bynels2r byses1 byses2 amind asian black hispanic w.."
+       e(marginsnotok) : "_ALL"
+              e(wtype) : "pweight"
+               e(wvar) : "f1pnlwt"
+               e(wexp) : "= f1pnlwt"
+         e(singleunit) : "scaled"
+                e(su1) : "psu"
+            e(strata1) : "strat_id"
+         e(properties) : "b V"
+
+matrices:
+                  e(b) :  1 x 10
+                  e(V) :  10 x 10
+            e(_N_subp) :  1 x 10
+              e(V_srs) :  10 x 10
+                 e(_N) :  1 x 10
+              e(error) :  1 x 10
+  e(_N_strata_certain) :  1 x 1
+   e(_N_strata_single) :  1 x 1
+          e(_N_strata) :  1 x 1
+               e(mysd) :  1 x 4
+
+functions:
+             e(sample)   
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // use tabstat to make standard deviations for table
+. tabstat bynels2m bynels2r byses1 byses2 [pw=bystuwt], stat(sd) save 
+pweights not allowed
+r(101);
+
+end of do-file
+
+r(101);
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // proportions table for base year student expectations 
 . estpost svy: tabulate bystexp
@@ -433,8 +669,131 @@ saved vectors:
 (output written to proportions.rtf)
 
 . 
+end of do-file
+
+. help graph bar
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // using hbar instead
+. graph hbar ,over(bystexp, ///
+>                             sort(1) ///
+>                                 descending ///
+>                                 label(labsize(small) ) ///
+>                                 ) ///
+>         blabel(bar,format(%4.1f)) ///
+>         bar(1, color(blue*.5)) ///
+>         bltitle("") ///
+>         ytitle("")      
+option bltitle() not allowed
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // using hbar instead
+. graph hbar ,over(bystexp, ///
+>                             sort(1) ///
+>                                 descending ///
+>                                 label(labsize(small) ) ///
+>                                 ) ///
+>         blabel(bar,format(%4.1f)) ///
+>         bar(1, color(blue*.5)) ///
+>         b1title("") ///
+>         ytitle("")      
+
 .         
-. // KEY DEPENDENT VARIABLE IN RELATION TO OTHER INDEPENDENT VARIABLES
+. 
+end of do-file
+
+. svy: mean bynels2m
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =     361        Number of obs   =     16,160
+Number of PSUs   =     751        Population size =  3,388,462
+                                  Design df       =        390
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+    bynels2m |   .4474391   .0026182      .4422915    .4525866
+--------------------------------------------------------------
+
+. estat
+subcommand expected
+r(198);
+
+. estat, sd
+subcommand expected
+r(198);
+
+. estat sd
+
+-------------------------------------
+             |       Mean   Std. Dev.
+-------------+-----------------------
+    bynels2m |   .4474391    .1345208
+-------------------------------------
+
+. svy: mean byses1
+(running mean on estimation sample)
+
+Survey: Mean estimation
+
+Number of strata =     361        Number of obs   =     15,512
+Number of PSUs   =     751        Population size =  3,210,779
+                                  Design df       =        390
+
+--------------------------------------------------------------
+             |             Linearized
+             |       Mean   Std. Err.     [95% Conf. Interval]
+-------------+------------------------------------------------
+      byses1 |   .0050858   .0145406     -.0235019    .0336736
+--------------------------------------------------------------
+
+. estat sd
+
+-------------------------------------
+             |       Mean   Std. Dev.
+-------------+-----------------------
+      byses1 |   .0050858    .7205519
+-------------------------------------
+
+. tabstat byses1, stat(sd)
+
+    variable |        sd
+-------------+----------
+      byses1 |  .7429628
+------------------------
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // using hbar instead
+. graph hbar ,over(bystexp, ///
+>                             sort(1) ///
+>                                 descending ///
+>                                 label(labsize(small) ) ///
+>                                 ) ///
+>         blabel(bar,format(%4.1f)) ///
+>         bar(1, color(blue*.5)) ///
+>         b1title("") /// //X axis title
+>         ytitle("")      
+
+.         
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // math against reading scores in scatterplot: please don't do this
 . graph twoway scatter bynels2m bynels2r, name(sc_math_read)
@@ -444,7 +803,10 @@ saved vectors:
 > ormat)
 
 . 
-. //solutions
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // scatterplot with 10 percent sample of data
 . preserve                                // preserve data
@@ -466,15 +828,10 @@ saved vectors:
 . restore                                 // restore data
 
 . 
-. /***
-> 
-> 
-> You can condition on another variable in order to add another level to your scatter plot
-> . This can be done both with use of {c 96}if{c 96} statements, as in the first plot belo
-> w, and {c 96}by{c 96} statements, as in the second plot.
-> 
-> 
-> ***/
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // conditional scatterplot with 25 percent sample of data
 . preserve                                // preserve data
@@ -504,9 +861,10 @@ saved vectors:
 . restore  
 
 . 
-. 
-. 
-.                                // restore data
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // conditional scatterplot with by
 . graph twoway scatter bynels2m byses1, by(bystexp,note("")) ///
@@ -518,6 +876,10 @@ saved vectors:
 >     name(sc_cond, replace) 
 
 . 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 .         
 . graph twoway scatter bynels2m byses1, ///
 >                         subtitle(, ring(0) pos(11) nobexpand fcolor(white%1) lstyle(none
@@ -537,39 +899,52 @@ saved vectors:
 > t)
 
 . 
-. /***
-> 
-> You can also run a scatter plot across levels of a categorical variable if you suspect t
-> he underlying relationship may not be the same in each level of the categorical variable
-> . The {c 96}matrix{c 96} plot helpfully with plot each combination of included varibles 
-> against each other to produe a sort of "small multiples" correlation plot. I mostly don'
-> t recommend running a matrix plot.
-> 
-> ***/
-. 
-. // matrix plot:NO
-. graph matrix bynels2m bynels2r byses1 byses2, name(matrix_plot) msize(vtiny)
+end of do-file
 
-. graph export matrix_plot.$gtype, name(matrix_plot) replace
-(file /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/matrix_plot.png written in PNG fo
-> rmat)
+. help graph twoway
 
-. 
-. 
-. 
-. /***
-> Scatterplot of proportions
-> -------------------------
-> 
-> If you have a binary dv, you can do a scatterplot. What you need to do is calculate the 
-> proportion of the sample in ranges of another continuous variable. A standard solution h
-> ere is to use percentiles of another variable. Below I calculate the proportion of stude
-> nts who plan to go to college for each percentile of math scores, then plot the result. 
-> This can be a bit "too neat" so be careful.
-> 
-> ***/
-. 
-. // Proportions plot trick
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+.         
+. graph twoway (scatter bynels2m byses1, msize(*.05) mcolor(dknavy)) (lfit bynels2m byses1
+> ) ///
+>                         subtitle(, ring(0) pos(11) nobexpand fcolor(white%1) lstyle(none
+> )) /// 
+>                         by(bystexp, total note("")) ///
+>     ytitle("NELS Math Scores") ///
+>     xtitle("SES") ///   
+>     note("") ///
+>     name(sc_cond2, replace)     
+) required
+r(100);
+
+end of do-file
+
+r(100);
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+.         
+. graph twoway scatter bynels2m byses1, msize(*.05) mcolor(dknavy) || lfit bynels2m byses1
+>  ///
+>                         subtitle(, ring(0) pos(11) nobexpand fcolor(white%1) lstyle(none
+> )) /// 
+>                         by(bystexp, total note("")) ///
+>     ytitle("NELS Math Scores") ///
+>     xtitle("SES") ///   
+>     note("") ///
+>     name(sc_cond2, replace)     
+invalid varlist
+r(198);
+
+end of do-file
+
+r(198);
+
+. graph twoway scatter fouryr bynels2m
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . xtile pct_math = bynels2m, nq(100)
 
@@ -582,24 +957,11 @@ saved vectors:
 >                         ytitle("Pr(Plan to go to 4yr)") ///
 >                         mcolor(blue*.5%50)
 
-. /***
-> 
-> Describing relationships between a categorical and a continuous variable
-> ------------------------------------------------------------------------
-> 
-> ### Plots
-> 
-> There are multiple options for plotting the relationship between a categorical and a con
-> tinuous variable. A particularly useful option is to plot the continuous variable as a s
-> eries of boxplots, one for each level of the categorical variable.
-> 
-> #### Boxplots
-> 
-> For boxplots to be effective, they should be sorted by the median of the dependent varia
-> ble. This contrast is shown in the two figures below.
-> 
-> ***/
 . 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . // boxplot of math score over parental education
 . graph box bynels2m, over(bypared2, ///
@@ -610,33 +972,39 @@ saved vectors:
 >                     name(box1, replace)
 
 . 
-. graph export box1.$gtype, name(box1) replace
-(file /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/box1.png written in PNG format)
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // boxplot of math score over parental education
+. graph box bynels2m, over(bypared2, ///
+>                          label(alternate ///
+>                                labsize(small) ///
+>                                ) ///
+>                          ) ///
+>                     name(box1, replace)
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
 
 . 
 . graph box bynels2m, over(bypared2, ///
 >                          label(alternate ///
 >                                labsize(tiny) ///
 >                                ) ///
->                          sort(1) ///
+>                          sort(1)  ///
+>                                                  descending ///
 >                          ) ///
 >                     name(box2)
 
 . 
-. graph export box2.$gtype, name(box2) replace
-(file /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/box2.png written in PNG format)
+end of do-file
 
-. 
-. 
-. /***
-> Bar Plots
-> ------------
-> Bar plots are always a great option, particularly for policy audiences. Below I go over 
-> some options when using bar plots. 
-> 
-> ***/
-. 
-. // bar plots 
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 . 
 . graph hbar bynels2m bynels2r [pw=bystuwt], ///
 >                 over(bystexp, sort(bynels2m) descending) ///
@@ -646,13 +1014,9 @@ saved vectors:
 >                 bar(1, color(orange*.5)) bar(2, color(blue*.5))
 
 . 
-. graph hbar bynels2m bynels2r [pw=bystuwt], ///
->                 over(bystexp, sort(bynels2m) descending) ///
->                 ytitle("Test Scores") ///
->                 legend(order(1 "Math Scores" 2 "Reading Scores"))  ///
->                 blabel(bar,format(%9.2f)) ///
->                 bar(1, color(orange*.5)) bar(2, color(blue*.5)) ///
->                 name(barplot1)
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
 
 .         
 . //Better bar for nice CIs       
@@ -661,25 +1025,61 @@ saved vectors:
 
 .                                         
 . 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
 . // Statplot: ssc install statplot
 . statplot bynels2m bynels2r, over(bystexp,sort(1) descending) over(bysex)  name(statplot)
 
-.         
-.         
-. /***
-> 
-> #### Dot plots
-> 
-> Dot plots can also be useful for plotting the measure of central tendency across groups.
->  In this case, we'll produce two plots, one each for reading and math scores, and then c
-> ombine them into a single graphic.
-> 
-> ***/    
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
 .         
 . // dot plots of continuous against categorical
 . graph dot bynels2m, over(bypared2, ///
 >                          label(alternate ///
 >                                labsize(tiny) ///
+>                                ) ///
+>                          ) ///
+>                     ytick(0(.10).80) ///
+>                     ylabel(0(.1).8) ///
+>                     ytitle("Math Scores") ///
+>                     marker(1, msymbol(O) mcolor(dknavy)) ///
+>                     name(dot_math,replace)
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. ***/    
+.         
+. // dot plots of continuous against categorical
+. graph dot bynels2m, over(bypared2, ///
+>                          label(alternate ///
+>                                labsize(small) ///
+>                                ) ///
+>                          ) ///
+>                     ytick(0(.10).80) ///
+>                     ylabel(0(.1).8) ///
+>                     ytitle("Math Scores") ///
+>                     marker(1, msymbol(O) mcolor(dknavy)) ///
+>                     name(dot_math,replace)
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+.         
+. // dot plots of continuous against categorical
+. graph dot bynels2m, over(bypared2, ///
+>                          label(alternate ///
+>                                labsize(small) ///
 >                                ) ///
 >                          ) ///
 >                     ytick(0(.10).80) ///
@@ -695,7 +1095,7 @@ saved vectors:
 . 
 . graph dot bynels2r, over(bypared2, ///
 >                          label(alternate ///
->                                labsize(tiny) ///
+>                                labsize(small) ///
 >                                ) ///
 >                          ) ///
 >                     ytick(0(.10).80) ///
@@ -722,158 +1122,10 @@ saved vectors:
 > t)
 
 . 
-. 
-. /***
-> 
-> Describing relationships between two categorical variables
-> ----------------------------------------------------------
-> 
-> ### Plots
-> 
-> The basic tool for comparing two categorical variables is the crosstabulation. In a cros
-> stabulation we take a look at counts of the sample that are identified by their presence
->  in cells created by the two categorical variables. There are several tools for plotting
->  categorical variables, including tabplots, jittered plots, and heatmaps.
-> 
-> #### Tabplots
-> 
-> Below are examples of a tabplot, with both two and three dimensions.
-> 
-> 
-> ***/
-. 
-. 
-. // TABPLOT
-. 
-. // tabplot of parental education against student plans
-. tabplot bypared2 newpln, name(tabplot1, replace) ///
->     percent(bypared2) ///
->     showval ///
->     subtitle("") 
+end of do-file
 
-. 
-. graph export tabplot1.$gtype, name(tabplot1) replace
-(file /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/tabplot1.png written in PNG forma
-> t)
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
 
-. 
-. // tabplot again, but with new dimension
-. tabplot bypared2 newpln, by(bysex) ///
->     percent(bypared2) ///
->     showval ///
->     subtitle("") ///
->     name(tabplot2, replace)
-
-. 
-. graph export tabplot2.$gtype, name(tabplot2) replace
-(file /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/tabplot2.png written in PNG forma
-> t)
-
-. 
-. // jitter categorical against categorical
-. graph twoway scatter f1psepln bypared, name(jitterplot) ///
->     jitter(5) ///
->     msize(vtiny) ///
->         mcolor(dknavy)
-
-. 
-. graph export jitterplot.$gtype, name(jitterplot) replace
-(file /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/jitterplot.png written in PNG for
-> mat)
-
-. 
-. // heatmap of base year student plans and parental education
-. tddens bypared f1psepln, title("") ///
->     xtitle("Parent's Level of Education") ///
->     ytitle("PS PLans")
-
-.     
-. graph export heatmap.$gtype, replace
-(file /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/heatmap.png written in PNG format
-> )
-
-. 
-. /***
-> 
-> When checking crosstabulations, we can produce two-way tables that include survey weight
-> s in the command itself.
-> 
-> 
-> ***/
-. 
-. // table using weights directly
-. table byrace2 f1psepln [pw = bystuwt], by(bysex) contents(freq) row 
-
-------------------------------------------------------------------------------
-sex-composi |
-te and      |
-RECODE of   |
-byrace      |
-(student^s  |
-race/ethnic |
-ity-composi |         f1 post-secondary plans right after high school         
-te)         | don^t plan to contin  don^t know or planni  vocational, technica
-------------+-----------------------------------------------------------------
-male        |
-    Am.Ind. |             959.9478              2,165.51              1,850.23
-   Asian/PI |             955.4428              3,010.54              4,576.58
-      Black |             3,280.14              13,926.5              22,419.1
-   Hispanic |             2,481.69              23,987.1              25,572.5
-Multiracial |             2,885.66              7,204.85              6,076.28
-      White |               27,037                74,634                91,041
-            | 
-      Total |             37,599.8               124,929               151,536
-------------+-----------------------------------------------------------------
-female      |
-    Am.Ind. |                                   961.4319              1,422.26
-   Asian/PI |             182.5247              1,706.65              1,229.69
-      Black |             1,682.59              9,165.85                12,928
-   Hispanic |             1,098.54              12,487.4              16,983.4
-Multiracial |             916.7742              2,516.75              2,778.86
-      White |             5,139.84              37,381.5              44,545.3
-            | 
-      Total |             9,020.27              64,219.6              79,887.6
-------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------
-sex-composi |
-te and      |
-RECODE of   |
-byrace      |
-(student^s  |
-race/ethnic |
-ity-composi |         f1 post-secondary plans right after high school         
-te)         | two-year community c  four-year college or  early hs grad attend
-------------+-----------------------------------------------------------------
-male        |
-    Am.Ind. |             1,168.03               8,487.8              509.1148
-   Asian/PI |             13,906.7              41,635.3              1,415.14
-      Black |             33,505.1               121,834              8,161.93
-   Hispanic |             68,736.3              82,651.8                 7,870
-Multiracial |             12,485.4              31,158.9              1,156.67
-      White |              172,672               531,000              18,210.1
-            | 
-      Total |              302,473               816,768                37,323
-------------+-----------------------------------------------------------------
-female      |
-    Am.Ind. |             2,538.59               6,913.7              198.1191
-   Asian/PI |             9,878.74              47,395.6              1,796.86
-      Black |             48,116.9               124,183              5,876.88
-   Hispanic |             76,304.8               114,582              7,564.25
-Multiracial |             14,070.6              36,070.2              3,290.11
-      White |              195,002               606,845              20,989.9
-            | 
-      Total |              345,912               935,989              39,716.1
-------------------------------------------------------------------------------
-
-. 
-. 
-. /***
-> 
-> Of course, if we want to use a table in a paper, we should use {c 96}esttab{c 96}.
-> 
-> ***/
-. 
 . //  cross table of categorical
 . estpost svy: tabulate byrace2 newpln, row percent se
 (running tabulate on estimation sample)
@@ -943,7 +1195,6 @@ row labels saved in macro e(labels)
 . esttab racetab using race_tab.$ttype, ///
 >     replace ///
 >     nostar ///
->     nostar ///
 >     unstack ///
 >     nonotes ///
 >         nomtitles ///
@@ -953,10 +1204,52 @@ row labels saved in macro e(labels)
 (output written to race_tab.rtf)
 
 . 
-. // end file     
-. log close
-      name:  <unnamed>
-       log:  /Users/doylewr/lpo_prac/lessons/s1-09-descriptives/descriptives.log
-  log type:  text
- closed on:  28 Oct 2020, 11:18:21
-------------------------------------------------------------------------------------------
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // tabplot of parental education against student plans
+. tabplot bypared2 newpln, name(tabplot1, replace) ///
+>     percent(bypared2) ///
+>     showval ///
+>     subtitle("") 
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. // jitter categorical against categorical
+. graph twoway scatter f1psepln bypared
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // jitter categorical against categorical
+. graph twoway scatter f1psepln bypared, name(jitterplot) ///
+>     jitter(5) ///
+>     msize(vtiny) ///
+>         mcolor(dknavy)
+
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. 
+. // heatmap of base year student plans and parental education
+. tddens bypared f1psepln, title("") ///
+>     xtitle("Parent's Level of Education") ///
+>     ytitle("PS PLans")
+
+.     
+. 
+end of do-file
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD04781.000000"
+
+. capture log close
