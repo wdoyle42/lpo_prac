@@ -1,5 +1,3 @@
-<br>
-
 #### PURPOSE
 
 Stata programming will save you time, energy, and sanity. Investing the
@@ -26,24 +24,48 @@ make your program file more efficient.
     work that you have done thus far for the class. Snippets of code
     that you have already toiled over can be used again and again. The
     following tips might come in handy.
-    -   Save your do-files  
-    -   Label them well  
-    -   Re-use old code, copy-paste  
-    -   Make templates if you use a certain piece of code often  
+    -   Save your do-files\
+    -   Label them well\
+    -   Re-use old code, copy-paste\
+    -   Make templates if you use a certain piece of code often\
     -   Create files to include or do (e.g., "programs" you can
-        immediately run for things like dealing with missing data)  
+        immediately run for things like dealing with missing data)\
 -   Programming: When you approach your Stata script as a programmer,
     you have a different perspective, a certain general approach on how
     to put these pieces together. The following points are questions you
     might ask yourself in going through the general process for
     your program.
-    -   What is the overall task I am trying to accomplish?  
-    -   How are the variables structured? Which variables go together?  
-    -   What tasks need to be repeated?  
+    -   What is the overall task I am trying to accomplish?\
+    -   How are the variables structured? Which variables go together?\
+    -   What tasks need to be repeated?\
     -   What procedures may stay the same, though the numerical values
         may change?
 
+Remember, The three virtues of a computer programmer are laziness,
+impatience, and hubris.
+
+*Laziness* The programmer wants to write as little code as is humanly
+possible.
+
+*Impatience* The programmer does not have the patience to undertake a
+tedious task.
+
+*Hubris* The programmer is proud enough to believe that she can make the
+computer accomplish seemingly impossible tasks.\
 <br>
+
+          . version 16
+
+          . capture log close
+
+          . log using "programming.log",replace
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                name:  <unnamed>
+                 log:  /Users/doylewr/lpo_prac/lessons/s1-10-programming/programming.log
+            log type:  text
+           opened on:   4 Nov 2020, 11:14:00
+
+          . clear
 
 Organizing your do file
 -----------------------
@@ -56,1172 +78,1671 @@ will be clear to others who may read your script.
 
     . // TABLE OF CONTENTS
     . // 0.0 Set preferences/globals
-    . // 1.0 Describing
-    . // 2.0 Scalars
-    . //   2.1 return
-    . //   2.2 ereturn
-    . //   2.3 scalar
-    . // 3.0 Estimates
-    . //   3.1 estimates store
-    . //   3.2 estimates restore
-    . // 4.0 Shortcuts
-    . //   4.1 numlists
-    . //   4.2 varlists
-    . // 5.0 Macros
-    . //   5.1 globals
-    . //   5.2 numerical locals
-    . //   5.3 varlist locals
-    . //   5.4 nested locals
-    . // 6.0 Matrices
-    . // 7.0 Switches
-    . // 8.0 Loops
-    . //   8.1 if / else
-    . //   8.2 foreach
-    . //   8.3 forvalues
-    . //   8.4 while
-    . // 9.0 Nests
+    . // 1.0 Recoding /*KW: Bart */
+            .//  2.0 Descriptivs /*KW: Lisa */
+            .//  3.0 Analysis /* KW: Homer */
+            .//  4.0 Graphics /* KW: Marge */
+            
 
 <br>
 
-File header
------------
+          . local recoding=1
 
-Like you've seen in the do files from earlier lectures, it's often
-useful to place your file preferences at the top of the script. These
-may include, but aren't limited to, graphics settings and global macros
-storing directory structurs or url links. If you are only using one
-dataset for your analysis, this is a good place to load it.
+          . local analysis=1
 
-    .    
-    . clear all                               // clear memory
+          . global gtype png
 
-    . set more off                            // turn off annoying "__m
-    > ore__" feature
+          . global ttype rtf
 
-    . use loondata, clear
+          . clear matrix
 
-<br>
+          . use ../../data/plans2
 
-Describing
-----------
+          . svyset psu [pw=bystuwt], strat(strat_id) singleunit(scaled)
 
-`bysort`: Used by itself or in combination with `gen` or `egen`, this
-command also allows you to perform a task on numerous categories of a
-variable or variables.
-
-For example, we might want to know what the average flock size is by
-status as a loon. We could use the following code:
-
-    . sum flock1 if loon == 0
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          flock1 |       157    82822.28    20149.31      37267     125
-    > 631
-
-    . sum flock1 if loon == 1
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          flock1 |       278    78270.19    20389.95      12812     136
-    > 822
-
-<br>
-
-A slightly easier bit of code would use `tab` with the `summarize`
-option:
-
-    . tab loon, summarize(flock1)
-
-                |      Summary of Size of flock
-                |             represented
-           Loon |        Mean   Std. Dev.       Freq.
-    ------------+------------------------------------
-              0 |    82822.28   20149.306         157
-              1 |   78270.187   20389.948         278
-    ------------+------------------------------------
-          Total |   79913.126   20397.942         435
-
-<br> Still another line of code uses the `bysort` command, which takes
-the form `bysort <sorting variable>: <command> <variable>`:
-
-    . bysort loon: sum flock1
-
-    -------------------------------------------------------------------
-    -> loon = 0
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          flock1 |       157    82822.28    20149.31      37267     125
-    > 631
-
-    -------------------------------------------------------------------
-    -> loon = 1
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          flock1 |       278    78270.19    20389.95      12812     136
-    > 822
-
-<br> We could actually ask for numerous variables summarized in this
-way.
-
-    . bysort loon: sum flock1 flock2 flock3
-
-    -------------------------------------------------------------------
-    -> loon = 0
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          flock1 |       157    82822.28    20149.31      37267     125
-    > 631
-          flock2 |       157    84158.22    28303.17      23892     175
-    > 592
-          flock3 |       157    83077.31    34877.37      17005     207
-    > 132
-
-    -------------------------------------------------------------------
-    -> loon = 1
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          flock1 |       278    78270.19    20389.95      12812     136
-    > 822
-          flock2 |       278    78014.35    25704.09      13561     160
-    > 571
-          flock3 |       278    76961.31    27805.51      14268     168
-    > 056
-
-<br>
-
-#### QUICK EXERCISE
-
-> Find the average number of feathers in each period by the double
-> condition of being a loon and location of nest.
-
-<br>
-
-Scalars
--------
-
-Scalars temporarily save information that you can use later. There are
-two types of information that are stored in STATA after you run
-commands. The first is saved as `r` and can be found by using
-`return list`. Here are some examples:
-
-    . sum shells1
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-         shells1 |       435    114167.8    26180.23      45770     164
-    > 786
-
-    . return list
-
-    scalars:
-                      r(N) =  435
-                  r(sum_w) =  435
-                   r(mean) =  114167.8252873563
-                    r(Var) =  685404214.9233223
-                     r(sd) =  26180.22564691379
-                    r(min) =  45770
-                    r(max) =  164786
-                    r(sum) =  49663004
-
-    . di r(mean)
-    114167.83
-
-    . di r(sd)
-    26180.226
-
-<br> The second type of information that is stored is under `e`. These
-can be found by using `ereturn list`:
-
-    . mean shells1
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-         shells1 |   114167.8   1255.246      111700.7    116634.9
-    --------------------------------------------------------------
-
-    . ereturn list
-
-    scalars:
-                   e(df_r) =  434
-                 e(N_over) =  1
-                      e(N) =  435
-                   e(k_eq) =  1
-                   e(rank) =  1
-
-    macros:
-                e(cmdline) : "mean shells1"
-                    e(cmd) : "mean"
-                    e(vce) : "analytic"
-                  e(title) : "Mean estimation"
-              e(estat_cmd) : "estat_vce_only"
-                e(varlist) : "shells1"
-           e(marginsnotok) : "_ALL"
-             e(properties) : "b V"
-                 e(depvar) : "Mean"
-
-    matrices:
-                      e(b) :  1 x 1
-                      e(V) :  1 x 1
-                     e(_N) :  1 x 1
-                  e(error) :  1 x 1
-
-    functions:
-                 e(sample)   
-
-    . di e(N)
-    435
-
-<br> Keep in mind, however, that each time you run an expression, your
-previously stored information in both `return` and `ereturn` are
-overwritten. For example, if you run a `sum` command on one variable,
-you might have an `r(mean) = 100`. However, the next time you run `sum`
-on a new variable, the `r(mean)` will be overwritten, so you need to be
-aware of which variable you are using.
-
-So how do we store this information into memory for future use without
-fear of it being overwritten? There are multiple ways to do so. One easy
-way includes naming and storing your own scalar using the `scalar`
-command, which takes the form of `scalar <name> = <value>`.
-
-You can name a scalar whatever you want and assign it a value. Let's do
-this for the mean of total number of shells in the first period and show
-how this preserves the value despite the fact that we run another mean
-on feathers.
-
-    . sum shells1
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-         shells1 |       435    114167.8    26180.23      45770     164
-    > 786
-
-    . scalar mean_shells1 = r(mean)
-
-    . sum feathers1
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-       feathers1 |       435    121527.2    19807.43      65728     181
-    > 036
-
-    . di mean_shells1
-    114167.83
-
-<br>
-
-#### QUICK EXERCISE
-
-> Use a scalar to calculate the average number of shells across all
-> three periods.
-
-<br>
-
-Estimates
----------
-
-Similar to scalars and returns, estimates store multiple values. This
-will be especially useful when we get into regressions next semester.
-For now, let's just use estimates to store information we've learned
-from the `mean` command.
-
-    . mean ideas1
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-          ideas1 |   11.51724    .224046      11.07689    11.95759
-    --------------------------------------------------------------
-
-    . estimates store m_ideas1
-
-    .    
-
-<br> Now we'll use estimates restore and estimates replay to bring up
-previous information that we've stored.
-
-    . mean eggs1
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-           eggs1 |   5.878161   .0935593      5.694275    6.062047
-    --------------------------------------------------------------
-
-    . estimates store m_eggs1
-
-    . estimates restore m_ideas1
-    (results m_ideas1 are active now)
-
-    . estimates replay
-
-    -------------------------------------------------------------------
-    Model m_ideas1
-    -------------------------------------------------------------------
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-          ideas1 |   11.51724    .224046      11.07689    11.95759
-    --------------------------------------------------------------
-
-    . estimates clear
-
-<br>
-
-Shortcuts: Numlists and Varlists
---------------------------------
-
-Numlists and varlists can make your life much easier by streamlining
-your code. Here are some examples of numlists. Notice how we sort the
-data using both `sort` and `gsort`. Also notice the `-` sign used in the
-second `list` command (`-10/l`) and with `gsort -ideas1`. In the first
-case, the sign tells Stata to `list` the last 10 observations ('starting
-at the end, go back 10). In the second case, Stata understands that we
-want to sort our data based on the values in `ideas1`, but instead of
-sorting from smallest to largest, as is the default, we instead want
-descending values.
-
-    . sort shells1
-
-    . list id shells1 loon upper in 1/10
-
-         +------------------------------+
-         |  id   shells1   loon   upper |
-         |------------------------------|
-      1. | 371     45770      0       0 |
-      2. | 356     48682      0       0 |
-      3. | 357     52093      0       0 |
-      4. | 350     55419      0       0 |
-      5. | 309     58637      0       1 |
-         |------------------------------|
-      6. | 396     58916      0       0 |
-      7. | 321     59106      0       1 |
-      8. | 401     59578      0       0 |
-      9. | 335     60526      0       0 |
-     10. | 326     60763      0       1 |
-         +------------------------------+
-
-    . list id shells1 loon upper in -10/l
-
-         +------------------------------+
-         |  id   shells1   loon   upper |
-         |------------------------------|
-    426. | 260    153530      1       0 |
-    427. | 278    153992      1       0 |
-    428. |  21    154898      1       1 |
-    429. | 251    155580      1       0 |
-    430. |  87    155591      1       0 |
-         |------------------------------|
-    431. |  45    156288      1       1 |
-    432. |  61    157157      1       0 |
-    433. | 115    160948      1       0 |
-    434. | 164    162947      1       0 |
-    435. |   5    164786      1       1 |
-         +------------------------------+
-
-    . gsort -ideas1
-
-    . list id ideas1 loon upper in 1/10
-
-         +-----------------------------+
-         |  id   ideas1   loon   upper |
-         |-----------------------------|
-      1. | 421       25      0       0 |
-      2. | 347       24      0       0 |
-      3. | 405       23      0       0 |
-      4. | 291       23      0       1 |
-      5. | 368       22      0       0 |
-         |-----------------------------|
-      6. | 384       21      0       0 |
-      7. | 412       21      0       0 |
-      8. | 320       21      0       1 |
-      9. | 318       21      0       1 |
-     10. | 363       21      0       0 |
-         +-----------------------------+
-
-    . list id ideas1 loon upper in -10/l
-
-         +-----------------------------+
-         |  id   ideas1   loon   upper |
-         |-----------------------------|
-    426. | 274        3      1       0 |
-    427. | 219        3      1       0 |
-    428. |  60        3      1       0 |
-    429. | 100        2      1       0 |
-    430. | 138        2      1       0 |
-         |-----------------------------|
-    431. | 158        2      1       0 |
-    432. | 263        1      1       0 |
-    433. | 103        1      1       0 |
-    434. | 241        0      1       0 |
-    435. | 216        0      1       0 |
-         +-----------------------------+
-
-    .     
-
-<br> And here's how we might use varlists. Notice how instead of listing
-every variable, we can list the starting and final column with a `-`
-between. Using this format requires that we know the order of the
-variables in our dataset. We can also use wildcards such as `*`. As you
-can see, Stata returns every variable that starts with `flock`. Keep
-this feature in mind as you name your variables.
-
-    . sum shells1-flock3, sep(3)
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-         shells1 |       435    114167.8    26180.23      45770     164
-    > 786
-         shells2 |       435    114560.5    36139.61      28835     236
-    > 489
-         shells3 |       435    113311.4    42467.27      27373     265
-    > 026
-    -------------+-----------------------------------------------------
-    > ---
-       feathers1 |       435    121527.2    19807.43      65728     181
-    > 036
-       feathers2 |       435      122083    33439.98      47380     265
-    > 891
-       feathers3 |       435    120652.8    40768.82      34113     278
-    > 089
-    -------------+-----------------------------------------------------
-    > ---
-          flock1 |       435    79913.13    20397.94      12812     136
-    > 822
-          flock2 |       435    80231.79    26802.23      13561     175
-    > 592
-          flock3 |       435    79168.69    30648.81      14268     207
-    > 132
-
-    . sum flock*
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          flock1 |       435    79913.13    20397.94      12812     136
-    > 822
-          flock2 |       435    80231.79    26802.23      13561     175
-    > 592
-          flock3 |       435    79168.69    30648.81      14268     207
-    > 132
-
-<br>
+                pweight: bystuwt
+                    VCE: linearized
+            Single unit: scaled
+               Strata 1: strat_id
+                   SU 1: psu
+                  FPC 1: <zero>
 
 Macros
 ------
 
-### Globals
+What's a macro? A way of storing information in Stata.
 
-We've already been using global macros throughout this course, but it
-never hurts to reiterate. Global macros allow you to store many types of
-information that will persist throughout a Stata session. We've been
-using them to store relative directory links, but they can also store
-numerical values and even commands.
+Why? Simplification. Lots of times we use lists of things. Say we need
+to use a list of terms that would influence college choice. This could
+be financial, academic, and family influences. We choose indicators to
+represent variables in each of these areas. What if we change one of
+these? We could change it each and every time, or if we had it stored in
+a macro we change it just once.
 
-Be careful when using global macros. It is easy over the course of a
-long Stata session to forget what's hanging around in the memory. To see
-which globals (or any macros you have stored for that matter), you can
-use the `macro list` command. To drop macros you no longer need, a
-generally good policy, use the `macro drop <macro names>` command.
+Macros are also used so that commands don't need to be repeated again
+and again, and instead can be written just once. This cuts down on
+mistakes and allows the analyst to focus on the analysis. The whole goal
+here is to get the computer to do the boring (repetitive) tasks, while
+the analyst does the interesting (analytical and interpretive) tasks.
 
-    . global repstr "Long string I will use a lot and don't want to ret
-    > ype"
+There are two types of macos in Stata, local and global macros. Global
+macros should basically never be used.
 
-    . macro list
-    repstr:         Long string I will use a lot and don't want to
-                    retype
-    S_2:            1
-    S_1:            ideas1
-    S_FNDATE:       17 Sep 2014 09:25
-    S_FN:           loondata.dta
-    S_level:        95
-    F1:             help advice;
-    F2:             describe;
-    F7:             save
-    F8:             use
-    S_ADO:          BASE;SITE;.;PERSONAL;PLUS;OLDPLACE
-    S_StataSE:      SE
-    S_FLAVOR:       Intercooled
-    S_OS:           MacOSX
-    S_OSDTL:        10.10.5
-    S_MACH:         Macintosh (Intel 64-bit)
+So, let's do a macro: this macro will contain two variables from the
+plans dataset, math and reading test scores
 
-    . di "$repstr"
-    Long string I will use a lot and don't want to retype
+          . local tests bynels2m bynels2r 
 
-    . macro drop repstr
+What can we do now that we have a macro? Any command that can be run on
+the object can now be run on the macro. However, the macro must be
+referenced corectly. Referring to the macro without quotes will result
+in an error:
 
-    . macro list
-    S_2:            1
-    S_1:            ideas1
-    S_FNDATE:       17 Sep 2014 09:25
-    S_FN:           loondata.dta
-    S_level:        95
-    F1:             help advice;
-    F2:             describe;
-    F7:             save
-    F8:             use
-    S_ADO:          BASE;SITE;.;PERSONAL;PLUS;OLDPLACE
-    S_StataSE:      SE
-    S_FLAVOR:       Intercooled
-    S_OS:           MacOSX
-    S_OSDTL:        10.10.5
-    S_MACH:         Macintosh (Intel 64-bit)
+Why didn't this work? Without proper specification, a macro can not be
+accessed. The macro must be *dereferenced*. For STATA to know it's
+dealing with a macro, you must put it in single quotes, meaning that you
+start with the left tick (\`) and close with the apostrophe ('). Most of
+the curse words directed at STATA have come about as a result of this
+syntax. To use our macro, we would do the following:
 
-<br>
+          . summarize `tests' /*Will work */
 
-### Locals
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |     15,884    45.35452    13.53664      14.71      79.27
+              bynels2r |     15,884    29.63405    9.399866       9.74      50.57
 
-*Locals* are a way of storing information that you would not really want
-to store in a new variable or even scalar. Some of the other automatic
-results that are given after running some descriptive or estimation
-command are locals. Locals can store a single value or a list of values,
-but only for length of time that the script is actively running. This is
-unlike global macros, which persist throughout a Stata session (until
-you quit the program or purposefully drop them). Once script has exited,
-all information stored in locals is lost. There is a very particular way
-data in locals are stored and recalled.
+          . local ses byses1 byses2
 
-Here are some of the different ways locals are used with numbers:
+          . summarize `ses'
 
-    . local i 1
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+                byses1 |     15,236    .0421042    .7429628      -2.11       1.82
+                byses2 |     15,236    .0447427    .7502604      -2.11       1.98
 
-    . di `i'
-    1
+*Quick Exercise*
 
-    . local j = 2
+Create a macro that contains two variables. Run a summarize command on
+the macro.
 
-    . di `j'
-    2
+A Note on Local vs. Global macors
 
-    . local k = `i'+`j'
+When you run a do file with a local macro, Stata will hold that local
+macro in memory only while the do file is running. After it stops, the
+macro is dropped. This is important. Say you had a do file with a local
+named `family`, because it contained variables relating to a student's
+family. After running your do file, you'd like to summarize the family
+variables.
 
-    . di `k'
-    3
+`. sum`family' \`
 
-    . sum ideas1
+You'll get back an error message because the `family` macro is no longer
+held in memory. For this reason, when using macros, it's a good idea to
+run the do file as a whole each time, instead of just running pieces of
+it.
 
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          ideas1 |       435    11.51724     4.67285          0        
-    >  25
-
-    . local mean_ideas1 = r(mean)
-
-    . di `mean_ideas1'
-    11.517241
-
-    .     
-
-<br> Locals can also store strings (such as variable names):
-
-    . local contributions ideas1 ideas2 ideas3 eggs1 eggs2 eggs3
-
-    . sum `contributions', sep(3)
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          ideas1 |       435    11.51724     4.67285          0        
-    >  25
-          ideas2 |       435    11.56322     4.79271          0        
-    >  25
-          ideas3 |       435    11.42529     5.11263         -2        
-    >  26
-    -------------+-----------------------------------------------------
-    > ---
-           eggs1 |       435    5.878161    1.951333          1        
-    >  14
-           eggs2 |       435    5.924138    2.155529          1        
-    >  16
-           eggs3 |       435    5.786207     2.95867         -4        
-    >  16
-
-<br> Even better, locals can be nested, that is, a local can hold other
-locals:
-
-    . local whoareyou loon upper seasons
-
-    . local wholeshebang `contributions' `whoareyou'
-
-    . sum `wholeshebang', sep(3)
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          ideas1 |       435    11.51724     4.67285          0        
-    >  25
-          ideas2 |       435    11.56322     4.79271          0        
-    >  25
-          ideas3 |       435    11.42529     5.11263         -2        
-    >  26
-    -------------+-----------------------------------------------------
-    > ---
-           eggs1 |       435    5.878161    1.951333          1        
-    >  14
-           eggs2 |       435    5.924138    2.155529          1        
-    >  16
-           eggs3 |       435    5.786207     2.95867         -4        
-    >  16
-    -------------+-----------------------------------------------------
-    > ---
-            loon |       435    .6390805    .4808202          0        
-    >   1
-           upper |       435    .2298851    .4212432          0        
-    >   1
-         seasons |       435    8.036782     1.71696          5        
-    >  12
-
-*NB:* The quotation marks for locals can be tricky. If you are having
-trouble getting your locals to do exactly what you want, check to make
-sure you are using the correct quotes. The left quote `` ` ``, or
-backtick, is distinct from the normal single quotation mark, `'`.
+Programming Concepts
+--------------------
 
 <br>
 
-Matrices
---------
+Scalars
 
-Stata has a powerful matrix language under the hood called Mata. If you
-are feeling particularly bold, you can perform most if not all of your
-analyses through linear algebra. More realistically, you will use Stata
-matrices to store output in a convenient format.
+In the language of matrix algebra, a scalar is a single number. In STATA
+a scalar is a value that can only hold one value at a time. The value
+can be numeric or a character.
 
-For example, let's say you want to gather the mean and standard error of
-multiple variables. Using `return list` after `mean`, we can see that
-Stata stores the underlying information it presents in a matrix called
-`r(table)`.
+To define a scalar, use the following syntax:
 
-    . mean ideas1 ideas2 ideas3
+`scalar pi=3.14159`
 
-    Mean estimation                     Number of obs    =     435
+More usefully we can define scalars to take on the value of a result.
+For instance, to calculate a standardized transformation of the variable
+\`income' we could do the following:
 
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-          ideas1 |   11.51724    .224046      11.07689    11.95759
-          ideas2 |   11.56322   .2297929      11.11157    12.01486
-          ideas3 |   11.42529   .2451319      10.94349    11.90708
-    --------------------------------------------------------------
+\`summarize income'
 
-    . // return list to show r(table)
-    . return list
+`scalar mean_income=r(mean)`
 
-    scalars:
-                  r(level) =  95
+`scalar sd_income=r(sd)`
 
-    macros:
-               r(mcmethod) : "noadjust"
+`gen stand_income = (income-mean_income)/sd_income`
 
-    matrices:
-                  r(table) :  9 x 3
+Scalars are also quite useful if you have a constant in a do file that
+you may wish to change. For instance, if you'd like to limit your
+analysis to a certain age group, but you might change that age group as
+you go through different iterations.
 
-    . matrix list r(table)
+Quick Exercise
+--------------
 
-    r(table)[9,3]
-               ideas1     ideas2     ideas3
-         b  11.517241  11.563218  11.425287
-        se  .22404603  .22979287  .24513187
-         t  51.405692  50.320178  46.608739
-    pvalue  1.10e-186  3.07e-183  4.76e-171
-        ll  11.076891  11.111573  10.943494
-        ul  11.957592  12.014864  11.907081
-        df        434        434        434
-      crit  1.9654451  1.9654451  1.9654451
-     eform          0          0          0
+Generate scalars for a binary or continuous variable's sum and a
+variable's total number of units from the plans dataset. Divide the sum
+by the total number of units to obtain the mean.
 
-<br>
+The `varlist` Concept
+---------------------
 
-Unfortunately, in a "you can't get there from here" kind of situation,
-you cannot subset the `r(table)` matrix directly. Instead, we must first
-store it another matrix. Once that is accomplished, we can subset the
-matrix to just the first two rows that we want by using square brackets,
-`[]`, after the matrix. Following convention, the brackets use the
-format \[*i*, *j*\], with *i* standing in for row and *j* for column.
-When more than one row or column are wanted, Stata uses the form
-`[i_start .. i_end, j_start .. j_end]`. Note that any of those four
-positions can be replaced by `.`, which in this case roughly means
-*all*. After subsetting the matrix, we can transpose it using a single
-quotation mark, `'`.
+A varlist is a list of variables (of all things). Say for instance you
+wanted a local that was equal to just data elements that were in the
+base year. We know from NCES nomenclature that all base year data
+elements in ELS are preceded by \`\`by''. We can use this, plus the wild
+card operator \*, to create a varlist in the following way:
 
-    . matrix meanse = r(table)
+local bydata by\*
 
-    . matrix list meanse
+This tells STATA to include every variable in the local bydata that
+begins with by.
 
-    meanse[9,3]
-               ideas1     ideas2     ideas3
-         b  11.517241  11.563218  11.425287
-        se  .22404603  .22979287  .24513187
-         t  51.405692  50.320178  46.608739
-    pvalue  1.10e-186  3.07e-183  4.76e-171
-        ll  11.076891  11.111573  10.943494
-        ul  11.957592  12.014864  11.907081
-        df        434        434        434
-      crit  1.9654451  1.9654451  1.9654451
-     eform          0          0          0
+Say you wanted to create a local that included the first five variables
+in the dataset. This can be done using the - as part of the command:
 
-    . // subset matrix
-    . matrix meanse = meanse[1..2,1...]
+`local first_five stu_id-f1sch_id`
 
-    . matrix list meanse
+If you wanted every variable that had ses, and you knew that variables
+could only have one letter or number at the end, you could do something
+like this:
 
-    meanse[2,3]
-           ideas1     ideas2     ideas3
-     b  11.517241  11.563218  11.425287
-    se  .22404603  .22979287  .24513187
+`local myses *ses?`
 
-    . // transpose matrix
-    . matrix tmeanse = meanse'
+*Quick Exercise*
 
-    . matrix list tmeanse
+Generate a varlist that contains only nels related variables, without
+naming the variables themselves.
 
-    tmeanse[3,2]
-                    b         se
-    ideas1  11.517241  .22404603
-    ideas2  11.563218  .22979287
-    ideas3  11.425287  .24513187
+The `numlist` concept
+---------------------
 
-<br>
-
-Finally, it is useful to know how to initialize a blank matrix. Using
-the command `matrix <name> = J(<rows>, <columns>, <fill>)`, we can
-initialize a matrix of *rows* by *columns* size that is filled with
-*fill*. Choosing `.` is implicitly choosing a blank matrix.
-
-Once the matrix is created, we can fill its cells one by one with output
-from various commands or simply values that we want.
-
-    . matrix blank = J(5,2,.)
-
-    . // add to first row and show matrix
-    . matrix blank[1,1] = 1
-
-    . matrix blank[1,2] = 6
-
-    . matrix list blank
-
-    blank[5,2]
-        c1  c2
-    r1   1   6
-    r2   .   .
-    r3   .   .
-    r4   .   .
-    r5   .   .
-
-<br>
-
-Switches
---------
-
-Now that weve learned how to create locals, lets use them to create
-switches. Switches are impor- tant because you can use them to turn on
-and off portions of your code. For example, you can use them to delegate
-whether you want to input the full dataset or your most recently save
-data. You could also use them to determine whether you want to turn
-graphs on or off. They can be very useful.
-
-As an example, below is a switch for turning on or off graphs:
-
-    . local graphs = 0
-
-    . if `graphs' == 1 {
-    .     scatter shells1 feathers1 if loon == 1
-    . }
-
-<br>
-
-As you can see, there is no special switch command. Instead, we create a
-local called `graphs` that is set to either 0 or 1. Next comes an `if`
-statement that says if the local is equal to 1, then run the graph. If
-not, then don't. It's good practice to place your switches in the top of
-your do file so that you don't have to hunt for them.
-
-One trick to keep track of `if` statements (and loops as you will see
-below) is to indent code that is within the loop and align the start of
-the loop with the end of the loop. It's also good practice with long
-loops to use a comment at the closing brace to label the loop (very
-helpful when you have many loops in your file).
-
-<br>
+A numlist is a way of constructing a pattern of numbers. Stata
+recognizes several types of patterns for numlists, including a list like
+0 1 2, a sequence like 0/2 and a sequence with steps like 0(1)2.
 
 Loops
 -----
 
-Loops are used when you are performing one task on a variable or group
-of variables and `bysort` and `egen` cannot meet your needs. It is
-useful to think about how the procedures you are running can be grouped
-together and how the same structure can be applied to multiple cases.
-Stata loops have a few different structures:
-
--   `if` (`if` / `else`)
--   `foreach`
--   `forvalues`
--   `while`
-
-<br>
-
-### `if` / `else`
-
-To start, let's just use our switch structure to specify an alternative
-action if the switch condition is not met.
-
-    . local switch = 0    
-
-    .     
-    . if `switch' == 0 {
-    .     sum loon if upper == 0
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-            loon |       335    .6925373     .462133          0        
-    >   1
-    . }
-
-    . else {
-    .     sum loon if upper == 1
-    . }
-
-    .   
-
-<br> If `switch == 1` then the first command will run; in all other
-cases, the second command will run.
-
-<br>
-
-### `foreach`
-
-Another type of loop uses the `foreach` command. Take a look at the
-[help file](http://www.stata.com/manuals14/pforeach.pdf) for `foreach`
-statements. As you can see, there are a variety of different ways to use
-the `foreach` command. Here are some examples:
-
-    . foreach var of varlist shells1-feathers3 {
-      2.     mean `var'
-      3. }
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-         shells1 |   114167.8   1255.246      111700.7    116634.9
-    --------------------------------------------------------------
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-         shells2 |   114560.5   1732.762      111154.8    117966.1
-    --------------------------------------------------------------
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-         shells3 |   113311.4    2036.15      109309.4    117313.3
-    --------------------------------------------------------------
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-       feathers1 |   121527.2   949.6935      119660.7    123393.8
-    --------------------------------------------------------------
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-       feathers2 |     122083   1603.324      118931.7    125234.2
-    --------------------------------------------------------------
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-       feathers3 |   120652.8   1954.715      116810.9    124494.6
-    --------------------------------------------------------------
-
-    . local memberships loon upper
-
-    . foreach var of local memberships {
-      2.     mean `var'
-      3. }
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-            loon |   .6390805   .0230536      .5937699     .684391
-    --------------------------------------------------------------
-
-    Mean estimation                     Number of obs    =     435
-
-    --------------------------------------------------------------
-                 |       Mean   Std. Err.     [95% Conf. Interval]
-    -------------+------------------------------------------------
-           upper |   .2298851   .0201971      .1901888    .2695813
-    --------------------------------------------------------------
-
-    . foreach val in id {
-      2.     list `val' if eggs1 < 3
-      3. }
-
-         +-----+
-         |  id |
-         |-----|
-     67. | 394 |
-     92. | 386 |
-    118. | 203 |
-    120. |  18 |
-    132. | 345 |
-         |-----|
-    175. | 308 |
-    267. | 121 |
-    330. | 135 |
-    347. | 326 |
-    398. | 259 |
-         +-----+
-
-<br>
-
-#### QUICK EXERCISE
-
-> Rescale each `shells*` variable so it is in 1000s of shells.
-
-<br>
-
-### `forvalues`
-
-Another loop command that is quite useful is called `forvalues`. The
-`forvalues` loop uses a counter within a loop and repeats the loop until
-you hit the maximum specified value. Here are some examples; notice the
-different ways to count:
-
-    . forvalues x = 1/10 {
-      2.     di `x'
-      3. }
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-
-    . forvalues y = 2(2)10 {
-      2.     di `y' 
-      3. }
-    2
-    4
-    6
-    8
-    10
-
-    . forvalues z = 2 4 to 10 {
-      2.     di `z'
-      3. }
-    2
-    4
-    6
-    8
-    10
-
-<br>
-
-#### QUICK EXERCISE
-
-> Use `forvalues` to create means for days in nest.
-
-<br>
-
-### `while`
-
-Finally, `while` loops are another way to loop using numbers. They are
-similar to `forvalue`s loops in Stata, but require a counter. Though the
-two are generally interchangeable, while loops are technically about
-waiting to fulfill a condition. Therefore, they can be used in more ways
-than `forvalues` loops. Keep in mind, however, that if you set a
-condition that will never be fulfilled, your `while` loop will run
-forever (or until your computer crashes or the network administrator, if
-you are running code through a network, kills the process and sends you
-a mean email).
-
-    . local i = 1
-
-    . while `i' < 11 {
-      2.     di `i'
-      3.     local i = `i' + 1
-      4. }
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-    8
-    9
-    10
-
-<br>
-
-Nests
------
-
-It is also possible to nest loops within loops. When you do this, the
-outer loop runs until it hits an inner loop. Then it evaluates the inner
-loop until the inner loop is finished. Then it will continue with the
-outer loop. If the inner loops statement uses an `if` statement, Stata
-will only evaluate it if the condition is met (evaluates to true). This
-can get very complicated very quickly, so you need to know where you are
-in the code. This is why it is smart to indent all commands within a
-loop to the level of the loop.
-
-    . local thoughts ideas1 ideas2 ideas3
-
-    .     
-    . forvalues i = 1/2 {
-      2.     if `i' == 1 {
-      3.         local type "Not a loon"
-      4.     }
-      5.     if `i' == 2 {
-      6.         local type "Loon"
-      7.     }
-      8.     foreach var of local thoughts {
-      9.         di "`i': `type'"
-     10.         sum `var' if loon == `i' - 1
-     11.     }
-     12. }
-    1: Not a loon
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          ideas1 |       157    15.95541    3.386141          7        
-    >  25
-    1: Not a loon
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          ideas2 |       157    16.04459    3.429405          7        
-    >  25
-    1: Not a loon
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          ideas3 |       157    15.80255    3.984649          7        
-    >  26
-    2: Loon
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          ideas1 |       278    9.010791    3.207036          0        
-    >  18
-    2: Loon
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          ideas2 |       278    9.032374    3.399251          0        
-    >  19
-    2: Loon
-
-        Variable |       Obs        Mean    Std. Dev.       Min        
-    > Max
-    -------------+-----------------------------------------------------
-    > ---
-          ideas3 |       278    8.953237    3.875496         -2        
-    >  22
-
-<br>
-
-#### QUICK EXERCISE
-
-> Using the nested loop above, store the number of observations, mean,
-> and standard error in a matrix. Hint: initialize a blank matrix before
-> the loop (how big does it need to be?).
-
-<br>
-
-Sectioning your do-file (templates)
------------------------------------
-
-You will go through the same general procedures every time you work with
-quantitative data. The structure of this class is a good guide for you
-to create your own template do-file that you can pull up every time you
-start a new research project. Sections might include the following:
-
--   Setting up Stata (most of what the do files we have been using for
-    class already have)
--   Setting up globals/locals/file preferences
--   Pulling in the data you will use
--   Data cleaning/validation
--   Taking account of the survey design
--   Descriptive statistics
--   Regression model(s)
--   Recording output
-
-<br> <br>
-
-*Init: 16 August 2015; Updated: 04 October 2016*
-
-<br>
+A loop construct is the basic stepping stone to a life of laziness,
+impatience and hubris.
+
+All loop constructs follow the same basic format:
+
+`(A pattern goes here){`
+`(A series of commands for each step in the pattern goes here)` }\`
+
+Note the braces: these always denote the beginning and end of a loop.
+The brace must follow the pattern command, and must always be closed
+after the body of the loop is complete.
+
+With a loop construct, if you can figure out the underlying set of
+commands that you'd like to repeat, and if you can figure out the
+pattern that you'd like to apply them, you can simplify some pretty
+daunting tasks down to something rather simple. There are three basic
+ways to run loops in STATA: the `forvalues`, `foreach` and `while`
+commands.
+
+Here's an example: Missing data, as you probably know, are a hassle when
+working with NCES datasets. They can be listed as -4, -8, or -9.
+Replacing this for every single variable in your dataset with a . would
+be time consuming and error prone. The following loop structure (which I
+will explain later) can accomplish it for you in just a few lines of
+code.
+
+          . if `recoding'==1{
+          . foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
+          .               foreach i of numlist -4 -8 -9 { /* Start inner loop */
+          .                      replace `myvar'=. if `myvar'== `i'
+          .                                             }  /* End inner loop */
+          .                                           } /* End loop over variables */
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          (0 real changes made)
+          . local race_names amind asian black hispanic multiracial white
+          . drop `race_names'
+          . local race_var_label: label byrace2 1
+          . di "`race_var_label'"
+          Am.Ind.
+
+          . tab(byrace2), gen(race_)
+
+            RECODE of |
+               byrace |
+           (student^s |
+          race/ethnic |
+          ity-composi |
+                  te) |      Freq.     Percent        Cum.
+          ------------+-----------------------------------
+              Am.Ind. |        130        0.85        0.85
+             Asian/PI |      1,460        9.58       10.44
+                Black |      2,019       13.25       23.69
+             Hispanic |      2,214       14.53       38.22
+          Multiracial |        735        4.82       43.04
+                White |      8,678       56.96      100.00
+          ------------+-----------------------------------
+                Total |     15,236      100.00
+          . local i=1 // initialize counter
+          . foreach race_name of local race_names{   // loop over each of the elements in race_names identified above
+          .         rename race_`i' `race_name' // rename each variable generated by tab as equiv name
+          .         local race_var_label: label byrace2 `i' // grab value label for the that level
+          .         label var `race_name' "`race_var_label'" // make the value label the variable level
+          .         local ++i //iterate counter by 1, equivalent to: local i=`i'+1
+          . }
+          . 
+
+          . save plans_b, replace
+          file plans_b.dta saved
+          . }/*end recoding section conditional*/
+
+          . else{
+          . use plans_b, clear
+          . }/* end else */
+
+          . if `analysis'==1{
+          . local y bynels2m bynels2r
+          . local demog amind asian black hispanic white bysex
+          . local pared bypared bymothed
+          . bysort `demog': sum `y' 
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 0, asian = 0, black = 0, hispanic = 0, white = 0, bysex = male
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        368    45.99967    13.83643      16.43      77.47
+              bynels2r |        368    29.31185    9.736969      10.13      49.66
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 0, asian = 0, black = 0, hispanic = 0, white = 0, bysex = female
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        367    43.85275    12.45861      15.71      73.01
+              bynels2r |        367    30.55485    8.426174      10.69      49.44
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 0, asian = 0, black = 0, hispanic = 0, white = 1, bysex = male
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      4,297     49.4118    12.95041      14.71      78.56
+              bynels2r |      4,297    31.34097    9.300624       9.74      50.57
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 0, asian = 0, black = 0, hispanic = 0, white = 1, bysex = female
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      4,381    47.89092    12.09374      15.65      76.69
+              bynels2r |      4,381    32.83335    8.514871      10.12      50.57
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 0, asian = 0, black = 0, hispanic = 1, white = 0, bysex = male
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      1,097     39.2063    13.22485         15      75.69
+              bynels2r |      1,097    24.68695    9.192204       9.75      47.85
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 0, asian = 0, black = 0, hispanic = 1, white = 0, bysex = female
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      1,117    37.84592    12.63614      15.15      73.37
+              bynels2r |      1,117    25.64628    8.905022       9.82      49.44
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 0, asian = 0, black = 1, hispanic = 0, white = 0, bysex = male
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      1,004    37.07529    11.61478      14.85      74.18
+              bynels2r |      1,004    24.00324    8.336857       9.82      48.55
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 0, asian = 0, black = 1, hispanic = 0, white = 0, bysex = female
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      1,015    35.87664    11.16035      15.12      75.61
+              bynels2r |      1,015    25.27687    8.158944      10.01      48.58
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 0, asian = 1, black = 0, hispanic = 0, white = 0, bysex = male
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        738    50.02741     14.3848      15.99      79.27
+              bynels2r |        738    28.77725    9.790352       9.95      49.74
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 0, asian = 1, black = 0, hispanic = 0, white = 0, bysex = female
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        722    48.99823     14.1432      15.55      78.99
+              bynels2r |        722    29.77144     9.52353      11.08      49.74
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 1, asian = 0, black = 0, hispanic = 0, white = 0, bysex = male
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         72    38.07569    11.69312       17.8      72.49
+              bynels2r |         72    23.41542    7.906922       10.6      41.52
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = 1, asian = 0, black = 0, hispanic = 0, white = 0, bysex = female
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         58    39.02741    10.36186      22.72      61.15
+              bynels2r |         58    27.19207    7.568352      10.79      40.28
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = ., asian = ., black = ., hispanic = ., white = ., bysex = male
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |          0
+              bynels2r |          0
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = ., asian = ., black = ., hispanic = ., white = ., bysex = female
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |          0
+              bynels2r |          0
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> amind = ., asian = ., black = ., hispanic = ., white = ., bysex = .
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        648    44.80427    11.24556       16.6      72.75
+              bynels2r |        648    28.87716    7.237261      11.74      47.24
+
+          . bysort `pared': sum `y'
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = did not, bymothed = did not
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        926    36.29864     12.1837      15.15      75.23
+              bynels2r |        926    22.84815    7.976839       9.86      48.08
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = did not, bymothed = .
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |          0
+              bynels2r |          0
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = did not
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        511    36.89016    12.64277      14.97      73.68
+              bynels2r |        511    23.53352    8.278774      10.13      48.66
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      2,507    41.26339    12.42085      15.65      78.99
+              bynels2r |      2,507    26.83786    8.626295       9.89      49.44
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = .
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |          0
+              bynels2r |          0
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = attended, bymothed = did not
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        119     40.2958    13.22161       16.2      71.38
+              bynels2r |        119    25.62227    9.093246      10.69      45.23
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = attended, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        390    44.09467    12.34262      16.17      73.25
+              bynels2r |        390    28.69133    8.640406       9.82      48.02
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = attended, bymothed = attended
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      1,154     42.2999    12.93097      14.85      75.24
+              bynels2r |      1,154    27.98836      8.9459       9.98      49.54
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = did not
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         87    39.41598    12.69535      16.17      65.91
+              bynels2r |         87    25.34644    8.453047      10.92      47.75
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        290    44.51759    12.90463      17.73      74.46
+              bynels2r |        290     28.9041    9.197216       9.74      48.35
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = attended
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        166    46.53687    10.81539      21.12      71.89
+              bynels2r |        166    29.96139    7.494344      10.79      47.54
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      1,048    44.52222    12.52586      16.12      78.73
+              bynels2r |      1,048    29.27707    8.981425      10.16      48.95
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = attended, bymothed = did not
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         98    38.19265    12.70117         15       67.5
+              bynels2r |         98    25.24755     9.90177      10.24      47.53
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = attended, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        300     44.1376    12.58255       18.2      74.34
+              bynels2r |        300    29.00637    9.190034      10.87      47.63
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = attended, bymothed = attended
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        161    45.90783    12.74323       15.8      74.57
+              bynels2r |        161    30.09143    9.430261       10.3      47.24
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = attended, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        137    45.65292      12.219      16.62      72.47
+              bynels2r |        137    31.72328    8.576218      11.73      50.57
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = attended, bymothed = attended
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      1,058    45.07909    12.58754      16.41      77.27
+              bynels2r |      1,058    29.85282    8.689249      10.12      49.74
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = attended, bymothed = .
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |          0
+              bynels2r |          0
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = did not
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        120     38.3675    13.72881      17.82      77.52
+              bynels2r |        120      24.046    8.737457      10.18      45.64
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        411    47.14669    13.72442      15.49      78.76
+              bynels2r |        411    30.39942    9.139422       9.82      50.57
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = attended
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        232     47.2456    12.66077      16.49       73.4
+              bynels2r |        232    31.23487    8.861817      10.23      49.74
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        261     50.2146     12.4629      16.24      75.99
+              bynels2r |        261    32.90575    8.964075       10.1      49.66
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = attended
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        326    48.98267    12.41035      17.72      74.13
+              bynels2r |        326     32.6615    8.577078      10.89       48.5
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = graduate, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |      2,106    49.20339    12.78511      15.47      77.47
+              bynels2r |      2,106    32.28855    9.100237      10.03      50.57
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = did not
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         37    36.31378    11.94017      15.99      58.63
+              bynels2r |         37    22.03811    7.576329      11.73       38.4
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        135    45.38874    14.62208      14.71      77.39
+              bynels2r |        135    29.01963    9.981705       9.75      49.44
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = attended
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         86     47.8586    11.66725      20.35      70.35
+              bynels2r |         86    31.87558    8.644887      12.61      49.66
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        106    50.90274    11.30089      15.12       72.3
+              bynels2r |        106     32.4767    8.426385      11.72      47.83
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = attended
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        129    51.41047    12.05469      17.99         77
+              bynels2r |        129    33.68426    8.956323      10.43      50.57
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        433    54.76028    11.66964      18.25      79.16
+              bynels2r |        433    36.00127     8.37303      10.72      50.57
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = complete
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        854    52.95843     12.6195      15.55      77.25
+              bynels2r |        854    34.91924    8.535885      11.52      50.57
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = did not
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         19    35.18947    12.76681      17.57      53.63
+              bynels2r |         19       20.66    6.436862      12.23      32.54
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         61    45.73295    13.81682      17.49      66.71
+              bynels2r |         61    29.39033    10.52368      10.18      48.94
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = attended
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         47    45.88404    14.42939      22.18      74.77
+              bynels2r |         47    30.94447    9.454503      12.65         45
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         60    52.04467    14.45515      17.54      79.27
+              bynels2r |         60    33.13267    10.14322      10.68       49.4
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = attended
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |         74    51.29284    13.32049      17.94      77.47
+              bynels2r |         74    33.66662    9.308829      11.61      47.85
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = graduate
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        274    56.62336    11.32135      21.78      78.56
+              bynels2r |        274    37.13073    7.661651       11.4      49.74
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = complete
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        202    56.10594     11.7006      17.38      75.52
+              bynels2r |        202    36.76287    8.197718      10.71      50.57
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = complete, bymothed = complete
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        311    51.57942    14.78805      15.72      76.86
+              bynels2r |        311    33.90646     9.89402       9.95      50.57
+
+          --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+          -> bypared = ., bymothed = .
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |        648    44.80427    11.24556       16.6      72.75
+              bynels2r |        648    28.87716    7.237261      11.74      47.24
+
+          . scalar pi=3.14159
+          .  display "`pi'"
+
+
+          . summarize bynels2m
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |     15,884    45.35452    13.53664      14.71      79.27
+          . scalar mean_math=r(mean)
+          . scalar sd_math=r(sd)
+          . scalar sum_math=r(sum)
+          . scalar units_math=r(N)
+          . scalar math_mean=sum_math/units_math
+          . gen stand_math= (bynels2m-mean_math)/(2*sd_math)
+          (276 missing values generated)
+          . local bydata by*
+          . local first_five stu_id-f1sch_id
+          . local myses *ses?
+          . sum *ed
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+               bypared |     15,304    4.500784     2.09164          1          8
+              bymothed |     15,301    3.723221    2.012134          1          8
+              byfathed |     15,284    3.869798    2.208181          1          8
+          . sum by*ed
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+               bypared |     15,304    4.500784     2.09164          1          8
+              bymothed |     15,301    3.723221    2.012134          1          8
+              byfathed |     15,284    3.869798    2.208181          1          8
+
+The forvalues structure
+-----------------------
+
+The `forvalue` command tells STATA to execute the series of commands
+within the braces in a numerical format defined by a numlist.
+
+The general structure of a forvalues command is:
+
+`foreach [local_name] of [number pattern] {     (run the following commands on [local\_name])      }`
+
+          . forvalues i= 1/10{
+          .  di "This is number {c 96}i'"
+          . }
+          This is number `i'
+          This is number `i'
+          This is number `i'
+          This is number `i'
+          This is number `i'
+          This is number `i'
+          This is number `i'
+          This is number `i'
+          This is number `i'
+          This is number `i'
+
+In the example above, I defined the placeholder macro i to be equal to
+the numlist 1-10, starting at 1 and moving up by one for each run
+through the loop. The braces define the body of the loop. The command is
+a simple print command, asking STATA to display the text and the value
+of the placeholder macro i.
+
+<br> A more complex example is to convert the date of birth variable
+into an age, and then convert the result into a series of binary
+variables for 14, 15, 16, 17 or 18 years old(you'll need to download and
+install the nsplit command).
+
+          . nsplit bydob_p, digits (4 2) gen (newdobyr newdobm)
+          . gen myage= 2002-newdobyr
+          (977 missing values generated)
+          . forvalues i = 14/18{
+          . gen age`i'=0
+          . replace age`i'=1 if myage==`i'
+          . replace age`i'=. if myage==.
+          . }
+          (0 real changes made)
+          (977 real changes made, 977 to missing)
+          (108 real changes made)
+          (977 real changes made, 977 to missing)
+          (8,813 real changes made)
+          (977 real changes made, 977 to missing)
+          (5,515 real changes made)
+          (977 real changes made, 977 to missing)
+          (636 real changes made)
+          (977 real changes made, 977 to missing)
+
+Foreach
+-------
+
+The foreach structure is a more general version of the fovralues
+command. The general pattern for a foreach structure is:
+
+`foreach [local\_name] of [varlist, local numlist, etc] {`
+`(run the following commands on [local\_name])` `}`
+
+In the example on missing data, I used a foreach command to recode the
+variables. Let's use one now to standardize two test variables by
+subtracting the mean and dividing by 2 times their standard deviation
+(which is recommended by many statisticians).
+
+          . local mytest *nels*
+          . foreach test of local mytest {
+          .   sum `test'
+          . }
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |     15,884    45.35452    13.53664      14.71      79.27
+              bynels2r |     15,884    29.63405    9.399866       9.74      50.57
+          . foreach test of varlist *nels*{
+          .  sum `test'
+          .  gen stand_`test'=(`test'-r(mean))/(2*r(sd))
+          . }
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2m |     15,884    45.35452    13.53664      14.71      79.27
+          (276 missing values generated)
+
+              Variable |        Obs        Mean    Std. Dev.       Min        Max
+          -------------+---------------------------------------------------------
+              bynels2r |     15,884    29.63405    9.399866       9.74      50.57
+          (276 missing values generated)
+
+*Quick Exercise*
+
+Create a macro that contains only base year variables, with the
+exception of the two test variables (bynels2m and bynels2r). Write a
+loop that tabulates every variable in this macro.
+
+          . forvalues i =1(3)100{
+          . di "I can count by threes, look! `i' "
+          . }
+          I can count by threes, look! 1 
+          I can count by threes, look! 4 
+          I can count by threes, look! 7 
+          I can count by threes, look! 10 
+          I can count by threes, look! 13 
+          I can count by threes, look! 16 
+          I can count by threes, look! 19 
+          I can count by threes, look! 22 
+          I can count by threes, look! 25 
+          I can count by threes, look! 28 
+          I can count by threes, look! 31 
+          I can count by threes, look! 34 
+          I can count by threes, look! 37 
+          I can count by threes, look! 40 
+          I can count by threes, look! 43 
+          I can count by threes, look! 46 
+          I can count by threes, look! 49 
+          I can count by threes, look! 52 
+          I can count by threes, look! 55 
+          I can count by threes, look! 58 
+          I can count by threes, look! 61 
+          I can count by threes, look! 64 
+          I can count by threes, look! 67 
+          I can count by threes, look! 70 
+          I can count by threes, look! 73 
+          I can count by threes, look! 76 
+          I can count by threes, look! 79 
+          I can count by threes, look! 82 
+          I can count by threes, look! 85 
+          I can count by threes, look! 88 
+          I can count by threes, look! 91 
+          I can count by threes, look! 94 
+          I can count by threes, look! 97 
+          I can count by threes, look! 100 
+
+\subsection{The while command}
+The while command is a little outdated. It used to be the main way to
+construct loops in Stata, but the forvalues and foreach command have
+since superseded it i in most cases. However, it can still be useful,
+mainly when you're running complex code that you want to stop if
+something bad happens.
+
+The general format of the while command is:
+
+`while (a condition is true) {` `(run these commands)` `}`
+
+So, we can repeat the counting program from above, but use the while
+command:
+
+          . local i = 1
+          . while `i' < 10 {
+          .     di "I have not yet reached 10, instead the counter is now `i' "
+          .     local i=`i'+1
+          .   }
+          I have not yet reached 10, instead the counter is now 1 
+          I have not yet reached 10, instead the counter is now 2 
+          I have not yet reached 10, instead the counter is now 3 
+          I have not yet reached 10, instead the counter is now 4 
+          I have not yet reached 10, instead the counter is now 5 
+          I have not yet reached 10, instead the counter is now 6 
+          I have not yet reached 10, instead the counter is now 7 
+          I have not yet reached 10, instead the counter is now 8 
+          I have not yet reached 10, instead the counter is now 9 
+          .   foreach i of numlist 1/10{
+          .  di "Foreach can count too, look: `i'"
+          .   }
+          Foreach can count too, look: 1
+          Foreach can count too, look: 2
+          Foreach can count too, look: 3
+          Foreach can count too, look: 4
+          Foreach can count too, look: 5
+          Foreach can count too, look: 6
+          Foreach can count too, look: 7
+          Foreach can count too, look: 8
+          Foreach can count too, look: 9
+          Foreach can count too, look: 10
+          . local by_select bysex byrace bypared-byincome bystexp
+          . foreach myvar of local by_select{
+          . tab1 `myvar'
+          . }
+
+          -> tabulation of bysex  
+
+                                  sex-composite |      Freq.     Percent        Cum.
+          --------------------------------------+-----------------------------------
+                                           male |      7,639       49.79       49.79
+                                         female |      7,702       50.21      100.00
+          --------------------------------------+-----------------------------------
+                                          Total |     15,341      100.00
+
+          -> tabulation of byrace  
+
+               student^s race/ethnicity-composite |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+          amer. indian/alaska native, non-hispani |        130        0.85        0.85
+          asian, hawaii/pac. islander,non-hispani |      1,460        9.58       10.44
+          black or african american, non-hispanic |      2,019       13.25       23.69
+                      hispanic, no race specified |        994        6.52       30.21
+                         hispanic, race specified |      1,220        8.01       38.22
+                        multiracial, non-hispanic |        735        4.82       43.04
+                              white, non-hispanic |      8,678       56.96      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,236      100.00
+
+          -> tabulation of bypared  
+
+              parents^ highest level of education |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+                       did not finish high school |        942        6.16        6.16
+                graduated from high school or ged |      3,044       19.89       26.05
+                attended 2-year school, no degree |      1,663       10.87       36.91
+                     graduated from 2-year school |      1,597       10.44       47.35
+               attended college, no 4-year degree |      1,758       11.49       58.83
+                           graduated from college |      3,466       22.65       81.48
+          completed master^s degree or equivalent |      1,785       11.66       93.15
+          completed phd, md, other advanced degre |      1,049        6.85      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,304      100.00
+
+          -> tabulation of bymothed  
+
+                        mother^s highest level of |
+                              education-composite |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+                       did not finish high school |      1,935       12.65       12.65
+                graduated from high school or ged |      4,117       26.91       39.55
+                attended 2-year school, no degree |      1,849       12.08       51.64
+                     graduated from 2-year school |      1,620       10.59       62.22
+               attended college, no 4-year degree |      1,589       10.38       72.61
+                           graduated from college |      2,820       18.43       91.04
+          completed master^s degree or equivalent |      1,060        6.93       97.97
+          completed phd, md, other advanced degre |        311        2.03      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,301      100.00
+
+          -> tabulation of byfathed  
+
+                        father^s highest level of |
+                              education-composite |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+                       did not finish high school |      2,039       13.34       13.34
+                graduated from high school or ged |      4,314       28.23       41.57
+                attended 2-year school, no degree |      1,438        9.41       50.97
+                     graduated from 2-year school |      1,194        7.81       58.79
+               attended college, no 4-year degree |      1,417        9.27       68.06
+                           graduated from college |      2,735       17.89       85.95
+          completed master^s degree or equivalent |      1,282        8.39       94.34
+          completed phd, md, other advanced degre |        865        5.66      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,284      100.00
+
+          -> tabulation of byincome  
+
+                     Income |      Freq.     Percent        Cum.
+          ------------------+-----------------------------------
+                       none |         80        0.50        0.50
+             $1,000 or less |        178        1.10        1.60
+              $1,001-$5,000 |        304        1.88        3.48
+             $5,001-$10,000 |        351        2.17        5.65
+            $10,001-$15,000 |        697        4.31        9.96
+            $15,001-$20,000 |        781        4.83       14.80
+            $20,001-$25,000 |        996        6.16       20.96
+            $25,001-$35,000 |      1,887       11.68       32.64
+            $35,001-$50,000 |      3,017       18.67       51.31
+            $50,001-$75,000 |      3,309       20.48       71.78
+           $75,001-$100,000 |      2,173       13.45       85.23
+          $100,001-$200,000 |      1,806       11.18       96.40
+           $200,001 or more |        581        3.60      100.00
+          ------------------+-----------------------------------
+                      Total |     16,160      100.00
+
+          -> tabulation of bystexp  
+
+            how far in |
+                school |
+               student |
+           thinks will |
+          get-composit |
+                     e |      Freq.     Percent        Cum.
+          -------------+-----------------------------------
+            Don't Know |      1,450        9.52        9.52
+          Less than HS |        128        0.84       10.36
+                    HS |        983        6.45       16.81
+                  2 yr |        879        5.77       22.58
+           4 yr No Deg |        561        3.68       26.26
+             Bachelors |      5,416       35.55       61.81
+               Masters |      3,153       20.69       82.50
+              Advanced |      2,666       17.50      100.00
+          -------------+-----------------------------------
+                 Total |     15,236      100.00
+          . foreach myvar in `by_select'{
+          . tab1 `myvar'
+          . }
+
+          -> tabulation of bysex  
+
+                                  sex-composite |      Freq.     Percent        Cum.
+          --------------------------------------+-----------------------------------
+                                           male |      7,639       49.79       49.79
+                                         female |      7,702       50.21      100.00
+          --------------------------------------+-----------------------------------
+                                          Total |     15,341      100.00
+
+          -> tabulation of byrace  
+
+               student^s race/ethnicity-composite |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+          amer. indian/alaska native, non-hispani |        130        0.85        0.85
+          asian, hawaii/pac. islander,non-hispani |      1,460        9.58       10.44
+          black or african american, non-hispanic |      2,019       13.25       23.69
+                      hispanic, no race specified |        994        6.52       30.21
+                         hispanic, race specified |      1,220        8.01       38.22
+                        multiracial, non-hispanic |        735        4.82       43.04
+                              white, non-hispanic |      8,678       56.96      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,236      100.00
+
+          -> tabulation of bypared  
+
+              parents^ highest level of education |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+                       did not finish high school |        942        6.16        6.16
+                graduated from high school or ged |      3,044       19.89       26.05
+                attended 2-year school, no degree |      1,663       10.87       36.91
+                     graduated from 2-year school |      1,597       10.44       47.35
+               attended college, no 4-year degree |      1,758       11.49       58.83
+                           graduated from college |      3,466       22.65       81.48
+          completed master^s degree or equivalent |      1,785       11.66       93.15
+          completed phd, md, other advanced degre |      1,049        6.85      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,304      100.00
+
+          -> tabulation of bymothed  
+
+                        mother^s highest level of |
+                              education-composite |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+                       did not finish high school |      1,935       12.65       12.65
+                graduated from high school or ged |      4,117       26.91       39.55
+                attended 2-year school, no degree |      1,849       12.08       51.64
+                     graduated from 2-year school |      1,620       10.59       62.22
+               attended college, no 4-year degree |      1,589       10.38       72.61
+                           graduated from college |      2,820       18.43       91.04
+          completed master^s degree or equivalent |      1,060        6.93       97.97
+          completed phd, md, other advanced degre |        311        2.03      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,301      100.00
+
+          -> tabulation of byfathed  
+
+                        father^s highest level of |
+                              education-composite |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+                       did not finish high school |      2,039       13.34       13.34
+                graduated from high school or ged |      4,314       28.23       41.57
+                attended 2-year school, no degree |      1,438        9.41       50.97
+                     graduated from 2-year school |      1,194        7.81       58.79
+               attended college, no 4-year degree |      1,417        9.27       68.06
+                           graduated from college |      2,735       17.89       85.95
+          completed master^s degree or equivalent |      1,282        8.39       94.34
+          completed phd, md, other advanced degre |        865        5.66      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,284      100.00
+
+          -> tabulation of byincome  
+
+                     Income |      Freq.     Percent        Cum.
+          ------------------+-----------------------------------
+                       none |         80        0.50        0.50
+             $1,000 or less |        178        1.10        1.60
+              $1,001-$5,000 |        304        1.88        3.48
+             $5,001-$10,000 |        351        2.17        5.65
+            $10,001-$15,000 |        697        4.31        9.96
+            $15,001-$20,000 |        781        4.83       14.80
+            $20,001-$25,000 |        996        6.16       20.96
+            $25,001-$35,000 |      1,887       11.68       32.64
+            $35,001-$50,000 |      3,017       18.67       51.31
+            $50,001-$75,000 |      3,309       20.48       71.78
+           $75,001-$100,000 |      2,173       13.45       85.23
+          $100,001-$200,000 |      1,806       11.18       96.40
+           $200,001 or more |        581        3.60      100.00
+          ------------------+-----------------------------------
+                      Total |     16,160      100.00
+
+          -> tabulation of bystexp  
+
+            how far in |
+                school |
+               student |
+           thinks will |
+          get-composit |
+                     e |      Freq.     Percent        Cum.
+          -------------+-----------------------------------
+            Don't Know |      1,450        9.52        9.52
+          Less than HS |        128        0.84       10.36
+                    HS |        983        6.45       16.81
+                  2 yr |        879        5.77       22.58
+           4 yr No Deg |        561        3.68       26.26
+             Bachelors |      5,416       35.55       61.81
+               Masters |      3,153       20.69       82.50
+              Advanced |      2,666       17.50      100.00
+          -------------+-----------------------------------
+                 Total |     15,236      100.00
+          . foreach myvar of varlist bysex-byincome{
+          . tab `myvar'
+          . }
+
+                                  sex-composite |      Freq.     Percent        Cum.
+          --------------------------------------+-----------------------------------
+                                           male |      7,639       49.79       49.79
+                                         female |      7,702       50.21      100.00
+          --------------------------------------+-----------------------------------
+                                          Total |     15,341      100.00
+
+               student^s race/ethnicity-composite |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+          amer. indian/alaska native, non-hispani |        130        0.85        0.85
+          asian, hawaii/pac. islander,non-hispani |      1,460        9.58       10.44
+          black or african american, non-hispanic |      2,019       13.25       23.69
+                      hispanic, no race specified |        994        6.52       30.21
+                         hispanic, race specified |      1,220        8.01       38.22
+                        multiracial, non-hispanic |        735        4.82       43.04
+                              white, non-hispanic |      8,678       56.96      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,236      100.00
+
+            student^s |
+             year and |
+             month of |
+                birth |      Freq.     Percent        Cum.
+          ------------+-----------------------------------
+               198300 |         18        0.12        0.12
+               198301 |          3        0.02        0.14
+               198302 |          3        0.02        0.16
+               198303 |          7        0.05        0.20
+               198304 |          9        0.06        0.26
+               198305 |          5        0.03        0.30
+               198306 |          4        0.03        0.32
+               198307 |          8        0.05        0.38
+               198308 |          4        0.03        0.40
+               198309 |          6        0.04        0.44
+               198310 |          9        0.06        0.50
+               198311 |         16        0.11        0.61
+               198312 |         19        0.13        0.73
+               198400 |          3        0.02        0.75
+               198401 |         24        0.16        0.91
+               198402 |         32        0.21        1.12
+               198403 |         32        0.21        1.33
+               198404 |         29        0.19        1.52
+               198405 |         27        0.18        1.70
+               198406 |         39        0.26        1.96
+               198407 |         46        0.30        2.26
+               198408 |         50        0.33        2.59
+               198409 |         67        0.44        3.03
+               198410 |         91        0.60        3.63
+               198411 |         93        0.61        4.24
+               198412 |        103        0.68        4.92
+               198500 |          9        0.06        4.98
+               198501 |        133        0.88        5.86
+               198502 |        164        1.08        6.94
+               198503 |        169        1.11        8.05
+               198504 |        217        1.43        9.48
+               198505 |        276        1.82       11.30
+               198506 |        271        1.78       13.08
+               198507 |        345        2.27       15.35
+               198508 |        480        3.16       18.51
+               198509 |        757        4.99       23.50
+               198510 |        849        5.59       29.09
+               198511 |        850        5.60       34.69
+               198512 |        995        6.55       41.24
+               198600 |          6        0.04       41.28
+               198601 |      1,094        7.21       48.49
+               198602 |        936        6.16       54.65
+               198603 |      1,015        6.69       61.34
+               198604 |        932        6.14       67.48
+               198605 |        962        6.34       73.81
+               198606 |        884        5.82       79.64
+               198607 |        955        6.29       85.93
+               198608 |        805        5.30       91.23
+               198609 |        515        3.39       94.62
+               198610 |        327        2.15       96.77
+               198611 |        246        1.62       98.39
+               198612 |        136        0.90       99.29
+               198700 |          8        0.05       99.34
+               198701 |         21        0.14       99.48
+               198702 |         14        0.09       99.57
+               198703 |         15        0.10       99.67
+               198704 |         11        0.07       99.74
+               198705 |          6        0.04       99.78
+               198706 |          7        0.05       99.83
+               198707 |          6        0.04       99.87
+               198708 |         11        0.07       99.94
+               198709 |          4        0.03       99.97
+               198710 |          1        0.01       99.97
+               198711 |          3        0.02       99.99
+               198712 |          1        0.01      100.00
+          ------------+-----------------------------------
+                Total |     15,183      100.00
+
+              parents^ highest level of education |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+                       did not finish high school |        942        6.16        6.16
+                graduated from high school or ged |      3,044       19.89       26.05
+                attended 2-year school, no degree |      1,663       10.87       36.91
+                     graduated from 2-year school |      1,597       10.44       47.35
+               attended college, no 4-year degree |      1,758       11.49       58.83
+                           graduated from college |      3,466       22.65       81.48
+          completed master^s degree or equivalent |      1,785       11.66       93.15
+          completed phd, md, other advanced degre |      1,049        6.85      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,304      100.00
+
+                        mother^s highest level of |
+                              education-composite |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+                       did not finish high school |      1,935       12.65       12.65
+                graduated from high school or ged |      4,117       26.91       39.55
+                attended 2-year school, no degree |      1,849       12.08       51.64
+                     graduated from 2-year school |      1,620       10.59       62.22
+               attended college, no 4-year degree |      1,589       10.38       72.61
+                           graduated from college |      2,820       18.43       91.04
+          completed master^s degree or equivalent |      1,060        6.93       97.97
+          completed phd, md, other advanced degre |        311        2.03      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,301      100.00
+
+                        father^s highest level of |
+                              education-composite |      Freq.     Percent        Cum.
+          ----------------------------------------+-----------------------------------
+                       did not finish high school |      2,039       13.34       13.34
+                graduated from high school or ged |      4,314       28.23       41.57
+                attended 2-year school, no degree |      1,438        9.41       50.97
+                     graduated from 2-year school |      1,194        7.81       58.79
+               attended college, no 4-year degree |      1,417        9.27       68.06
+                           graduated from college |      2,735       17.89       85.95
+          completed master^s degree or equivalent |      1,282        8.39       94.34
+          completed phd, md, other advanced degre |        865        5.66      100.00
+          ----------------------------------------+-----------------------------------
+                                            Total |     15,284      100.00
+
+                     Income |      Freq.     Percent        Cum.
+          ------------------+-----------------------------------
+                       none |         80        0.50        0.50
+             $1,000 or less |        178        1.10        1.60
+              $1,001-$5,000 |        304        1.88        3.48
+             $5,001-$10,000 |        351        2.17        5.65
+            $10,001-$15,000 |        697        4.31        9.96
+            $15,001-$20,000 |        781        4.83       14.80
+            $20,001-$25,000 |        996        6.16       20.96
+            $25,001-$35,000 |      1,887       11.68       32.64
+            $35,001-$50,000 |      3,017       18.67       51.31
+            $50,001-$75,000 |      3,309       20.48       71.78
+           $75,001-$100,000 |      2,173       13.45       85.23
+          $100,001-$200,000 |      1,806       11.18       96.40
+           $200,001 or more |        581        3.60      100.00
+          ------------------+-----------------------------------
+                      Total |     16,160      100.00
+
+Nested Loops
+------------
+
+You can run loops within loops, which is actually a very powerful
+function. Here's a simple example:
+
+\texttt{forvalues i = 1/10 \{\\
+              for values j =1/10 \{\\ 
+            di ``This is outer loop, inner loop `i'''
+            \} \\
+            \} \\
+             }
+
+The motivating example on missing data uses a nested loop structure. The
+outer loop consists of all of the variables, while the inner loop
+iterates over the possible missing value codes (-4,-8,-9).
+
+          . forvalues i =1/10 { /* Start outer loop */
+          .   forvalues j = 1/10 { /* Start inner loop */
+          .     di "This is outer loop `i', inner loop `j'"
+          .                       } /* End inner loop */
+          .                     } /* End outer loop */
+          This is outer loop 1, inner loop 1
+          This is outer loop 1, inner loop 2
+          This is outer loop 1, inner loop 3
+          This is outer loop 1, inner loop 4
+          This is outer loop 1, inner loop 5
+          This is outer loop 1, inner loop 6
+          This is outer loop 1, inner loop 7
+          This is outer loop 1, inner loop 8
+          This is outer loop 1, inner loop 9
+          This is outer loop 1, inner loop 10
+          This is outer loop 2, inner loop 1
+          This is outer loop 2, inner loop 2
+          This is outer loop 2, inner loop 3
+          This is outer loop 2, inner loop 4
+          This is outer loop 2, inner loop 5
+          This is outer loop 2, inner loop 6
+          This is outer loop 2, inner loop 7
+          This is outer loop 2, inner loop 8
+          This is outer loop 2, inner loop 9
+          This is outer loop 2, inner loop 10
+          This is outer loop 3, inner loop 1
+          This is outer loop 3, inner loop 2
+          This is outer loop 3, inner loop 3
+          This is outer loop 3, inner loop 4
+          This is outer loop 3, inner loop 5
+          This is outer loop 3, inner loop 6
+          This is outer loop 3, inner loop 7
+          This is outer loop 3, inner loop 8
+          This is outer loop 3, inner loop 9
+          This is outer loop 3, inner loop 10
+          This is outer loop 4, inner loop 1
+          This is outer loop 4, inner loop 2
+          This is outer loop 4, inner loop 3
+          This is outer loop 4, inner loop 4
+          This is outer loop 4, inner loop 5
+          This is outer loop 4, inner loop 6
+          This is outer loop 4, inner loop 7
+          This is outer loop 4, inner loop 8
+          This is outer loop 4, inner loop 9
+          This is outer loop 4, inner loop 10
+          This is outer loop 5, inner loop 1
+          This is outer loop 5, inner loop 2
+          This is outer loop 5, inner loop 3
+          This is outer loop 5, inner loop 4
+          This is outer loop 5, inner loop 5
+          This is outer loop 5, inner loop 6
+          This is outer loop 5, inner loop 7
+          This is outer loop 5, inner loop 8
+          This is outer loop 5, inner loop 9
+          This is outer loop 5, inner loop 10
+          This is outer loop 6, inner loop 1
+          This is outer loop 6, inner loop 2
+          This is outer loop 6, inner loop 3
+          This is outer loop 6, inner loop 4
+          This is outer loop 6, inner loop 5
+          This is outer loop 6, inner loop 6
+          This is outer loop 6, inner loop 7
+          This is outer loop 6, inner loop 8
+          This is outer loop 6, inner loop 9
+          This is outer loop 6, inner loop 10
+          This is outer loop 7, inner loop 1
+          This is outer loop 7, inner loop 2
+          This is outer loop 7, inner loop 3
+          This is outer loop 7, inner loop 4
+          This is outer loop 7, inner loop 5
+          This is outer loop 7, inner loop 6
+          This is outer loop 7, inner loop 7
+          This is outer loop 7, inner loop 8
+          This is outer loop 7, inner loop 9
+          This is outer loop 7, inner loop 10
+          This is outer loop 8, inner loop 1
+          This is outer loop 8, inner loop 2
+          This is outer loop 8, inner loop 3
+          This is outer loop 8, inner loop 4
+          This is outer loop 8, inner loop 5
+          This is outer loop 8, inner loop 6
+          This is outer loop 8, inner loop 7
+          This is outer loop 8, inner loop 8
+          This is outer loop 8, inner loop 9
+          This is outer loop 8, inner loop 10
+          This is outer loop 9, inner loop 1
+          This is outer loop 9, inner loop 2
+          This is outer loop 9, inner loop 3
+          This is outer loop 9, inner loop 4
+          This is outer loop 9, inner loop 5
+          This is outer loop 9, inner loop 6
+          This is outer loop 9, inner loop 7
+          This is outer loop 9, inner loop 8
+          This is outer loop 9, inner loop 9
+          This is outer loop 9, inner loop 10
+          This is outer loop 10, inner loop 1
+          This is outer loop 10, inner loop 2
+          This is outer loop 10, inner loop 3
+          This is outer loop 10, inner loop 4
+          This is outer loop 10, inner loop 5
+          This is outer loop 10, inner loop 6
+          This is outer loop 10, inner loop 7
+          This is outer loop 10, inner loop 8
+          This is outer loop 10, inner loop 9
+          This is outer loop 10, inner loop 10
+          . use plans2, clear
+          . svyset psu [pw=bystuwt], strat(strat_id) singleunit(scaled)
+
+                pweight: bystuwt
+                    VCE: linearized
+            Single unit: scaled
+               Strata 1: strat_id
+                   SU 1: psu
+                  FPC 1: <zero>
+          . recode f1psepln (1/2 = 1) (3/4 = 2) (5 = 3) (6 = .) (. = .), gen(newpln)
+          (13995 differences between f1psepln and newpln)
+          . label var newpln "PS Plans"
+          . label define newpln 1 "No plans" 2 "VoTech/CC" 3 "4 yr"
+          . label values newpln newpln
+          . recode bypared (1/2 = 1) (3/5 = 2) (6 = 3) (7/8 = 4) (. = .), gen(newpared)
+          (14362 differences between bypared and newpared)
+          . label var newpared "Parental Education"
+          . label define newpared 1 "HS or Less" 2 "Less than 4yr" 3 "4 yr" 4 "Advanced"
+          . label values newpared newpared
+          . local ivars byrace2 newpared
+          . erase plan_tab.$ttype // Delete the table (can't append and replace)
+          . foreach ivar of local ivars{
+          .         estpost svy: tabulate `ivar' newpln, row percent se
+          .         eststo desc_`ivar'
+          . esttab desc_`ivar' using plan_tab.$ttype, ///
+               nostar ///
+               nostar ///
+               unstack ///
+               nonotes ///
+               varlabels(`e(labels)') ///
+               eqlabels(`e(eqlabels)') ///
+                   nomtitles ///
+                   nonumbers ///
+                   append
+
+          .         } // end loop over variables 
+          (running tabulate on estimation sample)
+
+          Number of strata   =       361                  Number of obs     =     13,055
+          Number of PSUs     =       750                  Population size   =  2,868,334
+                                                          Design df         =        389
+
+          --------------------------------------------------
+          RECODE of |
+          byrace    |
+          (student^ |
+          s         |
+          race/ethn |
+          icity-com |                PS Plans               
+          posite)   | No plans  VoTech/C      4 yr     Total
+          ----------+---------------------------------------
+            Am.Ind. |    15.44     26.37     58.19       100
+                    |  (3.492)   (4.184)   (5.404)          
+                    | 
+           Asian/PI |    4.704     23.77     71.52       100
+                    |  (.8798)   (1.797)   (1.975)          
+                    | 
+              Black |    7.174     29.91     62.91       100
+                    |  (.7508)    (1.36)   (1.486)          
+                    | 
+           Hispanic |    9.427     44.15     46.42       100
+                    |  (.7945)   (1.482)   (1.683)          
+                    | 
+           Multirac |    11.64     30.48     57.87       100
+                    |  (1.622)   (2.468)   (2.537)          
+                    | 
+              White |    8.077     28.19     63.73       100
+                    |  (.3891)   (.8186)   (.9211)          
+                    | 
+              Total |     8.22     30.67     61.11       100
+                    |  (.3214)   (.6345)   (.7321)          
+          --------------------------------------------------
+            Key:  row percentage
+                  (linearized standard error of row percentage)
+
+            Pearson:
+              Uncorrected   chi2(10)        =  259.9747
+              Design-based  F(9.08, 3530.88)=   18.5866     P = 0.0000
+
+          Note: Variance scaled to handle strata with a single sampling unit.
+
+          saved vectors:
+                       e(b) =  row percentages
+                      e(se) =  standard errors of row percentages
+                      e(lb) =  lower 95% confidence bounds for row percentages
+                      e(ub) =  upper 95% confidence bounds for row percentages
+                    e(deff) =  deff for variances of row percentages
+                    e(deft) =  deft for variances of row percentages
+                    e(cell) =  cell percentages
+                     e(row) =  row percentages
+                     e(col) =  column percentages
+                   e(count) =  weighted counts
+                     e(obs) =  number of observations
+
+          row labels saved in macro e(labels)
+          (note: file plan_tab.rtf not found)
+          (output written to `"plan_tab.rtf"') 
+          (running tabulate on estimation sample)
+
+          Number of strata   =       361                  Number of obs     =     13,109
+          Number of PSUs     =       750                  Population size   =  2,868,334
+                                                          Design df         =        389
+
+          --------------------------------------------------
+          Parental  |                PS Plans               
+          Education | No plans  VoTech/C      4 yr     Total
+          ----------+---------------------------------------
+           HS or Le |    13.69      41.7      44.6       100
+                    |  (.7395)   (1.086)   (1.151)          
+                    | 
+           Less tha |    8.928     35.35     55.73       100
+                    |  (.5732)   (.9667)   (.9883)          
+                    | 
+               4 yr |    5.053     21.74     73.21       100
+                    |  (.5192)   (.9942)   (1.049)          
+                    | 
+           Advanced |    2.851     16.56     80.59       100
+                    |   (.427)   (1.094)   (1.155)          
+                    | 
+              Total |     8.22     30.67     61.11       100
+                    |  (.3214)   (.6345)   (.7321)          
+          --------------------------------------------------
+            Key:  row percentage
+                  (linearized standard error of row percentage)
+
+            Pearson:
+              Uncorrected   chi2(6)         = 1001.8604
+              Design-based  F(5.79, 2253.30)=  101.7709     P = 0.0000
+
+          Note: Variance scaled to handle strata with a single sampling unit.
+
+          saved vectors:
+                       e(b) =  row percentages
+                      e(se) =  standard errors of row percentages
+                      e(lb) =  lower 95% confidence bounds for row percentages
+                      e(ub) =  upper 95% confidence bounds for row percentages
+                    e(deff) =  deff for variances of row percentages
+                    e(deft) =  deft for variances of row percentages
+                    e(cell) =  cell percentages
+                     e(row) =  row percentages
+                     e(col) =  column percentages
+                   e(count) =  weighted counts
+                     e(obs) =  number of observations
+          (output written to `"plan_tab.rtf"') 
+          . }/* End analysis section */
+
+          . else{
+          . di "Did not run analysis"
+          . }
+
+Your best friend here is `set trace=on`. Also, I've found STATA's
+foreach, forvalues commands to be really tricky. If you know that your
+\`\`core'' code is running fine, the main problem with loops is probably
+going to be in the syntax for your forvalues or foreach command.
+
+It's also a really good idea to build in sanity checks if you're running
+complex programs. Small mistakes can really compound when you're using
+these powerful tools.
+
+In Class Exercise
+-----------------
+
+Use the plans dataset. Create an algorithm that will convert a continous
+variable into a series of binary variables, one dummy variable for each
+quintile. Make sure the resulting binary variables are properly labeled.
+
+Now, run this for every continuous variable in the dataset, using a loop
+structure.
+
+Bonus challenge: can you identify continuous variables programmatically?
+
+          . exit
