@@ -2444,3 +2444,7 @@ linesize of 64. markdoc automatically adjusts your document
 width. You can avoid this warning by increasing Stata's linesize
 or by writing shorter lines
 
+
+(markdoc created programming.pdf)
+
+
