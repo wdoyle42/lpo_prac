@@ -15,20 +15,16 @@ Human and Organizational Development
 Course Number HOD 9952
 ----------------------
 
-Spring 2020
+Spring 2021
 -----------
 
 William R. Doyle
 
 Office: 207D Payne
 
-Office Hours: Tuesdays and Thursdays, 1-4 pm or by appointment, use wdoyle42.youcanbook.me
+Office Hours: Wednesdays and Thursdays, 2-5 pm or by appointment, use wdoyle42.youcanbook.me
 
 Email: <w.doyle@vanderbilt.edu>
-
-Twitter: [\@wdoyle42](https://twitter.com/wdoyle42)
-
-Phone: (615) 322-2904
 
 Introduction
 ============
@@ -42,13 +38,18 @@ Evaluation for the course will be based on the following factors:
 
 *Assignments: 33%*
 
-There will be a total of fourteen assignments, which will be graded. Late assignments will not be accepted. These assignments will account for a third of your grade. Collaboration on assignments is fine, however, many of the assignments will ask you to work with variables and datasets of your own choosing.  The lowest scoring assignment will be removed.
+There will be a total of fourteen assignments, thirteen of which will be graded. Late assignments will not be accepted. These assignments will account for a third of your grade. Collaboration on assignments is fine, however, many of the assignments will ask you to work with variables and datasets of your own choosing.  The lowest scoring assignment will be removed.
 
-*Literature Review: 33%* I will ask you to compile a brief (no more than five page) literature review on your chosen subject. This literature review, along with a revised research question, will be due midnight, February 13.
+*Literature Review: 33%* I will ask you to compile a brief (no more
+ than five page) literature review on your chosen subject. This
+ literature review, along with a revised research question, will be
+ due midnight, March 1. 
 
 *Replication File: 34%*
 
-A replication file containing all of the data (or links to the data) for your analysis, a codebook and your Stata program to analyze this data will be due by midnight on April 29. This assignment will be evaluated based on the following factors:
+A replication file containing all of the data (or links to the data)
+for your analysis, a codebook and your Stata program to analyze this
+data will be due by midnight on May 6. This assignment will be evaluated based on the following factors:
 
 -   The quality of the underlying analysis
 -   How well the replication file produces publication-ready results, including tables and graphics
@@ -89,9 +90,20 @@ Schedule
 
 Class meetings will teach specific skills that are helpful for data analysts as they seek to answer questions. Class meetings will combine some instruction with hands on practice of the skill for that week.
 
-Students are responsible for their own projects, and I expect that you will make progress toward the final assignment throughout the semester. Office hours and/or appointments are an excellent time to discuss the direction of your project and to get feedback on completed work.
+Students are responsible for their own projects, and I expect that you
+will make progress toward the final assignment throughout the
+semester. Office hours and/or appointments are an excellent time to
+discuss the direction of your project and to get feedback on completed
+work.
 
-January 9 The Logic of Conditional Means; review of programming skills
+
+Safety
+=========
+
+This will be an in-person class during a global pandemic. My thoughts
+on safety are \href{https://docs.google.com/document/d/1Sme5cm_fhtXRSgjiBjmbSByGjS9lXMxWEC70nB8TZM8/edit?usp=sharing}{here}
+
+January 28 The Logic of Conditional Means; review of programming skills
 --------------------------------------------------------------------------------
 
 *Readings*
@@ -100,7 +112,7 @@ Baum, Chapters 1-3
 
 Mitchell, Chapter 3
 
-January 16 Linear estimators
+February 4 Linear estimators
 -------------------------------------
 
 *Readings*
@@ -109,9 +121,9 @@ Baum, Chapter 4
 
 *Assignments*
 
-Assignment 1 due January 14
+Assignment 1 due February 2
 
-January 23 OLS Regression in Stata
+February 11 OLS Regression in Stata
 -------------------------------------------
 
 *Readings*
@@ -122,9 +134,9 @@ Long & Freese, Chapter 3
 
 *Assignments*
 
-Assignment 2 due Sunday, January 21
+Assignment 2 due February 9
 
-January 30 Properties of OLS estimator
+February 18 Properties of OLS estimator
 -----------------------------------------------
 
 *Readings*
@@ -135,9 +147,9 @@ Adkins, L. & Gade, M. (2012) "Monte Carlo Experiments Using Stata: A Primer with
 
 *Assignments*
 
-Assignment 3 due January 28
+Assignment 3 due February 16
 
-February 6 Inference with OLS, hypothesis testing (sigh)
+February 25 Inference with OLS, hypothesis testing (sigh)
 -----------------------------------------------------------------
 
 *Readings*
@@ -152,9 +164,9 @@ Outreg documentation: [http://repec.org/bocode/o/outreg2]
 
 *Assignments*
 
-Assignment 4 due February 4
+Assignment 4 due February 23
 
-Tuesday, February 13 Functional Form, model specification
+March 4 Functional Form, model specification
 ---------------------------------------------------------
 
 *Readings*
@@ -165,11 +177,11 @@ Kennedy, P. E. (2002). Sinning in the basement: What are the rules? The ten comm
 
 *Assignments*
 
-Assignment 5 due February 11
+Assignment 5 due March 2
 
-Literature Review due February 13
+Literature Review due March 1
 
-February 20 Binary variables, interactions
+March 11 Binary variables, interactions
 ---------------------------------------------------
 
 *Readings*
@@ -180,9 +192,9 @@ UCLA IDRE,"How can I use the margins command to understand multiple interactions
 
 *Assignments*
 
-Assignment 6 due February 18
+Assignment 6 due March 9
 
-February 27 Interactions, marginal effects
+March 18 Interactions, marginal effects
 ---------------------------------------------------
 
 *Readings*
@@ -191,12 +203,9 @@ UCLA IDRE "How can I explain a continuous by continuous interaction?" [http://ww
 
 *Assignments*
 
-Assignment 7 due February 25
+Assignment 7 due March 16
 
-March 5 Spring Break
------------------------------
-
-March 12 Replication
+March 25 Replication
 -----------------------------
 
 *Readings*
@@ -207,10 +216,11 @@ Hammermesh, D. (2007) Replication in Economics. NBER Working Papers 13026.
 
 *Assignments*
 
-Assignment 8 due March 10
+Assignment 8 due March 23
 
-March 19 Non-spherical errors
---------------------------------------
+
+April 1 Non-Spherical Errors
+---------------------------------------------
 
 *Readings*
 
@@ -218,10 +228,22 @@ Cox, Nicholas J. "Speaking Stata: Graphing model diagnostics." Stata Journal 4.4
 
 *Assignments*
 
-Assignment 9 due March 17
+Assignment 9 due March 30
 
-March 26 Limited Dependent Variables
----------------------------------------------
+
+
+
+April 8 Reading Day
+--------------------------------------
+
+Watch one of: Piled Higher and Deeper: The PhD Comic Movie, Real
+Genius,  Legally Blonde, the Paper Chase or
+Bad Education
+
+
+
+April 15 Limited Dependent Variables
+-----------------------------
 
 *Readings*
 
@@ -231,9 +253,9 @@ Williams, R. (2012). Using the margins command to estimate and interpret adjuste
 
 *Assignments*
 
-Assignment 10 due March 24
+Assignment 10 due April 13
 
-April 2 Panel Data
+April 22 Panel Data
 ---------------------------
 
 *Readings*
@@ -242,9 +264,10 @@ McCaffrey, D. F., Lockwood, J. R., Mihaly, K., & Sass, T. R. (2012). A review of
 
 *Assignments*
 
-Assignment 11 due March 31
+Assignment 11 due April 20
 
-Tuesday, April  9 Advanced Graphics
+
+April 29 Advanced Graphics, Reporting Complex Results
 -----------------------------------
 
 *Readings*
@@ -253,20 +276,11 @@ Jann, B. (2013). Plotting regression coefficients and other estimates in Stata. 
 
 Gelman, A., Pasarica, C., & Dodhia, R. (2002). Let's practice what we preach: turning tables into graphs. The American Statistician, 56(2), 121-130. (Online)[http://www.tandfonline.com/doi/abs/10.1198/000313002317572790]
 
-*Assignments*
-
-Assignment 12 due April 7
-
-April 16 Reporting Complex Results
--------------------------------------------
-
-*Readings*
-
 Gallup, J. L. (2012). A programmer’s command to build formatted statistical tables. Stata Journal, 12(4), 655-673. (Online)[http://go.galegroup.com.proxy.library.vanderbilt.edu/ps/i.do?ty=as&v=2.1&u=tel_a_vanderbilt&it=DIourl&s=RELEVANCE&p=AONE&qt=SN~1536-867X>~~VO<sub>12SP</sub>655~~IU<sub>4&lm=DA</sub>120120000&sw=w&authCount=1]
 
 *Assignments*
 
-Assignment 13 due April 14
+Assignment 13 due April 27
 
-*Replication File Due April 23*
+*Replication File Due May 6*
 
