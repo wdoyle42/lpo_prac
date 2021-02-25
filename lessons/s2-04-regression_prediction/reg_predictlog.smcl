@@ -1,15 +1,15 @@
 {smcl}
 {com}{sf}{ul off}{txt}{.-}
       name:  {res}<unnamed>
-       {txt}log:  {res}/Users/doylewr/practicum_2017/central/lessons/s2-04-regression_prediction/reg_predictlog.smcl
+       {txt}log:  {res}/Users/doylewr/lpo_prac/lessons/s2-04-regression_prediction/reg_predictlog.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}30 Jan 2018, 10:01:02
+ {txt}opened on:  {res}25 Feb 2021, 08:49:20
 {txt}
 {com}. 
 . /* PhD Practicum, Spring 2018 */
 . /* Using Prediction to Interpret Regressions */
 . /* Will Doyle*/
-. /* 1/30/18 */
+. /* 2/25/21 */
 . 
 . clear
 {txt}
@@ -21,9 +21,6 @@
 {txt}
 {com}. 
 . estimates clear
-{txt}
-{com}. 
-. graph set ps logo off
 {txt}
 {com}. 
 . graph drop _all
@@ -204,6 +201,16 @@
 . estimates restore basic
 {txt}(results {stata estimates replay basic:basic} are active now)
 {com}. 
+. 
+. /***
+> 
+> 
+> What we want to do is to first show the overall relationship between
+> student teacher ratios and test scores and to indicate our uncertainty
+> for the regression line. This is when prediction comes in handy. 
+> 
+> ***/
+. 
 . // Predict using data in memory
 . predict yhat, xb
 . 
@@ -217,7 +224,6 @@
 . gen low_ci_90=yhat-(`myt2'*yhat_se)
 . gen hi_ci_90=yhat+(`myt2'*yhat_se)
 . 
-. 
 . sort `x'
 . 
 . graph twoway scatter `y' `x',msize(small) mcolor(blue)  ///
@@ -226,12 +232,39 @@
 >   || line hi_ci `x', lcolor(red) lpattern(dash) ///
 >   || line low_ci_90 `x', lcolor(yellow) lpattern(dash) ///
 >   || line hi_ci_90 `x', lcolor(yellow) lpattern(dash) ///
->       legend( order(1 "Math score" 2 "Prediction" 3 "95% Confidence Interval" 5 "90% COnfidence Interval")) ///
+>       legend( order(1 "Math score" 2 "Prediction" 3 "95% Confidence Interval" 5 "90% Confidence Interval")) ///
 >       name(basic_predict)
 {res}{com}. 
 . graph export basic_predict.`gtype', replace
-{txt}(file /Users/doylewr/practicum_2017/central/lessons/s2-04-regression_prediction/basic_predict.pdf written in PDF format)
+{txt}(file /Users/doylewr/lpo_prac/lessons/s2-04-regression_prediction/basic_predict.pdf written in PDF format)
 {com}. 
+. 
+. /***
+> 
+> Remember that the prediction interval does not tell us where we can
+> expect any individual unit to be located. Instead, the prediction
+> interval tells us the likely range of \emph{c -(}lines{c )-} that would be
+> generated in repeated samples. 
+> 
+> ***/
+. 
+. /***
+> ## Hypothetical Values
+> 
+> 
+> Many times, we'd also like to think about how the dependent variable
+> would increase or decrease as a function of hypothetical values of x.
+> Using only Stata's {c -(}c 96{c )-}predict{c -(}c 96{c )-}' command, we're stuck with just
+> using the data in memory. The {c -(}c 96{c )-}margins{c -(}c 96{c )-} command can help us to
+> make predictions for hypothetical values of the independent variable. 
+> 
+> There are two steps to using margins. First, we need to generate
+> values of $\hat{c -(}y{c )-}$ across levels of x, then we need to generate the
+> standard error of $\hat{c -(}y{c )-}$ across those same levels of x. With those
+> estimates in hand, we can save them in memory and plot them. 
+> 
+> ***/
+. 
 . /*Making use of the margins command*/
 . 
 . // Use summary to get min and max of key IV    
@@ -265,7 +298,7 @@
 {com}. margins , /* init margins */
 >     predict(xb) /* Type of prediction */
 >     nose /* Don't give SE */
->     at( (mean) /* Precition at mean of all variables */
+>     at( (mean) /* Prediction at mean of all variables */
 >     `controls' /* Set controls at mean */
 >     `x'=(`mymin'(.1)`mymax'))  /*range from min to max of x in steps of .1 */
 >      post  /* Post results in matrix form */
@@ -5048,6 +5081,7 @@
 {com}. generate ub = pred12 + (`myt'* pred11) /*Prediction plus t value times SE */
 {txt}(302 missing values generated)
 {com}. 
+. 
 . /*Plot Simple Prediction */
 . 
 . graph twoway line pred12 pred13, ///
@@ -5056,7 +5090,7 @@
 >     name(basic_predict_margins)
 {res}{com}. 
 . graph export basic_predict.`gtype', replace 
-{txt}(file /Users/doylewr/practicum_2017/central/lessons/s2-04-regression_prediction/basic_predict.pdf written in PDF format)
+{txt}(file /Users/doylewr/lpo_prac/lessons/s2-04-regression_prediction/basic_predict.pdf written in PDF format)
 {com}. 
 . /*Plot Prediction with CI*/
 . 
@@ -5069,10 +5103,11 @@
 >     name(ci_predict95) 
 {res}{com}. 
 . graph export ci_predict95.`gtype', replace 
-{txt}(file /Users/doylewr/practicum_2017/central/lessons/s2-04-regression_prediction/ci_predict95.pdf written in PDF format)
+{txt}(file /Users/doylewr/lpo_prac/lessons/s2-04-regression_prediction/ci_predict95.pdf written in PDF format)
 {com}. 
 . drop pred11 pred12 pred13
-. /*Or: Marginsplaot */
+. 
+. /*Or: Marginsplot */
 . 
 . estimates restore basic_controls
 {txt}(results {stata estimates replay basic_controls:basic_controls} are active now)
@@ -5090,7 +5125,7 @@
 >          ;
 {res}
 {txt}Adjusted predictions{col 49}Number of obs{col 67}= {res}       420
-{txt}Model VCE{col 14}: {res}OLS
+{txt}{col 1}Model VCE{col 14}: {res}OLS
 
 {txt}{p2colset 1 14 16 2}{...}
 {p2col:Expression}:{space 1}{res:Linear prediction, predict(xb)}{p_end}
@@ -7474,9 +7509,37 @@
 {com}. 
 . if `second_part'==1{c -(}
 . 
+. /***
+> 
+> ## Forecasting
+> 
+> Forecasting is distinct from prediction in the parlance of
+> regression. The prediction interval is all about how different the
+> regression line is likely to be in repeated samples. The forecast
+> interval is all about how well the model predicts the location of
+> individual points. A 95\% confidence interval around the regression
+> line says: {c -(}c 96{c )-}{c -(}c 96{c )-}In 95 percent of repeated samples, an interval calculated
+> in this way will include the true value of the regression line.'' A
+> 95\% forecast interval around the regression line says {c -(}c 96{c )-}{c -(}c 96{c )-}In 95 percent
+> of repeated samples, an interval calculated in this way will include
+> all but 5 percent of observations.'' 
+> 
+> The process for generating these lines is very similar to the one we
+> just went through, with the exception that we'll be using
+> \texttt{c -(}stdf{c )-}, the standrad error of the forecast, as opposed to
+> \texttt{c -(}stdp{c )-}, the standard error of the prediction. 
+> 
+> Here's what the forecast interval looks like for us, when predicting
+> using available data:
+> 
+> 
+> 
+> ***/
+. 
+. 
 . /*Prediction vs. forecasting*/
 . 
-.     drop yhat* *ci
+. drop yhat* *ci
 .              
 .     
 . estimates restore basic
@@ -7502,7 +7565,7 @@
 >     legend( order(1 "Math score" 2 "Prediction" 3 "95% Confidence Interval, Prediction" 5 "95% Confidence Interval, Forecast"))
 {res}{com}. 
 . graph export predictvforecast.`gtype', replace
-{txt}(file /Users/doylewr/practicum_2017/central/lessons/s2-04-regression_prediction/predictvforecast.pdf written in PDF format)
+{txt}(file /Users/doylewr/lpo_prac/lessons/s2-04-regression_prediction/predictvforecast.pdf written in PDF format)
 {com}. 
 . gen outside=`y' < low_ci_f | `y' >hi_ci_f
 . 
@@ -7526,6 +7589,14 @@
 . estimates restore basic_controls
 {txt}(results {stata estimates replay basic_controls:basic_controls} are active now)
 {com}. 
+. /***
+> 
+> With hypothetical data, we're forecasting out of range, and so the
+> intervals are going to be quite wide. 
+> 
+> ***/
+. 
+. 
 . /*Then with margins */ 
 . 
 . sum `x', detail
@@ -11642,13 +11713,15 @@
 . 
 . svmat pred1
 . 
+. drop lb ub
+. 
 . generate lb = pred12 - (`myt' * pred11) /*Prediction minus t value times SE */
-{err}variable {bf}lb{sf} already defined
-{txt}{search r(110), local:r(110);}
+{txt}(319 missing values generated)
 {com}. generate ub = pred12 +  (`myt' * pred11) /*Prediction plus t value times SE */
+{txt}(319 missing values generated)
+{com}. 
 . 
 . /*Plot Prediction with CI*/
-. 
 .     
 . graph twoway line pred12 pred13 || ///
 >     line lb pred13,lcolor(red) || ///
@@ -11656,15 +11729,33 @@
 >     xtitle("Hypothetical Values of Student-Teacher Ratio") ///
 >     ytitle("Predicted Values of Math Test Scores") ///
 >     legend(order(1 "Predicted Value" 2 "Lower/Upper Bound 95% CI" )) ///
->     name(ci_predict95)
-. 
+>     name(ci_predict95_b)
+{res}{com}. 
 . graph export ci_predict95_forecast.`gtype', replace 
-.     
+{txt}(file /Users/doylewr/lpo_prac/lessons/s2-04-regression_prediction/ci_predict95_forecast.pdf written in PDF format)
+{com}.     
+. /***
+> 
+> The point is that we should approach these results with some
+> humility. Too often, we don't take forecast intervals very
+> seriously. Predictions are made on {c -(}c 96{c )-}{c -(}c 96{c )-}average'' using the conditional
+> expectation function. If you're going to forecast for an individual
+> unit--- a person, a school, a state--- you need to acknowledge that
+> the uncertainty is likely to be large. 
+> 
+> ***/    
+.         
 . {c )-} /* End part 2 */
-{txt}{search r(110), local:r(110);}
+{txt}
+{com}. 
+{txt}end of do-file
 
-end of do-file
 
-{search r(110), local:r(110);}
+{err}{title:Warning}
+{p}your documentation has a width of 445 which is beyond the limit of Stata. This can corrupt your document... avoid writing very long lines in the document. 
+
+{txt}
+(markdoc created {bf:{browse "reg_predict.md"}})
+
 
 {com}. 
