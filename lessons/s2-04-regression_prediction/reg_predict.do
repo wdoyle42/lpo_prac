@@ -137,16 +137,16 @@ local gtype pdf /*For Mac*/
 
 //Bookmarks    
 local first_part=1
-local second_part=1
+local second_part=0
 
 // DV
-local y math_scr
+local y read_scr
 
 // Key IV
-local x str
+local x expn_stu_t
 
 // Controls
-local controls expn_stu_t avginc el_pct meal_pct comp_stu
+local controls str avginc el_pct meal_pct comp_stu
 
 //alpha
 
@@ -173,7 +173,7 @@ reg `y' `x' `controls'
 eststo basic_controls
 
 #delimit ;
-quietly esttab * using my_models.tex,          /* estout command: * indicates all estimates in memory. csv specifies comma sep, best for excel */
+esttab * using my_models.rtf,          /* estout command: * indicates all estimates in memory. csv specifies comma sep, best for excel */
                label                          /*Use labels for models and variables */
                nodepvars                      /* Use my model titles */
                b(2)                           /* b= coefficients , this gives two sig digits */
@@ -199,6 +199,8 @@ scalar myt=`myt'
 local myt2=invttail(`df_r',`alpha_2a')
 scalar myt2=`myt2'
 
+
+
 if `first_part'==1{
 
 estimates restore basic
@@ -219,6 +221,7 @@ predict yhat, xb
 //Get SE of prediction
 predict yhat_se,stdp
 
+
 // Generate Prediction interval 
 gen low_ci=yhat-(`myt'*yhat_se)
 gen hi_ci=yhat+(`myt'*yhat_se)
@@ -238,7 +241,6 @@ graph twoway scatter `y' `x',msize(small) mcolor(blue)  ///
       name(basic_predict)
 
 graph export basic_predict.`gtype', replace
-
 
 /***
 
@@ -273,6 +275,9 @@ sum `x', detail
 
 local mymin=r(min)
 local mymax=r(max)
+local n_steps=100
+local diff =`mymax'-`mymin'
+local step=`diff'/`n_steps'
 
 estimates restore basic_controls
 
@@ -284,10 +289,11 @@ margins , /* init margins */
     nose /* Don't give SE */
     at( (mean) /* Prediction at mean of all variables */
     `controls' /* Set controls at mean */
-    `x'=(`mymin'(.1)`mymax'))  /*range from min to max of x in steps of .1 */
+    `x'=(`mymin'(`step')`mymax'))  /*range from min to max of x in steps of .1 */
      post  /* Post results in matrix form */
          ;
 #delimit cr
+
 
 // Pull results
 mat xb=e(b)
@@ -302,13 +308,15 @@ matrix myx=allx[1...,1]'
 estimates restore basic_controls
 
 // Run margins again, but this time get standard error of prediction as output
-margins , predict(stdp) nose at(`x'=(`mymin'(.1)`mymax') (mean) `controls') post
+margins , predict(stdp) nose at(`x'=(`mymin'(`step')`mymax') (mean) `controls') post
 
 //Grab standard error of prediction
 mat stdp=e(b)
 
+
 //Put three matrices together: standard error, prediction, and values of x: transpose 
 mat pred1=[stdp \ xb\ myx]'
+
 
 //Put matrix in data 
 svmat pred1
@@ -352,12 +360,18 @@ margins , /* init margins */
     predict(xb) /* Type of prediction */
     at( (mean) /* Precition at mean of all variables */
     `controls' /* Set controls at mean */
-    `x'=(`mymin'(.1)`mymax'))  /*range from min to max of x in steps of .1 */
+    `x'=(`mymin'(`step')`mymax'))  /*range from min to max of x in steps of .1 */
      post  /* Post results in matrix form */
          ;
 #delimit cr
 
-marginsplot , recast(line) plotopts(lcolor(black)) recastci(rarea)  
+marginsplot , recast(line) plotopts(lcolor(black)) ///
+				recastci(rarea) ciopts(lcolor(0) fcolor(blue%50)) ///
+				name(preferred, replace)
+
+marginsplot ,name(definitely_not_preferred, replace)
+
+exit 
 
 }/* End first part */
 
