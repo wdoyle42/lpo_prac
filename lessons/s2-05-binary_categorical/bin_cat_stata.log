@@ -1,13 +1,14 @@
------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s2-05-binary_categorical/bin_cat_stata.log
+       log:  /Users/doylewr/lpo_prac/lessons/s2-05-binary_cate
+> gorical/bin_cat_stata.log
   log type:  text
- opened on:   6 Feb 2018, 14:23:26
+ opened on:   4 Mar 2021, 08:56:21
 
 . 
 . // Working with binary and cateogrical independent variables
 . // Will Doyle
-. // 2018-01-29
+. // 2021-03-04
 . // Practicum repo on github
 . 
 . // TOC
@@ -43,11 +44,15 @@
 . 
 . use ${ddir}plans.dta, clear
 . 
-. foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
-  2.               foreach i of numlist -4 -8 -9 { /* Start inner loop */
+. foreach myvar of varlist stu_id-f1psepln{ /* Start outer loo
+> p */
+  2.               foreach i of numlist -4 -8 -9 { /* Start in
+> ner loop */
   3.                      replace `myvar'=. if `myvar'== `i'
-  4.                                             }  /* End inner loop */
-  5.                                           } /* End outer loop */
+  4.                                             }  /* End inn
+> er loop */
+  5.                                           } /* End outer 
+> loop */
 (0 real changes made)
 (0 real changes made)
 (0 real changes made)
@@ -127,21 +132,64 @@
 (781 real changes made, 781 to missing)
 (46 real changes made, 46 to missing)
 . 
-. local race_names amind asian black hispanic_no hispanic_race multiracial white
+. /***
+> 
+> ## Coding
+> 
+> First, it's worth thinking pretty carefully about how these 
+> variables
+> will be coded. Are you sure that they are mutually exclusive
+>  and
+> exhaustive? How about the numbers of categories? Are these a
+> ppropriate
+> for the task at hand? Are they really categorical or can the
+> y be
+> thought of as ordered? How would you figure this out? 
+> 
+> In general, it's better to favor fewer categories, but you n
+> eed to
+> make sure that your decisions reflect the important question
+> s in your
+> theoretical framework. 
+> 
+> Below, I recode the race variables as they're constructed by
+>  NCES to
+> be more useful in our analysis. 
+> 
+> 
+> ***/                                                        
+>                       
+.                                                             
+>                       
+.                                                             
+>                       
+. local race_names amind asian black hispanic_no hispanic_race
+>  multiracial white
 . 
 . tab(byrace), gen(race_)
 
-     student^s race/ethnicity-composite |      Freq.     Percent        Cum.
-----------------------------------------+-----------------------------------
-amer. indian/alaska native, non-hispani |        130        0.85        0.85
-asian, hawaii/pac. islander,non-hispani |      1,460        9.58       10.44
-black or african american, non-hispanic |      2,019       13.25       23.69
-            hispanic, no race specified |        994        6.52       30.21
-               hispanic, race specified |      1,220        8.01       38.22
-              multiracial, non-hispanic |        735        4.82       43.04
-                    white, non-hispanic |      8,678       56.96      100.00
-----------------------------------------+-----------------------------------
-                                  Total |     15,236      100.00
+     student^s race/ethnicity-composite |      Freq.     Perce
+> nt        Cum.
+----------------------------------------+---------------------
+> --------------
+amer. indian/alaska native, non-hispani |        130        0.
+> 85        0.85
+asian, hawaii/pac. islander,non-hispani |      1,460        9.
+> 58       10.44
+black or african american, non-hispanic |      2,019       13.
+> 25       23.69
+            hispanic, no race specified |        994        6.
+> 52       30.21
+               hispanic, race specified |      1,220        8.
+> 01       38.22
+              multiracial, non-hispanic |        735        4.
+> 82       43.04
+                    white, non-hispanic |      8,678       56.
+> 96      100.00
+----------------------------------------+---------------------
+> --------------
+                                  Total |     15,236      100.
+> 00
 . 
 . local i=1
 . 
@@ -172,7 +220,8 @@ black or african american, non-hispanic |      2,019       13.25       23.69
 . recode byrace (4/5=4) (6=5) (7=6) (.=.), gen(byrace2)
 (10633 differences between byrace and byrace2)
 . 
-. label define byrace2 1 "Am.Ind." 2 "Asian/PI" 3 "Black" 4 "Hispanic" 5 "Multiracial" 6 "White"
+. label define byrace2 1 "Am.Ind." 2 "Asian/PI" 3 "Black" 4 "H
+> ispanic" 5 "Multiracial" 6 "White"
 . 
 . label values byrace2 byrace2
 . 
@@ -180,22 +229,33 @@ black or african american, non-hispanic |      2,019       13.25       23.69
 (16,160 missing values generated)
 . replace urm=0 if byrace2==4 | byrace2==6
 (10,892 real changes made)
-. replace urm=1 if byrace2==1 | byrace2==2 | byrace2==3 | byrace2==5
+. replace urm=1 if byrace2==1 | byrace2==2 | byrace2==3 | byra
+> ce2==5
 (4,344 real changes made)
 .   
 . tab(f1psepln), gen(plan_)
 
    f1 post-secondary plans right after |
-                           high school |      Freq.     Percent        Cum.
----------------------------------------+-----------------------------------
-                don^t plan to continue |        207        1.46        1.46
-don^t know or planning but unspecified |        834        5.87        7.33
-vocational, technical, or trade school |        986        6.94       14.27
-            two-year community college |      2,894       20.38       34.65
-       four-year college or university |      8,955       63.05       97.70
-early hs grad attending postsec school |        326        2.30      100.00
----------------------------------------+-----------------------------------
-                                 Total |     14,202      100.00
+                           high school |      Freq.     Percen
+> t        Cum.
+---------------------------------------+----------------------
+> -------------
+                don^t plan to continue |        207        1.4
+> 6        1.46
+don^t know or planning but unspecified |        834        5.8
+> 7        7.33
+vocational, technical, or trade school |        986        6.9
+> 4       14.27
+            two-year community college |      2,894       20.3
+> 8       34.65
+       four-year college or university |      8,955       63.0
+> 5       97.70
+early hs grad attending postsec school |        326        2.3
+> 0      100.00
+---------------------------------------+----------------------
+> -------------
+                                 Total |     14,202      100.0
+> 0
 . 
 . local i=1
 . 
@@ -223,13 +283,15 @@ early hs grad attending postsec school |        326        2.30      100.00
 .   replace order_plan=3 if fouryr==1
 (8,955 real changes made)
 . 
-. label define orderplan 1 "---No Plans/DK" 2 "---Votech/CC" 3 "---Four Year"
+. label define orderplan 1 "---No Plans/DK" 2 "---Votech/CC" 3
+>  "---Four Year"
 . 
 . label values order_plan orderplan
 .   
 . local pareds bymothed byfathed bypared
 . 
-. local ed_names nohs hs 2yrnodeg 2yr some4  4yrgrad masters phd
+. local ed_names nohs hs 2yrnodeg 2yr some4  4yrgrad masters p
+> hd
 . 
 . foreach pared of local pareds{
   2. 
@@ -252,57 +314,96 @@ early hs grad attending postsec school |        326        2.30      100.00
  15. }
 
               mother^s highest level of |
-                    education-composite |      Freq.     Percent        Cum.
-----------------------------------------+-----------------------------------
-             did not finish high school |      1,935       12.65       12.65
-      graduated from high school or ged |      4,117       26.91       39.55
-      attended 2-year school, no degree |      1,849       12.08       51.64
-           graduated from 2-year school |      1,620       10.59       62.22
-     attended college, no 4-year degree |      1,589       10.38       72.61
-                 graduated from college |      2,820       18.43       91.04
-completed master^s degree or equivalent |      1,060        6.93       97.97
-completed phd, md, other advanced degre |        311        2.03      100.00
-----------------------------------------+-----------------------------------
-                                  Total |     15,301      100.00
+                    education-composite |      Freq.     Perce
+> nt        Cum.
+----------------------------------------+---------------------
+> --------------
+             did not finish high school |      1,935       12.
+> 65       12.65
+      graduated from high school or ged |      4,117       26.
+> 91       39.55
+      attended 2-year school, no degree |      1,849       12.
+> 08       51.64
+           graduated from 2-year school |      1,620       10.
+> 59       62.22
+     attended college, no 4-year degree |      1,589       10.
+> 38       72.61
+                 graduated from college |      2,820       18.
+> 43       91.04
+completed master^s degree or equivalent |      1,060        6.
+> 93       97.97
+completed phd, md, other advanced degre |        311        2.
+> 03      100.00
+----------------------------------------+---------------------
+> --------------
+                                  Total |     15,301      100.
+> 00
 
               father^s highest level of |
-                    education-composite |      Freq.     Percent        Cum.
-----------------------------------------+-----------------------------------
-             did not finish high school |      2,039       13.34       13.34
-      graduated from high school or ged |      4,314       28.23       41.57
-      attended 2-year school, no degree |      1,438        9.41       50.97
-           graduated from 2-year school |      1,194        7.81       58.79
-     attended college, no 4-year degree |      1,417        9.27       68.06
-                 graduated from college |      2,735       17.89       85.95
-completed master^s degree or equivalent |      1,282        8.39       94.34
-completed phd, md, other advanced degre |        865        5.66      100.00
-----------------------------------------+-----------------------------------
-                                  Total |     15,284      100.00
+                    education-composite |      Freq.     Perce
+> nt        Cum.
+----------------------------------------+---------------------
+> --------------
+             did not finish high school |      2,039       13.
+> 34       13.34
+      graduated from high school or ged |      4,314       28.
+> 23       41.57
+      attended 2-year school, no degree |      1,438        9.
+> 41       50.97
+           graduated from 2-year school |      1,194        7.
+> 81       58.79
+     attended college, no 4-year degree |      1,417        9.
+> 27       68.06
+                 graduated from college |      2,735       17.
+> 89       85.95
+completed master^s degree or equivalent |      1,282        8.
+> 39       94.34
+completed phd, md, other advanced degre |        865        5.
+> 66      100.00
+----------------------------------------+---------------------
+> --------------
+                                  Total |     15,284      100.
+> 00
 
-    parents^ highest level of education |      Freq.     Percent        Cum.
-----------------------------------------+-----------------------------------
-             did not finish high school |        942        6.16        6.16
-      graduated from high school or ged |      3,044       19.89       26.05
-      attended 2-year school, no degree |      1,663       10.87       36.91
-           graduated from 2-year school |      1,597       10.44       47.35
-     attended college, no 4-year degree |      1,758       11.49       58.83
-                 graduated from college |      3,466       22.65       81.48
-completed master^s degree or equivalent |      1,785       11.66       93.15
-completed phd, md, other advanced degre |      1,049        6.85      100.00
-----------------------------------------+-----------------------------------
-                                  Total |     15,304      100.00
+    parents^ highest level of education |      Freq.     Perce
+> nt        Cum.
+----------------------------------------+---------------------
+> --------------
+             did not finish high school |        942        6.
+> 16        6.16
+      graduated from high school or ged |      3,044       19.
+> 89       26.05
+      attended 2-year school, no degree |      1,663       10.
+> 87       36.91
+           graduated from 2-year school |      1,597       10.
+> 44       47.35
+     attended college, no 4-year degree |      1,758       11.
+> 49       58.83
+                 graduated from college |      3,466       22.
+> 65       81.48
+completed master^s degree or equivalent |      1,785       11.
+> 66       93.15
+completed phd, md, other advanced degre |      1,049        6.
+> 85      100.00
+----------------------------------------+---------------------
+> --------------
+                                  Total |     15,304      100.
+> 00
 . 
 . 
 . // Recode Mother Education
 . 
-. recode bymothed (1=1) (2=2) (3/5=3) (6/8=4) (.=.), gen(bymothed2)
+. recode bymothed (1=1) (2=2) (3/5=3) (6/8=4) (.=.), gen(bymot
+> hed2)
 (7400 differences between bymothed and bymothed2)
 . 
-. label define pared2 1 "---Less than HS" 2 "---HS" 3 "---Some College" 4 "---College or More"
+. label define pared2 1 "---Less than HS" 2 "---HS" 3 "---Some
+>  College" 4 "---College or More"
 . 
 . label values bymothed2 pared2
 . 
-. label define expect -1 "Don't Know" 1 "Less than HS" 2 "HS" 3 "2 yr" 4 "4 yr No Deg" ///
+. label define expect -1 "Don't Know" 1 "Less than HS" 2 "HS" 
+> 3 "2 yr" 4 "4 yr No Deg" ///
 >     5 "Bachelors" 6 "Masters" 7 "Advanced"
 . 
 . label values bystexp expect
@@ -327,6 +428,23 @@ Less than HS |        128        0.84       10.36
 -------------+-----------------------------------
        Total |     15,236      100.00
 . 
+. /***
+> 
+> ## Binary Variables
+> 
+> Binary variables must always be constructed to be directiona
+> l. Never
+> have a binary variable for ``sex,'' always construct this ki
+> nd of
+> binary variable as either  student identified as``male'' or 
+> student identified as``female.'' Binary variables in
+> a regression represent an intercept shift-- for the group in
+>  question,
+> they increase or decrease the intercept by that amount.  
+> 
+> ***/
+. 
+. 
 . gen female=bysex==2
 . replace female=. if bysex==.
 (819 real changes made, 819 to missing)
@@ -339,10 +457,12 @@ Less than HS |        128        0.84       10.36
 . 
 . //replace bynels2r=bynels2r/100  
 .   
-. recode f2ps1sec (1=1) (2=2) (4=3) (3=4) (5/9=4), gen(first_inst)
+. recode f2ps1sec (1=1) (2=2) (4=3) (3=4) (5/9=4), gen(first_i
+> nst)
 (4167 differences between f2ps1sec and first_inst)
 . 
-. label define sector 1 "Public 4 Year" 2 "Private 4 Year" 3 "Public 2 Year"  4 "Other"
+. label define sector 1 "Public 4 Year" 2 "Private 4 Year" 3 "
+> Public 2 Year"  4 "Other"
 . 
 . label values first_inst sector
 . 
@@ -362,7 +482,8 @@ file ../../data/plans2.dta saved
 
 . 
 . // use svyset to account for survey design
-. svyset psu [pw = f1pnlwt], strat(strat_id) singleunit(scaled)
+. svyset psu [pw = f1pnlwt], strat(strat_id) singleunit(scaled
+> )
 
       pweight: f1pnlwt
           VCE: linearized
@@ -383,26 +504,70 @@ file ../../data/plans2.dta saved
          Total |     13,876      100.00
 
 . 
+. 
+. /***
+> 
+> 
+> ## Categorical Variables
+> 
+> When running a model with categorical variables, Stata won't
+>  always
+> know what you're talking about. If the underlying variable i
+> s numeric,
+> it will simply include that variable as numeric. This is not
+> good. Instead, we need to use the \texttt{i.} formulation, w
+> hich
+> specifies not only that a given variable is to be understood
+>  as a
+> factor variable, but also allows the user some fine-grained 
+> control
+> over how this will be constructed. 
+> 
+> Remember that categorical variables must always be interpret
+> ed
+> relative to their reference category. We cover how to think 
+> about that
+> next. 
+> 
+> ***/
+. 
 . // NOPE!
 . eststo order1: svy: reg `y' order_plan
 (running regress on estimation sample)
 
 Survey: Linear regression
 
-Number of strata   =       361                  Number of obs     =     15,129
-Number of PSUs     =       751                  Population size   =  3,055,918
-                                                Design df         =        390
-                                                F(   1,    390)   =    1025.42
-                                                Prob > F          =     0.0000
-                                                R-squared         =     0.1261
+Number of strata   =       361                  Number of obs 
+>     =     15,129
+Number of PSUs     =       751                  Population siz
+> e                                                           
+>     =  3,055,918
+                                                Design df     
+>     =        390
+                                                F(   1,    390
+> )                                                           
+>     =    1025.42
+                                                Prob > F      
+>     =     0.0000
+                                                R-squared     
+>     =     0.1261
 
-------------------------------------------------------------------------------
+--------------------------------------------------------------
+> ----------------
              |             Linearized
-    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-  order_plan |      7.355   .2296846    32.02   0.000     6.903425    7.806574
-       _cons |   27.04247    .591459    45.72   0.000     25.87962    28.20531
-------------------------------------------------------------------------------
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95%
+>  Con                                                        
+>     f. Interval]
+-------------+------------------------------------------------
+> ----------------
+  order_plan |      7.355   .2296846    32.02   0.000     6.90
+> 3425                                                        
+>         7.806574
+       _cons |   27.04247    .591459    45.72   0.000     25.8
+> 7962                                                        
+>         28.20531
+--------------------------------------------------------------
+> ----------------
 
 . 
 . 
@@ -412,25 +577,48 @@ Number of PSUs     =       751                  Population size   =  3,055,918
 
 Survey: Linear regression
 
-Number of strata   =       361                  Number of obs     =     14,561
-Number of PSUs     =       751                  Population size   =  2,908,622
-                                                Design df         =        390
-                                                F(   4,    387)   =     647.17
-                                                Prob > F          =     0.0000
-                                                R-squared         =     0.2507
+Number of strata   =       361                  Number of obs 
+>     =     14,561
+Number of PSUs     =       751                  Population siz
+> e                                                           
+>     =  2,908,622
+                                                Design df     
+>     =        390
+                                                F(   4,    387
+> )                                                           
+>     =     647.17
+                                                Prob > F      
+>     =     0.0000
+                                                R-squared     
+>     =     0.2507
 
--------------------------------------------------------------------------------
-              |             Linearized
-     bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
---------------+----------------------------------------------------------------
-   order_plan |
----Votech/CC  |   1.748766   .5325367     3.28   0.001     .7017643    2.795768
----Four Year  |   8.998486   .5453333    16.50   0.000     7.926325    10.07065
-              |
-       byses1 |   6.298143   .2098067    30.02   0.000     5.885649    6.710637
-       female |  -2.086194   .2648791    -7.88   0.000    -2.606963   -1.565424
-        _cons |   40.48229   .5152481    78.57   0.000     39.46927     41.4953
--------------------------------------------------------------------------------
+--------------------------------------------------------------
+> ----------------
+             |             Linearized
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95%
+>  Con                                                        
+>     f. Interval]
+-------------+------------------------------------------------
+> ----------------
+  order_plan |
+---Votech~C  |   1.748766   .5325367     3.28   0.001     .701
+> 7643                                                        
+>         2.795768
+---Four Y..  |   8.998486   .5453333    16.50   0.000     7.92
+> 6325                                                        
+>         10.07065
+             |
+      byses1 |   6.298143   .2098067    30.02   0.000     5.88
+> 5649                                                        
+>         6.710637
+      female |  -2.086194   .2648791    -7.88   0.000    -2.60
+> 6963                                                        
+>        -1.565424
+       _cons |   40.48229   .5152481    78.57   0.000     39.4
+> 6927                                                        
+>          41.4953
+--------------------------------------------------------------
+> ----------------
 
 . 
 . 
@@ -441,7 +629,8 @@ Number of PSUs     =       751                  Population size   =  2,908,622
 >                 se(3)                     ///       
 >                r2 (2)                    ///
 >                ar2 (2)                   ///
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual"
+>  N)   ///
 >                sfmt (2 0 0 0)               ///
 >                replace                   
 (output written to order1.rtf)
@@ -450,7 +639,8 @@ Number of PSUs     =       751                  Population size   =  2,908,622
 . 
 .                            
 . esttab order1 using order1.`ttype',  varwidth(50) label  ///
->     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know",nolabel) ///
+>     refcat(2.order_plan "Plans, Reference= No Plans/ Don't K
+> now",nolabel) ///
 >         nobaselevels ///
 >                nomtitles ///
 >                nodepvars              ///
@@ -458,7 +648,8 @@ Number of PSUs     =       751                  Population size   =  2,908,622
 >                 se(3)                     ///       
 >                r2 (2)                    ///
 >                ar2 (2)                   ///
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual"
+>  N)   ///
 >                sfmt (2 0 0 0)               ///
 >                replace                   
 (output written to order1.rtf)
@@ -466,96 +657,470 @@ Number of PSUs     =       751                  Population size   =  2,908,622
 . 
 . /*
 > 1  did not finish high school
->                          3,044         2  graduated from high school or
+>                          3,044         2  graduated from hig
+> h school or
 >                                           ged
->                          1,663         3  attended 2-year school, no
+>                          1,663         3  attended 2-year sc
+> hool, no
 >                                           degree
->                          1,597         4  graduated from 2-year school
->                          1,758         5  attended college, no 4-year
+>                          1,597         4  graduated from 2-y
+> ear school
+>                          1,758         5  attended college, 
+> no 4-year
 >                                           degree
->                          3,466         6  graduated from college
->                          1,785         7  completed master^s degree or
+>                          3,466         6  graduated from col
+> lege
+>                          1,785         7  completed master^s
+>  degree or
 >                                           equivalent
->                          1,049         8  completed phd, md, other
+>                          1,049         8  completed phd, md,
+>  other
 >                                           advanced degree
 >                            856         .  
 > 
 > */
 . 
+. /***
+> 
+> ## Quick Exercise
+> Run the above regression, but use parental education as a
+> predictor. Create a properly formatted table with parental e
+> ducation
+> as a categorical variable. 
+> 
+> ***/
 . 
-. recode bypared (1=1 )(2=2 ) (3 5=3) (4=4) (6=5) (7/8=6), gen(pared_level)                          
-(8058 differences between bypared and pared_level)
-
-. label define ed_levels 1 "---LT HS" 2 "---HS" 3  "---Some College" 4 "---2yr Degree" 5 "---Bachelor
-> s" 6 "---Graduate"
-
-. label values pared_level ed_levels                         
-
+. /***
+> 
+> ## Reference Categories for Categorical Variables
+> 
+> It's important to put some thought into reference categories
+>  for
+> category variables. If you have no other preference, then us
+> e the
+> largest group. You can accomplish this via the \texttt{ib(fr
+> eq).}
+> command. You should put some careful thought into the contra
+> sts you'd
+> like to draw--which groups do you want to compare and why? 
+> 
+> ***/
 .                            
-. eststo order_pared: svy: reg `y' i.order_plan i.pared_level  female
+.                            
+. //Proper factor notation: setting base levels
+. eststo order2: svy: reg `y' ib(freq).order_plan byses1 femal
+> e
 (running regress on estimation sample)
 
 Survey: Linear regression
 
-Number of strata   =       361                  Number of obs     =     14,561
-Number of PSUs     =       751                  Population size   =  2,908,622
-                                                Design df         =        390
-                                                F(   8,    383)   =     243.13
-                                                Prob > F          =     0.0000
-                                                R-squared         =     0.2016
+Number of strata   =       361                  Number of obs 
+>     =     14,561
+Number of PSUs     =       751                  Population siz
+> e                                                           
+>     =  2,908,622
+                                                Design df     
+>     =        390
+                                                F(   4,    387
+> )                                                           
+>     =     647.17
+                                                Prob > F      
+>     =     0.0000
+                                                R-squared     
+>     =     0.2507
 
-----------------------------------------------------------------------------------
-                 |             Linearized
-        bynels2m |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
------------------+----------------------------------------------------------------
-      order_plan |
-   ---Votech/CC  |   1.867231   .5302296     3.52   0.000     .8247653    2.909697
-   ---Four Year  |   10.17716   .5485875    18.55   0.000     9.098596    11.25571
-                 |
-     pared_level |
-          ---HS  |   4.311856   .6482477     6.65   0.000     3.037358    5.586353
----Some College  |   6.055646    .594868    10.18   0.000     4.886097    7.225196
-  ---2yr Degree  |   6.688304   .6764882     9.89   0.000     5.358284    8.018324
-   ---Bachelors  |   9.153235   .6217046    14.72   0.000     7.930923    10.37555
-    ---Graduate  |   12.47742   .7002531    17.82   0.000     11.10068    13.85416
-                 |
-          female |  -2.366976    .273278    -8.66   0.000    -2.904259   -1.829694
-           _cons |   32.87273   .6906146    47.60   0.000     31.51493    34.23052
-----------------------------------------------------------------------------------
+--------------------------------------------------------------
+> ----------------
+             |             Linearized
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95%
+>  Con                                                        
+>     f. Interval]
+-------------+------------------------------------------------
+> ----------------
+  order_plan |
+---No Pla..  |  -8.998486   .5453333   -16.50   0.000    -10.0
+> 7065                                                        
+>        -7.926325
+---Votech~C  |   -7.24972   .2801882   -25.87   0.000    -7.80
+> 0588                                                        
+>        -6.698852
+             |
+      byses1 |   6.298143   .2098067    30.02   0.000     5.88
+> 5649                                                        
+>         6.710637
+      female |  -2.086194   .2648791    -7.88   0.000    -2.60
+> 6963                                                        
+>        -1.565424
+       _cons |   49.48077   .2872533   172.25   0.000     48.9
+> 1601                                                        
+>         50.04553
+--------------------------------------------------------------
+> ----------------
 
 . 
-. esttab order_pared using order1.`ttype',  varwidth(50) label  ///
->     refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know" ///
->         2.pared_level "Parental Education, Reference= Less than HS", ///
->         nolabel) ///
->         nobaselevels ///
->                nomtitles ///
+. esttab order2 using order2.`ttype',  varwidth(50) label  ///
+>                nodepvars              ///
+>                    b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual"
+>  N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                   
+(output written to order2.rtf)
+
+. 
+. esttab order2 using order2.`ttype',  varwidth(50)   ///
+>     refcat(1.order_plan "College Plans, Reference=Plans to g
+> o to College",nolabel) ///
+>         label ///
+>          nomtitles ///
+>          nobaselevels ///
 >                nodepvars              ///
 >                 b(3)                   ///
 >                 se(3)                     ///       
 >                r2 (2)                    ///
 >                ar2 (2)                   ///
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual"
+>  N)   ///
 >                sfmt (2 0 0 0)               ///
 >                replace                   
-(output written to order1.rtf)
+(output written to order2.rtf)
 
 . 
-. exit 
+. margins, predict(xb) at((mean) byses1 order_plan=(1 2 3)) po
+> st
 
-end of do-file
+Predictive margins
 
+Number of strata   =       361                  Number of obs 
+>     =     13,055
+Number of PSUs     =       751                  Population siz
+> e                                                           
+>     =  2,908,622
+Model VCE    : Linearized                       Design df     
+>     =        390
 
-. cor ed_level byses1
-variable ed_level not found
-r(111);
+Expression   : Linear prediction, predict(xb)
 
-. cor pared_level byses1
-(obs=15,236)
+1._at        : order_plan      =           1
+               byses1          =    .0400221 (mean)
 
-             | pared_~l   byses1
--------------+------------------
- pared_level |   1.0000
-      byses1 |   0.8039   1.0000
+2._at        : order_plan      =           2
+               byses1          =    .0400221 (mean)
 
+3._at        : order_plan      =           3
+               byses1          =    .0400221 (mean)
 
+--------------------------------------------------------------
+> ----------------
+             |            Delta-method
+             |     Margin   Std. Err.      t    P>|t|     [95%
+>  Con                                                        
+>     f. Interval]
+-------------+------------------------------------------------
+> ----------------
+         _at |
+          1  |   39.68796   .5037281    78.79   0.000      38.
+> 6976                                                        
+>         40.67832
+          2  |   41.43673   .2612051   158.64   0.000     40.9
+> 2318                                                        
+>         41.95027
+          3  |   48.68645   .2276586   213.86   0.000     48.2
+> 3886                                                        
+>         49.13404
+--------------------------------------------------------------
+> ----------------
+
+. 
+. 
+. /***
+> 
+> ## Quick Exercsie
+> 
+> Run the regression above, but include parental education. Th
+> is time,
+> output the results with some college as the reference catego
+> ry for
+> parental education. 
+> 
+> ***/
+. 
+. 
+. /***
+> ## Interactions
+> 
+> 
+> When interacting a binary variable with a categorical variab
+> le, you
+> must do the FULL interaction-- you can't just interact with 
+> one
+> level. Same thing applies to continuous variables. 
+> 
+> ***/
+. 
+. // Factor notation, interaction
+. 
+. //Proper factor notation: setting base levels
+. eststo order3: svy: reg `y' b3.order_plan##i.female byses1
+(running regress on estimation sample)
+
+Survey: Linear regression
+
+Number of strata   =       361                  Number of obs 
+>     =     14,561
+Number of PSUs     =       751                  Population siz
+> e                                                           
+>     =  2,908,622
+                                                Design df     
+>     =        390
+                                                F(   6,    385
+> )                                                           
+>     =     436.30
+                                                Prob > F      
+>     =     0.0000
+                                                R-squared     
+>     =     0.2508
+
+--------------------------------------------------------------
+> ----------------
+             |             Linearized
+    bynels2m |      Coef.   Std. Err.      t    P>|t|     [95%
+>  Con                                                        
+>     f. Interval]
+-------------+------------------------------------------------
+> ----------------
+  order_plan |
+---No Pla..  |  -8.525456   .6892792   -12.37   0.000    -9.88
+> 0624                                                        
+>        -7.170288
+---Votech~C  |  -7.123964   .3838901   -18.56   0.000    -7.87
+> 8717                                                        
+>        -6.369211
+             |
+    1.female |  -1.908111   .3136299    -6.08   0.000    -2.52
+> 4728                                                        
+>        -1.291494
+             |
+  order_plan#|
+      female |
+---No Pla.. #|
+          1  |  -1.408776   1.010942    -1.39   0.164    -3.39
+> 6355                                                        
+>         .5788024
+---Votech~C #|
+          1  |  -.2453994   .5164566    -0.48   0.635    -1.26
+> 0787                                                        
+>         .7699881
+             |
+      byses1 |   6.292627   .2098255    29.99   0.000     5.88
+> 0097                                                        
+>         6.705158
+       _cons |   49.38647   .2962783   166.69   0.000     48.8
+> 0397                                                        
+>         49.96898
+--------------------------------------------------------------
+> ----------------
+
+. 
+. esttab order3 using order3.`ttype', varwidth(50) ///
+>     refcat(1.order_plan "College Plans, Reference=Plans to g
+> o to College:" 1.order_plan#1.female "Interaction of Plans w
+> ith Female:", nolabel) ///
+>  interaction(" X ") ///
+>    label ///
+>                    nomtitles ///
+>                        nobaselevels ///
+>                nodepvars              ///
+>                 b(3)                   ///
+>                 se(3)                     ///       
+>                r2 (2)                    ///
+>                ar2 (2)                   ///
+>                scalar(F  "df_m DF model"  "df_r DF residual"
+>  N)   ///
+>                sfmt (2 0 0 0)               ///
+>                replace                 
+(output written to order3.rtf)
+
+. 
+.                            
+. /***
+> 
+> ## Margins and Interactions
+> 
+> Once you're undertaking interactions with categorical variab
+> les, it's
+> generally a good idea to interpret them using the margins co
+> mmand. In
+> the below code I use margins to interpret the interaction be
+> tween a
+> categorical and a binary variable and to make a table with c
+> onfidence
+> intervals from the output. 
+> 
+> 
+> ***/                       
+.                            
+. 
+. // Margins to figure out what's going on
+. margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) fem
+> ale=(0 1)) post
+
+Adjusted predictions
+
+Number of strata   =       361                  Number of obs 
+>     =     13,055
+Number of PSUs     =       751                  Population siz
+> e                                                           
+>     =  2,908,622
+Model VCE    : Linearized                       Design df     
+>     =        390
+
+Expression   : Linear prediction, predict(xb)
+
+1._at        : order_plan      =           1
+               female          =           0
+               byses1          =    .0400221 (mean)
+
+2._at        : order_plan      =           1
+               female          =           1
+               byses1          =    .0400221 (mean)
+
+3._at        : order_plan      =           2
+               female          =           0
+               byses1          =    .0400221 (mean)
+
+4._at        : order_plan      =           2
+               female          =           1
+               byses1          =    .0400221 (mean)
+
+5._at        : order_plan      =           3
+               female          =           0
+               byses1          =    .0400221 (mean)
+
+6._at        : order_plan      =           3
+               female          =           1
+               byses1          =    .0400221 (mean)
+
+--------------------------------------------------------------
+> ----------------
+             |            Delta-method
+             |     Margin   Std. Err.      t    P>|t|     [95%
+>  Con                                                        
+>     f. Interval]
+-------------+------------------------------------------------
+> ----------------
+         _at |
+          1  |   41.11286   .6376636    64.47   0.000     39.8
+> 5917                                                        
+>         42.36655
+          2  |   37.79598   .7331028    51.56   0.000     36.3
+> 5465                                                        
+>          39.2373
+          3  |   42.51435   .3467731   122.60   0.000     41.8
+> 3258                                                        
+>         43.19613
+          4  |   40.36084   .3435734   117.47   0.000     39.6
+> 8536                                                        
+>         41.03633
+          5  |   49.63832   .2939528   168.86   0.000     49.0
+> 6039                                                        
+>         50.21625
+          6  |   47.73021    .257478   185.38   0.000     47.2
+> 2399                                                        
+>         48.23643
+--------------------------------------------------------------
+> ----------------
+
+. 
+. estimates store order_female
+
+. 
+. esttab . using margins.`ttype' , margin label nostar ci ///
+>     varlabels(1._at "No College Plans, Male" ///
+>                   2._at "No College Plans, Female" ///
+>                       3._at "Vo-Tech/Community College, Male
+> " ///
+>                           4._at "Vo-Tech/Community College, 
+> Female" ///
+>                               5._at "Four-Year College Plans
+> , Male" ///
+>                                   6._at "Four-Year College P
+> lans, Female" ) ///
+>         replace 
+(output written to margins.rtf)
+
+. 
+. 
+. // not great
+. marginsplot, name(margins_1,replace)
+
+  Variables that uniquely identify margins: order_plan
+      female
+
+. 
+. // better
+. 
+. marginsplot, recast(scatter) ciopts(recast(rspike)) name(mar
+> gins_2,replace)
+
+  Variables that uniquely identify margins: order_plan
+      female
+
+. 
+. // best
+. 
+. preserve
+
+. 
+. estimates restore order_female
+(results order_female are active now)
+
+. 
+. parmest,  list (parm estimate min95 max95) fast
+
+     +-------------------------------------------+
+     |  parm    estimate       min95       max95 |
+     |-------------------------------------------|
+  1. | 1._at   41.112862   39.859174   42.366551 |
+  2. | 2._at   37.795975   36.354647   39.237303 |
+  3. | 3._at   42.514354   41.832576   43.196133 |
+  4. | 4._at   40.360844   39.685357   41.036332 |
+  5. | 5._at   49.638319   49.060388   50.216249 |
+     |-------------------------------------------|
+  6. | 6._at   47.730208   47.223989   48.236427 |
+     +-------------------------------------------+
+
+. 
+. egen levels =fill(1/6)
+
+. 
+. graph twoway bar estimate levels
+
+. 
+. restore
+
+. 
+. /***
+> 
+> ## Quick Exercise
+> 
+> Again include parental education, and generate predicted pro
+> babilities
+> using the margins command. Then go back and choose a differe
+> nt
+> reference category. Does a different reference category resu
+> lt in
+> different predicted probablities? 
+> ***/
+.  
+. 
+. log close
+      name:  <unnamed>
+       log:  /Users/doylewr/lpo_prac/lessons/s2-05-binary_cate
+> gorical/bin_cat_stata.log
+  log type:  text
+ closed on:   4 Mar 2021, 08:56:28
+--------------------------------------------------------------

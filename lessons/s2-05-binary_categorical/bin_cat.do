@@ -1,10 +1,23 @@
+/***
+LPO 9952
+=================
+
+Binary and Categorical Variables in Regression
+=================
+
+Binary and categorical variables can be a headache to work with. It's worth taking some time to think about each step 
+with these kinds of variables in order to make sure that they are being reported effectively. 
+
+***/
+
+
 capture log close
 
 log using "bin_cat_stata.log", replace
 
 // Working with binary and cateogrical independent variables
 // Will Doyle
-// 2019-02-12
+// 2021-03-04
 // Practicum repo on github
 
 // TOC
@@ -39,6 +52,27 @@ foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
                                             }  /* End inner loop */
                                           } /* End outer loop */
 
+/***
+
+## Coding
+
+First, it's worth thinking pretty carefully about how these variables
+will be coded. Are you sure that they are mutually exclusive and
+exhaustive? How about the numbers of categories? Are these appropriate
+for the task at hand? Are they really categorical or can they be
+thought of as ordered? How would you figure this out? 
+
+In general, it's better to favor fewer categories, but you need to
+make sure that your decisions reflect the important questions in your
+theoretical framework. 
+
+Below, I recode the race variables as they're constructed by NCES to
+be more useful in our analysis. 
+
+
+***/										  
+										  
+										  
 local race_names amind asian black hispanic_no hispanic_race multiracial white
 
 tab(byrace), gen(race_)
@@ -145,6 +179,19 @@ label values bystexp expect
   
 tab bystexp,gen(exp_)
 
+/***
+
+## Binary Variables
+
+Binary variables must always be constructed to be directional. Never
+have a binary variable for ``sex,'' always construct this kind of
+binary variable as either  student identified as``male'' or student identified as``female.'' Binary variables in
+a regression represent an intercept shift-- for the group in question,
+they increase or decrease the intercept by that amount.  
+
+***/
+
+
 gen female=bysex==2
 replace female=. if bysex==.
 
@@ -178,6 +225,26 @@ else use ${ddir}plans2.dta, clear
 svyset psu [pw = f1pnlwt], strat(strat_id) singleunit(scaled)
 
 tab order_plan
+
+
+/***
+
+
+## Categorical Variables
+
+When running a model with categorical variables, Stata won't always
+know what you're talking about. If the underlying variable is numeric,
+it will simply include that variable as numeric. This is not
+good. Instead, we need to use the \texttt{i.} formulation, which
+specifies not only that a given variable is to be understood as a
+factor variable, but also allows the user some fine-grained control
+over how this will be constructed. 
+
+Remember that categorical variables must always be interpreted
+relative to their reference category. We cover how to think about that
+next. 
+
+***/
 
 // NOPE!
 eststo order1: svy: reg `y' order_plan
@@ -231,29 +298,26 @@ esttab order1 using order1.`ttype',  varwidth(50) label  ///
 
 */
 
+/***
 
-recode bypared (1=1 )(2=2 ) (3 5=3) (4=4) (6=5) (7/8=6), gen(pared_level)			   
-label define ed_levels 1 "---LT HS" 2 "---HS" 3  "---Some College" 4 "---2yr Degree" 5 "---Bachelors" 6 "---Graduate"
-label values pared_level ed_levels			   
-			   
-eststo order_pared: svy: reg `y' i.order_plan i.pared_level  female
+## Quick Exercise
+Run the above regression, but use parental education as a
+predictor. Create a properly formatted table with parental education
+as a categorical variable. 
 
-esttab order_pared using order1.`ttype',  varwidth(50) label  ///
-    refcat(2.order_plan "Plans, Reference= No Plans/ Don't Know" ///
-	2.pared_level "Parental Education, Reference= Less than HS", ///
-	nolabel) ///
-        nobaselevels ///
-               nomtitles ///
-               nodepvars              ///
-                b(3)                   ///
-                se(3)                     ///       
-               r2 (2)                    ///
-               ar2 (2)                   ///
-               scalar(F  "df_m DF model"  "df_r DF residual" N)   ///
-               sfmt (2 0 0 0)               ///
-               replace                   
+***/
 
-exit 
+/***
+
+## Reference Categories for Categorical Variables
+
+It's important to put some thought into reference categories for
+category variables. If you have no other preference, then use the
+largest group. You can accomplish this via the \texttt{ib(freq).}
+command. You should put some careful thought into the contrasts you'd
+like to draw--which groups do you want to compare and why? 
+
+***/
 			   
 			   
 //Proper factor notation: setting base levels
@@ -285,6 +349,28 @@ esttab order2 using order2.`ttype',  varwidth(50)   ///
 
 margins, predict(xb) at((mean) byses1 order_plan=(1 2 3)) post
 
+
+/***
+
+## Quick Exercsie
+
+Run the regression above, but include parental education. This time,
+output the results with some college as the reference category for
+parental education. 
+
+***/
+
+
+/***
+## Interactions
+
+
+When interacting a binary variable with a categorical variable, you
+must do the FULL interaction-- you can't just interact with one
+level. Same thing applies to continuous variables. 
+
+***/
+
 // Factor notation, interaction
 
 //Proper factor notation: setting base levels
@@ -305,9 +391,25 @@ esttab order3 using order3.`ttype', varwidth(50) ///
                sfmt (2 0 0 0)               ///
                replace                 
 
+			   
+/***
+
+## Margins and Interactions
+
+Once you're undertaking interactions with categorical variables, it's
+generally a good idea to interpret them using the margins command. In
+the below code I use margins to interpret the interaction between a
+categorical and a binary variable and to make a table with confidence
+intervals from the output. 
+
+
+***/			   
+			   
 
 // Margins to figure out what's going on
 margins, predict(xb) at((mean) byses1 order_plan=(1 2 3) female=(0 1)) post
+
+estimates store order_female
 
 esttab . using margins.`ttype' , margin label nostar ci ///
     varlabels(1._at "No College Plans, Male" ///
@@ -316,18 +418,40 @@ esttab . using margins.`ttype' , margin label nostar ci ///
                           4._at "Vo-Tech/Community College, Female" ///
                               5._at "Four-Year College Plans, Male" ///
                                   6._at "Four-Year College Plans, Female" ) ///
-        replace
+        replace 
 
 
-// fairly lame
-marginsplot, name(margins_1)
+// not great
+marginsplot, name(margins_1,replace)
 
-// less lame
+// better
 
-marginsplot, recast(scatter) ciopts(recast(rspike)) name(margins_2)
+marginsplot, recast(scatter) ciopts(recast(rspike)) name(margins_2,replace)
 
-// ??
-marginsplot, recast(bar) 
+// best
+
+preserve
+
+estimates restore order_female
+
+parmest,  list (parm estimate min95 max95) fast
+
+egen levels =fill(1/6)
+
+graph twoway bar estimate levels
+
+restore
+
+/***
+
+## Quick Exercise
+
+Again include parental education, and generate predicted probabilities
+using the margins command. Then go back and choose a different
+reference category. Does a different reference category result in
+different predicted probablities? 
+***/
+ 
 
 log close
 exit
