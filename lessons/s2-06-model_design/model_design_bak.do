@@ -623,12 +623,14 @@ estimates restore age_educ
     
  quietly margins, predict(xb) at((mean) _all age=(`mymin'(1)`mymax') educ=`myeduc') post
 mat pred_ed`myeduc'=e(b)'
+mat li pred_ed`myeduc'
 svmat pred_ed`myeduc'
 
 estimates restore age_educ
 
 quietly margins, predict(stdp) at((mean) _all age=(`mymin'(1)`mymax') educ=`myeduc') nose post
 mat pred_se_ed`myeduc'=e(b)'
+mat li pred_se_ed`myeduc'
 svmat pred_se_ed`myeduc'
 }
 
@@ -665,6 +667,8 @@ educ and knowledge of world of work (kww). Include other covariates as you
 see fit. Plot the results of the interaction after generating predictions from the 
 margins command */
 
+
+
 eststo ten_educ: reg lwage hours age black married iq meduc c.tenure##c.educ 
 						
 /* Working with continuous vs. Continuous interactions */
@@ -677,24 +681,19 @@ local mymax=r(max)
 
 foreach mytenure of numlist 0(5)20{
 
-    estimates restore ten_educ
+estimates restore ten_educ
     
- quietly   margins, predict(xb) at((mean) _all educ=(`mymin'(1)`mymax') tenure=`mytenure') post
-    
-    mat pred_ed`mytenure'=e(b)'
-
-    // mat li pred_ed`mytenure'
-
-   svmat pred_ed`mytenure'
+margins, predict(xb) at((mean) _all educ=(`mymin'(1)`mymax') tenure=`mytenure') post
+mat pred_ed`mytenure'=e(b)'
+mat li pred_ed`mytenure'
+svmat pred_ed`mytenure'
 
 estimates restore ten_educ
 
-quietly margins, predict(stdp) at((mean) _all educ=(`mymin'(1)`mymax') tenure=`mytenure') nose post
-    mat pred_se_ed`mytenure'=e(b)'
-
-    // mat li pred_se_ed`mytenure'
-
-    svmat pred_se_ed`mytenure'
+margins, predict(stdp) at((mean) _all educ=(`mymin'(1)`mymax') tenure=`mytenure') nose post
+mat pred_se_ed`mytenure'=e(b)'
+mat li pred_se_ed`mytenure'
+svmat pred_se_ed`mytenure'
 }
 
 foreach mytenure of numlist 0(5)20{
@@ -740,16 +739,16 @@ foreach myiq of numlist `iqlo'(`step')`iqhi'{
 
 estimates restore age_iq
     
-quietly margins, predict(xb) at((mean) _all age=(`mymin'(1)`mymax') iq=`myiq') post
+margins, predict(xb) at((mean) _all age=(`mymin'(1)`mymax') iq=`myiq') post
 mat pred_ed`myiq'=e(b)'
-// mat li pred_ed`myiq'
+mat li pred_ed`myiq'
 svmat pred_ed`myiq'
 
 estimates restore age_iq
 
-quietly margins, predict(stdp) at((mean) _all age=(`mymin'(1)`mymax') iq=`myiq') nose post
+margins, predict(stdp) at((mean) _all age=(`mymin'(1)`mymax') iq=`myiq') nose post
 mat pred_se_ed`myiq'=e(b)'
-// mat li pred_se_ed`myiq'
+mat li pred_se_ed`myiq'
 svmat pred_se_ed`myiq'
 }
 
