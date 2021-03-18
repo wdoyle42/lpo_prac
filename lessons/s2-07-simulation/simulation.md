@@ -1,6 +1,6 @@
 Simulation in Stata
 ================
-LPO 9952 | Spring 2018
+LPO 9952 | Spring 2021
 
 Simulation for Understanding
 ----------------------------
@@ -188,7 +188,7 @@ In regression, the central finding is the same, but as applied to coefficients. 
     . }
 	```
 	
-As with the above example, we can compare our estimates of *β*<sub>0</sub> and *β*<sub>1</sub> to the values we set.
+As with the above example, we can compare our estimates of *B*<sub>0</sub> and *V*<sub>1</sub> to the values we set.
 
 <img src = "beta_0.png" />
 

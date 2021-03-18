@@ -1,4 +1,4 @@
-version 12 /* Can set version here, use the most recent as default */
+version 15 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 
 log using "simulation.log",replace /*Open up new log */
@@ -6,7 +6,7 @@ log using "simulation.log",replace /*Open up new log */
 /* Simluation techniques */
 /* Using simulation to understand and correct problems with regression*/
 /* Will Doyle */
-/* 180220 */
+/* 210318 */
 /* Practicum Folder */
 
 clear
@@ -36,9 +36,9 @@ local analysis=1
   
 /*3. Simulation */
 
-local simulation=0
+local simulation=1
 
-local complex_example=1
+local complex_example=0
 
 
 
@@ -501,10 +501,6 @@ mat mymat[4,4]=1
 mat mymat[5,5]=1
 
 mat li cormat
-    
-drawnorm a b c d f, corr(mymat) n(`popsize')
-
-drop a b c d f
 
 /*Hypothetical structure for omitted variables*/
 
