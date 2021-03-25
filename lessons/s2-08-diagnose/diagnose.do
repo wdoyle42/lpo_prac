@@ -1,11 +1,11 @@
-version 14
+version 15
 capture log close
 log using "diagnose.log",replace
 
-/* PhD Practicum, Spring 2017 */
+/* PhD Practicum, Spring 2021 */
 /* Diagnosing Problems with Regression */
 /* Will Doyle*/
-/* 2/27/2018 */
+/* 3/25/2021 */
 /* On github repo */
 
 clear
@@ -26,7 +26,7 @@ local gtype pdf
 
 /**************************************************/
 /*Recode  Data*/
-/* NB: doing this just to "screw things up" in interesting ways */
+/* NB: doing this just to "mess things up" in interesting ways */
 /**************************************************/  
 
 gen w=exp(lw)

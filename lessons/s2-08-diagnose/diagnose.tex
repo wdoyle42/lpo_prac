@@ -53,7 +53,7 @@ might be some issues with your model fit:
 The test to use for collinearity in Stata is \texttt{vif}. The results
 of the VIF (Variance Inflation Factor) test states whether inflation
 has been increased because the covariate is correlated with the other
-regressors. The rule of thumb with VIF's is that 10 is large, while 20
+regressors. The informal rule with VIF's is that 10 is large, while 20
 is unacceptable.
 
 Stata's vif command can be run after a regression to check for
@@ -524,7 +524,7 @@ axis are the cutoff points for ``large'' leverage or residual stats.
 
 For each of the measures leverage, dfits, cooks' D and dfbeta, the
 procedure is the same. Calculate the measure, then look for
-observations that exceed a given rule of thumb. Here's that procedure
+observations that exceed a given informally set level. Here's that procedure
 applied to leverage. 
 
 For DFits, the measure is given by:
@@ -539,7 +539,7 @@ Where $r_j$ is a studentized residual:
   r_j=\frac{\epsilon_j}{s_{(j)}}\sqrt{1-h_j}
 \end{equation*}
 
-The rule of thumb cutoff for dfits is $|{DFITS_j}|>2 \sqrt{k/N}$.
+The informal rule for the cutoff for dfits is $|{DFITS_j}|>2 \sqrt{k/N}$.
 
 For Cook's D, the calculation is:
 
@@ -550,7 +550,7 @@ For Cook's D, the calculation is:
 Where $\hat{y}_i$ is the prediction with observation $i$ and
 $\hat{y}_{i(w)}$ is the prediction \emph{without} observation $i$. 
 
-The rule of thumb for cooks D is to investigate values over $4/n$. 
+The informal rule for cooks D is to investigate values over $4/n$. 
 
 Last, the calculation for DFBETA is given by: 
 
