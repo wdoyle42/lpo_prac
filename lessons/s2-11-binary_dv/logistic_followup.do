@@ -4,7 +4,7 @@ log using "logistic.log",replace
 /* PhD Practicum, Spring 2020 */
 /* Regression models for binary data*/
 /* Will Doyle*/
-/* 2020-04-08 */
+/* 2021-04-22 */
 
 clear
 
@@ -63,30 +63,20 @@ reg `y' `ses' `demog' `tests'
 
 graph twoway (scatter `y' `ses',jitter(.1)   msize(tiny) ) ///
 			(lfit `y' `ses' )
-					
+
+
+			
 predict e, resid
 
-reg `y' bynels2m
+graph twoway scatter e byses1
 
-predict yhat_pr 
-
-graph twoway scatter yhat_pr bynels2m, msize(vtiny) mcolor(%20) name(prob1)
-
-predict e1, resid
-
-graph twoway scatter e1 bynels2m, msize(vtiny) mcolor(%20) name(resid1)
-
-sum yhat_pr
-
-replace yhat_pr=.9999 if yhat_pr>1
-
-replace yhat_pr=.0001 if yhat_pr<0
 
 // Can always use robust ses
 reg `y' `ses' `demog' `tests', vce(robust)
 
 // Save this for later
 estimates store lpm
+
 
 /* Generate predicted probabilites over range of ses*/
 
@@ -110,14 +100,16 @@ margins , predict(xb) ///
 
 // Grab results for plotting    
 
-marginsplot
+marginsplot, name("uninspired")
 
 marginsplot, recastci(rarea) ciopts(color(gray%10)) ///
 			recast(line)  plotopts(color(blue)) ///
-			xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") name("LPM")
+			xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") name(LPM)
 
 			
 graph export lpm.pdf, replace name("LPM")
+
+
 
 /*Logistic Function*/
 
@@ -126,9 +118,8 @@ graph drop _all
 local k=.25 /*Scale*/
 local x0=0 /*Location*/
 
-graph twoway function y=1/(1+exp((-`k')*(x-`x0'))),range(-2 2) name("Logit")
 
-graph twoway function y=(1/(1+exp((-`k')*(x-`x0')))),range(-2 2) name("Logit_s")
+graph twoway function y=-log(1/x-1) ,range(0 1) xtitle("P") ytitle("Logit(p)")
 
 
 /*Logistic Regression */
@@ -168,9 +159,12 @@ margins , predict(pr) ///
 
 marginsplot, recastci(rarea) ciopts(color(gray%10)) ///
 			recast(line)  plotopts(color(blue)) ///
-			xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") name("logit_basic")
+xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") name("logit_basic")
+
+
 			
 graph export logit_basic.pdf, replace name("logit_basic")
+
     
 /* Margins for range of ses, all races */
 
@@ -189,6 +183,7 @@ marginsplot, recastci(rarea) ciopts(color(%10)) ///
 				recast(line) ///
               xlabel(-2(.3)2) xtitle("SES") ytitle("Pr(Attend)") title("") ///
               name("logit_race")
+			  
 			
 graph export logit_race.pdf, replace name("logit_race")
 	
@@ -201,27 +196,18 @@ quietly margins , predict(pr) ///
         byrace2=(3 4 6) ///
        ) ///
       post
-	  
 
-	  
+
 marginsplot, recastci(rarea) ciopts(color(%10)) ///
 				recast(line) ///
 				xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") ///
 				legend(cols(1))
 
 				
-// Another option
+	
+estimates restore full_model	
 
-//estimates restore full_model
-
-//marginscontplot2 byses1, at1(-2(.2)2) ci				
-
-//mcp2 byses1, at1(-2(.1)2) ci
-
-//mcp2 byses1 byrace2, at1(-2(.1)2) ci				
-
-estimates restore full_model
-
+	  
 local x byses1
 
 sum `x', detail
@@ -233,117 +219,99 @@ local mymax=r(max)
 local diff=`mymax'-`mymin'
 local step=`diff'/`no_steps'
     
-local z bynels2m
 
-sum `z', detail
+sum bynels2r, detail	
 
-local low_z=r(p25)
-local mid_z=r(p50)
-local hi_z=r(p75)
+local lo_test=r(p25)	
 
-quietly margins , predict(pr) ///
-    at((mean) _continuous ///
-        (base) _factor ///
-		 byrace2=6 ///
-		 female=1 ///
-        `x'=(`mymin'(`step')`mymax') ///
-		`z'=(`low_z' `mid_z' `hi_z') ///
-       ) ///
-      post
+local mid_test=r(p50)
 
-marginsplot ,name(step1, replace)
-
-marginsplot, recastci(rarea) name(step2, replace)
-
-
-marginsplot, recastci(rarea) ciopts(color(%10)) name(step3, replace)
-
-
-marginsplot, recastci(rarea) ciopts(color(%10)) ///
-				recast(line) ///
-				name(step4, replace)
-
-
-marginsplot, recastci(rarea) ciopts(color(%10)) ///
-				recast(line) ///
-				ytitle("Pr(College)") ///
-				xtitle("SES") ///
-				xlabel(-2(.3)2) ///
-				legend(order(4 "25th percentile, Math Test" ///
-							5 "Median, Math Test"  ///
-							6 "75th percentile, Math Test")) ///
-				legend(cols(1)) ///		
-				title("") ///
-				name(step5, replace)				
-	  
-	  
-
-estimates restore full_model
-
-local x byses1
-
-sum `x', detail
-
-local no_steps=20
-
-local mymin=r(min)
-local mymax=r(max)
-local diff=`mymax'-`mymin'
-local step=`diff'/`no_steps'
-    
-local z bynels2m
-
-sum `z', detail
-
-local low_z=r(p25)
-local mid_z=r(p50)
-local hi_z=r(p75)
-
-local race_levels "Native_American" "Asian_Pacific_Islander" "African-American"  "Hispanic"  "Multiracial"  "White"
-
-local i=1
-
-foreach race of local race_levels{ 
-
-estimates restore full_model
+local hi_test=r(p75)
 
 quietly margins , predict(pr) ///
     at((mean) _continuous ///
         (base) _factor ///
-		 byrace2=`i' ///
-		 female=1 ///
         `x'=(`mymin'(`step')`mymax') ///
-		`z'=(`low_z' `mid_z' `hi_z') ///
+		bynels2r=(`lo_test' `mid_test' `hi_test') ///
        ) ///
       post
 
+	  
+/*
+estimates restore full_model
+
+
+quietly margins , predict(pr) ///
+    at((mean) _continuous ///
+        (base) _factor ///
+        `x'=(`mymin'(`step')`mymax') ///
+		bynels2r=(p25 p50 p75) ///
+       ) ///
+      post
+*/
+	
+	
 marginsplot, recastci(rarea) ciopts(color(%10)) ///
 				recast(line) ///
-				ytitle("Pr(College)") ///
-				xtitle("SES") ///
-				xlabel(-2(.3)2) ///
-				legend(order(4 "25th percentile, Math Test" ///
-							5 "Median, Math Test"  ///
-							6 "75th percentile, Math Test")) ///
-				legend(cols(1)) ///		
-				title(`race') 
+				xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") ///
+				legend(cols(1))
+	
 				
-graph save "prob_`i'.gph", replace				
-		
-local i=`i'+1				
-}	  
+				
+// Another option
+/*
+estimates restore full_model
 
+marginscontplot2 byses1, at1(-2(.2)2) ci				
 
+mcp2 byses1, at1(-2(.1)2) ci
+
+mcp2 byses1 byrace2, at1(-2(.1)2) ci				
+*/
 
 // Other functions
 
 estimates restore full_model
 
+// What are odds ratios (Q:would we ever care A:NO)?
+
+mean f2evratt,over(female)
+
+mat results=e(b)
+
+scalar attend_not_female=results[1,1]
+
+scalar not_attend_not_female=1-attend_not_female
+
+scalar odds_not_female=attend_not_female/not_attend_not_female
+
+
+scalar attend_female=results[1,2]
+
+scalar not_attend_female=1-attend_female
+
+scalar odds_female=attend_female/not_attend_female
+
+scalar li odds_not_female odds_female
+
+
+scalar or_female=odds_female/odds_not_female
+
+scalar li or_female
+
+logistic f2evratt female
+
+
+logit f2evratt female
+
+
+/* QE: or for parent with a bachelor's degree */
+
+
 listcoef /*Display odds ratios from model in memory */
 
 logistic `y' `ses' `demog' `tests'  /*Works too */
 
-exit 
  
 /* Measures of model fit: all imperfect */
 
@@ -373,6 +341,7 @@ est store tests
 lrtest full_model tests
 
 estimates restore full_model
+
 
 /* Percent Correctly Predicted  */
 
