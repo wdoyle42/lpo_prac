@@ -1,870 +1,1232 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.4.16)  9 APR 2020 08:58
-entering extended mode
- restricted \write18 enabled.
- file:line:error style messages enabled.
- %&-line parsing enabled.
-**\input logistic.tex
-(./logistic.tex (/usr/local/texlive/2018/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/size12.clo
-File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
-)
-\c@part=\count80
-\c@section=\count81
-\c@subsection=\count82
-\c@subsubsection=\count83
-\c@paragraph=\count84
-\c@subparagraph=\count85
-\c@figure=\count86
-\c@table=\count87
-\abovecaptionskip=\skip41
-\belowcaptionskip=\skip42
-\bibindent=\dimen102
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/geometry/geometry.sty
-Package: geometry 2018/03/24 v5.7 Page Geometry
+-------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/lpo_prac/lessons/s2-11-binary_dv/logistic.log
+  log type:  text
+ opened on:  22 Apr 2021, 08:53:10
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/keyval.sty
-Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks14
-)
-(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
-)
-(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ifvtex.sty
-Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
-Package ifvtex Info: VTeX not detected.
-)
-(/usr/local/texlive/2018/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-)
-\Gm@cnth=\count88
-\Gm@cntv=\count89
-\c@Gm@tempcnt=\count90
-\Gm@bindingoffset=\dimen103
-\Gm@wd@mp=\dimen104
-\Gm@odd@mp=\dimen105
-\Gm@even@mp=\dimen106
-\Gm@layoutwidth=\dimen107
-\Gm@layoutheight=\dimen108
-\Gm@layouthoffset=\dimen109
-\Gm@layoutvoffset=\dimen110
-\Gm@dimlist=\toks15
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2017/09/02 v2.17a AMS math features
-\@mathmargin=\skip43
+. 
+. /* PhD Practicum, Spring 2020 */
+. /* Regression models for binary data*/
+. /* Will Doyle*/
+. /* 2021-04-22 */
+. 
+. clear
 
-For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amstext.sty
-Package: amstext 2000/06/29 v2.01 AMS text
+. 
+. set more off
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsgen.sty
-File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks16
-\ex@=\dimen111
-))
-(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsbsy.sty
-Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen112
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/amsmath/amsopn.sty
-Package: amsopn 2016/03/08 v2.02 operator names
-)
-\inf@bad=\count91
-LaTeX Info: Redefining \frac on input line 213.
-\uproot@=\count92
-\leftroot@=\count93
-LaTeX Info: Redefining \overline on input line 375.
-\classnum@=\count94
-\DOTSCASE@=\count95
-LaTeX Info: Redefining \ldots on input line 472.
-LaTeX Info: Redefining \dots on input line 475.
-LaTeX Info: Redefining \cdots on input line 596.
-\Mathstrutbox@=\box26
-\strutbox@=\box27
-\big@size=\dimen113
-LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
-\macc@depth=\count96
-\c@MaxMatrixCols=\count97
-\dotsspace@=\muskip10
-\c@parentequation=\count98
-\dspbrk@lvl=\count99
-\tag@help=\toks17
-\row@=\count100
-\column@=\count101
-\maxfields@=\count102
-\andhelp@=\toks18
-\eqnshift@=\dimen114
-\alignsep@=\dimen115
-\tagshift@=\dimen116
-\tagwidth@=\dimen117
-\totwidth@=\dimen118
-\lineht@=\dimen119
-\@envbody=\toks19
-\multlinegap=\skip44
-\multlinetaggap=\skip45
-\mathdisplay@stack=\toks20
-LaTeX Info: Redefining \[ on input line 2817.
-LaTeX Info: Redefining \] on input line 2818.
-)
-(/Users/doylewr/Library/texmf/tex/latex/stata/stata.sty
-Package: stata 2013/10/23 v1.34 LaTeX package for Stata code
+. 
+. set scheme s1color
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/alltt.sty
-Package: alltt 1997/06/16 v2.0g defines alltt environment
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/tools/calc.sty
-Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count103
-\calc@Bcount=\count104
-\calc@Adimen=\dimen120
-\calc@Bdimen=\dimen121
-\calc@Askip=\skip46
-\calc@Bskip=\skip47
-LaTeX Info: Redefining \setlength on input line 80.
-LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count105
-\calc@Cskip=\skip48
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/ifthen.sty
-Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
-)
-\st@box=\box28
-\st@box@wd=\dimen122
-\st@box@ht=\dimen123
-\st@box@dp=\dimen124
-\stsyndent=\skip49
-\streswidth=\skip50
-\st@parindent=\skip51
-\stexamplehskip=\skip52
-\sttechhskip=\skip53
-\st@ttbox@box=\box29
-\st@ttbox@framesep=\dimen125
-\ttboxIndent=\dimen126
-\ttboxWd=\dimen127
-\st@ttbox@boxwd=\dimen128
-\st@box=\box30
-\st@emptywidth=\skip54
-\st@linesize=\skip55
-\st@maxdepth=\skip56
-\st@maxheight=\skip57
-\st@mbdepth=\skip58
-\st@mtdepth=\skip59
-\st@xheight=\skip60
-\st@xwidth=\skip61
-\st@N=\count106
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+. 
+. graph drop _all
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+. 
+. global ddir "../../data/"
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/trig.sty
-Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
-File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
-)
-Package graphics Info: Driver file: pdftex.def on input line 99.
+. 
+. use ${ddir}attend, clear
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics-def/pdftex.def
-File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
-))
-\Gin@req@height=\dimen129
-\Gin@req@width=\dimen130
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/natbib/bibentry.sty
-Package: bibentry 2007/10/30 1.5 (PWD)
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/ccaption/ccaption.sty
-Package: ccaption 2011/08/07 v3.2c Extended captioning and new floats
-\@contcwidth=\skip62
-\@contindw=\skip63
-\abovelegendskip=\skip64
-\belowlegendskip=\skip65
-\c@newflo@tctr=\count107
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/fourier/fourier.sty
-Package: fourier 2005/01/01 1.4 fourier-GUTenberg package
-Now handling font encoding FML ...
-... no UTF-8 mapping file for font encoding FML
-Now handling font encoding FMS ...
-... no UTF-8 mapping file for font encoding FMS
-Now handling font encoding FMX ...
-... no UTF-8 mapping file for font encoding FMX
+. 
+. describe
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
+Contains data from ../../data/attend.dta
+  obs:        16,289                          
+ vars:            28                          11 Apr 2013 10:46
+-------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+-------------------------------------------------------------------------------------------------------
+stu_id          long    %12.0f                Student ID
+f2evratt        byte    %12.0f     F2EVRATT   Whether has ever attended a postsecondary institution -
+                                                composite
+sch_id          int     %8.0g                 school id
+strat_id        int     %8.0g                 stratum
+psu             byte    %8.0g      psu        primary sampling unit
+f1sch_id        int     %8.0g                 link to first follow-up school
+f1univ1         int     %8.0g      f1univ1    sample member status in by and f1 rounds
+f1univ2a        byte    %8.0g      f1univ2a   base year status and how sample member entered f1 sample
+f1univ2b        byte    %8.0g      f1univ2b   sample member f1 status
+g10cohrt        byte    %8.0g      g10cohrt   sophomore cohort member in 2001-2002 school year
+g12cohrt        byte    %8.0g      g12cohrt   f1 senior cohort member
+bystuwt         float   %9.0g                 student weight
+bysex           byte    %8.0g      bysex      sex-composite
+byrace          byte    %8.0g      byrace     student^s race/ethnicity-composite
+bydob_p         long    %12.0g                student^s year and month of birth
+bypared         byte    %8.0g      bypared    parents^ highest level of education
+bymothed        byte    %8.0g      bymothed   mother^s highest level of education-composite
+byfathed        byte    %8.0g      byfathed   father^s highest level of education-composite
+byincome        byte    %8.0g      byincome   total family income from all sources 2001-composite
+byses1          float   %9.0g                 socio-economic status composite, v.1
+byses2          float   %9.0g                 socio-economic status composite, v.2
+bystexp         byte    %8.0g      bystexp    how far in school student thinks will get-composite
+bynels2m        float   %9.0g                 els-nels 1992 scale equated sophomore math score
+bynels2r        float   %9.0g                 els-nels 1992 scale equated sophomore reading score
+f1qwt           float   %9.0g                 questionnaire weight for f1
+f1pnlwt         float   %9.0g                 panel weight, by and f1 (2002 and 2004)
+f1psepln        byte    %8.0g      f1psepln   f1 post-secondary plans right after high school
+_merge          byte    %23.0g     _merge     
+-------------------------------------------------------------------------------------------------------
+Sorted by: 
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/t1enc.def
-File: t1enc.def 2017/04/05 v2.0i Standard LaTeX file
-LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
-))
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/textcomp.sty
-Package: textcomp 2017/04/05 v2.0i Standard LaTeX package
-Package textcomp Info: Sub-encoding information:
-(textcomp)               5 = only ISO-Adobe without \textcurrency
-(textcomp)               4 = 5 + \texteuro
-(textcomp)               3 = 4 + \textohm
-(textcomp)               2 = 3 + \textestimated + \textcurrency
-(textcomp)               1 = TS1 - \textcircled - \t
-(textcomp)               0 = TS1 (full)
-(textcomp)             Font families with sub-encoding setting implement
-(textcomp)             only a restricted character set as indicated.
-(textcomp)             Family '?' is the default used for unknown fonts.
-(textcomp)             See the documentation for details.
-Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
+. 
+. /* Missing data*/
+. 
+. foreach myvar of varlist stu_id-f1psepln{ /* Start outer loop */
+  2.               foreach i of numlist -3 -4 -8 -9 { /* Start inner loop */
+  3.                      replace `myvar'=. if `myvar'== `i'
+  4.                                             }  /* End inner loop */
+  5.                                           } /* End outer loop */
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(108 real changes made, 108 to missing)
+(1,691 real changes made, 1,691 to missing)
+(359 real changes made, 359 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(3,825 real changes made, 3,825 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(171 real changes made, 171 to missing)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(276 real changes made, 276 to missing)
+(53 real changes made, 53 to missing)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(171 real changes made, 171 to missing)
+(37 real changes made, 37 to missing)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(171 real changes made, 171 to missing)
+(40 real changes made, 40 to missing)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(171 real changes made, 171 to missing)
+(57 real changes made, 57 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(651 real changes made, 651 to missing)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(276 real changes made, 276 to missing)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(1,164 real changes made, 1,164 to missing)
+(785 real changes made, 785 to missing)
+(47 real changes made, 47 to missing)
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/ts1enc.def
-File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
-Now handling font encoding TS1 ...
-... processing UTF-8 mapping file for font encoding TS1
+. 
+. 
+. /* Recodes */
+.  
+. 
+. recode byrace (1=1 "Native American") ///
+>                                 (2=2 "Asian/ Pacific Islander") ///
+>                                 (3=3 "African-American") ///
+>                                 (4/5=4 "Hispanic") ///
+>                                 (6=5 "Multiracial") ///                         
+>                                 (7=6 "White"), ///
+> gen(byrace2) 
+(10704 differences between byrace and byrace2)
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/ts1enc.dfu
-File: ts1enc.dfu 2018/04/05 v1.2c UTF-8 support for inputenc
-   defining Unicode char U+00A2 (decimal 162)
-   defining Unicode char U+00A3 (decimal 163)
-   defining Unicode char U+00A4 (decimal 164)
-   defining Unicode char U+00A5 (decimal 165)
-   defining Unicode char U+00A6 (decimal 166)
-   defining Unicode char U+00A7 (decimal 167)
-   defining Unicode char U+00A8 (decimal 168)
-   defining Unicode char U+00A9 (decimal 169)
-   defining Unicode char U+00AA (decimal 170)
-   defining Unicode char U+00AC (decimal 172)
-   defining Unicode char U+00AE (decimal 174)
-   defining Unicode char U+00AF (decimal 175)
-   defining Unicode char U+00B0 (decimal 176)
-   defining Unicode char U+00B1 (decimal 177)
-   defining Unicode char U+00B2 (decimal 178)
-   defining Unicode char U+00B3 (decimal 179)
-   defining Unicode char U+00B4 (decimal 180)
-   defining Unicode char U+00B5 (decimal 181)
-   defining Unicode char U+00B6 (decimal 182)
-   defining Unicode char U+00B7 (decimal 183)
-   defining Unicode char U+00B9 (decimal 185)
-   defining Unicode char U+00BA (decimal 186)
-   defining Unicode char U+00BC (decimal 188)
-   defining Unicode char U+00BD (decimal 189)
-   defining Unicode char U+00BE (decimal 190)
-   defining Unicode char U+00D7 (decimal 215)
-   defining Unicode char U+00F7 (decimal 247)
-   defining Unicode char U+0192 (decimal 402)
-   defining Unicode char U+02C7 (decimal 711)
-   defining Unicode char U+02D8 (decimal 728)
-   defining Unicode char U+02DD (decimal 733)
-   defining Unicode char U+0E3F (decimal 3647)
-   defining Unicode char U+2016 (decimal 8214)
-   defining Unicode char U+2020 (decimal 8224)
-   defining Unicode char U+2021 (decimal 8225)
-   defining Unicode char U+2022 (decimal 8226)
-   defining Unicode char U+2030 (decimal 8240)
-   defining Unicode char U+2031 (decimal 8241)
-   defining Unicode char U+203B (decimal 8251)
-   defining Unicode char U+203D (decimal 8253)
-   defining Unicode char U+2044 (decimal 8260)
-   defining Unicode char U+204E (decimal 8270)
-   defining Unicode char U+2052 (decimal 8274)
-   defining Unicode char U+20A1 (decimal 8353)
-   defining Unicode char U+20A4 (decimal 8356)
-   defining Unicode char U+20A6 (decimal 8358)
-   defining Unicode char U+20A9 (decimal 8361)
-   defining Unicode char U+20AB (decimal 8363)
-   defining Unicode char U+20AC (decimal 8364)
-   defining Unicode char U+20B1 (decimal 8369)
-   defining Unicode char U+2103 (decimal 8451)
-   defining Unicode char U+2116 (decimal 8470)
-   defining Unicode char U+2117 (decimal 8471)
-   defining Unicode char U+211E (decimal 8478)
-   defining Unicode char U+2120 (decimal 8480)
-   defining Unicode char U+2122 (decimal 8482)
-   defining Unicode char U+2126 (decimal 8486)
-   defining Unicode char U+2127 (decimal 8487)
-   defining Unicode char U+212E (decimal 8494)
-   defining Unicode char U+2190 (decimal 8592)
-   defining Unicode char U+2191 (decimal 8593)
-   defining Unicode char U+2192 (decimal 8594)
-   defining Unicode char U+2193 (decimal 8595)
-   defining Unicode char U+2329 (decimal 9001)
-   defining Unicode char U+232A (decimal 9002)
-   defining Unicode char U+2422 (decimal 9250)
-   defining Unicode char U+25E6 (decimal 9702)
-   defining Unicode char U+25EF (decimal 9711)
-   defining Unicode char U+266A (decimal 9834)
-   defining Unicode char U+FEFF (decimal 65279)
-))
-LaTeX Info: Redefining \oldstylenums on input line 334.
-Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
-Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
-Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
-Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
-Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
-Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
-Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
-Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
-Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
-Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
-Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
-Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
-Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
-Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
-Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
-Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
-Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
-Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
-Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
-Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
-Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
-Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
-Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
-Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
+. 
+. recode bysex (1=0 "Non-Female") ///
+>                           (2=1 "Female"), ///
+>                           gen(female)
+(15430 differences between bysex and female)
 
-Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
-Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
-Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
-Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
-Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
-Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
-Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
-Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
-Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
-Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
-Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
-Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
-Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
-Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
-Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
-Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
-Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
-Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
-Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
-Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
-Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
-Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
-Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
-Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
-Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
-Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
-Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
-Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
-Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
-Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
-Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
-Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
-Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
-Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
-Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
-Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
-Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/fourier/fourier-orns.sty
-Package: fourier-orns 2004/01/30 1.1 fourier-ornaments package
-)
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 50.
-LaTeX Font Info:    Encoding `OT1' has changed to `T1' for symbol font
-(Font)              `operators' in the math version `normal' on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> T1/futs/m/n on input line 50.
-LaTeX Font Info:    Encoding `OT1' has changed to `T1' for symbol font
-(Font)              `operators' in the math version `bold' on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> T1/futs/m/n on input line 50.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  T1/futs/m/n --> T1/futs/b/n on input line 51.
-LaTeX Font Info:    Redeclaring symbol font `letters' on input line 59.
-LaTeX Font Info:    Encoding `OML' has changed to `FML' for symbol font
-(Font)              `letters' in the math version `normal' on input line 59.
-LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
-(Font)                  OML/cmm/m/it --> FML/futmi/m/it on input line 59.
-LaTeX Font Info:    Encoding `OML' has changed to `FML' for symbol font
-(Font)              `letters' in the math version `bold' on input line 59.
-LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
-(Font)                  OML/cmm/b/it --> FML/futmi/m/it on input line 59.
-\symotherletters=\mathgroup4
-LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
-(Font)                  FML/futmi/m/it --> FML/futmi/b/it on input line 61.
-LaTeX Font Info:    Overwriting symbol font `otherletters' in version `bold'
-(Font)                  FML/futm/m/it --> FML/futm/b/it on input line 62.
-LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 63.
-LaTeX Font Info:    Redeclaring math symbol \Delta on input line 64.
-LaTeX Font Info:    Redeclaring math symbol \Theta on input line 65.
-LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 66.
-LaTeX Font Info:    Redeclaring math symbol \Xi on input line 67.
-LaTeX Font Info:    Redeclaring math symbol \Pi on input line 68.
-LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 69.
-LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 70.
-LaTeX Font Info:    Redeclaring math symbol \Phi on input line 71.
-LaTeX Font Info:    Redeclaring math symbol \Psi on input line 72.
-LaTeX Font Info:    Redeclaring math symbol \Omega on input line 73.
-LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 113.
-LaTeX Font Info:    Encoding `OMS' has changed to `FMS' for symbol font
-(Font)              `symbols' in the math version `normal' on input line 113.
-LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
-(Font)                  OMS/cmsy/m/n --> FMS/futm/m/n on input line 113.
-LaTeX Font Info:    Encoding `OMS' has changed to `FMS' for symbol font
-(Font)              `symbols' in the math version `bold' on input line 113.
-LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
-(Font)                  OMS/cmsy/b/n --> FMS/futm/m/n on input line 113.
-LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 114.
-LaTeX Font Info:    Encoding `OMX' has changed to `FMX' for symbol font
-(Font)              `largesymbols' in the math version `normal' on input line 1
-14.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
-(Font)                  OMX/cmex/m/n --> FMX/futm/m/n on input line 114.
-LaTeX Font Info:    Encoding `OMX' has changed to `FMX' for symbol font
-(Font)              `largesymbols' in the math version `bold' on input line 114
-.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
-(Font)                  OMX/cmex/m/n --> FMX/futm/m/n on input line 114.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 115.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> T1/futs/bx/n on input line 115.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> T1/futs/bx/n on input line 115.
-LaTeX Font Info:    Redeclaring math alphabet \mathrm on input line 116.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 117.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> T1/futs/m/it on input line 117.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> T1/futs/m/it on input line 117.
-LaTeX Font Info:    Redeclaring math alphabet \mathcal on input line 118.
-LaTeX Font Info:    Redeclaring math symbol \parallel on input line 134.
-LaTeX Font Info:    Redeclaring math symbol \hbar on input line 148.
-LaTeX Font Info:    Redeclaring math symbol \varkappa on input line 186.
-LaTeX Font Info:    Redeclaring math symbol \varvarrho on input line 187.
-LaTeX Font Info:    Redeclaring math delimiter \Vert on input line 210.
-LaTeX Font Info:    Redeclaring math delimiter \vert on input line 215.
-LaTeX Font Info:    Redeclaring math delimiter \lvert on input line 217.
-LaTeX Font Info:    Redeclaring math delimiter \rvert on input line 219.
-LaTeX Font Info:    Redeclaring math delimiter \lVert on input line 221.
-LaTeX Font Info:    Redeclaring math delimiter \rVert on input line 223.
-LaTeX Font Info:    Redeclaring math delimiter \Downarrow on input line 225.
-LaTeX Font Info:    Redeclaring math delimiter \backslash on input line 227.
-LaTeX Font Info:    Redeclaring math delimiter \rangle on input line 229.
-LaTeX Font Info:    Redeclaring math delimiter \langle on input line 231.
-LaTeX Font Info:    Redeclaring math delimiter \rbrace on input line 233.
-LaTeX Font Info:    Redeclaring math delimiter \lbrace on input line 235.
-LaTeX Font Info:    Redeclaring math delimiter \rceil on input line 237.
-LaTeX Font Info:    Redeclaring math delimiter \lceil on input line 239.
-LaTeX Font Info:    Redeclaring math delimiter \rfloor on input line 241.
-LaTeX Font Info:    Redeclaring math delimiter \lfloor on input line 243.
-LaTeX Font Info:    Redeclaring math accent \acute on input line 247.
-LaTeX Font Info:    Redeclaring math accent \grave on input line 248.
-LaTeX Font Info:    Redeclaring math accent \ddot on input line 249.
-LaTeX Font Info:    Redeclaring math accent \tilde on input line 250.
-LaTeX Font Info:    Redeclaring math accent \bar on input line 251.
-LaTeX Font Info:    Redeclaring math accent \breve on input line 252.
-LaTeX Font Info:    Redeclaring math accent \check on input line 253.
-LaTeX Font Info:    Redeclaring math accent \hat on input line 254.
-LaTeX Font Info:    Redeclaring math accent \dot on input line 255.
-LaTeX Font Info:    Redeclaring math accent \mathring on input line 256.
-\symUfutm=\mathgroup5
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2018/02/06 v6.86b Hypertext links for LaTeX
+. 
+. 
+. /* Set locals */
+. 
+. local y f2evratt
 
-(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
+. 
+. local ses byses1
 
+. 
+. local demog ib(freq).byrace2 ib(freq).female
 
-(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
-Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
-Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
-Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-Package hobsub Info: Skipping package `ifvtex' (already loaded).
-Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
-Package hobsub Info: Skipping package `ifpdf' (already loaded).
-Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
-Package etexcmds Info: Could not find \expanded.
-(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
-(etexcmds)             that some package has redefined \expanded.
-(etexcmds)             In the latter case, load this package earlier.
-Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
-Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-Package: pdftexcmds 2018/01/30 v0.27 Utility functions of pdfTeX for LuaTeX (HO
-)
-Package pdftexcmds Info: LuaTeX not detected.
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
-)
-Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
-Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
-)
-Package hobsub Info: Skipping package `hobsub' (already loaded).
-Package: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
-Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
-Package: xcolor-patch 2016/05/16 xcolor patch
-Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
-Package atveryend Info: \enddocument detected (standard20110627).
-Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
-Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
-Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/auxhook.sty
-Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
-)
-\@linkdim=\dimen131
-\Hy@linkcounter=\count108
-\Hy@pagecounter=\count109
+. 
+. local tests bynels2m bynels2r
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2018/02/06 v6.86b Hyperref: PDFDocEncoding definition (HO)
-Now handling font encoding PD1 ...
-... no UTF-8 mapping file for font encoding PD1
-)
-\Hy@SavedSpaceFactor=\count110
+. 
+. local gtype pdf
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/latexconfig/hyperref.cfg
-File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
-)
-Package hyperref Info: Option `colorlinks' set `true' on input line 4383.
-Package hyperref Info: Hyper figures OFF on input line 4509.
-Package hyperref Info: Link nesting OFF on input line 4514.
-Package hyperref Info: Hyper index ON on input line 4517.
-Package hyperref Info: Plain pages OFF on input line 4524.
-Package hyperref Info: Backreferencing OFF on input line 4529.
-Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4762.
-\c@Hy@tempcnt=\count111
+. 
+. /* Linear Probability Model */
+. 
+. reg `y' `ses' `demog' `tests'
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/url/url.sty
-\Urlmuskip=\muskip11
-Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-)
-LaTeX Info: Redefining \url on input line 5115.
-\XeTeXLinkMargin=\dimen132
-\Fld@menulength=\count112
-\Field@Width=\dimen133
-\Fld@charsize=\dimen134
-Package hyperref Info: Hyper figures OFF on input line 6369.
-Package hyperref Info: Link nesting OFF on input line 6374.
-Package hyperref Info: Hyper index ON on input line 6377.
-Package hyperref Info: backreferencing OFF on input line 6384.
-Package hyperref Info: Link coloring ON on input line 6387.
-Package hyperref Info: Link coloring with OCG OFF on input line 6394.
-Package hyperref Info: PDF/A mode OFF on input line 6399.
-LaTeX Info: Redefining \ref on input line 6439.
-LaTeX Info: Redefining \pageref on input line 6443.
-\Hy@abspage=\count113
-\c@Item=\count114
-\c@Hfootnote=\count115
-)
-Package hyperref Info: Driver (autodetected): hpdftex.
+      Source |       SS           df       MS      Number of obs   =    13,284
+-------------+----------------------------------   F(9, 13274)     =    374.14
+       Model |  496.008461         9  55.1120512   Prob > F        =    0.0000
+    Residual |  1955.28354    13,274  .147301759   R-squared       =    0.2023
+-------------+----------------------------------   Adj R-squared   =    0.2018
+       Total |  2451.29201    13,283  .184543552   Root MSE        =     .3838
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2018/02/06 v6.86b Hyperref driver for pdfTeX
-\Fld@listcount=\count116
-\c@bookmark@seq@number=\count117
+------------------------------------------------------------------------------------------
+                f2evratt |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                  byses1 |   .1230284   .0051494    23.89   0.000     .1129347     .133122
+                         |
+                 byrace2 |
+        Native American  |  -.0799666   .0375121    -2.13   0.033    -.1534955   -.0064376
+Asian/ Pacific Islander  |   .1061966   .0118984     8.93   0.000     .0828741    .1295192
+       African-American  |   .0664432   .0107626     6.17   0.000     .0453469    .0875395
+               Hispanic  |   .0224763    .010479     2.14   0.032     .0019359    .0430167
+            Multiracial  |   -.045084   .0158417    -2.85   0.004    -.0761361    -.014032
+                         |
+                  female |
+             Non-Female  |  -.0863008   .0067759   -12.74   0.000    -.0995824   -.0730191
+                         |
+                bynels2m |   .0069647   .0003931    17.72   0.000     .0061943    .0077352
+                bynels2r |   .0047414   .0005583     8.49   0.000      .003647    .0058357
+                   _cons |   .3055998   .0154191    19.82   0.000     .2753762    .3358233
+------------------------------------------------------------------------------------------
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
-82.
-)
-\Hy@SectionHShift=\skip66
-)
-(/usr/local/texlive/2018/texmf-dist/tex/latex/natbib/natbib.sty
-Package: natbib 2010/09/13 8.31b (PWD, AO)
-\bibhang=\skip67
-\bibsep=\skip68
-LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count118
-)
-(./logistic.aux)
-\openout1 = `logistic.aux'.
+. 
+. graph twoway (scatter `y' `ses',jitter(.1)   msize(tiny) ) ///
+>                         (lfit `y' `ses' )
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for FML/futm/m/it on input line 18.
-LaTeX Font Info:    Try loading font information for FML+futm on input line 18.
+. 
+. predict e, resid
+(3,005 missing values generated)
 
+. 
+. // Can always use robust ses
+. reg `y' `ses' `demog' `tests', vce(robust)
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/fourier/fmlfutm.fd
-File: fmlfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futm.
-)
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for FMS/futm/m/n on input line 18.
-LaTeX Font Info:    Try loading font information for FMS+futm on input line 18.
+Linear regression                               Number of obs     =     13,284
+                                                F(9, 13274)       =     408.19
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2023
+                                                Root MSE          =      .3838
 
+------------------------------------------------------------------------------------------
+                         |               Robust
+                f2evratt |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                  byses1 |   .1230284   .0051319    23.97   0.000     .1129691    .1330876
+                         |
+                 byrace2 |
+        Native American  |  -.0799666   .0453305    -1.76   0.078    -.1688208    .0088877
+Asian/ Pacific Islander  |   .1061966   .0105472    10.07   0.000     .0855226    .1268707
+       African-American  |   .0664432   .0117838     5.64   0.000     .0433454    .0895411
+               Hispanic  |   .0224763     .01161     1.94   0.053     -.000281    .0452335
+            Multiracial  |   -.045084   .0166198    -2.71   0.007    -.0776612   -.0125069
+                         |
+                  female |
+             Non-Female  |  -.0863008   .0067757   -12.74   0.000    -.0995821   -.0730194
+                         |
+                bynels2m |   .0069647   .0004003    17.40   0.000       .00618    .0077495
+                bynels2r |   .0047414    .000568     8.35   0.000      .003628    .0058547
+                   _cons |   .3055998   .0166884    18.31   0.000      .272888    .3383115
+------------------------------------------------------------------------------------------
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/fourier/fmsfutm.fd
-File: fmsfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FMS/futm.
-)
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for FMX/futm/m/n on input line 18.
-LaTeX Font Info:    Try loading font information for FMX+futm on input line 18.
+. 
+. // Save this for later
+. estimates store lpm
 
+. 
+. /* Generate predicted probabilites over range of ses*/
+. 
+. local x byses1
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/fourier/fmxfutm.fd
-File: fmxfutm.fd futm-extension
-)
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 18.
+. 
+. sum `x', detail
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/ts1cmr.fd
-File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Try loading font information for T1+futs on input line 18.
+            socio-economic status composite, v.1
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%        -1.54          -2.11
+ 5%        -1.18          -2.11
+10%         -.95          -1.97       Obs              15,325
+25%          -.5          -1.97       Sum of Wgt.      15,325
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/fourier/t1futs.fd
-File: t1futs.fd 2004/03/02 Fontinst v1.926 font definitions for T1/futs.
-)
-*geometry* driver: auto-detecting
-*geometry* detected driver: pdftex
-*geometry* verbose mode - [ preamble ] result:
-* driver: pdftex
-* paper: <default>
-* layout: <same size as paper>
-* layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: 
-* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
-* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
-* \paperwidth=614.295pt
-* \paperheight=794.96999pt
-* \textwidth=469.75502pt
-* \textheight=650.43001pt
-* \oddsidemargin=0.0pt
-* \evensidemargin=0.0pt
-* \topmargin=-37.0pt
-* \headheight=12.0pt
-* \headsep=25.0pt
-* \topskip=12.0pt
-* \footskip=30.0pt
-* \marginparwidth=44.0pt
-* \marginparsep=10.0pt
-* \columnsep=10.0pt
-* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
-* \hoffset=0.0pt
-* \voffset=0.0pt
-* \mag=1000
-* \@twocolumnfalse
-* \@twosidefalse
-* \@mparswitchfalse
-* \@reversemarginfalse
-* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+50%          .04                      Mean           .0426499
+                        Largest       Std. Dev.      .7429194
+75%          .59            1.8
+90%         1.05            1.8       Variance       .5519293
+95%         1.26           1.81       Skewness      -.0235649
+99%         1.55           1.82       Kurtosis       2.354114
 
-(/usr/local/texlive/2018/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count119
-\scratchdimen=\dimen135
-\scratchbox=\box31
-\nofMPsegments=\count120
-\nofMParguments=\count121
-\everyMPshowfont=\toks21
-\MPscratchCnt=\count122
-\MPscratchDim=\dimen136
-\MPnumerator=\count123
-\makeMPintoPDFobject=\count124
-\everyMPtoPDFconversion=\toks22
-) (/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+. 
+. local no_steps=20
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
-)
-Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
-38.
-Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 456.
+. 
+. local mymin=r(min)
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
-))
-\AtBeginShipoutBox=\box32
+. local mymax=r(max)
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/color.sty
-Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
+. local diff=`mymax'-`mymin'
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics-cfg/color.cfg
-File: color.cfg 2016/01/02 v1.6 sample color configuration
-)
-Package color Info: Driver file: pdftex.def on input line 147.
-)
-Package hyperref Info: Link coloring ON on input line 18.
+. local step=`diff'/`no_steps'
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
+.     
+. margins , predict(xb) ///
+>     at((mean) _continuous ///
+>         (base) _factor ///
+>         `x'=(`mymin'(`step')`mymax') ///          
+>        ) ///
+>       post
 
-(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
-)
-\c@section@level=\count125
-)
-LaTeX Info: Redefining \ref on input line 18.
-LaTeX Info: Redefining \pageref on input line 18.
-LaTeX Info: Redefining \nameref on input line 18.
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : Robust
 
-(./logistic.out) (./logistic.out)
-\@outlinefile=\write3
-\openout3 = `logistic.out'.
+Expression   : Linear prediction, predict(xb)
 
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <12> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 32.
-LaTeX Font Info:    Try loading font information for TS1+futs on input line 51.
+1._at        : byses1          =       -2.11
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
+2._at        : byses1          =     -1.9135
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/fourier/ts1futs.fd
-File: ts1futs.fd 2004/03/26 Fontinst v1.926 font definitions for TS1/futs.
-)
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 68.
-LaTeX Font Info:    Try loading font information for FML+futmi on input line 76
-.
+3._at        : byses1          =      -1.717
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/fourier/fmlfutmi.fd
-File: fmlfutmi.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futmi.
-)
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 11.03998pt on input line 76.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 8.27998pt on input line 76.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 6.43999pt on input line 76.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 11.03998pt on input line 76.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 8.27998pt on input line 76.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 6.43999pt on input line 76.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <9> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 77.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <7> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 77.
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 84.
+4._at        : byses1          =     -1.5205
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-(/usr/local/texlive/2018/texmf-dist/tex/latex/base/t1cmtt.fd
-File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 87.
- [1
+5._at        : byses1          =      -1.324
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<lpm.pdf, id=106, 397.485pt x 289.08pt>
-File: lpm.pdf Graphic file (type pdf)
-<use lpm.pdf>
-Package pdftex.def Info: lpm.pdf  used on input line 118.
-(pdftex.def)             Requested size: 469.75502pt x 341.64957pt.
+6._at        : byses1          =     -1.1275
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
+7._at        : byses1          =   -.9309999
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+8._at        : byses1          =   -.7344999
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 127.
-[2] [3 <./lpm.pdf>] [4] [5] [6] [7]
-<logit_basic.pdf, id=149, 397.485pt x 289.08pt>
-File: logit_basic.pdf Graphic file (type pdf)
-<use logit_basic.pdf>
-Package pdftex.def Info: logit_basic.pdf  used on input line 481.
-(pdftex.def)             Requested size: 469.75502pt x 341.64957pt.
+9._at        : byses1          =   -.5379999
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
+10._at       : byses1          =   -.3414999
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+11._at       : byses1          =   -.1449999
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-<logit_race.pdf, id=150, 397.485pt x 289.08pt>
-File: logit_race.pdf Graphic file (type pdf)
-<use logit_race.pdf>
-Package pdftex.def Info: logit_race.pdf  used on input line 494.
-(pdftex.def)             Requested size: 469.75502pt x 341.64957pt.
+12._at       : byses1          =    .0515001
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+13._at       : byses1          =    .2480001
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-[8] [9 <./logit_basic.pdf>] [10 <./logit_race.pdf>] [11]
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 13.24796pt on input line 658.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 9.19998pt on input line 658.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 7.35999pt on input line 658.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <10> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 658.
-LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <8> not available
-(Font)              Font shape `T1/futs/b/n' tried instead on input line 658.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 13.24796pt on input line 658.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 9.19998pt on input line 658.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 7.35999pt on input line 658.
+14._at       : byses1          =    .4445001
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
+15._at       : byses1          =    .6410001
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 658.
+16._at       : byses1          =    .8375001
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
+17._at       : byses1          =       1.034
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `superscript' on input line 658.
+18._at       : byses1          =      1.2305
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
+19._at       : byses1          =       1.427
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 658.
+20._at       : byses1          =      1.6235
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
 
-[12]
-<roc_curve.pdf, id=200, 397.485pt x 289.08pt>
-File: roc_curve.pdf Graphic file (type pdf)
-<use roc_curve.pdf>
-Package pdftex.def Info: roc_curve.pdf  used on input line 786.
-(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 791.
- [13] [14 <./roc_curve.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 791.
- (./logistic.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 791.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 791.
-Package rerunfilecheck Info: File `logistic.out' has not changed.
-(rerunfilecheck)             Checksum: 4A1816DD56745BD02B5E89EEA3924DF7;1539.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 791.
- ) 
-Here is how much of TeX's memory you used:
- 8077 strings out of 492649
- 113846 string characters out of 6129622
- 217239 words of memory out of 5000000
- 11768 multiletter control sequences out of 15000+600000
- 94548 words of font info for 98 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 28i,6n,32p,229b,562s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
-{/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/tex
-live/2018/texmf-dist/fonts/type1/public/fourier/fourier-mlit.pfb></usr/local/te
-xlive/2018/texmf-dist/fonts/type1/public/fourier/fourier-ms.pfb></usr/local/tex
-live/2018/texmf-dist/fonts/type1/adobe/utopia/putb8a.pfb></usr/local/texlive/20
-18/texmf-dist/fonts/type1/adobe/utopia/putr8a.pfb></usr/local/texlive/2018/texm
-f-dist/fonts/type1/adobe/utopia/putri8a.pfb></usr/local/texlive/2018/texmf-dist
-/fonts/type1/public/cm-super/sftt0800.pfb></usr/local/texlive/2018/texmf-dist/f
-onts/type1/public/cm-super/sftt1200.pfb>
-Output written on logistic.pdf (14 pages, 2207184 bytes).
-PDF statistics:
- 263 PDF objects out of 1000 (max. 8388607)
- 225 compressed objects within 3 object streams
- 43 named destinations out of 1000 (max. 500000)
- 205 words of extra memory for PDF output out of 10000 (max. 10000000)
+21._at       : byses1          =        1.82
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .5106382   .0134564    37.95   0.000     .4842618    .5370146
+          2  |   .5348132   .0125359    42.66   0.000      .510241    .5593855
+          3  |   .5589883   .0116301    48.06   0.000     .5361917    .5817849
+          4  |   .5831634   .0107425    54.29   0.000     .5621065    .6042203
+          5  |   .6073385   .0098782    61.48   0.000     .5879758    .6267012
+          6  |   .6315135   .0090438    69.83   0.000     .6137865    .6492406
+          7  |   .6556886   .0082483    79.49   0.000     .6395208    .6718564
+          8  |   .6798637   .0075042    90.60   0.000     .6651544    .6945729
+          9  |   .7040388   .0068282   103.11   0.000     .6906544    .7174231
+         10  |   .7282138   .0062427   116.65   0.000     .7159773    .7404503
+         11  |   .7523889    .005775   130.28   0.000     .7410691    .7637088
+         12  |    .776564   .0054557   142.34   0.000     .7658701    .7872579
+         13  |    .800739   .0053115   150.76   0.000     .7903278    .8111503
+         14  |   .8249141   .0053566   154.00   0.000     .8144144    .8354139
+         15  |   .8490892   .0055865   151.99   0.000     .8381389    .8600395
+         16  |   .8732643   .0059798   146.04   0.000     .8615431    .8849854
+         17  |   .8974393   .0065069   137.92   0.000     .8846848    .9101939
+         18  |   .9216144   .0071384   129.11   0.000     .9076221    .9356067
+         19  |   .9457895    .007849   120.50   0.000     .9304042    .9611747
+         20  |   .9699646   .0086193   112.53   0.000     .9530696    .9868596
+         21  |   .9941396   .0094345   105.37   0.000     .9756466    1.012633
+------------------------------------------------------------------------------
+
+. 
+. // Grab results for plotting    
+. 
+. marginsplot
+
+  Variables that uniquely identify margins: byses1
+
+. 
+. marginsplot, recastci(rarea) ciopts(color(gray%10)) ///
+>                         recast(line)  plotopts(color(blue)) ///
+>                         xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") name("LPM")
+
+  Variables that uniquely identify margins: byses1
+
+. 
+.                         
+. graph export lpm.pdf, replace name("LPM")
+(file /Users/doylewr/lpo_prac/lessons/s2-11-binary_dv/lpm.pdf written in PDF format)
+
+. 
+. /*Logistic Function*/
+. 
+. graph drop _all
+
+. 
+. local k=.25 /*Scale*/
+
+. local x0=0 /*Location*/
+
+. 
+. 
+. graph twoway function y=-log(1/x-1) ,range(0 1) xtitle("P") ytitle("Logit(p)")
+
+. 
+. 
+. /*Logistic Regression */
+. 
+. // Most general: glm
+. glm `y' `ses' `demog' `tests', family(binomial) link(logit) /*Logit model */
+
+Iteration 0:   log likelihood = -5993.9873  
+Iteration 1:   log likelihood = -5882.7372  
+Iteration 2:   log likelihood = -5881.8941  
+Iteration 3:   log likelihood = -5881.8937  
+
+Generalized linear models                         Number of obs   =     13,284
+Optimization     : ML                             Residual df     =     13,274
+                                                  Scale parameter =          1
+Deviance         =  11763.78742                   (1/df) Deviance =   .8862278
+Pearson          =  12895.93374                   (1/df) Pearson  =   .9715183
+
+Variance function: V(u) = u*(1-u/1)               [Binomial]
+Link function    : g(u) = ln(u/(1-u))             [Logit]
+
+                                                  AIC             =   .8870662
+Log likelihood   = -5881.893711                   BIC             =  -114263.8
+
+------------------------------------------------------------------------------------------
+                         |                 OIM
+                f2evratt |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                  byses1 |   .9044975   .0375964    24.06   0.000     .8308099    .9781851
+                         |
+                 byrace2 |
+        Native American  |  -.2907767   .2208319    -1.32   0.188    -.7235993     .142046
+Asian/ Pacific Islander  |   1.024892   .0997533    10.27   0.000     .8293791    1.220405
+       African-American  |   .4880563   .0687739     7.10   0.000     .3532619    .6228507
+               Hispanic  |   .3010217   .0673856     4.47   0.000     .1689483     .433095
+            Multiracial  |   -.290723   .1021569    -2.85   0.004    -.4909468   -.0904992
+                         |
+                  female |
+             Non-Female  |  -.5852037   .0470378   -12.44   0.000    -.6773961   -.4930113
+                         |
+                bynels2m |   .0461185    .002718    16.97   0.000     .0407913    .0514457
+                bynels2r |   .0308627   .0037971     8.13   0.000     .0234205    .0383049
+                   _cons |  -1.513998   .1018765   -14.86   0.000    -1.713673   -1.314324
+------------------------------------------------------------------------------------------
+
+. 
+. // Can also use probit, uses cdf of normal dist    
+. glm `y' `ses' `demog' `tests', family(binomial) link(probit) /*Probit Model */
+
+Iteration 0:   log likelihood = -5978.0284  
+Iteration 1:   log likelihood =  -5878.115  
+Iteration 2:   log likelihood = -5878.0383  
+Iteration 3:   log likelihood = -5878.0383  
+
+Generalized linear models                         Number of obs   =     13,284
+Optimization     : ML                             Residual df     =     13,274
+                                                  Scale parameter =          1
+Deviance         =  11756.07668                   (1/df) Deviance =   .8856469
+Pearson          =  13406.23809                   (1/df) Pearson  =   1.009962
+
+Variance function: V(u) = u*(1-u/1)               [Binomial]
+Link function    : g(u) = invnorm(u)              [Probit]
+
+                                                  AIC             =   .8864857
+Log likelihood   = -5878.038342                   BIC             =  -114271.5
+
+------------------------------------------------------------------------------------------
+                         |                 OIM
+                f2evratt |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                  byses1 |   .5214156   .0212996    24.48   0.000     .4796692    .5631621
+                         |
+                 byrace2 |
+        Native American  |  -.1781082   .1305367    -1.36   0.172    -.4339554     .077739
+Asian/ Pacific Islander  |   .5517663   .0544573    10.13   0.000     .4450319    .6585007
+       African-American  |   .2699883   .0401898     6.72   0.000     .1912179    .3487588
+               Hispanic  |   .1510589   .0391104     3.86   0.000      .074404    .2277139
+            Multiracial  |  -.1672064   .0598836    -2.79   0.005    -.2845761   -.0498366
+                         |
+                  female |
+             Non-Female  |   -.337614    .027022   -12.49   0.000    -.3905762   -.2846519
+                         |
+                bynels2m |   .0264463    .001554    17.02   0.000     .0234004    .0294921
+                bynels2r |   .0177605   .0021853     8.13   0.000     .0134773    .0220437
+                   _cons |  -.8476451   .0589918   -14.37   0.000    -.9632669   -.7320233
+------------------------------------------------------------------------------------------
+
+. 
+. // Simpler version of logit model 
+. logit `y' `ses' `demog' `tests' 
+
+Iteration 0:   log likelihood = -7383.1405  
+Iteration 1:   log likelihood = -5998.4224  
+Iteration 2:   log likelihood = -5882.6198  
+Iteration 3:   log likelihood = -5881.8938  
+Iteration 4:   log likelihood = -5881.8937  
+
+Logistic regression                             Number of obs     =     13,284
+                                                LR chi2(9)        =    3002.49
+                                                Prob > chi2       =     0.0000
+Log likelihood = -5881.8937                     Pseudo R2         =     0.2033
+
+------------------------------------------------------------------------------------------
+                f2evratt |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                  byses1 |   .9044976   .0375964    24.06   0.000     .8308101    .9781852
+                         |
+                 byrace2 |
+        Native American  |  -.2907766   .2208319    -1.32   0.188    -.7235993     .142046
+Asian/ Pacific Islander  |   1.024893   .0997533    10.27   0.000     .8293798    1.220406
+       African-American  |   .4880564   .0687739     7.10   0.000      .353262    .6228508
+               Hispanic  |   .3010218   .0673856     4.47   0.000     .1689485    .4330951
+            Multiracial  |  -.2907231   .1021569    -2.85   0.004    -.4909469   -.0904993
+                         |
+                  female |
+             Non-Female  |  -.5852038   .0470378   -12.44   0.000    -.6773962   -.4930114
+                         |
+                bynels2m |   .0461185    .002718    16.97   0.000     .0407913    .0514457
+                bynels2r |   .0308627   .0037971     8.13   0.000     .0234205    .0383049
+                   _cons |  -1.513998   .1018765   -14.86   0.000    -1.713673   -1.314324
+------------------------------------------------------------------------------------------
+
+. 
+. est store full_model
+
+. 
+. gen mysample=e(sample)
+
+. 
+. /* Generating marginal effects */
+. 
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+. 
+. margins, dydx(*) /*for all coefficients, default is to hold others at mean */
+
+Average marginal effects                        Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict()
+dy/dx w.r.t. : byses1 1.byrace2 2.byrace2 3.byrace2 4.byrace2 5.byrace2 0.female bynels2m bynels2r
+
+------------------------------------------------------------------------------------------
+                         |            Delta-method
+                         |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                  byses1 |   .1295129   .0050031    25.89   0.000     .1197071    .1393188
+                         |
+                 byrace2 |
+        Native American  |  -.0452716   .0355833    -1.27   0.203    -.1150136    .0244704
+Asian/ Pacific Islander  |   .1290152    .010561    12.22   0.000     .1083161    .1497143
+       African-American  |   .0677923   .0089834     7.55   0.000     .0501852    .0853993
+               Hispanic  |   .0431174   .0093053     4.63   0.000     .0248795    .0613554
+            Multiracial  |  -.0452629   .0163784    -2.76   0.006    -.0773641   -.0131618
+                         |
+                  female |
+             Non-Female  |  -.0843727   .0067135   -12.57   0.000     -.097531   -.0712144
+                         |
+                bynels2m |   .0066036    .000375    17.61   0.000     .0058685    .0073387
+                bynels2r |   .0044192   .0005392     8.20   0.000     .0033623     .005476
+------------------------------------------------------------------------------------------
+Note: dy/dx for factor levels is the discrete change from the base level.
+
+. 
+. /*Margins for range of ses */
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+. 
+. margins , predict(pr) ///
+>     at((mean) _continuous ///
+>         (base) _factor ///
+>         `x'=(`mymin'(`step')`mymax') ///          
+>        ) ///
+>       post
+
+Adjusted predictions                            Number of obs     =     13,284
+Model VCE    : OIM
+
+Expression   : Pr(f2evratt), predict(pr)
+
+1._at        : byses1          =       -2.11
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+2._at        : byses1          =     -1.9135
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+3._at        : byses1          =      -1.717
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+4._at        : byses1          =     -1.5205
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+5._at        : byses1          =      -1.324
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+6._at        : byses1          =     -1.1275
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+7._at        : byses1          =   -.9309999
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+8._at        : byses1          =   -.7344999
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+9._at        : byses1          =   -.5379999
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+10._at       : byses1          =   -.3414999
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+11._at       : byses1          =   -.1449999
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+12._at       : byses1          =    .0515001
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+13._at       : byses1          =    .2480001
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+14._at       : byses1          =    .4445001
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+15._at       : byses1          =    .6410001
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+16._at       : byses1          =    .8375001
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+17._at       : byses1          =       1.034
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+18._at       : byses1          =      1.2305
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+19._at       : byses1          =       1.427
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+20._at       : byses1          =      1.6235
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+21._at       : byses1          =        1.82
+               byrace2         =           6
+               female          =           1
+               bynels2m        =     46.1288 (mean)
+               bynels2r        =    30.23475 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   .4104825   .0208968    19.64   0.000     .3695255    .4514395
+          2  |   .4540705   .0198075    22.92   0.000     .4152485    .4928925
+          3  |   .4983741   .0184073    27.07   0.000     .4622966    .5344517
+          4  |   .5427033   .0167719    32.36   0.000     .5098309    .5755756
+          5  |   .5863664   .0149946    39.11   0.000     .5569774    .6157553
+          6  |   .6287126   .0131765    47.71   0.000     .6028872     .654538
+          7  |   .6691696   .0114167    58.61   0.000     .6467933    .6915458
+          8  |   .7072707    .009803    72.15   0.000     .6880572    .7264843
+          9  |   .7426713   .0084034    88.38   0.000      .726201    .7591416
+         10  |   .7751517   .0072582   106.80   0.000      .760926    .7893775
+         11  |    .804611   .0063745   126.22   0.000     .7921172    .8171049
+         12  |   .8310519   .0057259   145.14   0.000     .8198293    .8422745
+         13  |   .8545614   .0052603   162.45   0.000     .8442514    .8648714
+         14  |   .8752904   .0049166   178.03   0.000     .8656542    .8849267
+         15  |   .8934334   .0046402   192.54   0.000     .8843389     .902528
+         16  |   .9092107    .004392   207.02   0.000     .9006026    .9178188
+         17  |   .9228539   .0041487   222.44   0.000     .9147226    .9309852
+         18  |   .9345943   .0038996   239.66   0.000     .9269513    .9422374
+         19  |   .9446552   .0036421   259.37   0.000     .9375169    .9517935
+         20  |   .9532459   .0033781   282.18   0.000     .9466249    .9598669
+         21  |   .9605588   .0031118   308.68   0.000     .9544597    .9666579
+------------------------------------------------------------------------------
+
+.           
+. //Marginsplot
+. 
+. 
+. marginsplot, recastci(rarea) ciopts(color(gray%10)) ///
+>                         recast(line)  plotopts(color(blue)) ///
+> xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") name("logit_basic")
+
+  Variables that uniquely identify margins: byses1
+
+. 
+. 
+.                         
+. graph export logit_basic.pdf, replace name("logit_basic")
+(file /Users/doylewr/lpo_prac/lessons/s2-11-binary_dv/logit_basic.pdf written in PDF format)
+
+. 
+.     
+. /* Margins for range of ses, all races */
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+. 
+. quietly margins , predict(pr) ///
+>     at((mean) _continuous ///
+>         (base) _factor ///
+>         `x'=(`mymin'(`step')`mymax') ///
+>         byrace2=(1(1)6) ///
+>        ) ///
+>       post
+
+. 
+. 
+. marginsplot, recastci(rarea) ciopts(color(%10)) ///
+>                                 recast(line) ///
+>               xlabel(-2(.3)2) xtitle("SES") ytitle("Pr(Attend)") title("") ///
+>               name("logit_race")
+
+  Variables that uniquely identify margins: byses1 byrace2
+
+. 
+.                         
+. graph export logit_race.pdf, replace name("logit_race")
+(file /Users/doylewr/lpo_prac/lessons/s2-11-binary_dv/logit_race.pdf written in PDF format)
+
+.         
+. estimates restore full_model                    
+(results full_model are active now)
+
+. 
+. quietly margins , predict(pr) ///
+>     at((mean) _continuous ///
+>         (base) _factor ///
+>         `x'=(`mymin'(`step')`mymax') ///
+>         byrace2=(3 4 6) ///
+>        ) ///
+>       post
+
+. 
+. 
+. marginsplot, recastci(rarea) ciopts(color(%10)) ///
+>                                 recast(line) ///
+>                                 xlabel(-2(.3)2) xtitle("SES") ytitle(Linear Prediction) title("") ///
+>                                 legend(cols(1))
+
+  Variables that uniquely identify margins: byses1 byrace2
+
+. 
+.                                 
+. // Another option
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+. 
+. marginscontplot2 byses1, at1(-2(.2)2) ci                                
+
+. 
+. mcp2 byses1, at1(-2(.1)2) ci
+
+. 
+. mcp2 byses1 byrace2, at1(-2(.1)2) ci                            
+
+. 
+. // Other functions
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+. 
+. 
+. // What are odds ratios (Q:would we ever care A:NO)?
+. 
+. mean f2evratt,over(female)
+
+Mean estimation                        Number of obs   =     13,359
+
+-------------------------------------------------------------------
+                  |       Mean   Std. Err.     [95% Conf. Interval]
+------------------+------------------------------------------------
+c.f2evratt@female |
+      Non-Female  |   .7157305   .0056269       .704701      .72676
+          Female  |   .7888055   .0049026      .7791957    .7984154
+-------------------------------------------------------------------
+
+. 
+. mat results=e(b)
+
+. 
+. scalar attend_not_female=results[1,1]
+
+. 
+. scalar not_attend_not_female=1-attend_not_female
+
+. 
+. scalar odds_not_female=attend_not_female/not_attend_not_female
+
+. 
+. scalar attend_female=results[1,2]
+
+. 
+. scalar not_attend_female=1-attend_female
+
+. 
+. scalar odds_female=attend_female/not_attend_female
+
+. 
+. scalar li odds_not_female odds_female
+odds_not_female =  2.5177887
+odds_female =  3.7349727
+
+. 
+. scalar or_female=odds_female/odds_not_female
+
+. 
+. scalar li or_female
+ or_female =  1.4834337
+
+. 
+. logistic f2evratt female
+
+Logistic regression                             Number of obs     =     13,359
+                                                LR chi2(1)        =      95.95
+                                                Prob > chi2       =     0.0000
+Log likelihood = -7410.2256                     Pseudo R2         =     0.0064
+
+------------------------------------------------------------------------------
+    f2evratt | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      female |   1.483434   .0599035     9.77   0.000     1.370551    1.605614
+       _cons |   2.517789   .0696266    33.39   0.000     2.384955     2.65802
+------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+. /* QE: or for parent with a bachelor's degree */
+. 
+. 
+. listcoef /*Display odds ratios from model in memory */
+
+logistic (N=13359): Factor Change in Odds 
+
+  Odds of: Yes vs No
+
+------------------------------------------------------------------
+f2evratt |      b         z     P>|z|    e^b    e^bStdX      SDofX
+---------+--------------------------------------------------------
+  female |   0.39436    9.766   0.000   1.4834   1.2178     0.4997
+------------------------------------------------------------------
+
+. 
+. logistic `y' `ses' `demog' `tests'  /*Works too */
+
+Logistic regression                             Number of obs     =     13,284
+                                                LR chi2(9)        =    3002.49
+                                                Prob > chi2       =     0.0000
+Log likelihood = -5881.8937                     Pseudo R2         =     0.2033
+
+------------------------------------------------------------------------------------------
+                f2evratt | Odds Ratio   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------------------+----------------------------------------------------------------
+                  byses1 |    2.47069   .0928891    24.06   0.000     2.295177    2.659625
+                         |
+                 byrace2 |
+        Native American  |   .7476827   .1651122    -1.32   0.188     .4850034     1.15263
+Asian/ Pacific Islander  |   2.786797   .2779922    10.27   0.000     2.291897    3.388562
+       African-American  |   1.629147   .1120428     7.10   0.000     1.423704    1.864235
+               Hispanic  |   1.351239    .091054     4.47   0.000     1.184059    1.542023
+            Multiracial  |   .7477227    .076385    -2.85   0.004     .6120466     .913475
+                         |
+                  female |
+             Non-Female  |   .5569923   .0261997   -12.44   0.000     .5079378    .6107843
+                         |
+                bynels2m |   1.047198   .0028463    16.97   0.000     1.041635    1.052792
+                bynels2r |   1.031344   .0039161     8.13   0.000     1.023697    1.039048
+                   _cons |   .2200284   .0224157   -14.86   0.000     .1802027    .2686558
+------------------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+.  
+. /* Measures of model fit: all imperfect */
+. 
+. // Built in methods
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+. 
+. fitstat
+
+Measures of Fit for logit of f2evratt
+
+Log-Lik Intercept Only:    -7383.141     Log-Lik Full Model:        -5881.894
+D(13272):                  11763.787     LR(9):                      3002.494
+                                         Prob > LR:                     0.000
+McFadden's R2:                 0.203     McFadden's Adj R2:             0.202
+Maximum Likelihood R2:         1.000     Cragg & Uhler's R2:            1.000
+McKelvey and Zavoina's R2:     0.350     Efron's R2:                    0.219
+Variance of y*:                5.060     Variance of error:             3.290
+Count R2:                      0.790     Adj Count R2:                  0.141
+AIC:                           0.887     AIC*n:                     11787.787
+BIC:                     -114244.769     BIC':                      -2917.045
+
+. 
+. /* Likelihood ratio test for nested models */
+. quietly logit `y' `ses' if mysample==1
+
+. 
+. est store ses
+
+. 
+. lrtest full_model ses
+
+Likelihood-ratio test                                 LR chi2(8)  =   1398.05
+(Assumption: ses nested in full_model)                Prob > chi2 =    0.0000
+
+. 
+. quietly logit `y'  `demog' if mysample==1
+
+. 
+. est store demog
+
+. 
+. lrtest full_model demog
+
+Likelihood-ratio test                                 LR chi2(3)  =   2542.87
+(Assumption: demog nested in full_model)              Prob > chi2 =    0.0000
+
+. 
+. quietly logit `y' `tests' if mysample==1
+
+. 
+. est store tests
+
+. 
+. lrtest full_model tests
+
+Likelihood-ratio test                                 LR chi2(7)  =    860.54
+(Assumption: tests nested in full_model)              Prob > chi2 =    0.0000
+
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+. 
+. /* Percent Correctly Predicted  */
+. 
+. estat classification
+
+Logistic model for f2evratt
+
+              -------- True --------
+Classified |         D            ~D  |      Total
+-----------+--------------------------+-----------
+     +     |      9322          2068  |      11390
+     -     |       719          1175  |       1894
+-----------+--------------------------+-----------
+   Total   |     10041          3243  |      13284
+
+Classified + if predicted Pr(D) >= .5
+True D defined as f2evratt != 0
+--------------------------------------------------
+Sensitivity                     Pr( +| D)   92.84%
+Specificity                     Pr( -|~D)   36.23%
+Positive predictive value       Pr( D| +)   81.84%
+Negative predictive value       Pr(~D| -)   62.04%
+--------------------------------------------------
+False + rate for true ~D        Pr( +|~D)   63.77%
+False - rate for true D         Pr( -| D)    7.16%
+False + rate for classified +   Pr(~D| +)   18.16%
+False - rate for classified -   Pr( D| -)   37.96%
+--------------------------------------------------
+Correctly classified                        79.02%
+--------------------------------------------------
+
+. 
+. // Sensitivity/Specificity trafeoff
+. 
+. estimates restore full_model
+(results full_model are active now)
+
+. 
+. lsens, genprob(pr) genspec(spec) gensens(sens) replace
+
+. 
+. browse pr spec sens
+
+. 
+. /*Area under Receiver/Operator Characteristic Curve */
+. 
+. lroc, name("lroc1")
+
+Logistic model for f2evratt
+
+number of observations =    13284
+area under ROC curve   =   0.8013
+
+. 
+. /*comparing two models */
+. 
+. est restore ses
+(results ses are active now)
+
+. 
+. predict xb_ses, xb
+(964 missing values generated)
+
+. 
+. est restore full_model
+(results full_model are active now)
+
+. 
+. predict xb_full, xb
+(964 missing values generated)
+
+.  
+. roccomp f2evratt xb_full xb_ses, graph summary name("roc2")
+
+                              ROC                    -Asymptotic Normal--
+                   Obs       Area     Std. Err.      [95% Conf. Interval]
+-------------------------------------------------------------------------
+xb_full         13,284     0.8013       0.0043        0.79293     0.80960
+xb_ses          13,284     0.7300       0.0048        0.72056     0.73934
+-------------------------------------------------------------------------
+Ho: area(xb_full) = area(xb_ses)
+    chi2(1) =   345.06       Prob>chi2 =   0.0000
+
+. 
+. graph export roc_curve.pdf , replace name("roc2")  ///
+> 
+(file /Users/doylewr/lpo_prac/lessons/s2-11-binary_dv/roc_curve.pdf written in PDF format)
+
+. exit
+
+end of do-file
+
 

@@ -4,7 +4,7 @@ log using "logistic.log",replace
 /* PhD Practicum, Spring 2020 */
 /* Regression models for binary data*/
 /* Will Doyle*/
-/* 2020-04-08 */
+/* 2021-04-22 */
 
 clear
 
@@ -110,7 +110,9 @@ graph drop _all
 local k=.25 /*Scale*/
 local x0=0 /*Location*/
 
-graph twoway function y=1/(1+exp((-`k')*(x-`x0'))),range(-2 2) name("Logit")
+
+graph twoway function y=-log(1/x-1) ,range(0 1) xtitle("P") ytitle("Logit(p)")
+
 
 /*Logistic Regression */
 
@@ -208,6 +210,36 @@ mcp2 byses1 byrace2, at1(-2(.1)2) ci
 // Other functions
 
 estimates restore full_model
+
+
+// What are odds ratios (Q:would we ever care A:NO)?
+
+mean f2evratt,over(female)
+
+mat results=e(b)
+
+scalar attend_not_female=results[1,1]
+
+scalar not_attend_not_female=1-attend_not_female
+
+scalar odds_not_female=attend_not_female/not_attend_not_female
+
+scalar attend_female=results[1,2]
+
+scalar not_attend_female=1-attend_female
+
+scalar odds_female=attend_female/not_attend_female
+
+scalar li odds_not_female odds_female
+
+scalar or_female=odds_female/odds_not_female
+
+scalar li or_female
+
+logistic f2evratt female
+
+/* QE: or for parent with a bachelor's degree */
+
 
 listcoef /*Display odds ratios from model in memory */
 

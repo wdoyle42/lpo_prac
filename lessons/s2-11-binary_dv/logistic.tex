@@ -25,7 +25,7 @@
 
 
 \begin{flushleft}
-Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9952\\ Spring 2020\\
+Vanderbilt University\\Leadership, Policy and Organizations\\Class Number 9952\\ Spring 2021\\
 \end{flushleft}
 
 \begin{center}
@@ -54,7 +54,7 @@ binary data. A partial list includes:
 
 \item Departure from teaching: yes or no?
 
-\item Failure to make AYP: yes or no?
+\item Failure to make state standards: yes or no?
 
 \item Employment after graduation: yes or no?
 
@@ -345,6 +345,13 @@ since this is what is mapped onto the (0,1) scale.
 
 
 
+\subsubsection{Quick Exercise}
+
+Run a logistic regression predicting  college attendance by
+math scores. Generate a predicted outcome, and plot this against
+math scores. Use the form \texttt{predict yhat, pr} to get predicted
+probabilities for $y=1$. 
+
 \subsection{Generating Marginal Effects}
 
 The marginal effect of a covariate is the predicted change in the
@@ -389,12 +396,6 @@ dy/dx w.r.t. : byses1 amind asian black hispanic multiracial bysex bynels2m byne
 . 
 \end{stlog}
 
-\subsubsection{Quick Exercise}
-
-Run a logistic regression predicting  college attendance by
-math scores. Generate a predicted outcome, and plot this against
-math scores. Use the form \texttt{predict yhat, pr} to get predicted
-probabilities for $y=1$. 
 
 
 \subsection{Generating Probabilities}
@@ -584,8 +585,7 @@ writing them up.
 \subsubsection{Quick Exercise}
 
 Interpret the odds ratio for income from the above regression. Write
-down your answer. Get the marginal effects for all of the variables, but this time hold all of
-the other variables constant at their medians. 
+down your answer.
 
 
 \subsection{Hypothesis Testing}
