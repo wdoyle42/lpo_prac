@@ -6,7 +6,7 @@ output:
 ## Vanderbilt University
 ## Leadership, Policy and Organizations
 ## Class Number 9553
-## Maymester 2020
+## Maymester 2021
 
 
 William R. Doyle
@@ -49,59 +49,58 @@ Stata will again be the order of the day for this semester.
 # Schedule for Meetings
 Class will meet from 12-3 via Zoom.
 
-*May 4*
+*May   11*
 
 Polychotomous Outcomes
 
-*May 5*
+*May 12*
 
 Methods for latent variables
 
-*May 6*
+*May 13*
 
 Methods for Selection Bias: Propensity Score Matching
 
-*May 7*
+*May 14*
 
 Missing data, multiple imputation
 
-*May 8*
+*May 17*
 
 Instrumental variables, regression discontinuity
 
-*May 11*
+*May 18*
 
 Difference in Differences, Event History Analysis
 
-*May 12*
+*May 19*
 
 Limited dependent variables: censored data, count data
 
-*May 13*
-
-Student Presentations: Youjin Chung, Cara DeLoach
-
-*May 14*
-
-Student Presentations: Christine Dickason, Catherine Duggan 
-
-*May 15*
-
-Student Presentations: Divya Gopinath, Kara Mitchell
-
-*May 18*
-
-Student Presentations: Anna Moyer, Francisco Santelli
-
-*May 19*
-
-Student Presentations: Colby Woods
-
 *May 20*
+
+Student Presentations: 
+
+*May 21*
+
+Student Presentations: 
+*May 24*
+
+Student Presentations: 
+
+*May 25*
+
+Student Presentations: 
+
+*May 26*
+
+Student Presentations: 
+
+*May 27*
 
 Code-A-Rama: Open Office Hours from 10-3 to help with coding issues
 
-*May 21*
+*May 28*
 
 In-class conference style presentations
 
