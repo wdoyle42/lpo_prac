@@ -1,12 +1,12 @@
 
-version 15 /* Can set version here, use the most recent as default */
+version 13 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 
 log using "limited.log",replace /*Open up new log */
 
 /* Models for Limited and Count Variables*/
 /* Will Doyle */
-/* 2021-05-11 */
+/* 2019-04-03 */
 
 clear
 
@@ -23,11 +23,11 @@ global ddir "../../data/"
 /*Controls*/
 
 local coding=0
-local order_analysis=0
-local multi_analysis=0
+local order_analysis=1
+local multi_analysis=1
 local multi_ses_race=0
 local auc=0
-local compare=0
+local compare=1
 
 /*Locals for analysis*/
 local y first_inst
@@ -163,11 +163,11 @@ recode f2ps1sec (1=1) (2=2) (4=3) (3=4) (5/9=4), gen(first_inst)
 
 replace first_inst=. if first_inst<0  
 
-	label define sector 1 "Public 4 Year" 2 "Private 4 Year" 3 "Public 2 Year"  4 "Other"
+  label define sector 1 "Public 4 Year" 2 "Private 4 Year" 3 "Public 2 Year"  4 "Other"
 
-	label values first_inst sector
+  label values first_inst sector
   
-	tab first_inst f2ps1sec
+ tab first_inst f2ps1sec
   
 save apps_credits.dta, replace
   
@@ -183,13 +183,10 @@ else{
   if `order_analysis'==1{
 reg order_plan female `test' `race' `pared' `income'
 
+
 eststo oprob_1:oprobit order_plan female `test' 
 eststo oprob_2:oprobit order_plan female `test' `race' `pared' 
 eststo oprob_3:oprobit order_plan female `test' `race' `pared' `income'
-
-local cut1=_b[/:cut1]
-local cut2=_b[/:cut2]
-
 
 esttab oprob_* using raw_oprobit.rtf, ///
     not ///
@@ -199,12 +196,16 @@ esttab oprob_* using raw_oprobit.rtf, ///
     aic ///
     replace
 
+	
+local cut1=_b[cut1:_cons]
+local cut2=_b[cut2:_cons]
 
 margins, predict(xb)  at(female=(0/1)) atmeans post /* Z in wooldridge*/
 
 mat linpred=e(b)
 scalar male_pred=linpred[1,1]
 scalar female_pred=linpred[1,2]
+
         
 graph twoway (function y=normalden(x,female_pred,1),range(-3 6)) ///
              (function y=normalden(x,male_pred,1), range(-3 6)), ///
@@ -216,27 +217,6 @@ graph twoway (function y=normalden(x,female_pred,1),range(-3 6)) ///
              text(.3 -2 "No Plans", size(vsmall)) ///
              text(.35 .9 "Votech/CC", size(vsmall)) ///
              text(.3 4.2 "Four Year", size(vsmall))
-
-			 
-estimates restore oprob_3
-
-margins, predict(xb)  at(bynels2m=(.1 .7)) atmeans post /* Z in wooldridge*/
-
-mat linpred=e(b)
-scalar high_test_pred=linpred[1,1]
-scalar low_test_pred=linpred[1,2]
-        
-graph twoway (function y=normalden(x,high_test_pred,1),range(-3 6)) ///
-             (function y=normalden(x,low_test_pred,1), range(-3 6)), ///
-             xline(`cut1',lpattern(dash)) /// 
-             xline(`cut2',lpattern(dash)) ///
-             legend(order(1 "Low Test Scores" 2 "High Test Scores")) ///
-             note("") title("") ///
-             xtitle("Linear Prediction") ///
-             text(.3 -2 "No Plans", size(vsmall)) ///
-             text(.35 .9 "Votech/CC", size(vsmall)) ///
-             text(.3 4.2 "Four Year", size(vsmall))
-			 
 			 
 graph export "linear.pdf", replace
 
@@ -245,10 +225,6 @@ estimates restore oprob_3
     margins ,at(female=(0/1)) predict(outcome(1)) atmeans
     margins ,at(female=(0/1)) predict(outcome(2)) atmeans
     margins ,at(female=(0/1)) predict(outcome(3)) atmeans
-
-	margins ,at(bynels2m=(.1 .7)) predict(outcome(1)) atmeans
-    margins ,at(bynels2m=(.1 .7)) predict(outcome(2)) atmeans
-    margins ,at(bynels2m=(.1 .7)) predict(outcome(3)) atmeans
 
 	
 /*Marginal Effects*/
@@ -268,40 +244,67 @@ esttab marg?_ord using marg_ord.rtf, ///
     replace    
 
 	
-local my_outcomes `" "No Plans" "Votech/CC Plans" "Four-Year Plans" "'
-	
-local j=1	
-
-foreach my_outcome of local my_outcomes{
+forvalues j= 1/3{
 
 estimates restore oprob_3
 
 margins,  predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7) (min) `race' `pared'  (mean) bynels2r byses1  )  post
 
-set scheme s1color
-
 // If you want to use marginsplot: 
-marginsplot, recastci(rarea) ///
-			 ciopts(color(eltblue%25) lwidth(0) ) ///
-			 recast(line) ///
-			 plotopts(color(black)) ///
-			 title(`"`my_outcome'"') ///
-			 xtitle("Math Score") ///
-			 ytitle(`"Pr(`my_outcome')"') ///
-			 legend(off)
-			 
+marginsplot, recastci(rarea) recast(line) name("outcome_`j'")
+
+mat t=J(7,3,.) /* Empty matrix */
+
+mat a = (.1\.2\.3\.4\.5\.6\.7)   /*"at values"*/
+
+mat myb=r(b) /*Estimated marginal effects */
+mat myvc=r(V) /* variance/covariance */
+mat myvar=vecdiag(myvc) /* Variances of marginal effects */
+mat myse=J(1,7,.) /*Empty matrix for standard errors */
+
+/*Sqrt of variances = standard errors */
+  
+forvalues i=1/7{
+  mat myse[1,`i']=sqrt(myvar[1,`i'])
+}
+  
+forvalues i=1/7 {
+  mat t[`i',1] = myb[1,`i']                      /*Probabilities */
+  mat t[`i',2] = myb[1,`i'] - 1.96*myse[1,`i']   /* Lower bound of ci */
+  mat t[`i',3] = myb[1,`i'] + 1.96*myse[1,`i']   /* Upper bound of ci */
+}
+
+
+mat t=t,a   /*Combine with "at" values */
+
+mat li t
+
+mat colnames t = prob ll ul at
+
+svmat t, names(col) /*Converts matrix into data */
+
+// local outcome `: word `j' of `plan_outcomes' '
+
+twoway (rarea ll ul at,  fcolor(emidblue) fintensity(25) lwidth(none)  )(line prob at), nodraw legend(off)  ///
+       xtitle("Math Score" ) ytitle("Pr y=m") title("Outcome=`j'") ///
+         yscale(range(0 1)) ylabel(0(.1)1)  scheme(s1color)
+         
 graph save "order_plan_`j'.gph", replace
 
-local j=`j'+1
+drop prob ll ul at
 
 }/*End loop over outcomes*/
 
 graph combine order_plan_1.gph order_plan_2.gph order_plan_3.gph, ///
-		xcommon ycommon rows(1) 
-  
-graph export  "order.pdf", replace
+  rows(1)
+
+//Recode first institution
+
 
 /*Locals for analysis*/
+
+//drop new_first
+
 local y first_inst
 
 local test bynels2m bynels2r
@@ -312,82 +315,52 @@ local pared bypared_nohs bypared_2yrnodeg bypared_2yr bypared_some4 bypared_mast
 
 local income  byses1
 
-capture drop newexp
+recode first_inst (4=1) (3=2) (1/2=3), gen(new_first) 
 
-recode bystexp  ///
-		(-1/2=1 "HS or Less") ///
-		(3/4=2 "Less than 4 yr") ///
-		(5=3 "Four-Year") ///
-		(6/7=4 "Graduate Degree") , /// 		
-		gen(newexp)
+// Run Model
+eststo new_oprob_1:oprobit new_first female `test' `race' `pared' `income'
 
-eststo oprob_3:oprobit newexp female `test' `race' `pared' `income'
-		
-local my_outcomes `" "HS or Less" "Less than Four-Year" "BA" "Graduate Degree" "'
+// Generate predicted probabilities
 
-local j=1	
-		
-foreach my_outcome of local my_outcomes{
+forvalues j= 1/3{
 
-estimates restore oprob_3
+estimates restore new_oprob_1
 
-margins,  predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7) (min) `race' `pared'  (mean) bynels2r byses1  )  post
+margins, predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7) (min) `race' `pared' (mean) bynels2r byses1  )  post
 
-marginsplot, recastci(rarea) ciopts(color(%25) lwidth(0)) ///
-			 recast(line)  ///
-			  title(`"`my_outcome'"') ///
-			 xtitle("Math Score") ///
-			 ytitle(`"Pr(`my_outcome')"') ///
-			 legend(off)
-			 
-			 
-graph save "order_exp_`j'.gph", replace
-local j=`j'+1
+// If you want to use marginsplot: 
+marginsplot, recastci(rarea) recast(line) name("inst_`j'", replace)
 
-}/*End loop over outcomes*/
-	
-graph combine order_exp_1.gph order_exp_2.gph order_exp_3.gph order_exp_4.gph, ///
-  rows(1)	xcommon ycommon
+graph save inst_`j'.gph, replace
 
-		
-local my_outcomes `" "HS or Less" "Less than Four-Year" "BA" "Graduate Degree" "'
+} 
 
-local j=1	
-		
-foreach my_outcome of local my_outcomes{
+graph combine inst_1.gph inst_2.gph inst_3.gph, rows(1)
 
-estimates restore oprob_3
+// End loop over outcomes
 
-sum byses1
-
-local mymin=r(min)
-local mymax=r(max)
-local diff=`mymax'-`mymin'
-local no_step=100
-local step=`diff'/`no_step'
-
-margins,  predict(outcome(`j')) ///
-			at(byses1=(`mymin'(`step')`mymax') ///
-			female=(0 1) (min) `race' `pared' ///
-			(mean) bynels2r bynels2m) ///
-			post
-
-marginsplot, recastci(rarea) ciopts(color(%25) lwidth(0)) ///
-			 recast(line)  ///
-			 title(`"`my_outcome'"') ///
-			 xtitle("SES") ///
-			 ytitle(`"Pr(`my_outcome')"')  ///
-			 legend(order(1 "Male" 2 "Female"))
-			 			 
-graph save "order_exp_`j'.gph", replace
-local j=`j'+1
-
-}/*End loop over outcomes*/
-	
-grc1leg  order_exp_1.gph order_exp_2.gph order_exp_3.gph order_exp_4.gph, ///
-  rows(1) xcommon ycommon 
- 
   
+graph export  "order.pdf", replace
+
+eststo exp_oprob_1: oprobit exp_new female `test' `race' `pared' `income'
+
+forvalues j= 1/4{
+
+estimates restore exp_oprob_1
+
+margins, predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7) (min) `race' `pared'  (mean) bynels2r byses1  )  post
+
+// If you want to use marginsplot: 
+marginsplot, recastci(rarea) recast(line) name("exp_outcome_`j'")
+
+graph save "exp_outcome_`j'.gph", replace
+}
+
+graph combine exp_outcome_1.gph exp_outcome_2.gph exp_outcome_3.gph exp_outcome_4.gph, ///
+  rows(1)
+
+
+/* Class exercise: work with student expectations */
 
 } // End order analysis section
 
@@ -399,6 +372,7 @@ grc1leg  order_exp_1.gph order_exp_2.gph order_exp_3.gph order_exp_4.gph, ///
 if `multi_analysis'==1{
 
 eststo multi_plan:mlogit order_plan female `test' `race' `pared' `income', baseoutcome(1)
+
 
 estimates restore multi_plan
 margins, dydx(`test' `race' `pared' `income') predict(outcome(1)) post
@@ -412,10 +386,38 @@ forvalues j= 1/3{
 estimates restore multi_plan  
 margins, predict(outcome(`j'))  at(bynels2m=(.1 .2 .3 .4 .5 .6 .7)  (min) `race' `pared'  (mean) bynels2r byses1  )  post
 
-marginsplot, recastci(rarea) ciopts(color(%25) lwidth(0)) ///
-			 recast(line)   
-           
+mat t=J(7,3,.)
+
+mat a = (.1\.2\.3\.4\.5\.6\.7)                   
+
+mat myb=r(b)
+mat myvc=r(V)
+mat myvar=vecdiag(myvc)
+mat myse=J(1,7,.)
+forvalues i=1/7{
+  mat myse[1,`i']=sqrt(myvar[1,`i'])
+}
+  
+forvalues i=1/7 {
+  mat t[`i',1] = myb[1,`i']                      
+  mat t[`i',2] = myb[1,`i'] - 1.96*myse[1,`i']   
+  mat t[`i',3] = myb[1,`i'] + 1.96*myse[1,`i']   
+} 
+
+mat t=t,a                                          
+
+mat li t
+
+mat colnames t = prob ll ul at                     
+svmat t, names(col)   
+  
+twoway (rarea ll ul at)(line prob at), legend(off)  ///
+       xtitle("Math Score" ) ytitle("Pr y=m") title("Outcome `j'") ///
+         yscale(range(0 1)) scheme(s1mono) ylabel(0(.1)1)
+         
 graph save "unorder_plan_`j'.gph", replace
+
+drop prob ll ul at 
 
 
 }/*End loop over outcomes*/
@@ -424,17 +426,16 @@ graph save "unorder_plan_`j'.gph", replace
 graph combine unorder_plan_1.gph unorder_plan_2.gph unorder_plan_3.gph,  ///
   rows(1)
 
-
 graph export "unorder.pdf", replace
-
 
 /* Multinomial Logit: better application, first institution attended */
 
-eststo multi_first1: mlogit first_inst female `test' , baseoutcome(1)
+eststo multi_first1: mlogit first_inst female `test' ,baseoutcome(1)
 eststo multi_first2: mlogit first_inst female `test' `race' `pared',baseoutcome(1) 
 eststo multi_first3: mlogit first_inst female `test' `race' `pared' `income' ,baseoutcome(1) 
 
-esttab multi_first* using multi_first.tex, ///
+
+esttab multi_first* using multi_first.rtf, ///
     not ///
     b(2) ///
     se(2) ///
@@ -452,44 +453,91 @@ estimates restore multi_first3
 margins, dydx(`test' `race' `pared' `income') predict(outcome(4)) post
 
 
-	
-local my_outcomes `" "Public Four-Year" "Private Four-Year" "Public Two-Year" "Other" "'
-
-local j=1
-
-foreach my_outcome of local my_outcomes{
+forvalues j= 1/4{
 
 estimates restore multi_first3
 
 margins, predict(outcome(`j')) at(bynels2m=(.1 .2 .3 .4 .5 .6 .7)  (min) `race' `pared'  (mean) bynels2r byses1  )  post
 
-marginsplot, recastci(rarea) ciopts(color(%25) lwidth(0)) ///
-			 recast(line)  ///
-			 title(`"`my_outcome'"') ///
-			 xtitle("Math Scores") ///
-			 ytitle(`"Pr(`my_outcome')"') ///
-			 legend(off)
-        
+mat t=J(7,3,.)
+
+mat a = (.1\.2\.3\.4\.5\.6\.7)                   
+
+mat myb=r(b)
+mat myvc=r(V)
+mat myvar=vecdiag(myvc)
+mat myse=J(1,7,.)
+forvalues i=1/7{
+  mat myse[1,`i']=sqrt(myvar[1,`i'])
+}
+  
+forvalues i=1/7 {
+  mat t[`i',1] = myb[1,`i']                      
+  mat t[`i',2] = myb[1,`i'] - 1.96*myse[1,`i']   
+  mat t[`i',3] = myb[1,`i'] + 1.96*myse[1,`i']
+} 
+
+mat t=t,a                                          
+
+mat li t
+
+mat colnames t = prob ll ul at
+
+svmat t, names(col)   
+  
+twoway (rarea ll ul at, fcolor(emidblue) fintensity(50) lwidth(none) )(line prob at), nodraw legend(off)  ///
+       xtitle("Math Score" ) ytitle("Pr y=m") title("Outcome `j'") ///
+         yscale(range(0 1)) scheme(s1color) ylabel(0(.1)1)
+         
 graph save "unorder_first_`j'.gph", replace
 
-local j=`j'+1		
-	 
-} // Close loop over outcomes
-  
+drop prob ll ul at 
 
 }/*End loop over outcomes*/
+
 
 graph combine unorder_first_1.gph ///
               unorder_first_2.gph ///
               unorder_first_3.gph ///        
               unorder_first_4.gph, ///
-              rows(2) xcommon ycommon 
+              rows(2)
 
-graph export unorder_first.pdf,replace
-
-exit 
-
+//graph export unorder_first.pdf,replace
 } /*end multi analysis section*/
+
+
+// Graph outcome as a function of reading scores, separately by male/female
+// 
+
+
+/*Locals for analysis*/
+local y first_inst
+
+local test bynels2m bynels2r
+
+local race amind asian black hispanic multiracial
+
+local pared bypared_nohs bypared_2yrnodeg bypared_2yr bypared_some4 bypared_masters bypared_phd 
+
+local income  byses1
+
+
+forvalues j=1/4{
+
+estimates restore multi_first3
+
+margins, predict(outcome(`j')) at(bynels2r=(.1 .2 .3 .4 .5 .6 .7) female=(0 1) (min) `race' `pared'  (mean) bynels2r byses1  )  post
+
+marginsplot, recastci(rarea) ciopts(color(*.10))  ylabel(0(.1)1) yscale(range(0 1)) recast(line) name("read_`j'", replace)
+
+graph save "read_`j'.gph", replace
+
+}
+
+grc1leg read_1.gph read_2.gph read_3.gph read_4.gph, rows(2)
+
+exit
+
 
 if `multi_ses_race'==1{
 /* By Race and SES */
@@ -536,6 +584,43 @@ estimates restore multi_first3
 margins, predict(outcome(`j')) at((min) `race_non' `pared'  (mean) bynels2r bynels2m byses=(`mymin'(`step')`mymax') `myrace'=1)  post
 }
 
+mat myb=r(b)
+
+mat li myb
+
+/* Matrix with 3 columns, 1 for prediction, 2 for lb/ub*/
+mat t=J(21,3,.)
+
+/* Standard Errors */
+mat myvc=r(V)
+mat myvar=vecdiag(myvc)
+mat myse=J(1,21,.)
+forvalues i=1/21{
+  mat myse[1,`i']=sqrt(myvar[1,`i'])
+}
+
+/*Populate matrix*/  
+forvalues i=1/21 {
+/*Predictions*/
+  mat t[`i',1] = myb[1,`i']                      
+  /*Lower bound*/
+  mat t[`i',2] = myb[1,`i'] - 1.96*myse[1,`i']   
+  /* Upper bound*/
+  mat t[`i',3] = myb[1,`i'] + 1.96*myse[1,`i']
+} 
+
+
+mat allx=e(at)
+
+mat a=allx[1...,15]
+
+mat t=t,a                                          
+
+mat li t
+
+mat colnames t = prob ll ul at
+
+svmat t, names(col_`j'_`myrace')   
 
 } /* end outcome loop*/
 
@@ -558,12 +643,6 @@ xcommon ycommon
 }/* end section on complex predictions */
 
 
-/* IIA*/
-
- estimates restore multi_first3
- 
- mlogtest, iia
-
 /* AUC for mlogit */
 /* This takes FOREVER (approximately) */
 
@@ -584,6 +663,9 @@ estat ic
 }
 
 }/* end multi analysis section */
+
+exit 
+
 
 
 else di "No analysis"
