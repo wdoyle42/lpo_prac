@@ -36,10 +36,10 @@ Evaluation for the course will be based on the following factors:
   manuscript, reporting the results of the analysis conducted over the
   course of the year. You will need to turn in a replication file with
   this paper. This will be worth 100% of your grade. The paper will be
-  due at midnight on June 12.
+  due at midnight on June 11.
 
 *Presentation* : You will give a presentation based on your paper on
- May 22. The presentation will be in preparation for the presentation
+ May 28. The presentation will be in preparation for the presentation
  you will give to all students and faculty next year. I will give
  you feedback on this presentation along with the rest of the class.
 
@@ -55,7 +55,7 @@ Polychotomous Outcomes
 
 *May 12*
 
-Methods for latent variables
+Limited dependent variables: censored data, count data
 
 *May 13*
 
@@ -67,7 +67,7 @@ Missing data, multiple imputation
 
 *May 17*
 
-Instrumental variables, regression discontinuity
+Methods for latent variables
 
 *May 18*
 
@@ -75,26 +75,27 @@ Difference in Differences, Event History Analysis
 
 *May 19*
 
-Limited dependent variables: censored data, count data
+Spatial Analysis
 
 *May 20*
 
-Student Presentations: 
+Student Presentations: Christensen, Ellison
 
 *May 21*
 
-Student Presentations: 
+Student Presentations: McGill, McGuiness
+
 *May 24*
 
-Student Presentations: 
+Student Presentations: Quintero Castellanos, Shero
 
 *May 25*
 
-Student Presentations: 
+Student Presentations: Smith, Wellborn
 
 *May 26*
 
-Student Presentations: 
+Student Presentations: Xu
 
 *May 27*
 
