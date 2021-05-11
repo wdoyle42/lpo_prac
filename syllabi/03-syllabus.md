@@ -36,7 +36,7 @@ Evaluation for the course will be based on the following factors:
   manuscript, reporting the results of the analysis conducted over the
   course of the year. You will need to turn in a replication file with
   this paper. This will be worth 100% of your grade. The paper will be
-  due at midnight on June 11.
+  due at midnight on June 18.
 
 *Presentation* : You will give a presentation based on your paper on
  May 28. The presentation will be in preparation for the presentation
@@ -106,4 +106,4 @@ Code-A-Rama: Open Office Hours from 10-3 to help with coding issues
 In-class conference style presentations
 
 
-*Final Paper Due Midnight, June 12 (three weeks after last class)*
+*Final Paper Due Midnight, June 18 (three weeks after last class)*
