@@ -1,0 +1,2456 @@
+-----------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/doylewr/lpo_prac/lessons/s3-07-limited/
+> limited.log
+  log type:  text
+ opened on:  12 May 2021, 11:45:45
+
+. 
+. /* Models for Limited and Count Variables*/
+. /* Will Doyle */
+. /* 2021-05-12 */
+. 
+. 
+. clear
+
+. 
+. clear mata /* Clears any fluff that might be in mata */
+
+. 
+. estimates clear /* Clears any estimates hanging around */
+
+. 
+. set more off /*Get rid of annoying "more" feature */
+
+. 
+. graph drop _all
+
+. 
+. global ddir "../../data/"
+
+. 
+. /*Controls*/
+. 
+. local coding=0
+
+. local analysis=1
+
+. 
+. 
+. /*Locals for analysis*/
+. local y first_inst
+
+. 
+. local test bynels2m bynels2r
+
+. 
+. local race amind asian black hispanic multiracial
+
+. 
+. local pared bypared_nohs bypared_2yrnodeg bypared_2yr byp
+> ared_some4 bypared_masters bypared_phd 
+
+. 
+. local income  byses1
+
+. 
+. local plan_outcomes "No Plans" "CC/Votech" "Bachelors or 
+> More"
+
+. 
+. 
+. if `coding'==1{
+. 
+.   use "${ddir}plans.dta", clear
+. 
+. foreach myvar of varlist stu_id-f1psepln{ /* Start outer 
+> loop */
+  2.               foreach i of numlist -4 -8 -9 { /* Start
+>  inner loop */
+  3.                      replace `myvar'=. if `myvar'== `i
+> '
+  4.                                             }  /* End 
+> inner loop */
+  5.                                           } /* End out
+> er loop */
+. 
+. local race_names amind asian black hispanic_no hispanic_r
+> ace multiracial white
+. 
+. tab(byrace), gen(race_)
+. 
+. local i=1
+. 
+. foreach val of local race_names{
+  2.   rename race_`i' `val'
+  3.   local i=`i'+1
+  4. }
+. 
+. label variable byincome "Income"
+. label variable amind "American Indian/AK Native"
+. label variable asian "Asian/ PI"
+. label variable black "African American"
+. label variable white "White"
+. label variable multiracial "Multiracial"
+. 
+. 
+. gen hispanic=0
+. replace hispanic=1 if hispanic_no==1|hispanic_race==1
+. replace hispanic=. if byrace==.
+. 
+. label variable hispanic "Hispanic"
+. 
+. local plan_names noplan dontknow votech cc fouryr earlygr
+> ad
+. 
+. 
+. tab(f1psepln), gen(plan_)
+. 
+. local i=1
+. 
+. foreach val of local plan_names{
+  2.   rename plan_`i' `val'
+  3.   local i=`i'+1
+  4. }
+. 
+. 
+. label variable noplan "Plans: No plans"
+. label variable dontknow "Plans: Don't know"
+. label variable votech "Plans: Voc/Tech School"
+. label variable cc "Plans: Comm Coll"
+. label variable fouryr "Four Year"
+. label variable earlygrad "Early Graduation"
+. 
+. /* Plans for those who have them */
+. 
+. gen order_plan=.
+. replace order_plan=1 if noplan==1| dontknow==1
+.   replace order_plan=2 if votech==1|cc==1
+.   replace order_plan=3 if fouryr==1
+. 
+. label define orderplan 1 "No Plans/DK" 2 "Votech/CC" 3 "F
+> our Year"
+. 
+.  label values order_plan orderplan
+.   
+. local pareds bymothed byfathed bypared
+. 
+. local ed_names nohs hs 2yrnodeg 2yr some4  4yrgrad master
+> s phd
+. 
+. foreach pared of local pareds{
+  2. 
+. tab(`pared'), gen(`pared'_)
+  3. 
+. local i=1
+  4. 
+. 
+. foreach val of local ed_names{
+  5.   rename `pared'_`i' `pared'_`val'
+  6.   local i=`i'+1
+  7. }
+  8. 
+. label variable `pared'_nohs "Less than HS"
+  9. label variable `pared'_hs "HS/GED"
+ 10. label variable `pared'_2yr "CC" 
+ 11. label variable `pared'_some4 "Four year attend"
+ 12. label variable `pared'_4yrgrad "Bachelor's"
+ 13. label variable `pared'_masters "Master's"
+ 14. label variable `pared'_phd "PhD"
+ 15. }
+. 
+. tab bystexp,gen(exp_)
+. 
+. gen female=bysex==2
+. replace female=. if bysex==.
+. 
+. replace bynels2m=bynels2m/100
+. 
+. replace bynels2r=bynels2r/100  
+.   
+. merge 1:1 stu_id using "${ddir}attend_type.dta"
+. 
+. drop _merge
+. //limited outcomes: number of applications and credits ea
+> rned 
+. 
+. merge 1:1 stu_id using "${ddir}limited.dta"
+. 
+. drop _merge
+. 
+. foreach myvar of varlist f2ps1sec{ /* Start outer loop */
+  2.               foreach i of numlist -3 -4 -8 -9 { /* St
+> art inner loop */
+  3.                      replace `myvar'=. if `myvar'== `i
+> '
+  4.                                             }  /* End 
+> inner loop */
+  5.                                           } /* End out
+> er loop */
+. 
+.   
+. 
+. // Easier to remember names:
+. 
+. gen n_apps=f2napp1p
+. 
+. replace n_apps=. if  n_apps<0
+. 
+. gen credits=f3tzpostern
+. 
+. replace credits=. if credits <0
+.   
+. recode f2ps1sec (1=1) (2=2) (4=3) (3=4) (5/9=4), gen(firs
+> t_inst)
+. 
+. replace first_inst=. if first_inst<0  
+. 
+.   label define sector 1 "Public 4 Year" 2 "Private 4 Year
+> " 3 "Public 2 Year"  4 "Other"
+. 
+.   label values first_inst sector
+.   
+.  tab first_inst f2ps1sec
+.   
+. save "${ddir}apps_credits.dta", replace
+.   
+. }
+
+. 
+. else{
+.   use "${ddir}apps_credits.dta", clear
+. }
+
+. 
+. 
+. 
+. /*Analysis*/
+. 
+.   if `analysis'==1{
+. 
+.   // Count outcome: number of apps
+.   
+.   sum n_apps
+
+    Variable |        Obs        Mean    Std. Dev.       Mi
+> n        Max
+-------------+---------------------------------------------
+> ------------
+      n_apps |     14,036    2.253776    2.135156          
+> 0         11
+.   
+.   kdensity n_apps, name(dist_apps)
+.   
+.   tab n_apps
+
+     n_apps |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      2,654       18.91       18.91
+          1 |      3,736       26.62       45.53
+          2 |      2,751       19.60       65.13
+          3 |      1,852       13.19       78.32
+          4 |      1,188        8.46       86.78
+          5 |        742        5.29       92.07
+          6 |        449        3.20       95.27
+          7 |        230        1.64       96.91
+          8 |        154        1.10       98.01
+          9 |         71        0.51       98.51
+         10 |         96        0.68       99.19
+         11 |        113        0.81      100.00
+------------+-----------------------------------
+      Total |     14,036      100.00
+.   
+.   
+.   //OLS
+.   
+. eststo ols_full_count:  reg n_apps female `race' `pared' 
+> `test' `income', vce(robust)
+
+Linear regression                               Number of o
+> bs     =     13,282
+                                                F(15, 13266
+> )      =     173.98
+                                                Prob > F   
+>        =     0.0000
+                                                R-squared  
+>        =     0.1862
+                                                Root MSE   
+>        =     1.9127
+
+-----------------------------------------------------------
+> -------------------
+             |               Robust
+      n_apps |      Coef.   Std. Err.      t    P>|t|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+      female |   .4025224   .0337115    11.94   0.000     .
+> 3364431                                                  
+>            .4686017
+       amind |   .4299122   .1943892     2.21   0.027     .
+> 0488816                                                  
+>            .8109428
+       asian |   .9990481   .0683536    14.62   0.000     .
+> 8650652                                                  
+>            1.133031
+       black |   1.002118     .05596    17.91   0.000     .
+> 8924282                                                  
+>            1.111807
+    hispanic |   .4331722   .0502424     8.62   0.000     .
+> 3346899                                                  
+>            .5316546
+ multiracial |   .2596285   .0793919     3.27   0.001      
+> .104009                                                  
+>             .415248
+bypared_nohs |   .2139234   .0755102     2.83   0.005     .
+> 0659125                                                  
+>            .3619342
+bypared_2y~g |  -.1315755   .0511369    -2.57   0.010    -.
+> 2318111                                                  
+>           -.0313399
+ bypared_2yr |  -.1464478    .052521    -2.79   0.005    -.
+> 2493964                                                  
+>           -.0434991
+bypared_so~4 |  -.0916097   .0508916    -1.80   0.072    -.
+> 1913644                                                  
+>             .008145
+bypared_ma~s |    .081133   .0663512     1.22   0.221    -.
+> 0489248                                                  
+>            .2111908
+ bypared_phd |   .2034288   .0916376     2.22   0.026     .
+> 0238061                                                  
+>            .3830515
+    bynels2m |   3.067646   .1923534    15.95   0.000     2
+> .690606                                                  
+>            3.444686
+    bynels2r |   2.156924   .2735633     7.88   0.000     1
+> .620701                                                  
+>            2.693147
+      byses1 |   .6139683   .0335445    18.30   0.000     .
+> 5482162                                                  
+>            .6797204
+       _cons |  -.3560989   .0751053    -4.74   0.000     -
+> .503316                                                  
+>           -.2088818
+-----------------------------------------------------------
+> -------------------
+.   
+.   //Poisson: assumption is that variance=mean
+.   
+. eststo poisson_full:  poisson n_apps female `race' `pared
+> ' `test' `income'
+
+Iteration 0:   log likelihood = -25238.418  
+Iteration 1:   log likelihood = -25238.389  
+Iteration 2:   log likelihood = -25238.389  
+
+Poisson regression                              Number of o
+> bs                                                       
+>        =     13,282
+                                                LR chi2(15)
+>        =    4853.87
+                                                Prob > chi2
+>        =     0.0000
+Log likelihood = -25238.389                     Pseudo R2  
+>        =     0.0877
+
+-----------------------------------------------------------
+> -------------------
+      n_apps |      Coef.   Std. Err.      z    P>|z|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+      female |   .1839452   .0118218    15.56   0.000      
+> .160775                                                  
+>            .2071155
+       amind |   .1797572   .0728616     2.47   0.014     .
+> 0369512                                                  
+>            .3225632
+       asian |   .3729434   .0183426    20.33   0.000     .
+> 3369926                                                  
+>            .4088943
+       black |   .4551493   .0184984    24.60   0.000     .
+> 4188931                                                  
+>            .4914054
+    hispanic |   .1736804   .0197537     8.79   0.000     .
+> 1349639                                                  
+>            .2123968
+ multiracial |   .1160789   .0277377     4.18   0.000      
+> .061714                                                  
+>            .1704439
+bypared_nohs |   .0843877     .03448     2.45   0.014     .
+> 0168082                                                  
+>            .1519673
+bypared_2y~g |   -.049322    .021712    -2.27   0.023    -.
+> 0918767                                                  
+>           -.0067673
+ bypared_2yr |  -.0494705   .0214976    -2.30   0.021     -
+> .091605                                                  
+>            -.007336
+bypared_so~4 |  -.0174054   .0200743    -0.87   0.386    -.
+> 0567503                                                  
+>            .0219394
+bypared_ma~s |  -.0029195   .0190782    -0.15   0.878     -
+> .040312                                                  
+>            .0344731
+ bypared_phd |  -.0122798   .0233848    -0.53   0.600    -.
+> 0581132                                                  
+>            .0335536
+    bynels2m |   1.419688   .0694306    20.45   0.000     1
+> .283606                                                  
+>            1.555769
+    bynels2r |   .9917943   .0981548    10.10   0.000     .
+> 7994145                                                  
+>            1.184174
+      byses1 |   .2810001    .012162    23.10   0.000      
+> .257163                                                  
+>            .3048371
+       _cons |   -.451865   .0302841   -14.92   0.000    -.
+> 5112208                                                  
+>           -.3925091
+-----------------------------------------------------------
+> -------------------
+.  
+.  
+.   // Negative binomial: more flexible, generally better
+.   
+. eststo nbreg_full:  nbreg n_apps female `race' `pared' `t
+> est' `income'
+
+Fitting Poisson model:
+
+Iteration 0:   log likelihood = -25238.418  
+Iteration 1:   log likelihood = -25238.389  
+Iteration 2:   log likelihood = -25238.389  
+
+Fitting constant-only model:
+
+Iteration 0:   log likelihood = -26684.738  
+Iteration 1:   log likelihood = -25971.686  
+Iteration 2:   log likelihood = -25968.207  
+Iteration 3:   log likelihood = -25968.201  
+Iteration 4:   log likelihood = -25968.201  
+
+Fitting full model:
+
+Iteration 0:   log likelihood = -24746.045  
+Iteration 1:   log likelihood =  -24549.98  
+Iteration 2:   log likelihood =  -24541.69  
+Iteration 3:   log likelihood = -24541.663  
+Iteration 4:   log likelihood = -24541.663  
+
+Negative binomial regression                    Number of o
+> bs                                                       
+>        =     13,282
+                                                LR chi2(15)
+>        =    2853.08
+Dispersion     = mean                           Prob > chi2
+>        =     0.0000
+Log likelihood = -24541.663                     Pseudo R2  
+>        =     0.0549
+
+-----------------------------------------------------------
+> -------------------
+      n_apps |      Coef.   Std. Err.      z    P>|z|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+      female |   .1891993   .0147815    12.80   0.000     .
+> 1602281                                                  
+>            .2181705
+       amind |   .1836221   .0877946     2.09   0.036     .
+> 0115478                                                  
+>            .3556964
+       asian |   .3924661   .0242328    16.20   0.000     .
+> 3449707                                                  
+>            .4399614
+       black |   .4812357   .0234513    20.52   0.000      
+> .435272                                                  
+>            .5271994
+    hispanic |   .1883774   .0242954     7.75   0.000     .
+> 1407593                                                  
+>            .2359955
+ multiracial |   .1228744   .0345792     3.55   0.000     .
+> 0551005                                                  
+>            .1906483
+bypared_nohs |   .0799589   .0407146     1.96   0.050     .
+> 0001597                                                  
+>            .1597581
+bypared_2y~g |   -.042789   .0261953    -1.63   0.102    -.
+> 0941309                                                  
+>            .0085529
+ bypared_2yr |  -.0439771   .0261367    -1.68   0.092    -.
+> 0952041                                                  
+>              .00725
+bypared_so~4 |  -.0115518   .0246762    -0.47   0.640    -.
+> 0599162                                                  
+>            .0368126
+bypared_ma~s |  -.0017594   .0246445    -0.07   0.943    -.
+> 0500617                                                  
+>            .0465429
+ bypared_phd |   -.010887   .0306241    -0.36   0.722    -.
+> 0709092                                                  
+>            .0491351
+    bynels2m |   1.449195   .0865118    16.75   0.000     1
+> .279635                                                  
+>            1.618755
+    bynels2r |   1.014111   .1223424     8.29   0.000     .
+> 7743244                                                  
+>            1.253898
+      byses1 |   .2832859   .0149133    19.00   0.000     .
+> 2540564                                                  
+>            .3125154
+       _cons |  -.4861409   .0371241   -13.10   0.000    -.
+> 5589027                                                  
+>            -.413379
+-------------+---------------------------------------------
+> -------------------
+    /lnalpha |  -1.481184   .0378052                     -1
+> .555281                                                  
+>           -1.407087
+-------------+---------------------------------------------
+> -------------------
+       alpha |   .2273683   .0085957                       
+>  .21113                                                  
+>            .2448554
+-----------------------------------------------------------
+> -------------------
+LR test of alpha=0: chibar2(01) = 1393.45              Prob
+>  >= chibar2 = 0.000
+.   
+.  
+.   // Marginal effects
+.   
+. 
+.   margins, dydx(female `race' `pared' `test' `income')
+
+Average marginal effects                        Number of o
+> bs                                                       
+>        =     13,282
+Model VCE    : OIM
+
+Expression   : Predicted number of events, predict()
+dy/dx w.r.t. : female amind asian black hispanic
+               multiracial bypared_nohs bypared_2yrnodeg
+               bypared_2yr bypared_some4 bypared_masters
+               bypared_phd bynels2m bynels2r byses1
+
+-----------------------------------------------------------
+> -------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+      female |   .4278949   .0336843    12.70   0.000     .
+> 3618748                                                  
+>            .4939149
+       amind |   .4152814   .1985997     2.09   0.037     .
+> 0260332                                                  
+>            .8045296
+       asian |   .8876048   .0555497    15.98   0.000     .
+> 7787294                                                  
+>            .9964802
+       black |   1.088367   .0541049    20.12   0.000     .
+> 9823234                                                  
+>            1.194411
+    hispanic |   .4260361   .0551181     7.73   0.000     .
+> 3180065                                                  
+>            .5340656
+ multiracial |   .2778939   .0782523     3.55   0.000     .
+> 1245222                                                  
+>            .4312656
+bypared_nohs |   .1808358   .0920971     1.96   0.050     .
+> 0003288                                                  
+>            .3613427
+bypared_2y~g |  -.0967719   .0592498    -1.63   0.102    -.
+> 2128994                                                  
+>            .0193555
+ bypared_2yr |   -.099459   .0591184    -1.68   0.092    -.
+> 2153289                                                  
+>            .0164109
+bypared_so~4 |  -.0261257   .0558085    -0.47   0.640    -.
+> 1355083                                                  
+>            .0832568
+bypared_ma~s |  -.0039791   .0557361    -0.07   0.943    -.
+> 1132199                                                  
+>            .1052617
+ bypared_phd |  -.0246222   .0692587    -0.36   0.722    -.
+> 1603668                                                  
+>            .1111224
+    bynels2m |   3.277511   .1981512    16.54   0.000     2
+> .889142                                                  
+>            3.665881
+    bynels2r |   2.293523   .2775623     8.26   0.000     1
+> .749511                                                  
+>            2.837535
+      byses1 |    .640682   .0342743    18.69   0.000     .
+> 5735055                                                  
+>            .7078584
+-----------------------------------------------------------
+> -------------------
+. 
+.   estimates replay ols_full_count
+
+-----------------------------------------------------------
+Model ols_full_count
+-----------------------------------------------------------
+
+Linear regression                               Number of o
+> bs     =     13,282
+                                                F(15, 13266
+> )      =     173.98
+                                                Prob > F   
+>        =     0.0000
+                                                R-squared  
+>        =     0.1862
+                                                Root MSE   
+>        =     1.9127
+
+-----------------------------------------------------------
+> -------------------
+             |               Robust
+      n_apps |      Coef.   Std. Err.      t    P>|t|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+      female |   .4025224   .0337115    11.94   0.000     .
+> 3364431                                                  
+>            .4686017
+       amind |   .4299122   .1943892     2.21   0.027     .
+> 0488816                                                  
+>            .8109428
+       asian |   .9990481   .0683536    14.62   0.000     .
+> 8650652                                                  
+>            1.133031
+       black |   1.002118     .05596    17.91   0.000     .
+> 8924282                                                  
+>            1.111807
+    hispanic |   .4331722   .0502424     8.62   0.000     .
+> 3346899                                                  
+>            .5316546
+ multiracial |   .2596285   .0793919     3.27   0.001      
+> .104009                                                  
+>             .415248
+bypared_nohs |   .2139234   .0755102     2.83   0.005     .
+> 0659125                                                  
+>            .3619342
+bypared_2y~g |  -.1315755   .0511369    -2.57   0.010    -.
+> 2318111                                                  
+>           -.0313399
+ bypared_2yr |  -.1464478    .052521    -2.79   0.005    -.
+> 2493964                                                  
+>           -.0434991
+bypared_so~4 |  -.0916097   .0508916    -1.80   0.072    -.
+> 1913644                                                  
+>             .008145
+bypared_ma~s |    .081133   .0663512     1.22   0.221    -.
+> 0489248                                                  
+>            .2111908
+ bypared_phd |   .2034288   .0916376     2.22   0.026     .
+> 0238061                                                  
+>            .3830515
+    bynels2m |   3.067646   .1923534    15.95   0.000     2
+> .690606                                                  
+>            3.444686
+    bynels2r |   2.156924   .2735633     7.88   0.000     1
+> .620701                                                  
+>            2.693147
+      byses1 |   .6139683   .0335445    18.30   0.000     .
+> 5482162                                                  
+>            .6797204
+       _cons |  -.3560989   .0751053    -4.74   0.000     -
+> .503316                                                  
+>           -.2088818
+-----------------------------------------------------------
+> -------------------
+. 
+.   
+.   /*
+>        n               number of events; the default
+>       ir               incidence rate (equivalent to pred
+> ict ..., n nooffset)
+>       pr(n)            probability Pr(y = n)
+>       pr(a,b)          probability Pr(a < y < b)
+>       xb               linear prediction
+>       stdp             standard error of the linear predi
+> ction
+> */
+.   
+.   // Setup for margins
+.   
+. sum byses1, detail
+
+            socio-economic status composite, v.1
+-----------------------------------------------------------
+> --
+      Percentiles      Smallest
+ 1%        -1.54          -2.11
+ 5%        -1.18          -2.11
+10%         -.95          -1.97       Obs              15,2
+> 36
+25%          -.5          -1.97       Sum of Wgt.      15,2
+> 36
+
+50%          .04                      Mean           .04210
+> 42
+                        Largest       Std. Dev.      .74296
+> 28
+75%          .59            1.8
+90%         1.05            1.8       Variance       .55199
+> 38
+95%         1.26           1.81       Skewness      -.02218
+> 49
+99%         1.55           1.82       Kurtosis       2.3537
+> 93
+. 
+. local no_steps=10
+. local mymin=r(min)
+. local mymax=r(max)
+. local diff=`mymax'-`mymin'
+. local step=`diff'/`no_steps'
+. 
+.   
+.   
+.   // Margins: n
+.   estimates restore nbreg_full
+(results nbreg_full are active now)
+.   
+.   margins, predict(n) at(byses=(`mymin'(`step')`mymax')  
+> (min) female `race' `pared'  (mean) `test'  )  post
+
+Adjusted predictions                            Number of o
+> bs                                                       
+>        =     13,282
+Model VCE    : OIM
+
+Expression   : Predicted number of events, predict(n)
+
+1._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =       -2.11
+
+2._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =      -1.717
+
+3._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =      -1.324
+
+4._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =   -.9309999
+
+5._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =   -.5379999
+
+6._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =   -.1449999
+
+7._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =    .2480001
+
+8._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =    .6410001
+
+9._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =       1.034
+
+10._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =       1.427
+
+11._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =        1.82
+
+-----------------------------------------------------------
+> -------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+         _at |
+          1  |    .896902   .0332649    26.96   0.000      
+> .831704                                                  
+>               .9621
+          2  |   1.002526   .0319433    31.38   0.000      
+> .939918                                                  
+>            1.065134
+          3  |   1.120589    .030144    37.17   0.000     1
+> .061507                                                  
+>             1.17967
+          4  |   1.252555   .0280273    44.69   0.000     1
+> .197622                                                  
+>            1.307487
+          5  |   1.400062   .0260603    53.72   0.000     1
+> .348985                                                  
+>            1.451139
+          6  |   1.564941   .0252797    61.91   0.000     1
+> .515394                                                  
+>            1.614488
+          7  |   1.749237   .0273308    64.00   0.000     1
+> .695669                                                  
+>            1.802804
+          8  |   1.955236   .0336392    58.12   0.000     1
+> .889304                                                  
+>            2.021167
+          9  |   2.185495   .0446066    48.99   0.000     2
+> .098067                                                  
+>            2.272922
+         10  |    2.44287   .0601294    40.63   0.000     2
+> .325018                                                  
+>            2.560721
+         11  |   2.730555   .0802543    34.02   0.000      
+> 2.57326                                                  
+>            2.887851
+-----------------------------------------------------------
+> -------------------
+.  
+.  marginsplot, recastci(rarea) recast(line) name(nbreg_n)
+
+  Variables that uniquely identify margins: byses1
+.  
+.  
+.  
+.   // Margins: pr y=n
+.   
+.   
+.  estimates restore nbreg_full
+(results nbreg_full are active now)
+.   
+. margins, predict(pr(1)) at(byses=(`mymin'(`step')`mymax')
+>   (min) female `race' `pared'  (mean) `test'  )  post
+
+Adjusted predictions                            Number of o
+> bs                                                       
+>        =     13,282
+Model VCE    : OIM
+
+Expression   : Pr(n_apps=1), predict(pr(1))
+
+1._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =       -2.11
+
+2._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =      -1.717
+
+3._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =      -1.324
+
+4._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =   -.9309999
+
+5._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =   -.5379999
+
+6._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =   -.1449999
+
+7._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =    .2480001
+
+8._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =    .6410001
+
+9._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =       1.034
+
+10._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =       1.427
+
+11._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =        1.82
+
+-----------------------------------------------------------
+> -------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+         _at |
+          1  |   .3293465   .0016186   203.48   0.000     .
+> 3261741                                                  
+>            .3325189
+          2  |   .3309017   .0012376   267.37   0.000      
+> .328476                                                  
+>            .3333273
+          3  |   .3291181   .0014745   223.21   0.000     .
+> 3262281                                                  
+>             .332008
+          4  |   .3238189   .0018182   178.10   0.000     .
+> 3202552                                                  
+>            .3273825
+          5  |   .3149484   .0020463   153.91   0.000     .
+> 3109377                                                  
+>            .3189591
+          6  |   .3025903   .0022055   137.20   0.000     .
+> 2982676                                                  
+>             .306913
+          7  |   .2869769   .0024864   115.42   0.000     .
+> 2821036                                                  
+>            .2918503
+          8  |   .2684878   .0030791    87.20   0.000     .
+> 2624529                                                  
+>            .2745227
+          9  |   .2476359   .0040041    61.85   0.000     .
+> 2397879                                                  
+>            .2554839
+         10  |   .2250406   .0051412    43.77   0.000      
+> .214964                                                  
+>            .2351172
+         11  |   .2013908   .0063373    31.78   0.000     .
+> 1889698                                                  
+>            .2138118
+-----------------------------------------------------------
+> -------------------
+.  
+.  marginsplot, recastci(rarea) recast(line) name(pry_n)
+
+  Variables that uniquely identify margins: byses1
+.    
+.   
+.   //Margins: pr a<y<b
+.  
+.   estimates restore nbreg_full
+(results nbreg_full are active now)
+.   
+. margins, predict(pr(5,100)) at(byses=(`mymin'(`step')`mym
+> ax')  (min) female `race' `pared'  (mean) `test'  )  post
+
+Adjusted predictions                            Number of o
+> bs                                                       
+>        =     13,282
+Model VCE    : OIM
+
+Expression   : Pr(5<=n_apps<=100), predict(pr(5,100))
+
+1._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =       -2.11
+
+2._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =      -1.717
+
+3._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =      -1.324
+
+4._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =   -.9309999
+
+5._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =   -.5379999
+
+6._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =   -.1449999
+
+7._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =    .2480001
+
+8._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =    .6410001
+
+9._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =       1.034
+
+10._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =       1.427
+
+11._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =    .4612686 (mean)
+               bynels2r        =    .3023312 (mean)
+               byses1          =        1.82
+
+-----------------------------------------------------------
+> -------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+         _at |
+          1  |   .0065598    .000915     7.17   0.000     .
+> 0047664                                                  
+>            .0083531
+          2  |   .0098319    .001144     8.59   0.000     .
+> 0075898                                                  
+>             .012074
+          3  |   .0145304   .0013831    10.51   0.000     .
+> 0118197                                                  
+>            .0172412
+          4  |   .0211552   .0016198    13.06   0.000     .
+> 0179805                                                  
+>            .0243299
+          5  |   .0303156   .0018613    16.29   0.000     .
+> 0266674                                                  
+>            .0339637
+          6  |   .0427226   .0021768    19.63   0.000      
+> .038456                                                  
+>            .0469891
+          7  |   .0591622   .0027436    21.56   0.000     .
+> 0537849                                                  
+>            .0645396
+          8  |   .0804477   .0038101    21.11   0.000     .
+> 0729801                                                  
+>            .0879153
+          9  |   .1073472   .0055695    19.27   0.000     .
+> 0964312                                                  
+>            .1182632
+         10  |   .1404926    .008108    17.33   0.000     .
+> 1246012                                                  
+>            .1563841
+         11  |   .1802763   .0114232    15.78   0.000     .
+> 1578872                                                  
+>            .2026653
+-----------------------------------------------------------
+> -------------------
+.  
+. marginsplot, recastci(rarea) recast(line) name(prymoren)
+
+  Variables that uniquely identify margins: byses1
+. 
+. // Think about zip (zero-inflated poisson) and zinb (zero
+> -inflated negative binomial) as well
+. 
+.  
+.  // Truncated Outcome: number of credits
+.  
+.  sum credits
+
+    Variable |        Obs        Mean    Std. Dev.       Mi
+> n        Max
+-------------+---------------------------------------------
+> ------------
+     credits |     11,496    96.96634    60.52499          
+> 0        288
+.  
+.  kdensity credits, name(density_credits)
+.  
+.  eststo ols_full_censor: reg credits female `race' `pared
+> ' `test' `income', vce(robust)
+
+Linear regression                               Number of o
+> bs     =     10,925
+                                                F(15, 10909
+> )      =     178.19
+                                                Prob > F   
+>        =     0.0000
+                                                R-squared  
+>        =     0.1813
+                                                Root MSE   
+>        =     54.912
+
+-----------------------------------------------------------
+> -------------------
+             |               Robust
+     credits |      Coef.   Std. Err.      t    P>|t|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+      female |   11.83643   1.075177    11.01   0.000     9
+> .728886                                                  
+>            13.94397
+       amind |  -6.823267   7.112826    -0.96   0.337     -
+> 20.7657                                                  
+>            7.119163
+       asian |   20.52707    1.87951    10.92   0.000     1
+> 6.84289                                                  
+>            24.21125
+       black |   .6195734   1.802681     0.34   0.731    -2
+> .914009                                                  
+>            4.153156
+    hispanic |  -1.510178   1.779807    -0.85   0.396    -4
+> .998923                                                  
+>            1.978566
+ multiracial |  -3.271516   2.727629    -1.20   0.230    -8
+> .618165                                                  
+>            2.075132
+bypared_nohs |  -5.342908   2.988621    -1.79   0.074    -1
+> 1.20115                                                  
+>            .5153323
+bypared_2y~g |  -4.305989   1.876137    -2.30   0.022    -7
+> .983558                                                  
+>           -.6284208
+ bypared_2yr |  -4.174132   1.920176    -2.17   0.030    -7
+> .938025                                                  
+>           -.4102383
+bypared_so~4 |   -6.73446   1.795013    -3.75   0.000    -1
+> 0.25301                                                  
+>           -3.215908
+bypared_ma~s |   2.075094   1.783121     1.16   0.245    -1
+> .420147                                                  
+>            5.570334
+ bypared_phd |  -2.173801   2.209238    -0.98   0.325    -6
+> .504309                                                  
+>            2.156707
+    bynels2m |   115.1283    6.28751    18.31   0.000     1
+> 02.8037                                                  
+>             127.453
+    bynels2r |   50.90693   8.987784     5.66   0.000     3
+> 3.28924                                                  
+>            68.52462
+      byses1 |     12.662   1.098307    11.53   0.000     1
+> 0.50912                                                  
+>            14.81488
+       _cons |   16.67416   2.730903     6.11   0.000     1
+> 1.32109                                                  
+>            22.02722
+-----------------------------------------------------------
+> -------------------
+.  
+.  eststo tobit_full: tobit credits female `race' `pared' `
+> test' `income', ll(0)
+
+Refining starting values:
+
+Grid node 0:   log likelihood =  -58244.44
+
+Fitting full model:
+
+Iteration 0:   log likelihood =  -58244.44  
+Iteration 1:   log likelihood = -58237.285  
+Iteration 2:   log likelihood = -58237.271  
+Iteration 3:   log likelihood = -58237.271  
+
+Tobit regression                                Number of o
+> bs                                                       
+>        =     10,925
+                                                   Uncensor
+> ed                                                       
+>        =     10,630
+Limits: lower = 0                                  Left-cen
+> sored                                                    
+>        =        295
+        upper = +inf                               Right-ce
+> nsored                                                   
+>        =          0
+
+                                                LR chi2(15)
+>        =    2206.29
+                                                Prob > chi2
+>        =     0.0000
+Log likelihood = -58237.271                     Pseudo R2  
+>        =     0.0186
+
+-----------------------------------------------------------
+> -------------------
+     credits |      Coef.   Std. Err.      t    P>|t|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+      female |   12.32196    1.10103    11.19   0.000     1
+> 0.16374                                                  
+>            14.48018
+       amind |  -8.711323   6.891282    -1.26   0.206    -2
+> 2.21949                                                  
+>             4.79684
+       asian |   20.98021   1.851301    11.33   0.000     1
+> 7.35133                                                  
+>             24.6091
+       black |   .4004002   1.804274     0.22   0.824    -3
+> .136304                                                  
+>            3.937105
+    hispanic |  -1.678162   1.788305    -0.94   0.348    -5
+> .183565                                                  
+>             1.82724
+ multiracial |   -3.42225    2.62494    -1.30   0.192    -8
+> .567608                                                  
+>            1.723108
+bypared_nohs |  -5.450863   3.077947    -1.77   0.077     -
+> 11.4842                                                  
+>             .582471
+bypared_2y~g |  -4.233045   1.903011    -2.22   0.026    -7
+> .963292                                                  
+>           -.5027972
+ bypared_2yr |  -4.204212   1.879576    -2.24   0.025    -7
+> .888522                                                  
+>           -.5199028
+bypared_so~4 |  -7.007611   1.788297    -3.92   0.000      
+> -10.513                                                  
+>           -3.502224
+bypared_ma~s |   1.851012   1.863849     0.99   0.321    -1
+> .802471                                                  
+>            5.504495
+ bypared_phd |  -2.556007   2.360474    -1.08   0.279    -7
+> .182965                                                  
+>             2.07095
+    bynels2m |   118.5365   6.384317    18.57   0.000     1
+> 06.0221                                                  
+>            131.0509
+    bynels2r |   52.60591   9.016039     5.83   0.000     3
+> 4.93284                                                  
+>            70.27898
+      byses1 |    13.0618   1.108117    11.79   0.000     1
+> 0.88969                                                  
+>            15.23391
+       _cons |   13.53894   2.772219     4.88   0.000     8
+> .104889                                                  
+>            18.97299
+-------------+---------------------------------------------
+> -------------------
+var(e.cred~s)|   3147.107   43.43646                      3
+> 063.105                                                  
+>            3233.412
+-----------------------------------------------------------
+> -------------------
+.  
+.  /*      xb               linear prediction; the default
+>       stdp             standard error of the linear predi
+> ction
+>       stdf             standard error of the forecast
+>       pr(a,b)          Pr(a < y < b)
+>       e(a,b)           E(y|a < y < b)
+>       ystar(a,b)       E(y*),y* = max{a, min(y,b)}
+> */
+.  
+.  /* Marginal effects */
+.  margins , dydx(female `race' `pared' `test' `income')
+
+Average marginal effects                        Number of o
+> bs                                                       
+>        =     10,925
+Model VCE    : OIM
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : female amind asian black hispanic
+               multiracial bypared_nohs bypared_2yrnodeg
+               bypared_2yr bypared_some4 bypared_masters
+               bypared_phd bynels2m bynels2r byses1
+
+-----------------------------------------------------------
+> -------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      t    P>|t|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+      female |   12.32196    1.10103    11.19   0.000     1
+> 0.16374                                                  
+>            14.48018
+       amind |  -8.711323   6.891282    -1.26   0.206    -2
+> 2.21949                                                  
+>             4.79684
+       asian |   20.98021   1.851301    11.33   0.000     1
+> 7.35133                                                  
+>             24.6091
+       black |   .4004002   1.804274     0.22   0.824    -3
+> .136304                                                  
+>            3.937105
+    hispanic |  -1.678162   1.788305    -0.94   0.348    -5
+> .183565                                                  
+>             1.82724
+ multiracial |   -3.42225    2.62494    -1.30   0.192    -8
+> .567608                                                  
+>            1.723108
+bypared_nohs |  -5.450863   3.077947    -1.77   0.077     -
+> 11.4842                                                  
+>             .582471
+bypared_2y~g |  -4.233045   1.903011    -2.22   0.026    -7
+> .963292                                                  
+>           -.5027972
+ bypared_2yr |  -4.204212   1.879576    -2.24   0.025    -7
+> .888522                                                  
+>           -.5199028
+bypared_so~4 |  -7.007611   1.788297    -3.92   0.000      
+> -10.513                                                  
+>           -3.502224
+bypared_ma~s |   1.851012   1.863849     0.99   0.321    -1
+> .802471                                                  
+>            5.504495
+ bypared_phd |  -2.556007   2.360474    -1.08   0.279    -7
+> .182965                                                  
+>             2.07095
+    bynels2m |   118.5365   6.384317    18.57   0.000     1
+> 06.0221                                                  
+>            131.0509
+    bynels2r |   52.60591   9.016039     5.83   0.000     3
+> 4.93284                                                  
+>            70.27898
+      byses1 |    13.0618   1.108117    11.79   0.000     1
+> 0.88969                                                  
+>            15.23391
+-----------------------------------------------------------
+> -------------------
+.  
+.  // Prob >0
+.  
+.  estimates restore tobit_full
+(results tobit_full are active now)
+.  margins, predict(pr(0,5000)) at(byses=(`mymin'(`step')`m
+> ymax')  (min) female `race' `pared'  (mean) `test'  )  po
+> st
+
+Adjusted predictions                            Number of o
+> bs                                                       
+>        =     10,925
+Model VCE    : OIM
+
+Expression   : Pr(0<credits<5000), predict(pr(0,5000))
+
+1._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =       -2.11
+
+2._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =      -1.717
+
+3._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =      -1.324
+
+4._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =   -.9309999
+
+5._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =   -.5379999
+
+6._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =   -.1449999
+
+7._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =    .2480001
+
+8._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =    .6410001
+
+9._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =       1.034
+
+10._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =       1.427
+
+11._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =        1.82
+
+-----------------------------------------------------------
+> -------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+         _at |
+          1  |   .8575221   .0112482    76.24   0.000     .
+> 8354762                                                  
+>            .8795681
+          2  |   .8771296   .0087805    99.90   0.000     .
+> 8599201                                                  
+>            .8943391
+          3  |   .8947626   .0067037   133.47   0.000     .
+> 8816236                                                  
+>            .9079016
+          4  |   .9104878   .0050295   181.03   0.000     .
+> 9006301                                                  
+>            .9203455
+          5  |   .9243947   .0037699   245.21   0.000      
+> .917006                                                  
+>            .9317835
+          6  |   .9365912   .0029312   319.52   0.000     .
+> 9308462                                                  
+>            .9423363
+          7  |   .9471985   .0024831   381.46   0.000     .
+> 9423318                                                  
+>            .9520653
+          8  |   .9563468   .0023194   412.32   0.000     .
+> 9518008                                                  
+>            .9608927
+          9  |    .964171   .0022929   420.49   0.000     .
+> 9596769                                                  
+>            .9686651
+         10  |    .970807    .002292   423.56   0.000     .
+> 9663147                                                  
+>            .9752993
+         11  |   .9763884   .0022617   431.71   0.000     .
+> 9719556                                                  
+>            .9808212
+-----------------------------------------------------------
+> -------------------
+.  
+. marginsplot, recastci(rarea) recast(line) name(pr_credits
+> )
+
+  Variables that uniquely identify margins: byses1
+. 
+.  
+.  //E(y|y>0)
+.  
+.  estimates restore tobit_full
+(results tobit_full are active now)
+.  margins, predict(e(0,5000)) at(byses=(`mymin'(`step')`my
+> max')  (min) female `race' `pared'  (mean) `test'  )  pos
+> t
+
+Adjusted predictions                            Number of o
+> bs                                                       
+>        =     10,925
+Model VCE    : OIM
+
+Expression   : E(credits|0<credits<5000),
+               predict(e(0,5000))
+
+1._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =       -2.11
+
+2._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =      -1.717
+
+3._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =      -1.324
+
+4._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =   -.9309999
+
+5._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =   -.5379999
+
+6._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =   -.1449999
+
+7._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =    .2480001
+
+8._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =    .6410001
+
+9._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =       1.034
+
+10._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =       1.427
+
+11._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =        1.82
+
+-----------------------------------------------------------
+> -------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+         _at |
+          1  |   74.71929   1.814963    41.17   0.000     7
+> 1.16203                                                  
+>            78.27655
+          2  |    78.1259   1.624683    48.09   0.000     7
+> 4.94158                                                  
+>            81.31022
+          3  |   81.66992   1.425696    57.28   0.000      
+> 78.8756                                                  
+>            84.46423
+          4  |   85.34922   1.228498    69.47   0.000     8
+> 2.94141                                                  
+>            87.75703
+          5  |   89.16068   1.053008    84.67   0.000     8
+> 7.09682                                                  
+>            91.22454
+          6  |   93.10023   .9344001    99.64   0.000     9
+> 1.26884                                                  
+>            94.93162
+          7  |   97.16288   .9189757   105.73   0.000     9
+> 5.36172                                                  
+>            98.96404
+          8  |   101.3428   1.031938    98.21   0.000     9
+> 9.32023                                                  
+>            103.3653
+          9  |   105.6334   1.254563    84.20   0.000     1
+> 03.1745                                                  
+>            108.0923
+         10  |   110.0276   1.551704    70.91   0.000     1
+> 06.9863                                                  
+>            113.0689
+         11  |   114.5177   1.896827    60.37   0.000      
+>   110.8                                                  
+>            118.2354
+-----------------------------------------------------------
+> -------------------
+.  
+. marginsplot, recastci(rarea) recast(line) name(e_credits)
+
+  Variables that uniquely identify margins: byses1
+. 
+. //ystar
+.  
+.  
+.  
+.  estimates restore tobit_full
+(results tobit_full are active now)
+. margins, predict(ystar(0,5000)) at(byses=(`mymin'(`step')
+> `mymax')  (min) female `race' `pared'  (mean) `test'  )  
+> post
+
+Adjusted predictions                            Number of o
+> bs                                                       
+>        =     10,925
+Model VCE    : OIM
+
+Expression   : E(credits*|0<credits<5000),
+               predict(ystar(0,5000))
+
+1._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =       -2.11
+
+2._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =      -1.717
+
+3._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =      -1.324
+
+4._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =   -.9309999
+
+5._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =   -.5379999
+
+6._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =   -.1449999
+
+7._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =    .2480001
+
+8._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =    .6410001
+
+9._at        : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =       1.034
+
+10._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =       1.427
+
+11._at       : female          =           0 (min)
+               amind           =           0 (min)
+               asian           =           0 (min)
+               black           =           0 (min)
+               hispanic        =           0 (min)
+               multiracial     =           0 (min)
+               bypared_nohs    =           0 (min)
+               bypared_2y~g    =           0 (min)
+               bypared_2yr     =           0 (min)
+               bypared_so~4    =           0 (min)
+               bypared_ma~s    =           0 (min)
+               bypared_phd     =           0 (min)
+               bynels2m        =     .483557 (mean)
+               bynels2r        =    .3171968 (mean)
+               byses1          =        1.82
+
+-----------------------------------------------------------
+> -------------------
+             |            Delta-method
+             |     Margin   Std. Err.      z    P>|z|     [
+> 95% Con                                                  
+>        f. Interval]
+-------------+---------------------------------------------
+> -------------------
+         _at |
+          1  |   64.07345    2.37478    26.98   0.000     5
+> 9.41896                                                  
+>            68.72793
+          2  |   68.52654   2.085646    32.86   0.000     6
+> 4.43875                                                  
+>            72.61433
+          3  |   73.07519   1.793607    40.74   0.000     6
+> 9.55978                                                  
+>            76.59059
+          4  |   77.70942   1.513204    51.35   0.000     7
+> 4.74359                                                  
+>            80.67525
+          5  |   82.41967   1.269338    64.93   0.000     7
+> 9.93181                                                  
+>            84.90752
+          6  |   87.19686   1.103609    79.01   0.000     8
+> 5.03383                                                  
+>             89.3599
+          7  |   92.03253   1.067772    86.19   0.000     8
+> 9.93974                                                  
+>            94.12533
+          8  |   96.91885   1.183922    81.86   0.000     9
+> 4.59841                                                  
+>            99.23929
+          9  |   101.8487   1.421522    71.65   0.000     9
+> 9.06254                                                  
+>            104.6348
+         10  |   106.8156   1.735061    61.56   0.000     1
+> 03.4149                                                  
+>            110.2162
+         11  |   111.8137   2.092771    53.43   0.000      
+> 107.712                                                  
+>            115.9155
+-----------------------------------------------------------
+> -------------------
+.  
+. marginsplot, recastci(rarea) recast(line) name(e_credits)
+
+  Variables that uniquely identify margins: byses1
+graph e_credits already exists
+r(110);
+. 
+.  
+.   }
+r(110);
+
+end of do-file
+
+r(110);
+
+. do "/var/folders/h_/wc0n_t2j437g61hxg5t3sbdw1bjh2n/T//SD0
+> 0433.000000"
+
+.  
+.  kdensity credits, name(density_credits)
+graph density_credits already exists
+r(110);
+
+end of do-file
+
+r(110);
+
