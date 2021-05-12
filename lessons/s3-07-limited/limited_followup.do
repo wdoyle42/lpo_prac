@@ -268,30 +268,75 @@ margins, predict(pr(4)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `
  
  marginsplot, recastci(rarea) recast(line) name(pry_n)
  
- 
-  
   //Margins: pr a<=y<=b
  
   estimates restore nbreg_full
   
 margins, predict(pr(5,100)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
  
-marginsplot, recastci(rarea) recast(line) name(prymoren)
+marginsplot, recastci(rarea) recast(line)   name(prymoren)
+
+
+
+
+sum bynels2m, detail
+
+local no_steps=10
+local mymin=r(min)
+local mymax=r(max)
+local diff=`mymax'-`mymin'
+local step=`diff'/`no_steps'
+
+
+  estimates restore nbreg_full
+
+margins, predict(pr(2,100)) /// 
+			at(bynels2m=(`mymin'(`step')`mymax')  ///
+			(min) female `race' `pared' ///
+			 hispanic=(0 1) ///
+			(mean) bynels2r  )  post
+ 
+marginsplot ,recastci(rarea) recast(line) ci1opts(fcolor(blue%50))
+
+estimates restore nbreg_full
+
+
+// Think about zip (zero-inflated poisson) and zinb (zero-inflated negative binomial) as well
+
 
 eststo zip_full: zip n_apps female `race' `pared' `test' `income', ///
 				inflate( female `race' `pared' `test' `income')
 
+
+sum byses1, detail
+
+local no_steps=10
+local mymin=r(min)
+local mymax=r(max)
+local diff=`mymax'-`mymin'
+local step=`diff'/`no_steps'
+				
+	estimates restore zip_full
+	
 margins, predict(pr(0)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
 
-eststo nbreg_full: zip n_apps female `race' `pared' `test' `income', ///
+marginsplot, recastci(rarea) recast(line) name(inflate_0_p)
+
+
+estimates restore zip_full
+
+margins, predict(pr(1,5)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
+
+marginsplot, recastci(rarea) recast(line) name(inflate_range_p)
+
+eststo zi_nbreg_full: zinb n_apps female `race' `pared' `test' `income', ///
 				inflate( female `race' `pared' `test' `income')
 
 margins, predict(pr(0)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
 
+estimates restore zi_nbreg_full
 
-exit 
-
-// Think about zip (zero-inflated poisson) and zinb (zero-inflated negative binomial) as well
+margins, predict(pr(1,5)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
 
  
  // Truncated Outcome: number of credits
@@ -304,7 +349,6 @@ exit
  
  eststo tobit_full: tobit credits female `race' `pared' `test' `income', ll(0)
  
-
  
  /*      xb               linear prediction; the default
       stdp             standard error of the linear prediction
