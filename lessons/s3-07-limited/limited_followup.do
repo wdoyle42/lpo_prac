@@ -1,12 +1,12 @@
 
-version 13 /* Can set version here, use the most recent as default */
+version 15 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 
 log using "limited.log",replace /*Open up new log */
 
 /* Models for Limited and Count Variables*/
 /* Will Doyle */
-/* 170511 */
+/* 2021-05-12 */
 
 
 clear
@@ -23,7 +23,7 @@ global ddir "../../data/"
 
 /*Controls*/
 
-local coding=0
+local coding=1
 local analysis=1
 
 
@@ -191,7 +191,7 @@ else{
 /*Analysis*/
 
   if `analysis'==1{
-/*
+
   // Count outcome: number of apps
   
   sum n_apps
@@ -200,26 +200,33 @@ else{
   
   tab n_apps
   
-  
+ 
   //OLS
   
 eststo ols_full_count:  reg n_apps female `race' `pared' `test' `income', vce(robust)
+
   
   //Poisson: assumption is that variance=mean
   
 eststo poisson_full:  poisson n_apps female `race' `pared' `test' `income'
  
- 
+
   // Negative binomial: more flexible, generally better
   
 eststo nbreg_full:  nbreg n_apps female `race' `pared' `test' `income'
-  
+ 
  
   // Marginal effects
   
 
   margins, dydx(female `race' `pared' `test' `income')
-
+  
+  margins, dydx(*)
+  
+  
+  estimates restore nbreg_full
+  
+  
   estimates replay ols_full_count
 
   
@@ -252,18 +259,18 @@ local step=`diff'/`no_steps'
  marginsplot, recastci(rarea) recast(line) name(nbreg_n)
  
  
- 
   // Margins: pr y=n
   
   
  estimates restore nbreg_full
   
-margins, predict(pr(1)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
+margins, predict(pr(4)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
  
  marginsplot, recastci(rarea) recast(line) name(pry_n)
-   
+ 
+ 
   
-  //Margins: pr a<y<b
+  //Margins: pr a<=y<=b
  
   estimates restore nbreg_full
   
@@ -271,32 +278,21 @@ margins, predict(pr(5,100)) at(byses=(`mymin'(`step')`mymax')  (min) female `rac
  
 marginsplot, recastci(rarea) recast(line) name(prymoren)
 
+eststo zip_full: zip n_apps female `race' `pared' `test' `income', ///
+				inflate( female `race' `pared' `test' `income')
 
-sum bynels2m, detail
+margins, predict(pr(0)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
 
-local no_steps=10
-local mymin=r(min)
-local mymax=r(max)
-local diff=`mymax'-`mymin'
-local step=`diff'/`no_steps'
+eststo nbreg_full: zip n_apps female `race' `pared' `test' `income', ///
+				inflate( female `race' `pared' `test' `income')
+
+margins, predict(pr(0)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
 
 
-estimates restore nbreg_full
+exit 
 
-margins, predict(pr(2,100)) at(bynels2m=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) bynels2r `income' ///
-   hispanic=(0 1) )  post
+// Think about zip (zero-inflated poisson) and zinb (zero-inflated negative binomial) as well
 
-  
-marginsplot, recastci(rarea) recast(line)
-
-  /*"at values"*/
-
-mat myb=r(b) /*Estimated marginal effects */
-mat myvc=r(V) /* variance/covariance */
-mat myvar=vecdiag(myvc) /* Variances of marginal effects */
-mat at_all=e(at)
-
-*/
  
  // Truncated Outcome: number of credits
  
@@ -308,6 +304,8 @@ mat at_all=e(at)
  
  eststo tobit_full: tobit credits female `race' `pared' `test' `income', ll(0)
  
+
+ 
  /*      xb               linear prediction; the default
       stdp             standard error of the linear prediction
       stdf             standard error of the forecast
@@ -316,22 +314,10 @@ mat at_all=e(at)
       ystar(a,b)       E(y*),y* = max{a, min(y,b)}
 */
  
- 
  /* Marginal effects */
- 
- margins , dydx(female `race' `pared' `test' `income') predict(ystar(0,500))
- 
+ margins , dydx(female `race' `pared' `test' `income')
  
  // Prob >0
- 
- sum byses1, detail 
- 
-local no_steps=10
-local mymin=r(min)
-local mymax=r(max)
-local diff=`mymax'-`mymin'
-local step=`diff'/`no_steps'
-
  
  estimates restore tobit_full
  margins, predict(pr(0,5000)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
@@ -348,13 +334,13 @@ marginsplot, recastci(rarea) recast(line) name(e_credits)
 
 //ystar
  
-
+ 
+ 
  estimates restore tobit_full
 margins, predict(ystar(0,5000)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
  
-marginsplot, recastci(rarea) recast(line) name(ystar_credits)
+marginsplot, recastci(rarea) recast(line) name(e_credits)
 
-exit
  
   }
 
