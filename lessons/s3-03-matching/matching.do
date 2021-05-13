@@ -6,7 +6,7 @@ log using "match.log",replace /*Open up new log */
 /* Matching Examples */
 /* Following Zhao, 2004 examples of difft kinds of matching */
 /* Will Doyle */
-/* 2020-05-07 */
+/* 2021-05-13 */
 /* Practicum Folder */
 
 
@@ -75,23 +75,17 @@ tab  `t' `y' ,row
 
 graph save balance_ses_unmatch.gph, replace 
  
-/* Using teffects structure*/
-teffects psmatch (`y') (`t' `controls')
- 
 /* Balance on various covariates */
 
 ttest byses1, by(`t')
 
 ttest bynels2m, by(`t')
 
-
 /*Naive Estimate */
 
 ttest `y' ,by(`t')
 
 reg `y' `t' `controls', vce(robust)
-
-
 
 /* Full matching Table */
 
@@ -110,47 +104,6 @@ pstest `controls', treated(`t')  both
 
 psgraph
 
-
-/* Teffects -- PS matching, 1 to 1 */
-    teffects psmatch (`y') (`t' `controls'), ///
-        nn(1) ///
-		caliper(.25) ///
-            atet 
-         
-
-/*Replciate psmatch2, almost*/
-
-teffects psmatch (`y') (`t' `controls', probit) , nn(1) atet caliper(.25)
-
-tebalance summarize
-
-mat balance=r(table)
-
-estout matrix(balance) using balance.rtf, replace
-
-
-		 
-/* Teffects -- Nearest Neighbor matching, 4 neighboring units */
-    teffects nnmatch (`y' `controls')  ///
-    (`t'), ///
-    nn(4) 
-	
-/*use teffects to estimate difference, algorithm: ps matching, 5 nn, .15 calipers */ 
-teffects psmatch (`y') (`t' `controls', probit) , nn(5) atet caliper(.15)
-
-/* use teffects to estimate difference, algorithm: nn matching on mahalanobis metric 5 nn, .2 caliper width */	
-
-teffects nnmatch (`y'  `controls') (`t') , nn(5)   atet 
-
-/* use teffects to exactly match on race and gender	 */
-teffects nnmatch (`y' `controls' ) (`t'),  ///
-ematch( amind asian black hispanic white bysex ) 
-
-
-/* use psmatch2 estimate via ps matching, 5 nn .15 caliper, */
-
-	
- 	
 /* Propensity Score Matching: 1 to 4 */
   psmatch2 `t'   ///
          `controls', ///
@@ -175,8 +128,8 @@ graph save balance_ses_match.gph, replace
 		 
 grc1leg2 balance_ses_unmatch.gph balance_ses_match.gph
 
-exit 		 
- 	
+
+	
 /* Propensity Score Matching: 1 to 4 */
   psmatch2 `t'   ///
          `controls', ///
@@ -197,6 +150,39 @@ reg `y' `t' `controls' [iweight=_weight]
 
 /*Regression with ps as control */
 reg `y' `t' `controls'  _pscore
+
+
+
+/* Propensity Score Matching: Calipers, multiple matches */
+  
+  psmatch2 `t' ///
+         `controls' , ///
+         outcome(`y') ///
+         caliper(.25) ///
+         common ///
+         neighbor(3) 
+         
+
+pstest _pscore `controls', treated(`t') both
+
+
+ kdensity _pscore if `t'==1 , ///
+ addplot(kdensity _pscore if `t'==0, lpattern(dash))  ///
+ legend(order(1 "Treated"  2 "Untreated")) 
+ 
+graph save balance_ses_unmatch.gph 
+
+/* Propensity Score Matching: Calipers on propensity score and Mahalonobis metric */
+  psmatch2 `t' ///
+         `controls' , ///
+         outcome(`y') ///
+         caliper(.25) ///
+		 neighbor(4) /// 
+         common ///
+         mahal(bysex byses1)
+         
+
+pstest _pscore `controls' , both
 
 
 /* Stratification on ps: using weighted results */
@@ -274,37 +260,39 @@ di "Estimate is " myest
 di "SE is " myse
 
 
-/* Propensity Score Matching: Calipers, multiple matches */
-  
-  psmatch2 `t' ///
-         `controls' , ///
-         outcome(`y') ///
-         caliper(.25) ///
-         common ///
-         neighbor(3) 
+/* Teffects -- PS matching, 1 to 1 */
+    teffects psmatch (`y') (`t' `controls'), ///
+        nn(1) ///
+		caliper(.25) ///
+            atet 
          
 
-pstest _pscore `controls', treated(`t') both
+/*Replicate psmatch2, almost*/
+
+teffects psmatch (`y') (`t' `controls', probit) , nn(1) atet caliper(.25)
+
+tebalance summarize
+
+mat balance=r(table)
+
+estout matrix(balance) using balance.rtf, replace
 
 
- kdensity _pscore if `t'==1 , ///
- addplot(kdensity _pscore if `t'==0, lpattern(dash))  ///
- legend(order(1 "Treated"  2 "Untreated")) 
- 
-graph save balance_ses_unmatch.gph 
+/* Teffects -- Nearest Neighbor matching, 4 neighboring units */
+    teffects nnmatch (`y' `controls')  ///
+    (`t'), ///
+    nn(4) 
+	
+/*use teffects to estimate difference, algorithm: ps matching, 5 nn, .15 calipers */ 
+teffects psmatch (`y') (`t' `controls', probit) , nn(5) atet caliper(.15)
 
-/* Propensity Score Matching: Calipers on propensity score and Mahalonobis metric */
-  psmatch2 `t' ///
-         `controls' , ///
-         outcome(`y') ///
-         caliper(.25) ///
-		 neighbor(4) /// 
-         common ///
-         mahal(bysex byses1)
-         
+/* use teffects to estimate difference, algorithm: nn matching on mahalanobis metric 5 nn, .2 caliper width */	
 
-pstest _pscore `controls' , both
+teffects nnmatch (`y'  `controls') (`t') , nn(5)   atet 
 
+/* use teffects to exactly match on race and gender	 */
+teffects nnmatch (`y' `controls' ) (`t'),  ///
+ematch( amind asian black hispanic white bysex ) 
 
 /* Teffects -- Nearest Neighbor matching, 4 neighboring units */
     teffects nnmatch (`y' `controls')  ///
