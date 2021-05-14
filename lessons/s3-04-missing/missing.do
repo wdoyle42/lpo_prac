@@ -1,11 +1,11 @@
-version 14 /* Can set version here, use the most recent as default */
+version 16 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 
 log using "mvn.log",replace /*Open up new log */
 
-    /*Techniques for handling missing data */
+/*Techniques for handling missing data */
 /* Will Doyle */
-/* 190509 */
+/* 210514 */
 /* Practicum Folder */
 
 clear
@@ -16,7 +16,7 @@ estimates clear /* Clears any estimates hanging around */
 
 set more off /*Get rid of annoying "more" feature */
 
-  graph drop _all
+graph drop _all
 
 /*Controls*/
 
@@ -152,7 +152,6 @@ svy: logit fouryr `test'  `pared'
 eststo pared
 
 svy: logit fouryr `test'  `income'
-
 eststo income
 
 
@@ -169,9 +168,9 @@ replace
 
 if `imputation'==1 {
 
-local mice=0
+local mice=1
 
-local mvn=1
+local mvn=0
 
 mvpatterns `test'
 
@@ -183,7 +182,16 @@ mvpatterns `income'
 
 mvpatterns `y' `test' `race'
 
+
+
 mi set mlong
+
+mi misstable summarize `y' `test' `race'
+
+mi misstable patterns `y' `test' `race'
+
+mi misstable nested `y' `test' `race'
+
 
 drop if fouryr==.
 
