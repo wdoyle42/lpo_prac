@@ -43,7 +43,7 @@ Also, there are two broad approaches to this technique: one seeks to
 estimate components, while the other seeks to estimate factors. The
 difference is that techniques to recover components analyze all of the
 variance in the underlying items, while techniques to recover factors
-analyze only shared variance, while varience that is due to error or
+analyze only shared variance, while variance that is due to error or
 specific to the underlying items is (supposed to be) eliminated. We're
 going to focus on factor analysis, as that is usually what the analyst
 wants to do. In application, the two approaches yield similar but not
@@ -88,6 +88,27 @@ public what they consider to be the most important things that
 colleges can teach students, and another which asks people what they
 think college administrators should work on. 
 
+
+\section{Computing Scales}
+\label{sec:computing-scales}
+
+Sometimes based on very strong theoretical assumptions the analyst may
+wish to compute a scale. A scale is just a linear combination of a set
+of response variables. It can be additive or it can involve
+subject-level means of the response variables. The command for
+generating and evaluation a scale in stata is \texttt{alpha} which
+refers to Cronbach's alpha.
+
+Cronbach's alpha is a summative measure of the correlations among
+variables-- to the extent that all variables are more correlated with
+one another, Cronbach's alpha will be higher. It ranges from 0 to 1,
+with values above .7 generally thought to be acceptable for items to
+be included in a scale.
+
+When computing a scale, it's important to check the scale if item
+deleted to understand the contribution of each item to the scale. In
+addition, if the response scale for the variables is different, the
+variables should be standardized. 
 
 \section{Principal Factors}
 

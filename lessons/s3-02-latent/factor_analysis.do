@@ -128,7 +128,6 @@ local students q35-q42
 
 local admins q44-q54
 
-
 /*Correlations */
 
 corr `students'
@@ -141,6 +140,7 @@ alpha `students' , item gen(student_scale)
 
 alpha `admins', item gen(admin_scale)
 
+exit
 
 /*Factor analysis*/
 
