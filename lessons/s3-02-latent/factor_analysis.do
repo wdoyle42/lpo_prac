@@ -1,11 +1,11 @@
-version 15 /* Can set version here, use the most recent as default */
+version 16 /* Can set version here, use the most recent as default */
 capture log close /* Closes any logs, should they be open */
 log using "factor.log",replace /*Open up new log */
 
 /* Factor Analysis */
 /* Factor analysis and postsestimation via various techniques*/
 /* Will Doyle */
-/* 180509 */
+/* 210517 */
 /* Practicum Folder */  
 
 clear
@@ -67,8 +67,6 @@ renvars *, lower
 /* 54 Provide extra help for students who fall behind */
 
 
-    
-
 /* Recoding */
 
 
@@ -96,8 +94,6 @@ rename race_4 asian
 rename race_5 other
 
 rename race_6 native_am
-
-
 
 tab q116, gen(inc_)
 
@@ -209,7 +205,6 @@ tab _clus_2 college
 
 graph hbar college female democrat , over(_clus_2) asyvars
 
-exit 
 
 /*Postestimation*/
 
@@ -252,9 +247,9 @@ corr admin_1-admin_3 college white black hispanic democrat male
 
 /*Using factors */
 
-reg  studt_1  college female democrat whitedum blackdum hispdum
+reg  studt_1  college female democrat white black hispanic
 
-reg  studt_2  college female democrat whitedum blackdum hispdum
+reg  studt_2  college female democrat white black hispanic
 
-reg  studt_3  college female democrat whitedum blackdum hispdum
+reg  studt_3  college female democrat white black hispanic
 
