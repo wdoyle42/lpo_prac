@@ -1,21 +1,22 @@
 ---
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
+
 ## Vanderbilt University
 
 ## Leadership, Policy and Organizations
 
 ## Class Number 9951
 
-## Fall 2020
+## Fall 2021
 
 William R. Doyle
 
 Office: 207D Payne
 
-Office Hours: Tuesday and Thursday 2:30-5 or by Appointment (use http://wdoyle42.youcanbook.me)
+Office Hours: Tuesdays and Thursdays 12:00-2:00, Wednesdays 2-4. [Please use this link](https://outlook.office365.com/owa/calendar/WillDoyle@Vanderbilt365.onmicrosoft.com/bookings/)
 
 w.doyle@vanderbilt.edu
 
@@ -68,8 +69,8 @@ your own choosing.
 At the end of the semester, you will need to present the results of your
 data collection efforts, with a summary paper of no more than five pages
 of text, accompanied by properly formatted tables and graphics. The
-summary paper and codebook will be due on December 4. You will present
-your work to the rest of the class on December 4.
+summary paper and codebook will be due on December 8. You will present
+your work to the rest of the class on December 8.
 
 Texts
 -----
@@ -83,7 +84,7 @@ Software
 --------
 
 You need to have access to a working version of Stata, (at least v
-15.0).
+16.0).
 
 If you do purchase Stata, you will need at least Stata IC (standard
 version). Vanderbilt has what’s called a gradplan with Stata under which
@@ -118,31 +119,31 @@ This site is updated frequently, please check it often.
 
 The schedule for all class meetings is as follows:
 
-August 26
+August 25
 ---------
 
 Intro to Stata
 
-September 2
+September 1
 ---------
 
 *Topics*:
 
-Getting Started with Research Questions, Introduction to literate
-programming in Stata
+Getting Started with Research Questions, introduction to literate
+programming in Stata, introduction to github
 
-September 9
+September 8
 -----------
 
 *Topics*: 
 
-STATA Basics
+STATA Basics: do files, ado filles, labeling datasets, variables and values, recoding
 
 *Assignments:* 
 
 Assignment 1 due September 7, midnight
 
-September 16
+September 15
 ------------
 
 *Topics*:
@@ -153,21 +154,21 @@ Working with publicly available datasets
 
 Assignment 2 due September 14, midnight
 
-September 23
+September 22
 ------------
 
 *Topics*:
 
-Dataset manipulation: Collapsing, merging, bending the data to your will
+Basics of data wrangling: filtering, selecting, grouping 
 
 *Assignments:* Assignment 3 due September 21, midnight
 
-September 30
+September 29
 ------------
 
 *Topics*:
 
-More dataset manipulation: One to many merging, many to one merging, appending datasets
+More data wrangling: Merging, appending, reshaping 
 
 *Assignments:* 
 
@@ -175,7 +176,7 @@ Assignment 4 due September 28, midnight
 
 Summary research area due
 
-October 7
+October 6
 ---------
 
 *Topics*:
@@ -186,7 +187,7 @@ Sampling: Simple sampling designs
 
 Assignment 5 due October 5, midnight
 
-October 14
+October 13
 ---------
 
 *Topics*: 
@@ -197,7 +198,7 @@ Sampling: Complex sampling designs
 
 Assignment 6 due October 12, midnight
 
-October 21
+October 20
 ----------
 
 *Topics*:
@@ -208,7 +209,7 @@ Data Cleaning
 
 Assignment 7 due October 19, midnight
 
-October 21
+October 27
 ----------
 
 *Topics*:
@@ -220,7 +221,7 @@ Data Validation
 Assignment 8 due October 26, midnight
 
 
-October 28
+November 3
 ----------
 
 *Topics*:
@@ -231,7 +232,7 @@ Descriptive Statistics: Tabular and Graphical Approaches
 
 Assignment 9 due November 2, midnight
 
-November 4
+November 10
 ----------
 
 *Topics*:
@@ -242,7 +243,7 @@ An Introduction to Programming: Using Macros
 
 Assignment 10 due November 9, midnight
 
-November 11
+November 17
 -----------
 
 *Topics*:
@@ -253,24 +254,32 @@ Further graphical approaches to describing data
 
 Assignment 11 due November 16, midnight
 
-November 18
------------
 
-Individual consultations: schedule a time with me
-
-November 25
+November 24
 -----------
 
 No Class, Thanksgiving Break
 
-December 2
+December 1
 -----------
 
 *Topics*:
 
+Writing research reports
+
+*Assignments* 
+
+Assignment 12 November 30, midnight
+
+December 8
+------------
+
+*Topics*
+
 Class Presentations
+
 
 *Assignments:*
 
-Summary Papers, Do-File and Codebooks due before class, December 2.
+Summary Papers, Do-File and Codebooks due before class, December 7.
 
