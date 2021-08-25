@@ -12,8 +12,7 @@ log using "introduction.log",replace /*Open up new log */
 // Introduction to Stata  
 // Provides a brief look at display, list, summarize, gen, by and if commands 
 // Will Doyle 
-// 8/25/20
-// Saved under in-class work 
+// 8/25/21
 
 clear
 
@@ -25,8 +24,9 @@ set more off // Get rid of annoying "more" feature
 
 set scheme s1color // My  preferred graphics scheme 
 
-use census     /*filename of dataset */
+use ad, clear    /*filename of dataset */
 
+exit
 
 /*Using the display command for arithmetic */
 
@@ -45,15 +45,15 @@ describe
 
 codebook pop
 
-/* Show me the data for the first ten states */
+/* Show me the data for the first ten cities */
 list if _n <11
 
 /*Just state names and populations for the first ten states */
-li state pop if _n<11
+
 
 
 /*Take a look at deaths in the first 10 states. Which is highest, which is lowest? */
-li state death if _n<11
+
 
 /*Recoding variables */
 
