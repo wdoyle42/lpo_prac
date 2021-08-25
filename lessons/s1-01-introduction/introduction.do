@@ -26,6 +26,29 @@ set scheme s1color // My  preferred graphics scheme
 
 use ad, clear    /*filename of dataset */
 
+
+
+/*** This data comes from the American Community Survey of 2019. It covers all of the [metro or micro
+statistical areas](https://www.census.gov/programs-surveys/metro-micro/about.html#:~:text=The%20general%20concept%20of%20a,social%20integration%20with%20that%20core.) in the United States. It includes characteristics of these areas, include education, income, home ownership and others as described below.  
+
+| Name  | Description   |
+|---|---|
+| name   | Name of Micro/Metro Area   |
+| college_educ   | Percent of population with at least a bachelor's degree   |
+| perc_commute_30p   | Percent of population with commute to work of 30 minutes or more   |
+| perc_insured  | Percent of population with health insurance   |
+| perc_homeown  | Percent of housing units owned by occupier   |
+| geoid | Geographic FIPS Code (id) |
+| income_75  | Percent of population with income over 75,000   |
+| perc_moved_in   | Percent of population that moved from another state in last year   |
+|  perc_in_labor force  | Percent of population in labor force   |
+| metro | Metropolitan Area? Yes/No |
+| state  | State Abbreviation |
+| region  | Census Region |
+| division | Census Division|
+
+***/
+
 exit
 
 /*Using the display command for arithmetic */

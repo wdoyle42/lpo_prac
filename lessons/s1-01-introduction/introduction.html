@@ -1,0 +1,323 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" async 
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<!-- SYNTAX HIGHLIGHTING CLASSES  -->
+<style type="text/css">
+body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align:justify;
+    margin: 0 8%;
+    font-size: 14px;
+        background-color:white; 
+}
+
+a {
+   color: #1e6bb8;
+       text-decoration: none;
+}
+a:hover {
+       text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.5;
+}
+
+h1, h1 > a, h1 > a:link {
+        margin:0.67em 0;
+        padding: 0;
+        font-family: ;
+        color:#17365D;
+        font-size: 22px;
+        }
+
+h1 > a:hover, h1 > a:hover{
+color:#345A8A;
+} 
+
+h2, h2 > a, h2 > a, h2 > a:link {
+        margin:14px 0px 2px 0px;
+        padding: 0;
+        color:#345A8A;
+        font-size: 18px;
+        font-weight:bold;
+        }
+
+h3, h3 > a,h3 > a, h3 > a:link,h3 > a:link {
+        margin:14px 0px 0px 0px;
+        padding: 0;
+        color:#4F81BD;
+        font-size: 16px;
+        font-weight:bold;
+        }
+
+h4 {
+        margin:10px 0px 0px 0px;
+        padding: 0;
+        font-family: ;
+        font-size: 16px;
+        color:#4F81BD;
+        font-weight:bold;
+        font-style:italic;
+        }
+
+h5  {
+        font-size: 14px;
+        font-weight:normal;
+        color:#4F81BD;
+        }
+
+h6  {
+        font-size:14px;
+        font-weight:normal;
+        font-style:italic;
+        color:#4F81BD;
+        }
+
+p {
+        font-weight:normal;
+        font-size:14px;
+        line-height: 16px;
+        text-align:justify;
+        text-justify:inter-word;
+        margin:0 0 14px 0;
+        }
+
+.author {display:block;text-align:center;font-size:16px;margin-bottom:3px;}
+.date {display:block;text-align:center;font-size:12px;margin-bottom:3px;}
+.center, #center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-box-shadow: 0px 0px 2px rgba( 0, 0, 0, 0.5 );
+    -moz-box-shadow: 0px 0px 2px rgba( 0, 0, 0, 0.5 );
+    box-shadow: 0px 0px 2px rgba( 0, 0, 0, 0.5 );
+
+    padding: 0px;
+    border-width: 0px;
+    border-style: solid;
+    cursor:-webkit-zoom-in;
+    cursor:-moz-zoom-in;
+    }
+
+td > p {padding:0; margin:0;}
+
+
+header {
+        font-size:28px;
+        padding-bottom:5px; 
+        margin:0;
+        padding-top:150px; 
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        text-align:center;
+        display:block;
+        font-weight:bold;
+        }
+
+
+
+table {
+        border-collapse: collapse;
+        border-bottom:1px solid black;
+        padding:5px;
+        margin-top:5px;
+        margin-bottom: 16px;
+
+}
+.tble {
+        display:block;
+        margin-top: 10px;
+        margin-bottom: 0px;
+        margin-bottom: 0px;
+}
+
+.tblecenter {
+        display:block;
+        margin-top: 10px;
+        margin-bottom: 0px;
+        margin-bottom: 0px;
+        text-align:center;
+}
+
+span.tblecenter + table, span.tble + table, span.tble + img {
+        margin-top: 2px;
+}
+
+.figure, .caption {
+        text-align: center
+}
+
+th {
+        border-bottom:1px solid black;
+        border-top:1px solid black;
+        padding-right:20px;
+}
+
+td {
+        padding-right:20px;
+}
+
+pre code {
+       color: #567482;
+       font-size: 10px;
+       padding-top: 0;
+       padding-bottom: 0;
+       margin-top: 0;
+       margin-bottom: 0;
+      font-family: "menlo-regular","Consolas", "Liberation Mono", Menlo, Courier, monospace;
+   display: block;
+}
+
+code {
+   padding: 2px 4px;
+      font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+       font-size: 0.9rem;
+       color: #383e41;
+       background-color: #f3f6fa;
+   border-radius: 0.3rem; 
+}
+
+pre {
+   padding: 0.8rem ;
+      font: 1rem Consolas, "Liberation Mono", Menlo,  Courier, monospace;
+       margin-top: 0;
+       margin-bottom: 1rem;
+       color: #567482;
+   word-wrap: normal;
+   background-color: #f3f6fa;
+   border: solid 1px #dce6f0;
+   border-radius: 0.3rem; 
+}
+
+pre > code {
+   padding: 0;
+   margin: 0;
+   word-break: normal;
+}
+
+blockquote {
+       padding: 0 1rem;
+       margin-left: 0;
+       color: #819198;
+       border-left: 0.3rem solid #dce6f0;
+}
+
+img {
+        margin: 5px 0 5px 0;
+        padding: 0px;
+        cursor:-webkit-zoom-in;
+        cursor:-moz-zoom-in;
+        display:inline-block;
+        clear: both;
+        }
+
+hr {
+       height: 2px;
+       margin: 1rem 0;
+       background-color: #eff0f1;
+       border: 0; 
+}
+
+ul li {
+       font-size:14px;
+}
+
+</style>
+</head>
+<body>
+<pre><code>      . version 16 /* Can set version here, use version 13 as default */
+
+      . capture log close /* Closes any logs, should they be open */
+
+      . log using &quot;introduction.log&quot;,replace /*Open up new log */ 
+      ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            name:  &lt;unnamed&gt;
+             log:  /Users/doylewr/lpo_prac/lessons/s1-01-introduction/introduction.log
+        log type:  text
+       opened on:  25 Aug 2021, 10:39:03
+
+      . clear
+
+      . clear mata // Clears any fluff that might be in mata 
+
+      . estimates clear // Clears any estimates hanging around 
+
+      . set more off // Get rid of annoying &quot;more&quot; feature 
+
+      . set scheme s1color // My  preferred graphics scheme 
+
+      . use ad, clear    /*filename of dataset */</code></pre>
+<p>statistical areas](https://www.census.gov/programs-surveys/metro-micro/about.html#:~:text=The%20general%20concept%20of%20a,social%20integration%20with%20that%20core.) in the United States. It includes characteristics of these areas, include education, i ncome, home ownership and others as described below.</p>
+<table style="width:11%;">
+<colgroup>
+<col width="5%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">name</td>
+<td align="left">Name of Micro/Metro Area</td>
+</tr>
+<tr class="even">
+<td align="left">college_educ</td>
+<td align="left">Percent of population with at least a bachelor's degree</td>
+</tr>
+<tr class="odd">
+<td align="left">perc_commute_30p</td>
+<td align="left">Percent of population with commute to work of 30 minutes or more</td>
+</tr>
+<tr class="even">
+<td align="left">perc_insured</td>
+<td align="left">Percent of population with health insurance</td>
+</tr>
+<tr class="odd">
+<td align="left">perc_homeown</td>
+<td align="left">Percent of housing units owned by occupier</td>
+</tr>
+<tr class="even">
+<td align="left">geoid</td>
+<td align="left">Geographic FIPS Code (id)</td>
+</tr>
+<tr class="odd">
+<td align="left">income_75</td>
+<td align="left">Percent of population with income over 75,000</td>
+</tr>
+<tr class="even">
+<td align="left">perc_moved_in</td>
+<td align="left">Percent of population that moved from another state in last year</td>
+</tr>
+<tr class="odd">
+<td align="left">perc_in_labor force</td>
+<td align="left">Percent of population in labor force</td>
+</tr>
+<tr class="even">
+<td align="left">metro</td>
+<td align="left">Metropolitan Area? Yes/No</td>
+</tr>
+<tr class="odd">
+<td align="left">state</td>
+<td align="left">State Abbreviation</td>
+</tr>
+<tr class="even">
+<td align="left">region</td>
+<td align="left">Census Region</td>
+</tr>
+<tr class="odd">
+<td align="left">division</td>
+<td align="left">Census Division</td>
+</tr>
+</tbody>
+</table>
+<pre><code>      . exit</code></pre>
+</body>
+</html>
