@@ -26526,4 +26526,126 @@ college_educ {c |}{res}        176    27.32198    11.01423   10.74368   67.40573
 . 
 . /*Whoops */
 . 
+. histogram college_educ, by(region) percent
+{res}{txt}
+{com}. 
+. /*Kernel density plot */
 . 
+. kdensity college_educ
+{res}{txt}
+{com}. 
+. /*Which city is that, anyway?*/
+.   
+. li state name if college_educ>50
+
+     {txt}{c TLC}{hline 57}{c TRC}
+ 26. {c |}                          state                          {c |}
+     {c |}                          {res}MI                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}Ann Arbor, MI Metro Area                                {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+     {c TLC}{hline 57}{c TRC}
+308. {c |}                          state                          {c |}
+     {c |}                          {res}NY                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}Ithaca, NY Metro Area                                   {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+     {c TLC}{hline 57}{c TRC}
+539. {c |}                          state                          {c |}
+     {c |}                          {res}DC                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}Washington-Arlington-Alexandria, DC-VA-MD-WV Metro Area {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+     {c TLC}{hline 57}{c TRC}
+763. {c |}                          state                          {c |}
+     {c |}                          {res}CO                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}Breckenridge, CO Micro Area                             {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+     {c TLC}{hline 57}{c TRC}
+795. {c |}                          state                          {c |}
+     {c |}                          {res}MT                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}Bozeman, MT Micro Area                                  {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+     {c TLC}{hline 57}{c TRC}
+813. {c |}                          state                          {c |}
+     {c |}                          {res}OR                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}Corvallis, OR Metro Area                                {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+     {c TLC}{hline 57}{c TRC}
+818. {c |}                          state                          {c |}
+     {c |}                          {res}CA                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}San Jose-Sunnyvale-Santa Clara, CA Metro Area           {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+     {c TLC}{hline 57}{c TRC}
+820. {c |}                          state                          {c |}
+     {c |}                          {res}NM                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}Los Alamos, NM Micro Area                               {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+     {c TLC}{hline 57}{c TRC}
+832. {c |}                          state                          {c |}
+     {c |}                          {res}WY                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}Laramie, WY Micro Area                                  {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+     {c TLC}{hline 57}{c TRC}
+834. {c |}                          state                          {c |}
+     {c |}                          {res}CO                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}Boulder, CO Metro Area                                  {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+     {c TLC}{hline 57}{c TRC}
+866. {c |}                          state                          {c |}
+     {c |}                          {res}WY                             {txt}{c |}
+     {c LT}{hline 57}{c RT}
+     {c |} name                                                    {c |}
+     {c |} {res}Jackson, WY-ID Micro Area                               {txt}{c |}
+     {c BLC}{hline 57}{c BRC}
+
+{com}. 
+. 
+. graph twoway scatter income_75 college_educ /*Scatterplot of earnings by college educated*/
+{res}{txt}
+{com}. 
+. graph  twoway scatter income_75 college_educ, mcolor(%30) xtitle("Percent with Bachelor's Degree") ytitle("Percent with Income>75k") 
+{res}{txt}
+{com}.   
+.   
+. log close /* close log file */
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}/Users/doylewr/lpo_prac/lessons/s1-01-introduction/introduction.log
+  {txt}log type:  {res}text
+ {txt}closed on:  {res}25 Aug 2021, 10:57:35
+{txt}{.-}
+
+{com}. 
+.   
+. exit /*end do file */ 
+
+{txt}end of do-file
+{smcl}
+{txt}{sf}{ul off}
