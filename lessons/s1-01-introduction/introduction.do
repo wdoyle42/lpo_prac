@@ -1,3 +1,14 @@
+
+/***
+
+# Getting started in Stata
+
+
+Today we'l do a brief run-through of interacting with Stata. Next week we'll go more in-depth. 
+***/
+
+
+
 version 16 /* Can set version here, use version 13 as default */
 capture log close /* Closes any logs, should they be open */
 
@@ -28,9 +39,10 @@ use ad, clear    /*filename of dataset */
 
 
 
-/*** This data comes from the American Community Survey of 2019. It covers all of the [metro or micro
-statistical areas](https://www.census.gov/programs-surveys/metro-micro/about.html#:~:text=The%20general%20concept%20of%20a,social%20integration%20with%20that%20core.) in the United States. It includes characteristics of these areas, include education, income, home ownership and others as described below.  
+/*** This data comes from the American Community Survey of 2019. It covers all of the  in the United States. It includes characteristics of these areas, include education, income, home ownership and others as described below.  
+***/
 
+/***
 | Name  | Description   |
 |---|---|
 | name   | Name of Micro/Metro Area   |
@@ -45,11 +57,9 @@ statistical areas](https://www.census.gov/programs-surveys/metro-micro/about.htm
 | metro | Metropolitan Area? Yes/No |
 | state  | State Abbreviation |
 | region  | Census Region |
-| division | Census Division|
-
+| 
 ***/
 
-exit
 
 /*Using the display command for arithmetic */
 
@@ -66,13 +76,14 @@ list
 
 describe
 
-codebook pop
+codebook 
 
 /* Show me the data for the first ten cities */
 list if _n <11
 
-/*Just state names and populations for the first ten states */
+/*Just state names and percent in labor force for the first ten states */
 
+list 
 
 
 /*Take a look at deaths in the first 10 states. Which is highest, which is lowest? */
@@ -80,81 +91,58 @@ list if _n <11
 
 /*Recoding variables */
 
-*generate poplt5= poplt5/pop
+*generate perc_in_labor=  perc_in_labor/100
 
 
 
 /*Whoops!*/
 
-gen poplt5_pr=  poplt5/pop
+gen pr_in_labor=  perc_in_labor/100
 
 
 /* Summarize the new variable */
 
-summarize poplt5_pr 
+summarize pr_in_labor 
 
 /* Summarize the new variable in more detail */
 
-sum poplt5_pr, detail
-
-/* Create a new variable for proportion of pop urban */
-
-gen pop_urban=  popurban/pop
-
-/*What is the mean, and median of the new variable ?*/
-
-sum pop_urban, detail 
+sum pr_in_labor, detail
 
 /*using the by command */  
   
-*by region: sum poplt5_pr
+*by region: sum perc_in_labor
 
 /*Whoops */
 
-bysort region: sum poplt5_pr 
+bysort region: sum perc_in_labor
 
+/*Create a table of college educateed by region */  
 
-/*Create a table of urbanicity by region */  
-
-bysort region: sum pop_urban
+bysort region: sum college_educ
 
 
 /*Univariate graphics */
 
-histogram poplt5_pr 
+histogram college_educ
 
 // bysort region: histogram poplt5_pr
 
 /*Whoops */
 
-histogram poplt5_pr, by(region) percent
-
+histogram college_educ, by(region) percent
 
 /*Kernel density plot */
 
-kdensity poplt5_pr
+kdensity college_educ
 
-/*Which state is that, anyway?*/
+/*Which city is that, anyway?*/
   
-li state poplt5_pr if poplt5_pr >.1 /*List state name and pop less than 5 if pop less than 5 is greater than .1 */
+li state name if college_educ>50
 
-gen pop65p_pr=pop65p/pop
 
-graph twoway scatter poplt5_pr pop65p_pr /*Scatterplot of young population as a function of older population */
+graph twoway scatter income_75 college_educ /*Scatterplot of earnings by college educated*/
 
-graph twoway scatter poplt5_pr pop65p_pr, msymbol(none) mlabel(state) /*Add State Labels*/
-
-graph  twoway scatter poplt5_pr pop65p_pr, ///
-msymbol(none) mlabel(state)  mlabsize(tiny)/*Change Label Size*/    
-  
-
-/*Create variables for rate of marriages and divorces*/
-
-/*Which region has the highest rates of marriage and divorce in the population?*/
-
-/* What do the distributions of these two variables look like? */
-
-/*What does a scatterplot say about the possible relationship? between the two*/  
+graph  twoway scatter income_75 college_educ, mcolor(%30) xtitle("Percent with Bachelor's Degree") ytitle("Percent with Income>75k") 
   
   
 log close /* close log file */
