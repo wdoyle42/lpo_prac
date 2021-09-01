@@ -1,6 +1,3 @@
-capture log close
-
-
 /***
 # LPO 9951: Tools of the Trade
 ***/
@@ -105,7 +102,7 @@ This will create a markdown document. [Markdown](https://daringfireball.net/proj
 
 ***/ 
 
-
+capture log close
 
 clear all                               // clear memory
 set more off                            // turn off annoying "__more__" feature

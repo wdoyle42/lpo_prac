@@ -1,5 +1,3 @@
-          . capture log close
-
 LPO 9951: Tools of the Trade
 ============================
 
@@ -110,6 +108,8 @@ This will create a markdown document.
 syntax for generating html, and it serves as a great "source" language
 for a variety of typesetting programs, including Latex and Word.
 
+          . capture log close
+
           . clear all                               // clear memory
 
 
@@ -120,7 +120,7 @@ for a variety of typesetting programs, including Latex and Word.
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-02-stata_basics/tools_of_the_trade.log
             log type:  text
-           opened on:   1 Sep 2021, 10:56:14
+           opened on:   1 Sep 2021, 10:57:41
 
           . net search renvars 
           (contacting http://www.stata.com)
@@ -287,7 +287,7 @@ for a variety of typesetting programs, including Latex and Word.
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-02-stata_basics/tools_of_the_trade.log
             log type:  text
-           closed on:   1 Sep 2021, 10:56:15
+           closed on:   1 Sep 2021, 10:57:42
           ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
           . exit                                    // exit script
