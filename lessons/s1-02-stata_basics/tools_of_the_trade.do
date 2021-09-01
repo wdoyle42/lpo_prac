@@ -32,11 +32,11 @@ Having access to command line tools is very important when doing any kind of dev
 
 Version control is the general term for software that tracks changes in code (or other documents) and has resources for reverting or merging in changes. One of the most popular forms of version control is Git. We're going to start by using Github Desktop, but later we'll switch to interfacing with git and github via the command line. 
 
-You'll need to sign up for a github account at (https://github.com/). 
+You'll need to sign up for a github account at [https://github.com/](https://github.com/). 
 
 Then you'll want to [download github desktop](https://desktop.github.com/).
 
-The first thing I want you to do is to create a clone of our class directory. Go to (https://github.com/wdoyle42/lpo_prac), copy the url, then  go to File--> Clone directory, then click the "URL" tab, and paste in the URL. 
+The first thing I want you to do is to create a clone of our class directory. Go to [https://github.com/wdoyle42/lpo_prac](https://github.com/wdoyle42/lpo_prac), copy the url, then  go to File--> Clone directory, then click the "URL" tab, and paste in the URL. 
 
 At a minimum, before every class you'll want to sync your directory with my changes. 
 

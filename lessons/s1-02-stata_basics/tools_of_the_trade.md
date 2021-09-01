@@ -31,15 +31,15 @@ changes. One of the most popular forms of version control is Git. We're
 going to start by using Github Deskto p, but later we'll switch to
 interfacing with git and github via the command line.
 
-You'll need to sign up for a github account at (https://github.com/).
+You'll need to sign up for a github account at <https://github.com/>.
 
 Then you'll want to [download github
 desktop](https://desktop.github.com/).
 
 The first thing I want you to do is to create a clone of our class
-directory. Go to (https://github.com/wdoyle42/lpo\_prac), copy the url,
+directory. Go to <https://github.com/wdoyle42/lpo_prac>, copy the url,
 then go to File--&gt; Clone directory, then click the "URL" tab, and
-paste in the URL.
+paste in t he URL.
 
 At a minimum, before every class you'll want to sync your directory with
 my changes.
@@ -120,7 +120,7 @@ for a variety of typesetting programs, including Latex and Word.
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-02-stata_basics/tools_of_the_trade.log
             log type:  text
-           opened on:   1 Sep 2021, 10:57:41
+           opened on:   1 Sep 2021, 10:59:14
 
           . net search renvars 
           (contacting http://www.stata.com)
@@ -287,7 +287,7 @@ for a variety of typesetting programs, including Latex and Word.
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-02-stata_basics/tools_of_the_trade.log
             log type:  text
-           closed on:   1 Sep 2021, 10:57:42
+           closed on:   1 Sep 2021, 10:59:14
           ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
           . exit                                    // exit script
