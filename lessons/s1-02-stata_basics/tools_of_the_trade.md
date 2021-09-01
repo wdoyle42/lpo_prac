@@ -1,5 +1,8 @@
           . capture log close
 
+LPO 9951: Tools of the Trade
+============================
+
 Intro
 -----
 
@@ -113,12 +116,11 @@ for a variety of typesetting programs, including Latex and Word.
           . set more off                            // turn off annoying "__more__" feature
 
           . log using "tools_of_the_trade.log", replace
-          (file /Users/doylewr/lpo_prac/lessons/s1-02-stata_basics/tools_of_the_trade.log not found)
           ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-02-stata_basics/tools_of_the_trade.log
             log type:  text
-           opened on:   1 Sep 2021, 10:36:47
+           opened on:   1 Sep 2021, 10:56:14
 
           . net search renvars 
           (contacting http://www.stata.com)
@@ -285,7 +287,7 @@ for a variety of typesetting programs, including Latex and Word.
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-02-stata_basics/tools_of_the_trade.log
             log type:  text
-           closed on:   1 Sep 2021, 10:36:48
+           closed on:   1 Sep 2021, 10:56:15
           ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
           . exit                                    // exit script

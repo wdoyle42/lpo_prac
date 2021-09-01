@@ -1,5 +1,10 @@
 capture log close
 
+
+/***
+# LPO 9951: Tools of the Trade
+***/
+
 // Working with Git/Github, markdoc and pandoc
 // Will Doyle
 // 2021-09-01
