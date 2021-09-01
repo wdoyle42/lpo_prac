@@ -23,8 +23,6 @@ This week we're going to get started with severa of the tools of the trade that 
 ## Command Line
 
 Having access to command line tools is very important when doing any kind of development. If you're on a Mac, the `terminal` program is used for command line interface with the computer. The best tool for a Windows computer is powershell. We'll start out by making sure everyone has these. 
-
-
 ***/
 
 /***
@@ -41,8 +39,6 @@ The first thing I want you to do is to create a clone of our class directory. Go
 At a minimum, before every class you'll want to sync your directory with my changes. 
 
 Next, I want you to create a private repository that contains your work for this class. To do this, start in github by creating a repository, and in the repository, create a brief readme that states that this is the working directory for your practicum course. Next, add me (wdoyle42) as a collaborator on this repostiory. Clone this repostiory to your computer, create a directory for assignments, and then create a do file in the assignments directory named 02-assignment.do. Commit and push this empty do file to the repository. I'll double check that I have access to it. 
- 
-
 ***/
 
 
