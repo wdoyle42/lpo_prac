@@ -116,6 +116,7 @@ global ...
 
 display "$ddir"
 
+exit 
 
 
 /***
@@ -123,7 +124,7 @@ display "$ddir"
 
 One big takeaway from all of this is that you should *never* include a `cd` statement in
 a do file that references a specific spot on your computer. Either don't include a cd command at all, 
-or include a cd command that makes use of a relative directory strucure. The easiest (but not necessarialy the best) way to do this is to assume that the do file and the 
+or include a cd command that makes use of a relative directory strucure. The easiest (but not necessarialy the best) way to do this is to assume that the do file and the data file are in the same directory. 
 
 I'm also going to get the information for my current directory so I can easily return to it.
 
