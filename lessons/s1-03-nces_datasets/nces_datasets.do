@@ -5,7 +5,7 @@ Working with NCES Datasets
 Will Doyle
 =====
 
-2020-09-06
+2021-09-08
 =====
 
 Intro
@@ -86,6 +86,7 @@ access that directory from the current lesson
 I need to go up two levels and then into the data directory, so the relative
 path is: ___`../../data/`___. 
 
+
 ***/
 
 
@@ -116,10 +117,21 @@ global ...
 display "$ddir"
 
 
+
 /***
 ... and there you have it. 
 
+One big takeaway from all of this is that you should *never* include a `cd` statement in
+a do file that references a specific spot on your computer. Either don't include a cd command at all, 
+or include a cd command that makes use of a relative directory strucure. The easiest (but not necessarialy the best) way to do this is to assume that the do file and the 
+
+I'm also going to get the information for my current directory so I can easily return to it.
+
 ***/
+
+global cdir `c(pwd)'
+
+di "$cdir"
 
 
 /***
@@ -170,6 +182,86 @@ renvars *, lower
 
 save "${ddir}nhes_analsyis.dta", replace
 
+
+/***
+Working with ECLS 2011
+-------------------
+
+[ECLS 2011](https://nces.ed.gov/ecls/kindergarten2011.asp) uses a nationally represntative sample of students 
+that were in kindergarten as of 2011. This study is excellent for tracking younger students as they progress through
+early grades. 
+
+ECLS is a bit different in that NCES doesn't have any equivalent of the online codebook for it. Instead we have to navigate it using some other tools. 
+
+NCES provides a do file, a dictionary file, and a data file (zipped) for ECLS 2011. The code below assumes that you have downloaded the zip file `ChildK5p.zip` from [the ECLS data products website](https://nces.ed.gov/ecls/dataproducts.asp). 
+
+
+
+
+***/
+
+clear
+
+// Look to see if file exists
+capture confirm file "${ddir}ChildK5p.zip"
+//If it doesn't then go ahead and download it a
+if _rc==601 {
+	copy https://nces.ed.gov/ecls/data/2019/ChildK5p.zip "${ddir}ChildK5p.zip"
+}
+
+capture confirm file "${ddir}childK5p.dat"
+//If it doesn't then go ahead and download it a
+if _rc==601 {
+	unzipfile ChildK5p.zip
+}
+
+	
+
+// Check for ancillary files locally
+
+//Do file
+
+capture confirm file "${ddir}ECLSK2011_K5PUF.do"
+//If it doesn't then go ahead and download it. 
+if _rc==601 {
+	copy https://nces.ed.gov/ecls/data/2019/ECLSK2011_K5PUF.do ${ddir}ECLSK2011_K5PUF.do
+}
+
+// Dictionary file: located in same directory as data
+
+
+capture confirm file "${ddir}ECLSK2011_K5PUF.dct"
+//If it doesn't then go ahead and download it. 
+if _rc==601 {
+	copy https://nces.ed.gov/ecls/data/2019/ECLSK2011_K5PUF.do "${ddir}ECLSK2011_K5PUF.dct"
+}
+
+//Check for stata data file if it doesn't exist use the two do fies to create it. 
+// THE DO FILE MUST BE ADJUSTED FOR THE DIRECTORY STRUCTURE USED. 
+
+//set maxvar 32767 , permanently /* Stata SE max */
+
+capture confirm file "${ddir}ECLSK2011_K5PUF.dta"
+if _rc==601{
+cd $ddir
+do ECLSK2011_K5PUF.do
+cd $cdir
+}
+
+use   ///
+ CHILDID ///
+ X9SESL_I ///
+ X9INCCAT_I ///
+ using "${ddir}ECLSK2011_K5PUF.dta", clear
+ 
+renvars *, lower
+
+
+save "${ddir}ecls_analsyis.dta", replace
+
+
+exit 
+
 /*** 
 PISA Datasets
 -------------
@@ -200,13 +292,10 @@ In-Class Work
 
 Using the online codebook, download the ELS student data and create an
 analysis dataset that includes variables for student SES, Race, parental 
-education and type of postsecondary institution attended (from the 3rd follow 
+education and cumulative educational attainment (from the 3rd follow 
 up).
 
-If you have time, calculate the average SES of students attending different 
-types of instituitions. Then calculate the proportion of students whose parents  
-have at least a bachelor's degree who attended these different types of
-instutions.
+If you have time, calculate the average SES of students by educational attainment in the third followup. Then calculate the proportion of students whose parents have at least a bachelor's degree at each level of educational attainment. 
 
 See if you can create a bar graph that summarizes
 the patterns you observe. 
