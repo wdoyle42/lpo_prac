@@ -7,13 +7,14 @@
 Introduction
 -------------
 
-Learning to manipulate datasets is a key skill for statistical analysis. Today we'll work on four skills: subsetting data using preserve and restore commands, appending data, doing a simple one-to-one merge, and collapsing data.
+Learning to manipulate datasets is a key skill for statistical analysis. Today 
+we'll work on four skills: subsetting data using preserve and restore commands, appending data, doing a simple one-to-one merge, and collapsing data.
 
 
 
 ***/
 
-
+version 16
 capture log close                       // closes any logs, should they be open
 log using "dataset_manipulation.log", replace    // open new log
 
@@ -29,11 +30,12 @@ clear all                               // clear memory
 
 //Data import
 
-import delimited "https://stats.idre.ucla.edu/wp-content/uploads/2016/02/hsb2-2.csv", clear
- 
+import delimited "https://stats.idre.ucla.edu/wp-content/uploads/2016/02/hsb2-2.csv" , clear
+  
 // Excel
 
 import excel "tabn304.10.xls", cellrange(A5:L64) clear
+
 
 // set globals for url data link and local data path
 global urldata "https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop"
@@ -85,6 +87,8 @@ restore
 keep if stype == 3                      
 save middle, replace
 
+
+
 /***
 Appending Data
 --------------
@@ -97,9 +101,12 @@ append using elem
 append using hs
 
 
+
 /*** 
 The `append` command will not copy over labels from the using dataset, so you'll need to make sure they're right in the master dataset. The most common error with an append command is to not have exactly matching variable names.
 ***/
+
+
 
 /***
 Merging Data
@@ -115,7 +122,9 @@ use elem, clear
 
 merge 1:1 snum using hs, gen(_merge_a)
 
+
 merge 1:1 snum using middle, gen(_merge_b)
+
 
 /***
 Once you've completed the merge, you can take a look at the \_merge\_\* variables that were generated to see where the data came from.
@@ -129,8 +138,18 @@ tab _merge_a
 tab _merge_b
 
 
-/* Quick Exercise: Create a dataset that has just middle and elementary schools.
+
+/* Quick Exercise: Create a dataset that has just middle and high schools.
  Do this using first the append command and then the merge command.*/
+ 
+ use middle, clear
+ 
+ append using hs
+ 
+ use middle, clear
+ 
+ merge 1:1 snum using hs, nogen
+ 
  
  // Elementary schools in memory
  use elem, clear
@@ -163,10 +182,14 @@ save api_2, replace
 
 
 // merging back together (api_2 in memory)
+use api_2, clear
 merge 1:1 snum using api_1
+
 
 // view merge stats
 tab _merge
+
+
 
 // collapsing data
 
@@ -179,6 +202,17 @@ use $urldata, clear
 Create a dataset that has only mobility and percent tested. Next create another dataset that has only the year round and percent responding variables. Now merge these two datasets together using a one-to-one merge.*
 ***/
 
+keep snum mobility pcttest
+save api_a, replace
+
+use $urldata, clear
+keep snum yr_rnd pct_resp
+save api_b, replace
+
+use api_a, clear
+merge 1:1 snum using api_b, nogen
+
+
 
 /***
 Collapsing data
@@ -188,12 +222,16 @@ Collapsing data refers to summarizing data across a type and creating a new data
 
 ***/
 
+use $urldata, clear
+
 // count of unique counties in dataset
 unique cnum
 
 preserve
+
 // mean of pcttest and mobility within countyr
 collapse (mean) pcttest mobility, by (cnum)
+
 restore
 
 // Total enrollment by district
@@ -202,12 +240,20 @@ collapse (sum) district_enroll=enroll, by(dnum)
 
 save district_enroll, replace
 
+
 use $urldata, clear
 
 merge m:1 dnum using district_enroll
+
+
+use $urldata, clear
+
+egen district_enroll=sum(enroll), by(dnum)
  
-// give count of number of observations (should be number of unique counties)
+// give count of number of observations (should be number of unique schools)
 count
+
+exit
 
 /***
 QUICK EXERCISE
