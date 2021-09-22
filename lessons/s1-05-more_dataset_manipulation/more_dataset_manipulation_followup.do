@@ -54,14 +54,12 @@ sort cnum
 save county_data, replace
 restore
 
-
 preserve
 collapse (mean) api99, by(dnum)
 rename api99 api99c
 gen edd = rbinomial(1,.3)
 save district_data, replace
 restore
-
 
 /***
 Many-to-one match merging
@@ -84,17 +82,21 @@ same for the district data. Finally we merge the two together:
 // sort to aid in merge
 sort cnum
 
+
 // merge many-to-one
 merge m:1 cnum using county_data
-
 
 // inspect many-to-one merge
 tab _merge
 list cnum api99 county_inc if _n < 10
 
+
+
 // plot and save
 onewayplot api99, by(county_inc) stack ms(oh) msize(*.1) width(1) name(api99_ow)
 graph export ${plotdir}api99_ow.eps, name(api99_ow) replace
+
+
 
 
 /***
@@ -106,22 +108,23 @@ and a standard deviation of 1000. Add this variable to a county-level
 dataset and merge this new dataset into the api dataset.
 ***/
 
+	
+// create example datasets
 preserve
 collapse (mean) api99, by(cnum)
-drawnorm fake_spend, mean(8000) sd(1000)
+drawnorm edspend, means(8000) sds(1000)
+drop api99
 sort cnum
-save county_spend, replace
+save county_spend_data, replace
 restore
 
-use api, clear
 
-sort cnum
+// merge many-to-one
+merge m:1 cnum using county_spend_data, keepusing(edspend) gen("new_merge")
 
-merge m:1 cnum using county_spend
+tab new_merge
 
-tab _merge
-
-
+exit
 /***
 
 One-to-many match merging
@@ -162,7 +165,6 @@ merge 1:m dnum using api
 tab _merge
 list dnum api99 edd if _n < 10
 
-
 /***
 #### Quick Exercise
 
@@ -172,21 +174,6 @@ list dnum api99 edd if _n < 10
 
 <br>
 ***/
-
-preserve
-collapse (mean) api99, by(dnum)
-drawnorm fake_teacher_salary, mean(40) sd(5)  
-sort dnum
-save district_spend, replace
-restore
-
-use district_spend, clear
-
-merge 1:m dnum using api 
-
-li snum dnum api99 fake_teacher_salary in 1/20
-
-
 
 /***
 
@@ -222,28 +209,13 @@ drop api99
 sample 90
 save api_00, replace
 
-
-use api_00, clear
 // merge datasets
-merge 1:1 snum using api_99
+merge snum using api_99, sort
 
 // inspect messy merge
 tab _merge
 
-
 // code for looking at missing values, other patterns
-
-// command: inspect
-inspect api99
-inspect api00
-
-
-
-// command: mdesc
-mdesc api99 api00
-
-// command: mvpatterns
-mvpatterns api99 api00 ell mobility
 
 /***
 These combined files are likely to have lots of missing data. Let's take
@@ -252,11 +224,25 @@ is called `inspect`. The results from the inspect command look like
 this:
 ***/
 
+// command: inspect
+inspect api99
+inspect api00
+
 /***
 This gives you a nice quick glance at the variable in question. You can
 also use the `mdesc` command, the output of which looks like this:
 ***/
 
+// command: mdesc
+mdesc api99 api00
+
+/***
+MVpatterns does even showing whether variables are missing or not depending on other variables. 
+
+***?
+
+// command: mvpatterns
+mvpatterns api99 api00 ell mobility
 
 
 /***
@@ -284,7 +270,7 @@ gen ell_flag = ell == .
 kdensity api99 if ell_flag == 1, ///
     name(api99_kdens) ///
     addplot(kdensity api99 if ell_flag == 0) ///
-    legend(label(1 "Missing ELL")  label(2 "Not Missing ELL")) ///
+    legend(label(1 "Not Missing ELL")  label(2 "Missing ELL")) ///
     note("") ///
     title("")
 
@@ -301,30 +287,6 @@ graph export api99_kdens.eps, name(api99_kdens) replace
 
 <br>
 ***/
-
-use api, clear
-
-preserve
-drop meal emer
-sample 50
-save api_no_meal_emer, replace
-restore
-
-preserve
-drop not_hsg hsg some_col col_grad grad_sch avg_ed
-sample 50
-save api_no_pared, replace
-restore
-
-use api_no_meal_emer, clear
-
-merge 1:1 snum using api_no_pared
-
-mvpatterns not_hsg hsg some_col col_grad grad_sch avg_ed
-
-mvpatterns meal emer
-
-mvpatterns meal emer not_hsg hsg
 
 /***
 Reshaping data
@@ -345,7 +307,6 @@ on quarterly income growth that's in wide format:
 insheet using income.csv, comma clear
 sort fips
 
-
 /***
 
 We want to have this data in long format, meaning that there will be
@@ -360,7 +321,6 @@ income is a single variable.
 
 // reshape long
 reshape long inc_, i(fips) j(year_quarter, string)
-
 
 // create date that stata understands
 gen date = quarterly(year_quarter, "YQ")
@@ -388,7 +348,6 @@ drop if fips < 1 | fips > 56
 
 // graph
 xtline inc_, i(areaname) t(date) name(xtline_fipsinc)
-
 graph export ${plotdir}xtline_fipsinc.eps, name(xtline_fipsinc) replace
 
 
@@ -422,46 +381,6 @@ list if _n < 4
 <br> <br>
 ***/
 
-unzipfile SQINC.zip , replace
-
-import delimited  SQINC1__ALL_AREAS_1948_2020.csv, clear numericcols()
-
-keep if description=="Per capita personal income (dollars) 2/"
-
-drop geofips region tablename linecode industry description unit
-
-// The Ellison solution (with my annotation):
-
-drop q* v13-v16 // Drop unneeded variables 
-
-local v = 17 // Set "counter" which will change variable: start at v17
-
-forvalues yr = 1950/2019 { //loop that will go over each year
-
-rename v`v' yr_`yr'q1  //rename variable v## to be yr_####q1: first iteration will be rename v17 yr_1950q1
-
-local ++v //iterate variable by 1
-
-rename v`v' yr_`yr'q2 //rename variable v## to be yr_####q2: first iteration will be rename v18 yr_1950q2
-
-local ++v // iterate variable by 1
-
-rename v`v' yr_`yr'q3 //rename variable v## to be yr_####q2: first iteration will be rename v19 yr_1950q3
-
-local ++v // iterate variable by 1
-
-rename v`v' yr_`yr'q4 //rename variable v## to be yr_####q2: first iteration will be rename v20 yr_1950q4
-
-local ++v // iterate variable by 1
-
-} // Go back and start pattern over by years
-
-keep geoname yr_* // Keep just relevant variables
-
-destring yr_* , force replace // Make sure vars are numeric
-
-reshape long yr_, i(geoname) j(year_q, string) // Reshape long
- 
 // end file
 log close                               // close log
 exit                                    // exit script
