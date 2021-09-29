@@ -21,7 +21,7 @@ unzipfile ca1.zip
 insheet using "CA1_1969_2016__ALL_AREAS.csv", clear
 cd $workdir
 
-exit 
+
 
 keep if linecode==3
 
@@ -55,17 +55,23 @@ merge m:1 geofips using "${ddir}percapinc.dta"
 
 destring percapinc, gen(percapinc_n) force
 
+
 /*create a percap income at the state level and assign that value to all counties in that state*/
-gen last_three_fips= substr(geofips,3,5)
+gen last_three_fips= substr(geofips,3,3)
+
+gen first_two_fips=substr(geofips,1,2)
+
 gen state_bin = 1 if last_three_fips=="000"
 
 gen state_percap_inc = percapinc_n if state_bin==1
-bysort state: replace state_percap_inc=state_percap_inc[1]
 
-graph twoway scatter c_curppe percapinc_n, msize(tiny) mcolor(black%20) name(county)
+bysort first_two_fips (state_bin): replace state_percap_inc=state_percap_inc[1]
 
 
-graph twoway scatter c_curppe state_percap_inc, msize(tiny) mcolor(black%20) name(state)
+graph twoway scatter c_curppe percapinc_n, msize(tiny) mcolor(black%20) name(county, replace)
+
+
+graph twoway scatter c_curppe state_percap_inc, msize(tiny) mcolor(black%20) name(state, replace)
 
 
 log close
