@@ -22,7 +22,7 @@ log using "sampling_part2.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 18 October 2014
-// LAST: 7 October 2020
+// LAST: 6 October 2021
  
  
 /***
@@ -34,7 +34,7 @@ In the NCES surveys you'll be using this semester, the designers combined a desi
 
 Weights in complex survey designs such as the one employed with ECLS are calculated via the same that we discussed in the last lecture. Nothing changes except for the layers of complexity. The good news, however, is that we a researchers don't have to compute the weights ourselves. Instead, we can use information provided by the survey makers.
 
-The *PSUs* that are provided by NCES are what is known as "analysis *PSUs*". They aren't the identifier for the actual school or student. Instead, they are allocated within strata (many times 2 *PSU* per strata). Strata themselves may be analysis strata, that is, not the same strata that were used to run the survey. Oftentimes, this is done in service of further protecting the anonimity of participants. As far your analyses go, the end result is the same, but sometimes this can be a source of confusion.
+The *PSUs* that are provided by NCES are what is known as "analysis *PSUs*". They aren't the identifier for the actual school or student. Instead, they are allocated within strata (many times 2 *PSU* per strata). Strata themselves may be analysis strata, that is, not the same strata that were used to run the survey. Oftentimes, this is done in service of further protecting the anonymity of participants. As far your analyses go, the end result is the same, but sometimes this can be a source of confusion.
 
 <br>
 
@@ -196,7 +196,10 @@ merge 1:1 sampl using nhanes2f_s
 
 order sampl finalwgt psu stratid brr*
 
+gsort stratid psuid
+
 //browse sampl finalwgt psuid stratid brr*
+
 
 
 /***
@@ -245,7 +248,9 @@ merge 1:1 sampl using nhanes2f_s
 
 order sampl finalwgt psu stratid jkw_*
 
-//browse sampl finalwgt psuid stratid jkw_*
+gsort stratid psuid
+
+browse sampl finalwgt psuid stratid jkw_*
 
 /***
 
@@ -275,7 +280,9 @@ mean birthwgtlbs
 // compute mean with svy bootstrap
 svy: mean birthwgtlbs
 
-//browse idnume finwgt bsrw*
+gsort finwgt
+
+browse idnum finwgt bsrw*
 
 /***
 

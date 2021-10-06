@@ -24,7 +24,7 @@ we want.
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-06-sampling/sampling_part2.log
             log type:  text
-           opened on:   7 Oct 2020, 11:24:15
+           opened on:   6 Oct 2021, 10:59:45
 
 Complex survey designs: Cluster sampling and stratification
 -----------------------------------------------------------
@@ -52,7 +52,7 @@ The *PSUs* that are provided by NCES are what is known as "analysis
 Instead, they are allocated within strata (many times 2 *PSU* per
 strata). Strata themselves may be analysis strata , that is, not the
 same strata that were used to run the survey. Oftentimes, this is done
-in service of further protecting the anonimity of participants. As far
+in service of further protecting the anonymity of participants. As far
 your analyses go, the end result is the same, but sometimes this can be
 a source of confusio n.
 
@@ -101,10 +101,10 @@ the naive estimate:
 
           . mean age height weight
 
-          Mean estimation                   Number of obs   =     10,337
+          Mean estimation                         Number of obs = 10,337
 
           --------------------------------------------------------------
-                       |       Mean   Std. Err.     [95% Conf. Interval]
+                       |       Mean   Std. err.     [95% conf. interval]
           -------------+------------------------------------------------
                    age |    47.5637   .1693381      47.23177    47.89564
                 height |   167.6512   .0950124       167.465    167.8375
@@ -118,9 +118,9 @@ designation of strata and *PSUs*:
 
           . tab stratid psuid
 
-             stratum |   primary sampling
-          identifier |     unit, 1 or 2
-              , 1-32 |         1          2 |     Total
+             Stratum |
+          identifier | Primary sampling unit
+              , 1-32 |     PSU 1      PSU 2 |     Total
           -----------+----------------------+----------
                    1 |       215        165 |       380 
                    2 |       118         67 |       185 
@@ -168,10 +168,10 @@ of the means, but the variance estimates will be off:
 
           . mean age height weight [pw = finalwgt] 
 
-          Mean estimation                   Number of obs   =     10,337
+          Mean estimation                         Number of obs = 10,337
 
           --------------------------------------------------------------
-                       |       Mean   Std. Err.     [95% Conf. Interval]
+                       |       Mean   Std. err.     [95% conf. interval]
           -------------+------------------------------------------------
                    age |   42.23732   .1617236      41.92031    42.55433
                 height |   168.4625   .1139787      168.2391     168.686
@@ -224,12 +224,12 @@ To set up a dataset to use linearized estimates in Stata, we use the
 
           . svyset psuid [pweight = finalwgt], strata(stratid)
 
-                pweight: finalwgt
-                    VCE: linearized
-            Single unit: missing
-               Strata 1: stratid
-                   SU 1: psuid
-                  FPC 1: <zero>
+          Sampling weights: finalwgt
+                       VCE: linearized
+               Single unit: missing
+                  Strata 1: stratid
+           Sampling unit 1: psuid
+                     FPC 1: <zero>
 
 <br>
 
@@ -241,13 +241,13 @@ the sampling design, we use the `svy: <command>` format:
 
           Survey: Mean estimation
 
-          Number of strata =      31      Number of obs   =       10,337
-          Number of PSUs   =      62      Population size =  117,023,659
-                                          Design df       =           31
+          Number of strata = 31            Number of obs   =      10,337
+          Number of PSUs   = 62            Population size = 117,023,659
+                                           Design df       =          31
 
           --------------------------------------------------------------
                        |             Linearized
-                       |       Mean   Std. Err.     [95% Conf. Interval]
+                       |       Mean   std. err.     [95% conf. interval]
           -------------+------------------------------------------------
                    age |   42.23732   .3034412      41.61844    42.85619
                 height |   168.4625   .1471709      168.1624    168.7627
@@ -287,14 +287,14 @@ obtained as follows:
 
           . svyset [pw=finalwgt], brrweight(brr*) vce(brr)
 
-                pweight: finalwgt
-                    VCE: brr
-                    MSE: off
-              brrweight: brr_1 .. brr_32
-            Single unit: missing
-               Strata 1: <one>
-                   SU 1: <observations>
-                  FPC 1: <zero>
+          Sampling weights: finalwgt
+                       VCE: brr
+                       MSE: off
+               BRR weights: brr_1 .. brr_32
+               Single unit: missing
+                  Strata 1: <one>
+           Sampling unit 1: <observations>
+                     FPC 1: <zero>
 
           . svy: mean age height weight
           (running mean on estimation sample)
@@ -303,14 +303,14 @@ obtained as follows:
           ----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
           ................................
 
-          Survey: Mean estimation         Number of obs   =       10,351
-                                          Population size =  117,157,513
-                                          Replications    =           32
-                                          Design df       =           31
+          Survey: Mean estimation          Number of obs   =      10,351
+                                           Population size = 117,157,513
+                                           Replications    =          32
+                                           Design df       =          31
 
           --------------------------------------------------------------
                        |                 BRR
-                       |       Mean   Std. Err.     [95% Conf. Interval]
+                       |       Mean   std. err.     [95% conf. interval]
           -------------+------------------------------------------------
                    age |   42.25264   .3013406      41.63805    42.86723
                 height |   168.4599     .14663      168.1608    168.7589
@@ -326,16 +326,18 @@ strata
 
           . merge 1:1 sampl using nhanes2f_s
 
-              Result                           # of obs.
+              Result                      Number of obs
               -----------------------------------------
-              not matched                            14
+              Not matched                            14
                   from master                        14  (_merge==1)
                   from using                          0  (_merge==2)
 
-              matched                            10,337  (_merge==3)
+              Matched                            10,337  (_merge==3)
               -----------------------------------------
 
           . order sampl finalwgt psu stratid brr*
+
+          . gsort stratid psuid
 
 ### Jackknife estimates
 
@@ -362,14 +364,14 @@ In Stata, the command is:
 
           . svyset [pweight = finalwgt], jkrweight(jkw_*) vce(jackknife)
 
-                pweight: finalwgt
-                    VCE: jackknife
-                    MSE: off
-              jkrweight: jkw_1 .. jkw_62
-            Single unit: missing
-               Strata 1: <one>
-                   SU 1: <observations>
-                  FPC 1: <zero>
+           Sampling weights: finalwgt
+                        VCE: jackknife
+                        MSE: off
+          Jackknife weights: jkw_1 .. jkw_62
+                Single unit: missing
+                   Strata 1: <one>
+            Sampling unit 1: <observations>
+                      FPC 1: <zero>
 
 <br>
 
@@ -377,10 +379,10 @@ Now we can compare the naive estimates with the `svyset` estimates:
 
           . mean age weight height
 
-          Mean estimation                   Number of obs   =     10,351
+          Mean estimation                         Number of obs = 10,351
 
           --------------------------------------------------------------
-                       |       Mean   Std. Err.     [95% Conf. Interval]
+                       |       Mean   Std. err.     [95% conf. interval]
           -------------+------------------------------------------------
                    age |   47.57965   .1692044      47.24798    47.91133
                 weight |   71.89752   .1509381      71.60165    72.19339
@@ -397,14 +399,14 @@ Now we can compare the naive estimates with the `svyset` estimates:
 
           Survey: Mean estimation
 
-          Number of strata =      31      Number of obs   =       10,351
-                                          Population size =  117,157,513
-                                          Replications    =           62
-                                          Design df       =           31
+          Number of strata = 31            Number of obs   =      10,351
+                                           Population size = 117,157,513
+                                           Replications    =          62
+                                           Design df       =          31
 
           --------------------------------------------------------------
                        |              Jackknife
-                       |       Mean   Std. Err.     [95% Conf. Interval]
+                       |       Mean   std. err.     [95% conf. interval]
           -------------+------------------------------------------------
                    age |   42.25264   .3026765      41.63533    42.86995
                 weight |   71.90064   .1654453      71.56321    72.23806
@@ -413,16 +415,20 @@ Now we can compare the naive estimates with the `svyset` estimates:
 
           . merge 1:1 sampl using nhanes2f_s
 
-              Result                           # of obs.
+              Result                      Number of obs
               -----------------------------------------
-              not matched                            14
+              Not matched                            14
                   from master                        14  (_merge==1)
                   from using                          0  (_merge==2)
 
-              matched                            10,337  (_merge==3)
+              Matched                            10,337  (_merge==3)
               -----------------------------------------
 
           . order sampl finalwgt psu stratid jkw_*
+
+          . gsort stratid psuid
+
+          . browse sampl finalwgt psuid stratid jkw_*
 
 ### Bootstrap estimates
 
@@ -444,24 +450,24 @@ compiled samples.
 
           . svyset idnum [pweight = finwgt], vce(bootstrap) bsrweight(bsrw*)
 
-                pweight: finwgt
-                    VCE: bootstrap
-                    MSE: off
-              bsrweight: bsrw1 .. bsrw1000
-            Single unit: missing
-               Strata 1: <one>
-                   SU 1: idnum
-                  FPC 1: <zero>
+           Sampling weights: finwgt
+                        VCE: bootstrap
+                        MSE: off
+          Bootstrap weights: bsrw1 .. bsrw1000
+                Single unit: missing
+                   Strata 1: <one>
+            Sampling unit 1: idnum
+                      FPC 1: <zero>
 
           . gen birthwgtlbs = birthwgt * 0.0022046
           (7 missing values generated)
 
           . mean birthwgtlbs
 
-          Mean estimation                   Number of obs   =      9,946
+          Mean estimation                          Number of obs = 9,946
 
           --------------------------------------------------------------
-                       |       Mean   Std. Err.     [95% Conf. Interval]
+                       |       Mean   Std. err.     [95% conf. interval]
           -------------+------------------------------------------------
            birthwgtlbs |   6.272294   .0217405      6.229678     6.31491
           --------------------------------------------------------------
@@ -469,7 +475,7 @@ compiled samples.
           . svy: mean birthwgtlbs
           (running mean on estimation sample)
 
-          Bootstrap replications (1000)
+          Bootstrap replications (1,000)
           ----+--- 1 ---+--- 2 ---+--- 3 ---+--- 4 ---+--- 5 
           ..................................................    50
           ..................................................   100
@@ -490,18 +496,22 @@ compiled samples.
           ..................................................   850
           ..................................................   900
           ..................................................   950
-          ..................................................  1000
+          .................................................. 1,000
 
-          Survey: Mean estimation           Number of obs   =      9,946
-                                            Population size =  3,895,562
-                                            Replications    =      1,000
+          Survey: Mean estimation            Number of obs   =     9,946
+                                             Population size = 3,895,562
+                                             Replications    =     1,000
 
           --------------------------------------------------------------
                        |   Observed   Bootstrap         Normal-based
-                       |       Mean   Std. Err.     [95% Conf. Interval]
+                       |       mean   std. err.     [95% conf. interval]
           -------------+------------------------------------------------
            birthwgtlbs |    7.39743   .0143754      7.369255    7.425606
           --------------------------------------------------------------
+
+          . gsort finwgt
+
+          . browse idnum finwgt bsrw*
 
 <br>
 
@@ -552,19 +562,19 @@ Using variance estimation from different surveys
 
           . svyset psu [pw=f1pnlwt],strata(strat_id)
 
-                pweight: f1pnlwt
-                    VCE: linearized
-            Single unit: missing
-               Strata 1: strat_id
-                   SU 1: psu
-                  FPC 1: <zero>
+          Sampling weights: f1pnlwt
+                       VCE: linearized
+               Single unit: missing
+                  Strata 1: strat_id
+           Sampling unit 1: psu
+                     FPC 1: <zero>
 
           . mean bynels2m
 
-          Mean estimation                   Number of obs   =     16,160
+          Mean estimation                         Number of obs = 16,160
 
           --------------------------------------------------------------
-                       |       Mean   Std. Err.     [95% Conf. Interval]
+                       |       Mean   Std. err.     [95% conf. interval]
           -------------+------------------------------------------------
               bynels2m |   44.44327   .1187556      44.21049    44.67604
           --------------------------------------------------------------
@@ -574,13 +584,13 @@ Using variance estimation from different surveys
 
           Survey: Mean estimation
 
-          Number of strata =     361        Number of obs   =     16,160
-          Number of PSUs   =     751        Population size =  3,388,462
-                                            Design df       =        390
+          Number of strata = 361             Number of obs   =    16,160
+          Number of PSUs   = 751             Population size = 3,388,462
+                                             Design df       =       390
 
           --------------------------------------------------------------
                        |             Linearized
-                       |       Mean   Std. Err.     [95% Conf. Interval]
+                       |       Mean   std. err.     [95% conf. interval]
           -------------+------------------------------------------------
               bynels2m |   44.74391   .2618191      44.22915    45.25866
           --------------------------------------------------------------
@@ -591,18 +601,18 @@ Using variance estimation from different surveys
 
           . svyset [pw=w1parent], brr(w1parent???) vce(brr)
 
-                pweight: w1parent
-                    VCE: brr
-                    MSE: off
-              brrweight: w1parent001 .. w1parent200
-            Single unit: missing
-               Strata 1: <one>
-                   SU 1: <observations>
-                  FPC 1: <zero>
+          Sampling weights: w1parent
+                       VCE: brr
+                       MSE: off
+               BRR weights: w1parent001 .. w1parent200
+               Single unit: missing
+                  Strata 1: <one>
+           Sampling unit 1: <observations>
+                     FPC 1: <zero>
 
           . prop x3hscompstat
 
-          Proportion estimation             Number of obs   =        808
+          Proportion estimation                      Number of obs = 808
 
                 _prop_1: x3hscompstat = High school diploma
                 _prop_2: x3hscompstat = GED, certificate of attendance,
@@ -612,7 +622,7 @@ Using variance estimation from different surveys
 
           --------------------------------------------------------------
                        |                                   Logit
-                       | Proportion   Std. Err.     [95% Conf. Interval]
+                       | Proportion   Std. err.     [95% conf. interval]
           -------------+------------------------------------------------
           x3hscompstat |
                _prop_1 |   .7376238   .0154765      .7061348    .7668526
@@ -644,15 +654,15 @@ Using variance estimation from different surveys
                 _prop_5: x3hscompstat = Status unknown
 
           --------------------------------------------------------------
-                       |                 BRR               Normal
-                       | Proportion   Std. Err.     [95% Conf. Interval]
+                       |                 BRR               Logit
+                       | Proportion   std. err.     [95% conf. interval]
           -------------+------------------------------------------------
           x3hscompstat |
-               _prop_1 |   .7019053   .0249524      .6527003    .7511103
-               _prop_2 |   .0385162   .0101322      .0185359    .0584964
-               _prop_3 |   .0535511   .0134007      .0271255    .0799767
-               _prop_4 |   .0705174   .0125091        .04585    .0951848
-               _prop_5 |   .1355101   .0183957      .0992346    .1717855
+               _prop_1 |   .7019053   .0249524      .6504961    .7486743
+               _prop_2 |   .0385162   .0101322      .0228223    .0642919
+               _prop_3 |   .0535511   .0134007      .0325002    .0870105
+               _prop_4 |   .0705174   .0125091      .0494954    .0995331
+               _prop_5 |   .1355101   .0183957      .1031456    .1760363
           --------------------------------------------------------------
 
           . use ../../data/nhes_example.dta, clear
@@ -662,16 +672,16 @@ Using variance estimation from different surveys
 
           . svyset epsu [pw=fewt] ,strat(estratum) singleunit(scaled)
 
-                pweight: fewt
-                    VCE: linearized
-            Single unit: scaled
-               Strata 1: estratum
-                   SU 1: epsu
-                  FPC 1: <zero>
+          Sampling weights: fewt
+                       VCE: linearized
+               Single unit: scaled
+                  Strata 1: estratum
+           Sampling unit 1: epsu
+                     FPC 1: <zero>
 
           . prop dpcolor
 
-          Proportion estimation             Number of obs   =      3,997
+          Proportion estimation                    Number of obs = 3,997
 
                 _prop_1: dpcolor = 1 No
                 _prop_2: dpcolor = 2 Yes, some of them
@@ -679,7 +689,7 @@ Using variance estimation from different surveys
 
           --------------------------------------------------------------
                        |                                   Logit
-                       | Proportion   Std. Err.     [95% Conf. Interval]
+                       | Proportion   Std. err.     [95% conf. interval]
           -------------+------------------------------------------------
           dpcolor      |
                _prop_1 |   .0542907   .0035841      .0476777    .0617615
@@ -692,9 +702,9 @@ Using variance estimation from different surveys
 
           Survey: Proportion estimation
 
-          Number of strata =       3       Number of obs   =       3,997
-          Number of PSUs   =   3,997       Population size =  13,693,230
-                                           Design df       =       3,994
+          Number of strata =     3          Number of obs   =      3,997
+          Number of PSUs   = 3,997          Population size = 13,693,230
+                                            Design df       =      3,994
 
                 _prop_1: dpcolor = 1 No
                 _prop_2: dpcolor = 2 Yes, some of them
@@ -702,7 +712,7 @@ Using variance estimation from different surveys
 
           --------------------------------------------------------------
                        |             Linearized            Logit
-                       | Proportion   Std. Err.     [95% Conf. Interval]
+                       | Proportion   std. err.     [95% conf. interval]
           -------------+------------------------------------------------
           dpcolor      |
                _prop_1 |   .0639356   .0056819      .0536596    .0760214
@@ -715,18 +725,18 @@ Using variance estimation from different surveys
 
           . svyset epsu [pw=finalwgt] , vce(brr) brrweight(fewt*)
 
-                pweight: finalwgt
-                    VCE: brr
-                    MSE: off
-              brrweight: fewt1 .. fewt80
-            Single unit: missing
-               Strata 1: <one>
-                   SU 1: epsu
-                  FPC 1: <zero>
+          Sampling weights: finalwgt
+                       VCE: brr
+                       MSE: off
+               BRR weights: fewt1 .. fewt80
+               Single unit: missing
+                  Strata 1: <one>
+           Sampling unit 1: epsu
+                     FPC 1: <zero>
 
           . prop dpcolor
 
-          Proportion estimation             Number of obs   =      3,997
+          Proportion estimation                    Number of obs = 3,997
 
                 _prop_1: dpcolor = 1 No
                 _prop_2: dpcolor = 2 Yes, some of them
@@ -734,7 +744,7 @@ Using variance estimation from different surveys
 
           --------------------------------------------------------------
                        |                                   Logit
-                       | Proportion   Std. Err.     [95% Conf. Interval]
+                       | Proportion   Std. err.     [95% conf. interval]
           -------------+------------------------------------------------
           dpcolor      |
                _prop_1 |   .0542907   .0035841      .0476777    .0617615
@@ -750,30 +760,30 @@ Using variance estimation from different surveys
           ..................................................    50
           ..............................
 
-          Survey: Proportion estimation    Number of obs   =       3,997
-                                           Population size =  13,693,230
-                                           Replications    =          80
-                                           Design df       =          79
+          Survey: Proportion estimation     Number of obs   =      3,997
+                                            Population size = 13,693,230
+                                            Replications    =         80
+                                            Design df       =         79
 
                 _prop_1: dpcolor = 1 No
                 _prop_2: dpcolor = 2 Yes, some of them
                 _prop_3: dpcolor = 3 Yes, all of them
 
           --------------------------------------------------------------
-                       |                 BRR               Normal
-                       | Proportion   Std. Err.     [95% Conf. Interval]
+                       |                 BRR               Logit
+                       | Proportion   std. err.     [95% conf. interval]
           -------------+------------------------------------------------
           dpcolor      |
-               _prop_1 |   .0639356   .0005379      .0628649    .0650063
-               _prop_2 |   .2238697   .0009822      .2219147    .2258246
-               _prop_3 |   .7121947   .0010494       .710106    .7142834
+               _prop_1 |   .0639356   .0005379      .0628732    .0650147
+               _prop_2 |   .2238697   .0009822      .2219208    .2258307
+               _prop_3 |   .7121947   .0010494      .7101015    .7142789
           --------------------------------------------------------------
 
           . log close
                 name:  <unnamed>
                  log:  /Users/doylewr/lpo_prac/lessons/s1-06-sampling/sampling_part2.log
             log type:  text
-           closed on:   7 Oct 2020, 11:25:00
+           closed on:   6 Oct 2021, 11:00:28
           ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
           . exit
