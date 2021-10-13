@@ -211,7 +211,7 @@ Sampling: Complex sampling designs
 
 Assignment 6 due October 12, midnight
 
-October 20
+October 13
 ----------
 
 *Topics*:
