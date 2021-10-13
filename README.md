@@ -160,23 +160,23 @@ September 22
 *Topics*:
 
 Basics of data wrangling: filtering, selecting, grouping 
+More data wrangling: Merging, appending, reshaping 
 
 *Assignments:* Assignment 3 due September 21, midnight
 
-September 29
+
 ------------
 
 *Topics*:
 
-More data wrangling: Merging, appending, reshaping 
+
 
 *Assignments:* 
 
-Assignment 4 due September 28, midnight
 
-Summary research area due
 
-October 6
+
+September 29
 ---------
 
 *Topics*:
@@ -185,7 +185,20 @@ Sampling: Simple sampling designs
 
 *Assignments:* 
 
-Assignment 5 due October 5, midnight
+Assignment 4 due September 28, midnight
+
+
+October 6
+--------------
+
+*Topics* 
+
+Sampling: simple sampling designs
+
+*Assignments* 
+
+Assignment 5
+
 
 October 13
 ---------
@@ -203,13 +216,25 @@ October 20
 
 *Topics*:
 
-Data Cleaning
+Data Validation, Part 1
 
 *Assignments:*
 
-Assignment 7 due October 19, midnight
 
-October 27
+October 20
+----------
+
+*Topics*:
+
+Data Validation, Part 2
+
+*Assignments:*
+
+In class work to be discussed
+
+Revised problem statements due
+
+November 3
 ----------
 
 *Topics*:
@@ -218,10 +243,10 @@ Data Validation
 
 *Assignments:* 
 
-Assignment 8 due October 26, midnight
+Assignment 7 due November 2, midnight
 
 
-November 3
+November 10
 ----------
 
 *Topics*:
@@ -230,9 +255,9 @@ Descriptive Statistics: Tabular and Graphical Approaches
 
 *Assignments:*
 
-Assignment 9 due November 2, midnight
+Assignment 8 due November 9, midnight
 
-November 10
+November 17
 ----------
 
 *Topics*:
@@ -241,24 +266,14 @@ An Introduction to Programming: Using Macros
 
 *Assignments:*
 
-Assignment 10 due November 9, midnight
-
-November 17
------------
-
-*Topics*:
-
-Further graphical approaches to describing data
-
-*Assignments*
-
-Assignment 11 due November 16, midnight
+Assignment 9 due November 16, midnight
 
 
 November 24
 -----------
 
 No Class, Thanksgiving Break
+
 
 December 1
 -----------
@@ -269,7 +284,7 @@ Writing research reports
 
 *Assignments* 
 
-Assignment 12 November 30, midnight
+Assignment 10 due November 30, midnight
 
 December 8
 ------------
@@ -277,7 +292,6 @@ December 8
 *Topics*
 
 Class Presentations
-
 
 *Assignments:*
 
