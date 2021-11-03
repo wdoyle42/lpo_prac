@@ -1,7 +1,7 @@
 /***
 Descriptives
 ================
-LPO 9951 | Fall 2020
+LPO 9951 | Fall 2021
 
 #### PURPOSE
 
@@ -23,7 +23,7 @@ log using "descriptives.log", replace    // open new log
 // AUTH: Will Doyle
 // REVS: Benjamin Skinner
 // INIT: 6 November 2013
-// LAST: 27 October 2020
+// LAST: 3 November 2021
 
 clear all                               // clear memory
 graph drop _all
@@ -178,8 +178,6 @@ kdensity bynels2r, name(kd_bynels2r, replace) ///
 
 graph export kd_bynels2r.$gtype, name(kd_bynels2r) replace
 
-
-exit 
 
 // kernel density plots of base year math score across parental education
 kdensity bynels2m if bypared == 2, name(kd_bynels2m_cond, replace) ///
@@ -544,6 +542,23 @@ Describing relationships between two categorical variables
 
 The basic tool for comparing two categorical variables is the crosstabulation. In a crosstabulation we take a look at counts of the sample that are identified by their presence in cells created by the two categorical variables. There are several tools for plotting categorical variables, including tabplots, jittered plots, and heatmaps.
 
+
+#### Using Catplot
+
+
+***/
+
+catplot  newpln bypared2 , ///
+percent(bypared2) ///
+var1opts(label(labsize(small))) ///
+var2opts(label(labsize(small)) relabel(`r(relabel)')) ///
+ytitle("Percent of Respondents by Parental Education", size(small)) ///
+blabel(bar, format(%4.1f) size(vsmall)) ///
+intensity(25) ///
+asyvars ///
+legend(rows(1))
+
+/***
 #### Tabplots
 
 Below are examples of a tabplot, with both two and three dimensions.
