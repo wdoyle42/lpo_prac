@@ -1,7 +1,7 @@
 /***
 #### PURPOSE
 
-Stata programming will save you time, energy, and sanity. Investing the
+Stata programming will save you time, energy, and frustration. Investing the
 time now into learning how to program will certainly pay off. It may
 seem easy enough now to just copy code 10 times if you need to complete
 an operation 10 times, but force yourself to use your programming
@@ -64,8 +64,7 @@ log using "programming.log",replace
 /* PhD Practicum */
 /* Some simple demonstrations of macros and loops, good programming principles */
 /* Will Doyle*/
-/* LAST: 2020-11-04 */
-
+/* LAST: 2021-11-10 */
 
 clear
 
@@ -82,7 +81,7 @@ will be clear to others who may read your script.
     . // TABLE OF CONTENTS
     . // 0.0 Set preferences/globals
     . // 1.0 Recoding /*KW: Bart */
-	.//  2.0 Descriptivs /*KW: Lisa */
+	.//  2.0 Descriptives /*KW: Lisa */
 	.//  3.0 Analysis /* KW: Homer */
 	.//  4.0 Graphics /* KW: Marge */
 	
@@ -101,7 +100,7 @@ local recoding=1
 
 /* Section 2: Analysis KW: Lisa*/
 
-local analysis=1
+local analysis=0
 
 ************************************
 
@@ -139,16 +138,14 @@ goal here is to get the computer to do the boring (repetitive) tasks,
 while the analyst does the interesting (analytical and interpretive)
 tasks. 
 
-There are two types of macos in Stata, local and global macros. Global
-macros should basically never be used. 
+There are two types of macros in Stata, local and global macros. Global
+macros should basically never be used. Global macros are persistent across "sessions" meaning they can be accessed as long as Stata is open. The problem here is that you might run different do files for different projects in the same session. 
+
+A local macro is "forgotten" by Stata as soon as the code stops running. This is much safer, in that it will only be in use when expected, and will not persist when new do files are being called. 
 
 So, let's do a macro: this macro will contain two variables from the
 plans dataset, math and reading test scores
 ***/
-
-
-
-
 
 
 /*Generating macros*/
@@ -162,7 +159,8 @@ referenced corectly. Referring to the macro without quotes will
 result in an error:
 ***/
 
-*summarize tests /* Won't work */
+//summarize tests /* Won't work */
+
 
 /***
 Why didn't this work? Without proper specification, a macro can not be
@@ -179,6 +177,8 @@ local ses byses1 byses2
 
 summarize `ses'
 
+exit 
+
 /***
 
 *Quick Exercise*
@@ -189,7 +189,7 @@ the macro.
 ***/
 
 /***
-A Note on Local vs. Global macors
+A Note on Local vs. Global macros
 
 When you run a do file with a local macro, Stata will hold that local macro in
 memory only while the do file is running. After it stops, the macro is
