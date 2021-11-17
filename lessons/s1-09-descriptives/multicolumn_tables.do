@@ -1,6 +1,4 @@
 
-
-
 // set link for data, plot, and table directories
 global datadir "../data/"
 global plotdir "../plots/"
@@ -32,10 +30,8 @@ estimates store my_mean_total
 svy: mean bynels2m bynels2r byses1 byses2 amind asian black hispanic white female ///
 if bypared==2
 
-
 // Store it
 estimates store my_mean_hs
-
 
 // get mean estimates using svy
 svy: mean bynels2m bynels2r byses1 byses2 amind asian black hispanic white female ///
@@ -57,3 +53,21 @@ esttab my_mean_* using means_se.$ttype, ///    // . means all in current memory
     nonumbers ///                        // no column/model numbers
 	mtitles("Full Sample" "HS Educ Parents" "College Educ Parents") ///
     addnotes("Linearized estimates of standard errors in parentheses")
+
+
+gen expect_college=bystexp>=5
+	
+preserve 
+	
+collapse (mean) bynels2m 	, by(bypared expect_college)
+	
+graph twoway (dot bynels2m bypared if expect_college==0, horizontal) ///
+	          (dot bynels2m bypared if expect_college==1,horizontal) 
+	
+
+restore
+	
+
+
+	
+	
