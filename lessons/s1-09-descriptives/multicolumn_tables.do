@@ -44,7 +44,6 @@ if bypared==6
 // Store it
 estimates store my_mean_college
 
-exit 
 
 // store the estimates in a nice table using esttab
 esttab my_mean_* using means_se.$ttype, ///    // . means all in current memory
@@ -56,4 +55,5 @@ esttab my_mean_* using means_se.$ttype, ///    // . means all in current memory
     aux(se) ///                          // aux = standard errors 
     nonotes ///                          // no standard table notes 
     nonumbers ///                        // no column/model numbers
+	mtitles("Full Sample" "HS Educ Parents" "College Educ Parents") ///
     addnotes("Linearized estimates of standard errors in parentheses")
