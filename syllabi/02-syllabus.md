@@ -15,14 +15,14 @@ Human and Organizational Development
 Course Number HOD 9952
 ----------------------
 
-Spring 2021
+Spring 2022
 -----------
 
 William R. Doyle
 
 Office: 207D Payne
 
-Office Hours: Wednesdays and Thursdays, 2-5 pm or by appointment, use wdoyle42.youcanbook.me
+Office Hours: [Booking Page](https://outlook.office365.com/owa/calendar/WillDoyle@Vanderbilt365.onmicrosoft.com/bookings/)
 
 Email: <w.doyle@vanderbilt.edu>
 
@@ -103,7 +103,7 @@ Safety
 This will be an in-person class during a global pandemic. My thoughts
 on safety are \href{https://docs.google.com/document/d/1Sme5cm_fhtXRSgjiBjmbSByGjS9lXMxWEC70nB8TZM8/edit?usp=sharing}{here}
 
-January 28 The Logic of Conditional Means; review of programming skills
+January 20 The Logic of Conditional Means; review of programming skills
 --------------------------------------------------------------------------------
 
 *Readings*
@@ -112,7 +112,7 @@ Baum, Chapters 1-3
 
 Mitchell, Chapter 3
 
-February 4 Linear estimators
+January 27 Linear estimators
 -------------------------------------
 
 *Readings*
@@ -123,7 +123,7 @@ Baum, Chapter 4
 
 Assignment 1 due February 2
 
-February 11 OLS Regression in Stata
+February 3 OLS Regression in Stata
 -------------------------------------------
 
 *Readings*
@@ -136,7 +136,7 @@ Long & Freese, Chapter 3
 
 Assignment 2 due February 9
 
-February 18 Properties of OLS estimator
+February 10 Properties of OLS estimator
 -----------------------------------------------
 
 *Readings*
@@ -149,7 +149,7 @@ Adkins, L. & Gade, M. (2012) "Monte Carlo Experiments Using Stata: A Primer with
 
 Assignment 3 due February 16
 
-February 25 Inference with OLS, hypothesis testing (sigh)
+February 17 Inference with OLS, hypothesis testing (sigh)
 -----------------------------------------------------------------
 
 *Readings*
@@ -166,7 +166,7 @@ Outreg documentation: [http://repec.org/bocode/o/outreg2]
 
 Assignment 4 due February 23
 
-March 4 Functional Form, model specification
+February 24 Functional Form, model specification
 ---------------------------------------------------------
 
 *Readings*
@@ -181,7 +181,7 @@ Assignment 5 due March 2
 
 Literature Review due March 1
 
-March 11 Binary variables, interactions
+March 3 Binary variables, interactions
 ---------------------------------------------------
 
 *Readings*
@@ -194,7 +194,9 @@ UCLA IDRE,"How can I use the margins command to understand multiple interactions
 
 Assignment 6 due March 9
 
-March 18 Interactions, marginal effects
+March 10 Spring Break
+
+March 17 Interactions, marginal effects
 ---------------------------------------------------
 
 *Readings*
@@ -205,7 +207,7 @@ UCLA IDRE "How can I explain a continuous by continuous interaction?" [http://ww
 
 Assignment 7 due March 16
 
-March 25 Replication
+March 24 Replication
 -----------------------------
 
 *Readings*
@@ -219,7 +221,7 @@ Hammermesh, D. (2007) Replication in Economics. NBER Working Papers 13026.
 Assignment 8 due March 23
 
 
-April 1 Non-Spherical Errors
+March 31 Non-Spherical Errors
 ---------------------------------------------
 
 *Readings*
@@ -232,17 +234,7 @@ Assignment 9 due March 30
 
 
 
-
-April 8 Reading Day
---------------------------------------
-
-Watch one of: Piled Higher and Deeper: The PhD Comic Movie, Real
-Genius,  Legally Blonde, the Paper Chase or
-Bad Education
-
-
-
-April 15 Limited Dependent Variables
+April 7 Limited Dependent Variables
 -----------------------------
 
 *Readings*
@@ -253,9 +245,9 @@ Williams, R. (2012). Using the margins command to estimate and interpret adjuste
 
 *Assignments*
 
-Assignment 10 due April 13
+Assignment 10 due April 6
 
-April 22 Panel Data
+April 14 Panel Data
 ---------------------------
 
 *Readings*
@@ -267,7 +259,7 @@ McCaffrey, D. F., Lockwood, J. R., Mihaly, K., & Sass, T. R. (2012). A review of
 Assignment 11 due April 20
 
 
-April 29 Advanced Graphics, Reporting Complex Results
+April 21 Advanced Graphics, Reporting Complex Results
 -----------------------------------
 
 *Readings*
@@ -280,7 +272,12 @@ Gallup, J. L. (2012). A programmer’s command to build formatted statistical ta
 
 *Assignments*
 
-Assignment 13 due April 27
+Assignment 12 due April 20
+
+April 28 Ordinal and Multinomial Outcomes
+------------------------------
+
+Assignment 13 Due April 27
 
 *Replication File Due May 6*
 
