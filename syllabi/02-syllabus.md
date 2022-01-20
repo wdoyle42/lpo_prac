@@ -101,7 +101,7 @@ Safety
 =========
 
 This will be an in-person class during a global pandemic. My thoughts
-on safety are \href{https://docs.google.com/document/d/1Sme5cm_fhtXRSgjiBjmbSByGjS9lXMxWEC70nB8TZM8/edit?usp=sharing}{here}
+on safety are [here](https://docs.google.com/document/d/1Sme5cm_fhtXRSgjiBjmbSByGjS9lXMxWEC70nB8TZM8/edit?usp=sharing)
 
 January 20 The Logic of Conditional Means; review of programming skills
 --------------------------------------------------------------------------------
