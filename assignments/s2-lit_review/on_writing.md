@@ -46,7 +46,7 @@ Here are some tips, in no particular order.
     constitue the vast majority of theoretical propositions you make in
     a paper.
 
--   More a rule of thumb: I regret every sentence I’ve written that’s
+-   More an informal rule: I regret every sentence I’ve written that’s
     longer than twenty words. I regret a lot of my sentences. Break up
     convoluted sentences into smaller, easier-to- understand chunks.
 
