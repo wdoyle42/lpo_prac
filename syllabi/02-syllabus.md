@@ -121,7 +121,7 @@ Baum, Chapter 4
 
 *Assignments*
 
-Assignment 1 due February 2
+Assignment 1 due January 26
 
 February 3 OLS Regression in Stata
 -------------------------------------------
@@ -134,7 +134,7 @@ Long & Freese, Chapter 3
 
 *Assignments*
 
-Assignment 2 due February 9
+Assignment 2 due February 2
 
 February 10 Properties of OLS estimator
 -----------------------------------------------
@@ -147,7 +147,7 @@ Adkins, L. & Gade, M. (2012) "Monte Carlo Experiments Using Stata: A Primer with
 
 *Assignments*
 
-Assignment 3 due February 16
+Assignment 3 due February 9
 
 February 17 Inference with OLS, hypothesis testing (sigh)
 -----------------------------------------------------------------
@@ -164,7 +164,7 @@ Outreg documentation: [http://repec.org/bocode/o/outreg2]
 
 *Assignments*
 
-Assignment 4 due February 23
+Assignment 4 due February 16
 
 February 24 Functional Form, model specification
 ---------------------------------------------------------
@@ -177,9 +177,9 @@ Kennedy, P. E. (2002). Sinning in the basement: What are the rules? The ten comm
 
 *Assignments*
 
-Assignment 5 due March 2
+Assignment 5 due February 23
 
-Literature Review due March 1
+
 
 March 3 Binary variables, interactions
 ---------------------------------------------------
@@ -192,7 +192,9 @@ UCLA IDRE,"How can I use the margins command to understand multiple interactions
 
 *Assignments*
 
-Assignment 6 due March 9
+Assignment 6 due March 2
+
+Literature Review due March 2
 
 March 10 Spring Break
 
@@ -233,7 +235,6 @@ Cox, Nicholas J. "Speaking Stata: Graphing model diagnostics." Stata Journal 4.4
 Assignment 9 due March 30
 
 
-
 April 7 Limited Dependent Variables
 -----------------------------
 
@@ -256,7 +257,7 @@ McCaffrey, D. F., Lockwood, J. R., Mihaly, K., & Sass, T. R. (2012). A review of
 
 *Assignments*
 
-Assignment 11 due April 20
+Assignment 11 due April 13
 
 
 April 21 Advanced Graphics, Reporting Complex Results
