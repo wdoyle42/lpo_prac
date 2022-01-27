@@ -1,7 +1,7 @@
 /***
 Basics of Regression in Stata
 ================
-LPO 9952 | Spring 2021
+LPO 9952 | Spring 2022
 
 Intro
 -----
@@ -42,17 +42,17 @@ capture log close
 /* PhD Practicum, Spring 2020 */
 /* Getting Started with Regression */
 /* Will Doyle*/
-/* 2/4/21 */
+/* 1/27/22 */
 /* Github Repo */
 
  /*Graph type postscript */
 // local gtype ps
 
 /* Graph type: pdf */
-//local gtype pdf
+local gtype pdf
 
 /* Graph type: eps */
-local gtype eps
+//local gtype eps
 
 clear
 
@@ -66,7 +66,7 @@ sample 10
 
 local y yinc
 
-local x ccol 
+local x ccol
 
 local ytitle "Income"
 
@@ -156,8 +156,8 @@ reg `y' `x'
 
 *Quick Exercise*
 
-Run a regression with same dependent variable but a different independent variable. Interpret the results in one sentence. Write this sentence down.
-
+Run a regression with same dependent variable but a different independent variable.
+ Interpret the results in one sentence. Write this sentence down.
 
 ***/
 
@@ -188,7 +188,6 @@ The standard errors are stored as a variance-covariance matrix. To get a standar
 mat vcmat=e(V)
  
 scalar myb=betamat[1,1]
-
 
 // NOOOOO
 //scalar myb=e(b)[1,1]
@@ -235,6 +234,9 @@ By default, Stata gives 95% confidence intervals. To get confidence intervals at
 /*Use different confidence intervals */
 reg `y' `x', level(90)
 
+reg `y' `x', level(80)
+
+ 
 
 /***
 
@@ -253,6 +255,7 @@ Residuals are not stored as part of the estimation results, but can be generated
 
 /*How to get residual */
 predict uhat, residuals
+
 
 /*Residuals sum to 0 by definition */
 tabstat uhat, stat(sum)
@@ -275,8 +278,6 @@ graph twoway scatter uhat `x', ///
      scatter `y' `x', ///
      msize(tiny) ///
      msymbol(triangle) 
-
-
 	 
 	 
 /*Putting the pieces together*/
@@ -292,7 +293,7 @@ graph twoway scatter uhat `x', ///
       lwidth(thin) ///
       yline(0, lpattern(dash) lwidth(thin)) ///
       legend(order(1 2 "Actual `ytitle'" 3))
-
+ 
 
 graph export "residplot_fancy.`gtype'",replace
 
@@ -313,7 +314,6 @@ graph twoway scatter yhat `x', ///
       scatter `y' `x', ///
       msize(tiny) ///
       msymbol(triangle) 
-
 
 graph export "predict.`gtype'",replace
 
@@ -365,7 +365,6 @@ scalar my_rss=mymat[1,1]
 
 scalar li residss my_rss
 
-
 ///What's the model sum of squares?
 
 scalar modss=e(mss)
@@ -388,6 +387,7 @@ scalar my_mss=mymat[1,1]
 
 scalar li modss my_mss
 
+
 /*Calculate F */
 
 scalar df_resid=myN-myk
@@ -403,6 +403,11 @@ scalar myf=modss_std/residss_std
 scalar fstat=e(F)
 
 scalar li myf fstat
+
+/* What's RMSE?*/
+
+scalar my_rmse= sqrt(residss_std)
+
 
 /*What is R squared?*/
 
@@ -429,7 +434,6 @@ scalar test=cond(abs(myt)>=req_t,"Significant","Not significant")
 
 // p value 
 scalar stat_sig=(2*ttail(my_df,myt))
-
 
 
 exit
