@@ -1,11 +1,11 @@
 ## Vanderbilt University
 ## Leadership, Policy and Organizations
 ## Class Number 9952
-## Spring 2020
+## Spring 2022
 
 **Part 1**
 
-Write a program that does the following:
+Write a script that does the following:
 
 1.  Takes a variable list (assumed to be a series of continuous variables) as its argument.
 
