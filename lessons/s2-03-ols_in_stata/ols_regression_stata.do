@@ -2,11 +2,10 @@ capture log close
 
 log using "ols_regression_stata.log",replace
 
-/* PhD Practicum, Spring 2020 */
+/* PhD Practicum, Spring 2021 */
 /* Outputting regression results*/
 /* Will Doyle*/
-/* 1/23/20 */
-/* Saved on OAK */
+/* 2/3/22/ */
 
 clear
 
@@ -16,7 +15,7 @@ ssc install plotbeta
 
 local tab_type rtf  /*I use tex, word=rtf */
 
-local gtype eps /*Png or bmp for windows */
+local gtype png /*Png or bmp for windows */
 
 /* Check to see if file exists if not then download it. */
 capture confirm file caschool.dta
@@ -30,7 +29,7 @@ use caschool, clear
 
 /// Transformations of key independent variables
 
-gen expn_stu_k=expn_stu
+gen expn_stu_k=expn_stu/1000
 
 gen comp_stu_h=comp_stu*100
 
@@ -62,6 +61,8 @@ label variable str_20 "Avg Class Size>20"
 
 label variable read_scr "Reading Score"
 
+label variable math_scr "Math Score"
+
 /*Locals for groups of variables*/
 
 local y read_scr
@@ -81,10 +82,10 @@ estimates clear
 /* Setting up and outputting descriptive stats */
 
 eststo descriptives: estpost tabstat `y' `students' `teacher' `finance', ///
-    statistics(mean sd) ///
+    statistics(mean sd n) ///
     columns(statistics) ///
-    listwise 
-    
+    listwise 	
+	
 esttab descriptives using esttab_means.`tab_type' , ///
     main(mean) ///
     aux(sd) ///
@@ -93,8 +94,9 @@ esttab descriptives using esttab_means.`tab_type' , ///
     label ///
     nonumber ///
     replace 
-
+		
 	
+		
 /* Describing conditional mean of outcome as a function of covariates*/
 
 /* Three groups: small class size, middle, and large */
@@ -116,9 +118,11 @@ label values class_size sizes
 
 eststo descriptives_size: estpost tabstat `y' `students' `teacher' `finance', ///
     by(class_size) ///
-    statistics(mean sd) ///
-    columns(statistics) ///
+    statistics(mean sd n) ///
+    columns(statistics)	///
     listwise 
+
+	exit
 
 esttab descriptives_size using esttab_means_size.`tab_type', ///
     main(mean) ///
@@ -131,7 +135,20 @@ esttab descriptives_size using esttab_means_size.`tab_type', ///
     nomtitles ///
 	collabels(none) ///
     replace 
-
+	
+foreach i of numlist 1/3{
+	eststo descriptives_size_`i': estpost tabstat `y' `students' `teacher' `finance', ///
+    by(class_size) ///
+    statistics(mean sd n) ///
+    columns(statistics)	///
+    listwise 
+	
+	
+	scalar mysample=
+	
+	estadd 
+}	
+	
 	
 /* Estimate Models */
 	
@@ -153,17 +170,25 @@ esttab *_model using `y'_models.`tab_type',     /* estout command: * indicates a
                label                          /*Use labels for models and variables */
                nodepvars                      /* Use my model titles */
                b(2)                           /* b= coefficients , this gives two sig digits */
-               se(2)                         /* I do want standard errors */
+			   se(2)                         /* I do want standard errors */
                r2 (2)                      /* R squared */
                ar2 (2)                     /* Adj R squared */
                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
-               sfmt (2 0 0 0)                /* format for scalar stats*/
+               sfmt (2 0 0 0 2)                /* format for scalar stats*/
                replace                   /* replace existing file */
+			   nonotes
+			   addnotes("Robust standard errors in parentheses") 
                ;
 
 #delimit cr
 
+
+
+exit 
+
 // Redo table, this time include t stats instead of se and no stars!
+
+
 
 
 /// Plotting regression results

@@ -2,11 +2,10 @@ capture log close
 
 log using "ols_regression_stata.log",replace
 
-/* PhD Practicum, Spring 2019 */
+/* PhD Practicum, Spring 2021 */
 /* Outputting regression results*/
 /* Will Doyle*/
-/* 1/22/19 */
-/* Saved on OAK */
+/* 2/18/21/ */
 
 clear
 
@@ -16,7 +15,7 @@ ssc install plotbeta
 
 local tab_type rtf  /*I use tex, word=rtf */
 
-local gtype eps /*Png or bmp for windows */
+local gtype png /*Png or bmp for windows */
 
 /* Check to see if file exists if not then download it. */
 capture confirm file caschool.dta
@@ -28,6 +27,8 @@ save caschool, replace
 
 use caschool, clear
 
+
+
 /// Transformations of key independent variables
 
 gen expn_stu_k=expn_stu/1000
@@ -35,8 +36,6 @@ gen expn_stu_k=expn_stu/1000
 gen comp_stu_h=comp_stu*100
 
 gen str_20=str>=20
-
-replace str_20=. if str==.
 
 /*Label variables*/
 
@@ -64,6 +63,8 @@ label variable str_20 "Avg Class Size>20"
 
 label variable read_scr "Reading Score"
 
+label variable math_scr "Math Score"
+
 /*Locals for groups of variables*/
 
 local y read_scr
@@ -80,15 +81,13 @@ local computers comp_stu_h
 
 estimates clear
 
-
 /* Setting up and outputting descriptive stats */
 
 eststo descriptives: estpost tabstat `y' `students' `teacher' `finance', ///
-    statistics(mean sd) ///
-    columns(statistics) 
-
-
-   
+    statistics(mean sd n) ///
+    columns(statistics) ///
+    listwise 	
+	
 esttab descriptives using esttab_means.`tab_type' , ///
     main(mean) ///
     aux(sd) ///
@@ -97,8 +96,9 @@ esttab descriptives using esttab_means.`tab_type' , ///
     label ///
     nonumber ///
     replace 
-
+		
 	
+		
 /* Describing conditional mean of outcome as a function of covariates*/
 
 /* Three groups: small class size, middle, and large */
@@ -120,9 +120,11 @@ label values class_size sizes
 
 eststo descriptives_size: estpost tabstat `y' `students' `teacher' `finance', ///
     by(class_size) ///
-    statistics(mean sd) ///
-    columns(statistics) ///
+    statistics(mean sd n) ///
+    columns(statistics)	///
     listwise 
+
+
 
 esttab descriptives_size using esttab_means_size.`tab_type', ///
     main(mean) ///
@@ -135,34 +137,24 @@ esttab descriptives_size using esttab_means_size.`tab_type', ///
     nomtitles ///
 	collabels(none) ///
     replace 
+	
 
-/* Three groups: small class size, middle, and large */
-sum expn_stu_k, detail 
-  
-gen expend_level=expn_stu_k<=r(p25)
-
-local perc25=round(r(p25),0)
-
-replace expend_level=2 if expn_stu_k>r(p25)&expn_stu_k<=r(p75)
-
-replace expend_level=3 if expn_stu_k>r(p75)
-
-replace expend_level=. if expn_stu_k==.
-
-label define expend_levels 1 "Low Spending" 2 "Moderate Spending"  3 "High Spending"
-
-label values expend_level expend_levels
-
-
-/*Summary table */
-
-eststo descriptives_spending: estpost tabstat `y' `students' `teacher' `finance', ///
-    by(expend_level) ///
-    statistics(mean sd) ///
-    columns(statistics) ///
+eststo descriptives_size_4: estpost tabstat `y' `students' `teacher' `finance' , ///
+    statistics(mean sd n) ///
+    columns(statistics)	///
     listwise 
 
-esttab descriptives_spending using esttab_means_spend.`tab_type', ///
+	
+foreach i of numlist 1/3{
+	eststo descriptives_size_`i': estpost tabstat `y' `students' `teacher' `finance' if class_size==`i', ///
+    statistics(mean sd n) ///
+    columns(statistics)	///
+    listwise 
+	
+}	
+	
+	
+esttab descriptives_size_* using esttab_means_size.`tab_type', ///
     main(mean) ///
     aux(sd) ///
     nostar ///
@@ -173,21 +165,35 @@ esttab descriptives_spending using esttab_means_spend.`tab_type', ///
     nomtitles ///
 	collabels(none) ///
     replace 
-	 
+	
 	
 /* Estimate Models */
 	
 quietly reg `y' `teacher'
+estadd local hascontrols "No"
 estimates store teach_model, title ("Model 1")                                
 
 quietly reg `y'  `teacher' `students'
+estadd local hascontrols "Yes"
 estimates store st_tch_model, title ("Model 2")
 
-quietly reg `y' `teacher' `students'  `finance'
+quietly reg `y' `students' `teacher' `finance'
+estadd local hascontrols "Yes"
 estimates store st_tch_fin_model, title ("Model 3")
 
-quietly reg `y'  `teacher' `students' `finance' `computers'
+quietly reg `y' `students' `teacher' `finance' `computers'
+estadd local hascontrols "Yes"
 estimates store st_tch_fin_comp_model, title ("Model 4")
+
+quietly reg `y' `students' `finance' 
+estadd local hascontrols "Yes"
+estimates store st_fin_model, title ("Model 5")
+
+quietly reg `y' `students' `computers'
+estadd local hascontrols "Yes"
+estimates store st_comp_model, title ("Model 6")
+
+
 
 #delimit;
 
@@ -195,51 +201,22 @@ esttab *_model using `y'_models.`tab_type',     /* estout command: * indicates a
                label                          /*Use labels for models and variables */
                nodepvars                      /* Use my model titles */
                b(2)                           /* b= coefficients , this gives two sig digits */
-               se(2)                         /* I do want standard errors */
+			   t(2)                         /* I do want standard errors */
+			   nostar
                r2 (2)                      /* R squared */
                ar2 (2)                     /* Adj R squared */
-               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
-               sfmt (2 0 0 0)                /* format for scalar stats*/
+               scalar(F  "df_m DF model"  "df_r DF residual" N "hascontrols Controls?")   /* select stats from the ereturn (list) */
+               sfmt (2 0 0 0 2)                /* format for scalar stats*/
                replace                   /* replace existing file */
                ;
 
 #delimit cr
- 
-#delimit ;
+
+
+
 // Redo table, this time include t stats instead of se and no stars!
 
-esttab *_model using `y'_models_b.`tab_type',      /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
-               label                          /*Use labels for models and variables */
-               nodepvars                      /* Use my model titles */
-               b(2)                           /* b= coefficients , this gives two sig digits */
-               t(2)                         /* I do want t-stats */
-			   nostar 						/* No p value stars */
-               r2 (2)                      /* R squared */
-               ar2 (2)                     /* Adj R squared */
-               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
-               sfmt (2 0 0 0)                /* format for scalar stats*/
-               replace                   /* replace existing file */
-               ;
 
-#delimit cr
-
-#delimit ;
-// Redo table, this time include CI instead of se and 4 significant digits!
-
-esttab *_model using `y'_models_c.`tab_type',      /* estout command: * indicates all estimates in memory. rtf specifies rich text, best for word */
-               label                          /*Use labels for models and variables */
-               nodepvars                      /* Use my model titles */
-               b(4)                           /* b= coefficients , this gives two sig digits */
-               ci(4)                         /* I do want t-stats */
-			   nostar 						/* No p value stars */
-               r2 (4)                      /* R squared */
-               ar2 (4)                     /* Adj R squared */
-               scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn (list) */
-               sfmt (2 0 0 0)                /* format for scalar stats*/
-               replace                   /* replace existing file */
-               ;
-
-#delimit cr
 
 
 /// Plotting regression results
@@ -259,6 +236,7 @@ plotbeta  avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression 
 		  ;
 
 #delimit cr
+ 
  
 graph save teach_model, replace
 
@@ -312,18 +290,59 @@ plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str_20|str,
 
 graph save st_teach_fin_comp_model,replace;
 
+
+estimates restore st_fin_model; 
+
+#delimit;
+plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str_20|str,
+          labels
+          xtitle (Parameters)
+          title ("Students and Finance Model")
+          subtitle ("From OLS regression. Dep Var= `ytitle'")
+          xline(0,lp(dash))
+          xscale(range(-1.4 4))
+          xlabel(-4(.5)4)
+		  scale(.5)
+		  ;
+
+graph save st_fin_model,replace;
+
+
+estimates restore st_comp_model; 
+
+#delimit;
+plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str_20|str,
+          labels
+          xtitle (Parameters)
+          title ("Student and Computers Model")
+          subtitle ("From OLS regression. Dep Var= `ytitle'")
+          xline(0,lp(dash))
+          xscale(range(-1.4 4))
+          xlabel(-4(.5)4)
+		  scale(.5)
+		  ;
+
+graph save st_comp_model,replace;
+
+
 graph combine teach_model.gph //
 	st_teach_model.gph //
 	st_teach_fin_model.gph //
-	st_teach_fin_comp_model.gph
+	st_teach_fin_comp_model.gph //
+	st_fin_model.gph //
+	st_comp_model.gph //
 	,
          cols(2)
-         rows(2)
+         rows(3)
          ;
 
 #delimit cr
 
 graph export all_models.`gtype', replace 
+
+
+
+
 
 exit
 

@@ -1,16 +1,15 @@
------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/doylewr/practicum_2017/central/lessons/s2-03-ols_in_stata/ols_regression_stata.lo
+       log:  /Users/doylewr/lpo_prac/lessons/s2-03-ols_in_stata/ols_regression_stata.lo
 > g
   log type:  text
- opened on:  23 Jan 2018, 15:55:24
+ opened on:  18 Feb 2021, 11:18:18
 
 . 
-. /* PhD Practicum, Spring 2018 */
+. /* PhD Practicum, Spring 2021 */
 . /* Outputting regression results*/
 . /* Will Doyle*/
-. /* 1/23/18 */
-. /* Saved on OAK */
+. /* 2/18/21/ */
 . 
 . clear
 
@@ -25,7 +24,7 @@ all files already exist and are up to date.
 . local tab_type rtf  /*I use tex, word=rtf */
 
 . 
-. local gtype eps /*Png or bmp for windows */
+. local gtype png /*Png or bmp for windows */
 
 . 
 . /* Check to see if file exists if not then download it. */
@@ -41,9 +40,11 @@ all files already exist and are up to date.
 . use caschool, clear
 
 . 
+. 
+. 
 . /// Transformations of key independent variables
 > 
-. gen expn_stu_k=expn_stu
+. gen expn_stu_k=expn_stu/1000
 
 . 
 . gen comp_stu_h=comp_stu*100
@@ -90,6 +91,9 @@ all files already exist and are up to date.
 . label variable read_scr "Reading Score"
 
 . 
+. label variable math_scr "Math Score"
+
+. 
 . /*Locals for groups of variables*/
 . 
 . local y read_scr
@@ -116,25 +120,25 @@ all files already exist and are up to date.
 . /* Setting up and outputting descriptive stats */
 . 
 . eststo descriptives: estpost tabstat `y' `students' `teacher' `finance', ///
->     statistics(mean sd) ///
+>     statistics(mean sd n) ///
 >     columns(statistics) ///
->     listwise 
+>     listwise    
 
-Summary statistics: mean sd
+Summary statistics: mean sd count
      for variables: read_scr avginc el_pct calw_pct meal_pct str str_20 expn_stu_k
 
-             |   e(mean)      e(sd) 
--------------+----------------------
-    read_scr |  654.9705   20.10798 
-      avginc |  15.31659    7.22589 
-      el_pct |  15.76816   18.28593 
-    calw_pct |  13.24604   11.45482 
-    meal_pct |  44.70524   27.12338 
-         str |  19.64043   1.891812 
-      str_20 |  .4333333   .4961266 
-  expn_stu_k |  5312.408   633.9371 
+             |   e(mean)      e(sd)   e(count) 
+-------------+---------------------------------
+    read_scr |  654.9705   20.10798        420 
+      avginc |  15.31659    7.22589        420 
+      el_pct |  15.76816   18.28593        420 
+    calw_pct |  13.24604   11.45482        420 
+    meal_pct |  44.70524   27.12338        420 
+         str |  19.64043   1.891812        420 
+      str_20 |  .4333333   .4961266        420 
+  expn_stu_k |  5.312408   .6339371        420 
 
-.     
+.         
 . esttab descriptives using esttab_means.`tab_type' , ///
 >     main(mean) ///
 >     aux(sd) ///
@@ -145,8 +149,9 @@ Summary statistics: mean sd
 >     replace 
 (output written to esttab_means.rtf)
 
-. 
+.                 
 .         
+.                 
 . /* Describing conditional mean of outcome as a function of covariates*/
 . 
 . /* Three groups: small class size, middle, and large */
@@ -193,56 +198,58 @@ Summary statistics: mean sd
 . 
 . eststo descriptives_size: estpost tabstat `y' `students' `teacher' `finance', ///
 >     by(class_size) ///
->     statistics(mean sd) ///
+>     statistics(mean sd n) ///
 >     columns(statistics) ///
 >     listwise 
 
-Summary statistics: mean sd
+Summary statistics: mean sd count
      for variables: read_scr avginc el_pct calw_pct meal_pct str str_20 expn_stu_k
   by categories of: class_size
 
-  class_size |   e(mean)      e(sd) 
--------------+----------------------
-Small Clas~e |                      
-    read_scr |  661.6181   21.84814 
-      avginc |  17.80907   10.78676 
-      el_pct |  11.23263   16.98024 
-    calw_pct |  13.19018   12.09932 
-    meal_pct |  40.20112   29.78182 
-         str |  17.22926   1.069095 
-      str_20 |         0          0 
-  expn_stu_k |  5844.176   712.7741 
--------------+----------------------
-Medium Cla~e |                      
-    read_scr |  655.0952   19.03064 
-      avginc |  14.85916   5.688771 
-      el_pct |  15.42214   17.61338 
-    calw_pct |  13.20786   11.57226 
-    meal_pct |  44.02096   25.93847 
-         str |  19.68908   .6305783 
-      str_20 |  .3666667   .4830459 
-  expn_stu_k |  5247.282   496.0094 
--------------+----------------------
-Large Clas~e |                      
-    read_scr |  648.0733   18.19773 
-      avginc |  13.73897   4.445559 
-      el_pct |   20.9957   19.66651 
-    calw_pct |  13.37827   10.63472 
-    meal_pct |  50.57791   25.85828 
-         str |  21.95428   1.094183 
-      str_20 |         1          0 
-  expn_stu_k |  4910.889   399.7575 
--------------+----------------------
-Total        |                      
-    read_scr |  654.9705   20.10798 
-      avginc |  15.31659    7.22589 
-      el_pct |  15.76816   18.28593 
-    calw_pct |  13.24604   11.45482 
-    meal_pct |  44.70524   27.12338 
-         str |  19.64043   1.891812 
-      str_20 |  .4333333   .4961266 
-  expn_stu_k |  5312.408   633.9371 
+  class_size |   e(mean)      e(sd)   e(count) 
+-------------+---------------------------------
+Small Clas~e |                                 
+    read_scr |  661.6181   21.84814        105 
+      avginc |  17.80907   10.78676        105 
+      el_pct |  11.23263   16.98024        105 
+    calw_pct |  13.19018   12.09932        105 
+    meal_pct |  40.20112   29.78182        105 
+         str |  17.22926   1.069095        105 
+      str_20 |         0          0        105 
+  expn_stu_k |  5.844176   .7127741        105 
+-------------+---------------------------------
+Medium Cla~e |                                 
+    read_scr |  655.0952   19.03064        210 
+      avginc |  14.85916   5.688771        210 
+      el_pct |  15.42214   17.61338        210 
+    calw_pct |  13.20786   11.57226        210 
+    meal_pct |  44.02096   25.93847        210 
+         str |  19.68908   .6305783        210 
+      str_20 |  .3666667   .4830459        210 
+  expn_stu_k |  5.247282   .4960094        210 
+-------------+---------------------------------
+Large Clas~e |                                 
+    read_scr |  648.0733   18.19773        105 
+      avginc |  13.73897   4.445559        105 
+      el_pct |   20.9957   19.66651        105 
+    calw_pct |  13.37827   10.63472        105 
+    meal_pct |  50.57791   25.85828        105 
+         str |  21.95428   1.094183        105 
+      str_20 |         1          0        105 
+  expn_stu_k |  4.910889   .3997575        105 
+-------------+---------------------------------
+Total        |                                 
+    read_scr |  654.9705   20.10798        420 
+      avginc |  15.31659    7.22589        420 
+      el_pct |  15.76816   18.28593        420 
+    calw_pct |  13.24604   11.45482        420 
+    meal_pct |  44.70524   27.12338        420 
+         str |  19.64043   1.891812        420 
+      str_20 |  .4333333   .4961266        420 
+  expn_stu_k |  5.312408   .6339371        420 
 
+. 
+. 
 . 
 . esttab descriptives_size using esttab_means_size.`tab_type', ///
 >     main(mean) ///
@@ -257,117 +264,191 @@ Total        |
 >     replace 
 (output written to esttab_means_size.rtf)
 
+.         
 . 
+. eststo descriptives_size_4: estpost tabstat `y' `students' `teacher' `finance' , ///
+>     statistics(mean sd n) ///
+>     columns(statistics) ///
+>     listwise 
+
+Summary statistics: mean sd count
+     for variables: read_scr avginc el_pct calw_pct meal_pct str str_20 expn_stu_k
+
+             |   e(mean)      e(sd)   e(count) 
+-------------+---------------------------------
+    read_scr |  654.9705   20.10798        420 
+      avginc |  15.31659    7.22589        420 
+      el_pct |  15.76816   18.28593        420 
+    calw_pct |  13.24604   11.45482        420 
+    meal_pct |  44.70524   27.12338        420 
+         str |  19.64043   1.891812        420 
+      str_20 |  .4333333   .4961266        420 
+  expn_stu_k |  5.312408   .6339371        420 
+
+. 
+.         
+. foreach i of numlist 1/3{
+  2.         eststo descriptives_size_`i': estpost tabstat `y' `students' `teacher' `fi
+> nance' if class_size==`i', ///
+>     statistics(mean sd n) ///
+>     columns(statistics) ///
+>     listwise 
+  3.         
+. }       
+
+Summary statistics: mean sd count
+     for variables: read_scr avginc el_pct calw_pct meal_pct str str_20 expn_stu_k
+
+             |   e(mean)      e(sd)   e(count) 
+-------------+---------------------------------
+    read_scr |  661.6181   21.84814        105 
+      avginc |  17.80907   10.78676        105 
+      el_pct |  11.23263   16.98024        105 
+    calw_pct |  13.19018   12.09932        105 
+    meal_pct |  40.20112   29.78182        105 
+         str |  17.22926   1.069095        105 
+      str_20 |         0          0        105 
+  expn_stu_k |  5.844176   .7127741        105 
+
+Summary statistics: mean sd count
+     for variables: read_scr avginc el_pct calw_pct meal_pct str str_20 expn_stu_k
+
+             |   e(mean)      e(sd)   e(count) 
+-------------+---------------------------------
+    read_scr |  655.0952   19.03064        210 
+      avginc |  14.85916   5.688771        210 
+      el_pct |  15.42214   17.61338        210 
+    calw_pct |  13.20786   11.57226        210 
+    meal_pct |  44.02096   25.93847        210 
+         str |  19.68908   .6305783        210 
+      str_20 |  .3666667   .4830459        210 
+  expn_stu_k |  5.247282   .4960094        210 
+
+Summary statistics: mean sd count
+     for variables: read_scr avginc el_pct calw_pct meal_pct str str_20 expn_stu_k
+
+             |   e(mean)      e(sd)   e(count) 
+-------------+---------------------------------
+    read_scr |  648.0733   18.19773        105 
+      avginc |  13.73897   4.445559        105 
+      el_pct |   20.9957   19.66651        105 
+    calw_pct |  13.37827   10.63472        105 
+    meal_pct |  50.57791   25.85828        105 
+         str |  21.95428   1.094183        105 
+      str_20 |         1          0        105 
+  expn_stu_k |  4.910889   .3997575        105 
+
+.         
+.         
+. esttab descriptives_size_* using esttab_means_size.`tab_type', ///
+>     main(mean) ///
+>     aux(sd) ///
+>     nostar ///
+>     nonote ///
+>     label ///
+>     unstack ///
+>     nonumbers ///
+>     nomtitles ///
+>         collabels(none) ///
+>     replace 
+(output written to esttab_means_size.rtf)
+
+.         
 .         
 . /* Estimate Models */
 .         
 . quietly reg `y' `teacher'
+
+. estadd local hascontrols "No"
+
+added macro:
+        e(hascontrols) : "No"
 
 . estimates store teach_model, title ("Model 1")                                
 
 . 
 . quietly reg `y'  `teacher' `students'
 
+. estadd local hascontrols "Yes"
+
+added macro:
+        e(hascontrols) : "Yes"
+
 . estimates store st_tch_model, title ("Model 2")
 
 . 
 . quietly reg `y' `students' `teacher' `finance'
+
+. estadd local hascontrols "Yes"
+
+added macro:
+        e(hascontrols) : "Yes"
 
 . estimates store st_tch_fin_model, title ("Model 3")
 
 . 
 . quietly reg `y' `students' `teacher' `finance' `computers'
 
+. estadd local hascontrols "Yes"
+
+added macro:
+        e(hascontrols) : "Yes"
+
 . estimates store st_tch_fin_comp_model, title ("Model 4")
 
 . 
+. quietly reg `y' `students' `finance' 
+
+. estadd local hascontrols "Yes"
+
+added macro:
+        e(hascontrols) : "Yes"
+
+. estimates store st_fin_model, title ("Model 5")
+
+. 
+. quietly reg `y' `students' `computers'
+
+. estadd local hascontrols "Yes"
+
+added macro:
+        e(hascontrols) : "Yes"
+
+. estimates store st_comp_model, title ("Model 6")
+
+. 
+. 
+. 
 . #delimit;
 delimiter now ;
-. esttab *_model using `y'_models.`tab_type',     /* estout command: * indicates all estimates in mem
-> ory. rtf specifies rich text, best for word */
->                label                          /*Use labels for models and variables */
+. esttab *_model using `y'_models.`tab_type',     /* estout command: * indicates all es
+> timates in memory. rtf specifies rich text, best for word */
+>                label                          /*Use labels for models and variables *
+> /
 >                nodepvars                      /* Use my model titles */
->                b(2)                           /* b= coefficients , this gives two sig digits */
->                se(2)                         /* I do want standard errors */
+>                b(2)                           /* b= coefficients , this gives two sig
+>  digits */
+>                            t(2)                         /* I do want standard errors 
+> */
+>                            nostar
 >                r2 (2)                      /* R squared */
 >                ar2 (2)                     /* Adj R squared */
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn 
-> (list) */
->                sfmt (2 0 0 0)                /* format for scalar stats*/
+>                scalar(F  "df_m DF model"  "df_r DF residual" N "hascontrols Controls?
+> ")   /* select stats from the ereturn (list) */
+>                sfmt (2 0 0 0 2)                /* format for scalar stats*/
 >                replace                   /* replace existing file */
 >                ;
 (output written to read_scr_models.rtf)
 
 . #delimit cr
 delimiter now cr
+. 
+. 
 . 
 . // Redo table, this time include t stats instead of se and no stars!
 . 
-. #delimit;
-delimiter now ;
-. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates i
-> n memory. rtf specifies rich text, best for word */
->                label                          /*Use labels for models and variables */
->                nodepvars                      /* Use my model titles */
->                b(2)                           /* b= coefficients , this gives two sig digits */
->                t(2)                         /* I do want t stats */
->                            nostar
->                r2 (2)                      /* R squared */
->                ar2 (2)                     /* Adj R squared */
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn 
-> (list) */
->                sfmt (2 0 0 0)                /* format for scalar stats*/
->                replace                   /* replace existing file */
->                ;
-(output written to read_scr_models.rtf)
-
-. #delimit cr
-delimiter now cr
 . 
 . 
-. #delimit;
-delimiter now ;
-. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates i
-> n memory. rtf specifies rich text, best for word */
->                label                          /*Use labels for models and variables */
->                nodepvars                      /* Use my model titles */
->                b(2)                           /* b= coefficients , this gives two sig digits */
->                t(2)                         /* I do want t stats */
->                            nostar 
->                r2 (2)                      /* R squared */
->                ar2 (2)                     /* Adj R squared */
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn 
-> (list) */
->                sfmt (2 0 0 0)                /* format for scalar stats*/
->                replace                   /* replace existing file */
->                ;
-(output written to read_scr_models.rtf)
-
-. #delimit cr
-delimiter now cr
-. 
-. 
-. #delimit;
-delimiter now ;
-. esttab *_model using `y'_models.`tab_type',          /* estout command: * indicates all estimates i
-> n memory. rtf specifies rich text, best for word */
->                label                          /*Use labels for models and variables */
->                nodepvars                      /* Use my model titles */
->                b(4)                           /* b= coefficients , this gives two sig digits */
->                ci(4)                         /* I do want confidence interval */                   
->        
->                            nostar
->                r2 (4)                      /* R squared */
->                ar2 (4)                     /* Adj R squared */
->                scalar(F  "df_m DF model"  "df_r DF residual" N)   /* select stats from the ereturn 
-> (list) */
->                sfmt (4 0 0 0)                /* format for scalar stats*/
->                replace                   /* replace existing file */
->                ;
-(output written to read_scr_models.rtf)
-
-. #delimit cr
-delimiter now cr
 . 
 . /// Plotting regression results
 > 
@@ -377,7 +458,8 @@ delimiter now cr
 . 
 . #delimit;
 delimiter now ;
-. plotbeta  avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to report */
+. plotbeta  avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to re
+> port */
 >           labels                              /*Use Variable Labels*/
 >           xtitle (Parameters)                 /*Label of x axis*/
 >           title ("Model w/ No Covariates")    /*Title */ 
@@ -400,6 +482,7 @@ This term will not be plotted
 . #delimit cr
 delimiter now cr
 .  
+.  
 . graph save teach_model, replace
 (file teach_model.gph saved)
 
@@ -410,7 +493,8 @@ delimiter now cr
 . 
 . #delimit;
 delimiter now ;
-. plotbeta avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to report */
+. plotbeta avginc|el_pct|calw_pct|meal_pct|str_20|str, /*Variables in regression to rep
+> ort */
 >           labels                              /*Use Variable Labels*/
 >           xtitle (Parameters)                 /*Label of x axis*/
 >           title ("Model w/ Student Chars")    /*Title */ 
@@ -470,21 +554,114 @@ NOTE: Make sure there are no options in the lincom expressions
 . graph save st_teach_fin_comp_model,replace;
 (file st_teach_fin_comp_model.gph saved)
 
+. estimates restore st_fin_model;
+(results st_fin_model are active now)
+
+.  #delimit;
+delimiter now ;
+. plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str_20|str,
+>           labels
+>           xtitle (Parameters)
+>           title ("Students and Finance Model")
+>           subtitle ("From OLS regression. Dep Var= `ytitle'")
+>           xline(0,lp(dash))
+>           xscale(range(-1.4 4))
+>           xlabel(-4(.5)4)
+>                   scale(.5)
+>                   ;
+NOTE: Make sure there are no options in the lincom expressions
+lincom comp_stu failed
+This term will not be plotted
+lincom str_20 failed
+This term will not be plotted
+lincom str failed
+This term will not be plotted
+
+. graph save st_fin_model,replace;
+(note: file st_fin_model.gph not found)
+(file st_fin_model.gph saved)
+
+. estimates restore st_comp_model;
+(results st_comp_model are active now)
+
+.  #delimit;
+delimiter now ;
+. plotbeta avginc|el_pct|calw_pct|meal_pct|expn_stu_k|comp_stu|str_20|str,
+>           labels
+>           xtitle (Parameters)
+>           title ("Student and Computers Model")
+>           subtitle ("From OLS regression. Dep Var= `ytitle'")
+>           xline(0,lp(dash))
+>           xscale(range(-1.4 4))
+>           xlabel(-4(.5)4)
+>                   scale(.5)
+>                   ;
+NOTE: Make sure there are no options in the lincom expressions
+lincom expn_stu_k failed
+This term will not be plotted
+lincom str_20 failed
+This term will not be plotted
+lincom str failed
+This term will not be plotted
+
+. graph save st_comp_model,replace;
+(note: file st_comp_model.gph not found)
+(file st_comp_model.gph saved)
+
 . graph combine teach_model.gph //
 >         st_teach_model.gph //
 >         st_teach_fin_model.gph //
->         st_teach_fin_comp_model.gph
+>         st_teach_fin_comp_model.gph //
+>         st_fin_model.gph //
+>         st_comp_model.gph //
 >         ,
 >          cols(2)
->          rows(2)
+>          rows(3)
 >          ;
 
 . #delimit cr
 delimiter now cr
 . 
-. exit 
+. graph export all_models.`gtype', replace 
+(file /Users/doylewr/lpo_prac/lessons/s2-03-ols_in_stata/all_models.png written in PNG 
+> format)
+
+. 
+. 
+. 
+. 
+. 
+. exit
 
 end of do-file
 
+
+. ssc install coefplot
+checking coefplot consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. coefplot
+
+. help coefplot
+
+. coefplot, ci(95)
+
+. oneway read_scr str_20,
+
+                        Analysis of Variance
+    Source              SS         df      MS            F     Prob > F
+------------------------------------------------------------------------
+Between groups      8164.56011      1   8164.56011     21.16     0.0000
+ Within groups       161250.07    418   385.765719
+------------------------------------------------------------------------
+    Total           169414.631    419   404.330861
+
+Bartlett's test for equal variances:  chi2(1) =   0.7702  Prob>chi2 = 0.380
+
+. hhelp oneway
+command hhelp is unrecognized
+r(199);
+
+. help oneway
 
 . exit, clear

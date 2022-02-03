@@ -1,6 +1,6 @@
 Reporting Regression in Stata
 ================
-LPO 9952 | Spring 2020
+LPO 9952 | Spring 2022
 
 Reporting regression results should be motivated by the questions the reader would ask:
 
