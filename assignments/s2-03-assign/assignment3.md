@@ -5,7 +5,7 @@ output:
 ---
 # Assignment 3
 
-Using the api dataset,(https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop) complete the following steps for the full sample AND three different levels of school spending: low spending (less than 25th percentile in spending), middle (middle two quartiles), large (above or equal to 75th percentile). Do this by creating a loop structure around the following
+Using the api dataset,(https://stats.idre.ucla.edu/stat/stata/seminars/svy_stata_intro/apipop) complete the following steps for the full sample AND three different levels of school spending: low enrollmlent (less than 25th percentile in enrollment), middle (middle two quartiles), large (above or equal to 75th percentile). Do this by creating a loop structure around the following
 steps.
 
 1. Create a series of macros, one for each of the following characteristics of schools: students, teachers, parents
