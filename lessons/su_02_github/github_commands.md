@@ -21,7 +21,7 @@ Search for terminal.app in your search function.
 
 `git status .` tells the status of all files in current directory.
 
-`git add <filename` tells git to begin tracking a given file
+`git add <filename>` tells git to begin tracking a given file
 
 `git commit -m "<message here>"` Commits changes using "message"
 
@@ -35,6 +35,9 @@ Work on a file, saving as you go, then . . .
 
 add-->commit-->pull-->push
 
+Don't add large files (data files)
+
+You can use <git add *> to add all files in current directory. Be careful with this.
 
 ## Github Personal Access Tokens
 
@@ -42,7 +45,7 @@ On github click on settings-->developer settings--> Personal Access Token---> th
 
 # If you find yourself in the vim editor
 
-hit `ESC`, then hit `:`, then type `q!`
+Hit `ESC`, then hit `:`, then type `q!`
 
 # Some habits to get into
 
