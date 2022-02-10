@@ -29,6 +29,12 @@ Search for terminal.app in your search function.
 
 `git push` Pushes local changes to remote repository
 
+## Standard github workflow
+
+Work on a file, saving as you go, then . . .
+
+add-->commit-->pull-->push
+
 
 ## Github Personal Access Tokens
 
