@@ -4,7 +4,7 @@
 ## Spring 2021
 
 
-Due: February 12, midnight
+Due: March 2, midnight
 
 For this assignment I would like you to complete a brief (no more than
 2000 word) combined problem statement and literature review.
