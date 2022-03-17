@@ -16,19 +16,28 @@ local controls byses1 i.bypared
 
 // Interact fouryr with female 
 
-reg `y' i.female##i.fouryr `controls'
+eststo reg1: reg `y' i.female##i.fouryr `controls'
+
+estimates restore reg1 
 
 margins, predict(xb) at((mean) _continuous ///
 							(base) _factor ///
 							female=(0 1) ///
-							fouryr=(0 1))
+							fouryr=(0 1)) ///
+							post
+							exit
 marginsplot
 
 marginsplot, recast(scatter) ///
 			ytitle("Predicted Math Test Scores") ///
 			legend(order(3 "Does Not Plan to Go to a Four Year" ///
 						4 "Plans to Go to a Four Year")) ///
-						title("")
+						title("") ///
+			xscale(range(-.5(1)1.5))
+			
+// Interact 			
+			
+			
 
 
 exit 
