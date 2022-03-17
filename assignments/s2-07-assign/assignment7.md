@@ -15,7 +15,7 @@ figure this out.
 1. Create a simulated binary variable for planning to go to college. Ensure that
    the same proportion of your population wants to go to college as in
    the sample. Also make sure that this variable is correlated with
-   SES and parental education in the same magnitude and direction as
+   SES in the same magnitude and direction as
    in your smaple.
 2. Create another binary variable for respondent's GPA. This should be correlated with math scores and plans to go to college. 
  
