@@ -117,14 +117,76 @@ eststo reg4: reg `y' i.order_plan##i.bypared
                         8,955         3  ---Four Year
 */
 
+
+
+
 estimates restore reg4
 
 margins, predict(xb) ///
 		 at((mean) _continuous /// 
 			(base) _factor ///
 			order_plan=(1 2 3) /// 
-			bypared=(2 6 7))
+			bypared=(2))
 
-marginsplot			
+			
+marginsplot, recast(bar) /// 
+			plotopts(color(blue*.25)) ///
+			ciopts(msize(0)) ///
+			title("High School") ///
+			xtitle("") ///
+			ytitle("Predicted Math Scores") ///
+			xlabel(,angle(45) labsize(small)) ///			
+			name(hs_ed, replace)
+
+graph save pared1.gph, replace
+
+			
+		
+		
+
+estimates restore reg4
+
+
+margins, predict(xb) ///
+		 at((mean) _continuous /// 
+			(base) _factor ///
+			order_plan=(1 2 3) /// 
+			bypared=(6))
+
+		
+marginsplot, recast(bar) /// 
+			plotopts(color(red*.25)) ///
+			ciopts(msize(0)) ///
+			title("Bachelor's Degree") ///
+			xtitle("") ///
+			ytitle("") ///
+			xlabel(,angle(45) labsize(small)) ///
+			name(college_ed, replace)
+
+graph save pared2.gph, replace			
+			
+			
+estimates restore reg4
+
+
+margins, predict(xb) ///
+		 at((mean) _continuous /// 
+			(base) _factor ///
+			order_plan=(1 2 3) /// 
+			bypared=(7))
+
+		
+marginsplot, recast(bar) /// 
+			plotopts(color(green*.25)) ///
+			ciopts(msize(0)) ///
+			title("Advanced Degree") ///
+			xtitle("") ///
+			ytitle("") ///
+			xlabel(,angle(45) labsize(small)) ///			
+			name(adv_ed, replace)
+
+graph save pared3.gph, replace
+	
+graph combine pared1.gph pared2.gph pared3.gph, rows(1) ycommon
 			
 exit 
