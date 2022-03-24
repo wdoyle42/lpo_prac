@@ -32,13 +32,13 @@ local recoding=0
   
 /* 2. Analysis and output */
 
-local analysis=0
+local analysis=1
   
 /*3. Simulation */
 
-local simulation=1
+local simulation=0
 
-local complex_example=0
+local complex_example=1
 
 
 
@@ -283,13 +283,13 @@ set seed 0621
 local xbar_example=0
 
 //2: Run basic regression example
-local reg_example_1=1
+local reg_example_1=0
 
 //3: Run multiple regression example
 local reg_example_2=0
 
 //4: Run complex example based on data
-local complex_example=0
+local complex_example=1
     
 // Create a hypothetical situation
 
@@ -416,7 +416,7 @@ mean beta_0
 mean beta_1
 
 }
-exit
+
 
     
 // Multiple regression example
@@ -425,14 +425,14 @@ if `reg_example_2'==1{
 
 clear
     
-local my_corr=-.8
+local my_corr=-.2
 
 local my_means 10 20 
 
 local my_sds 5 10
 
 // Create variable x based on values above
-drawnorm x1 x2, means(`my_means') sds(`my sds') corr(1,`my_corr'\`my_corr',1) n(`pop_size') cstorage(lower)
+drawnorm x1 x2, means(`my_means') sds(`my_sds') corr(1,`my_corr'\`my_corr',1) n(`pop_size') cstorage(lower)
 
 drawnorm e, mean(0) sd(`error_sd')
 
@@ -440,9 +440,15 @@ local beta_0=10
 
 local beta_1=2
 
-local beta_2=4
+local beta_2=.05
 
 gen y= `beta_0'+`beta_1'*x1 +`beta_2'*x2 + e
+
+/*
+    X1  X2
+X1   1  -.8
+X2 -.8.   1
+*/
 
     
 // create a place in memory called buffer which will store a variable called xbar in a file called means.dta
@@ -460,7 +466,7 @@ postclose buffer // Buffer can stop recording
 
 use reg_2, clear
 
-kdensity beta_1, xline(`beta_1')
+kdensity beta_1, xline(`beta_1') 
 
 graph export ovb.`gtype', replace
 
@@ -501,9 +507,11 @@ mat mymat[3,3]=1
 mat mymat[4,4]=1
 mat mymat[5,5]=1
 
+
 mat li cormat
 
 
+exit
 /*Hypothetical structure for omitted variables*/
 
 mat newcol=(0.01\.5\-.2\.5\.5) /*Adds a column */
