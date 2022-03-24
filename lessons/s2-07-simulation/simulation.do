@@ -6,7 +6,7 @@ log using "simulation.log",replace /*Open up new log */
 /* Simluation techniques */
 /* Using simulation to understand and correct problems with regression*/
 /* Will Doyle */
-/* 210318 */
+/* 2021-03-18 */
 /* Practicum Folder */
 
 clear
@@ -28,11 +28,11 @@ set more off /*Get rid of annoying "more" feature */
 
 /* 1. Recoding and data setup */
 
-local recoding=1
+local recoding=0
   
 /* 2. Analysis and output */
 
-local analysis=1
+local analysis=0
   
 /*3. Simulation */
 
@@ -266,7 +266,6 @@ quietly esttab * using sim_model.rtf,          /* estout command: * indicates al
 
 } /*End Analysis Section*/
 
-
     
 /**************************************************/
 /* 4.Simulation */ 
@@ -284,10 +283,10 @@ set seed 0621
 local xbar_example=0
 
 //2: Run basic regression example
-local reg_example_1=0
+local reg_example_1=1
 
 //3: Run multiple regression example
-local reg_example_2=1
+local reg_example_2=0
 
 //4: Run complex example based on data
 local complex_example=0
@@ -311,24 +310,26 @@ save x, replace
 
 // Population mean
 mean x
-
+ 
 scalar pop_mean=_b[x]
 
-// Popoluation standard deviation
+// Population standard deviation
 tabstat x, stat(sd) save
 
 mat M=r(StatTotal)
 
 scalar pop_sd=M[1,1]
 
+
+
 preserve // Set return state
 sample `sample_size', count // Take a sample 
 mean x // Calculate mean 
 tabstat x, stat(sd) // Calculate sds
 restore //
-        
+      
 // create a place in memory called buffer which will store a variable called xbar in a file called means.dta
-postfile buffer xbar using means, replace 
+postfile buffer xbar  using means, replace 
 
 forvalues i=1/`nreps'{
 	preserve // Set return state
@@ -350,7 +351,7 @@ mean xbar
 
 scalar simulate_mean=_b[xbar]
 
-//Here's whate SE should be:
+//Here's what SE should be:
 scalar hypo_se=`mysd'/sqrt(`sample_size')
 
 //Here's what SE is: 
@@ -363,6 +364,8 @@ scalar simulate_se=M[1,1]
 }
 
 
+
+
 // Run MC study for basic regression
 if `reg_example_1'==1{
 
@@ -371,9 +374,9 @@ if `reg_example_1'==1{
 use x, clear
 
 // Generate error term
-local error_sd 10
+local error_sd=10
 
-drawnorm e, means(0) sds(`error_sd')
+drawnorm epsilon, means(0) sds(`error_sd')
 
 // Set values for parameters
 local beta_0=10
@@ -381,15 +384,16 @@ local beta_0=10
 local beta_1=2
 
 // Generate outcome
-gen y=`beta_0'+`beta_1'*x+e
+gen y=((`beta_0')+(`beta_1'*x))+rnormal(0,10)
 
     // create a place in memory called buffer which will store a variable called xbar in a file called means.dta
 postfile buffer beta_0 beta_1 using reg_1, replace 
 
-forvalues i=1/`nreps'{
+forvalues i=1/1000{
 	preserve // Set return state
-	quietly sample `sample_size', count // Keep only certain observations
+	quietly sample 100, count // Keep only certain observations
 	quietly reg y  x // get parameter estimates
+	di _b[_cons] _b[x]
 	post buffer (_b[_cons]) (_b[x]) // post the estimate to the buffer
 	restore // Go back to full dataset
 }
@@ -399,11 +403,11 @@ postclose buffer // Buffer can stop recording
 // Open up results of MC study for basic regression
 use reg_1, clear
 
-kdensity beta_0, xline(`beta_0')
+kdensity beta_0, xline(`beta_0') name(reg_intercept,replace)
 
 graph export beta_0.`gtype', replace
 
-kdensity beta_1, xline(`beta_1')
+kdensity beta_1, xline(`beta_1') name(reg_coeff,replace)
 
 graph export beta_1.`gtype', replace
 
@@ -412,7 +416,7 @@ mean beta_0
 mean beta_1
 
 }
-
+exit
 
     
 // Multiple regression example
@@ -448,7 +452,7 @@ forvalues i=1/`nreps'{
 	preserve // Set return state
 	quietly sample `sample_size', count // Keep only certain observations
 	quietly reg y  x1  // get parameter estimates
-	post buffer (_b[_cons]) (_b[x]) // post the estimate to the buffer
+	post buffer (_b[_cons]) (_b[x1]) // post the estimate to the buffer
 	restore // Go back to full dataset
 }
 
@@ -462,7 +466,6 @@ graph export ovb.`gtype', replace
 
 }
 }
-
 
     
 /* Generating Random Variables */
@@ -488,8 +491,6 @@ drop fakeses fakeincome
 /*Binary variable: independent */
 
 gen fakefem=rbinomial(1,.50) /* 1 trial, p=.50 */
-
-drop fakefem
     
 /*Binary variable correlated with a continous variable */
 
@@ -502,6 +503,7 @@ mat mymat[5,5]=1
 
 mat li cormat
 
+
 /*Hypothetical structure for omitted variables*/
 
 mat newcol=(0.01\.5\-.2\.5\.5) /*Adds a column */
@@ -512,8 +514,9 @@ mat cormat2=cormat2\0.01,.5,-.2,.5,.5,1 /*Adds a row */
 
 mat li cormat2
 
-corr2data female_st plans_st race_st pared_st ses counsel_st, corr(cormat2) n(`popsize')
+clear
 
+corr2data female_st plans_st race_st pared_st ses counsel_st, corr(cormat2) n(`popsize') 
 
 /*Specify cut in normal dist for proportion with and without characteristics*/
 
@@ -543,6 +546,7 @@ local effect 2
 gen y=`int'+(`fem_coeff'*female)+(`plans_coeff'*plans)+(`race_coeff'*race)+(`pared_coeff'*pared)+(`ses_coeff'*ses) + (`effect'*counsel)+e
 
 keep y female plans race pared ses counsel e
+
 
 preserve
 
@@ -595,7 +599,6 @@ use results_file, clear
 
 kdensity plans1, xline(`plans_coeff', lcolor(blue) lstyle(dash)) /// 
 addplot(kdensity plans2) legend(order(1 "True Model" 2 "OVB Model"))
-
 
 /*Now vary effect size*/
 
@@ -651,7 +654,7 @@ graph save monte_carlo_`effect'.gph, replace
 graph combine monte_carlo_5.gph monte_carlo_10.gph monte_carlo_15.gph monte_carlo_20.gph , rows(2) cols(2)
 }
 
-}
+
  
 /*Quick-ish Exercise Create a variable for the unobserved characteristic
  of motivation (oh fine, grit) which is uncorrelated with other variables
@@ -660,5 +663,122 @@ graph combine monte_carlo_5.gph monte_carlo_10.gph monte_carlo_15.gph monte_carl
  standardized (mean 0 sd 1). Change its impact on math scores to range from
  1 to 10. What happens to your estimate of plans when this variable is excluded? 
  */
+ 
+
+
+/*Hypothetical structure for omitted variables*/
+
+
+use ${ddir}plans3.dta, clear
+    
+local female female
+    
+local ses byses1
+    
+local pared pared_bin 
+    
+local race urm 
+
+local plans p_fouryr 
+
+local y bynels2m 	
+	
+/*Stuff we'll want later */
+
+prop `female'
+
+local prop_fem=_b[1.`female']
+
+prop `plans'
+
+local prop_plans=_b[1.`plans']
+
+prop `race'
+
+local prop_race=_b[1.`race']
+
+prop `pared'
+
+local prop_pared=_b[1.`pared']
+
+corr `female' `plans' `race' `pared' `ses'
+
+mat cormat=r(C)
+
+local popsize 1600000
+
+local corrs .1 .25 .5 .75
+
+foreach corr of local corrs{
+
+mat newcol=(0\ `corr' \0\0\0) /*Adds a column */
+
+mat cormat2=cormat,newcol
+
+mat cormat2=cormat2\0, `corr' ,0,0,0,1 /*Adds a row */
+
+clear
+
+corr2data female_st plans_st race_st pared_st ses motivation, corr(cormat2) n(`popsize') 
+
+local effect_size 1 5 10
+
+foreach effect of local effect_size{
+
+/*Specify cut in normal dist for proportion with and without characteristics*/
+
+gen femcut=invnormal(`prop_fem')    
+gen female=female_st>femcut
+
+gen paredcut=invnormal(`prop_pared')
+gen pared= pared_st>paredcut 
+
+gen plancut=invnormal(`prop_plans') 
+gen plans=plans_st>plancut 
+
+local race_other=1-`prop_race'
+
+gen racecut=invnormal(`prop_race') 
+gen race=race_st<racecut 
+
+drawnorm e, sds(11)	
+
+gen y=`int'+(`fem_coeff'*female)+(`plans_coeff'*plans)+(`race_coeff'*race)+(`pared_coeff'*pared)+(`ses_coeff'*ses) + (`effect'*motivation)+e
+    
+tempname results_store
+postfile `results_store' plans1 plans2  using results_file_`effect', replace
+local j=1  
+while `j'<=100{  
+
+quietly sample 10
+
+quietly reg y female plans race pared ses motivation /*True model */
+
+scalar plans1=_b[plans]
+
+ /*Pulls coefficient, puts it into scalar */
+quietly reg y female plans race pared ses /*OVB model*/
+
+scalar plans2=_b[plans]
+
+post `results_store' (plans1) (plans2)
+
+di "Finishing iteration `j' for correlation `corr' and effect `effect'"
+
+local ++j
+}
+
+postclose `results_store'
+
+use results_file_`effect', clear
+
+kdensity plans1, xline(`plans_coeff', lcolor(black) lpattern(dash)) addplot(kdensity plans2) legend(order(1 "True Model" 2 "OVB Model"))  title("Coefficient for Counseling=`effect', Correlation= `corr'")
+	
+
+} //end loop over effect sizes
+
+} // End loop over correlations
+
+ 
  
 exit
