@@ -21,7 +21,7 @@ figure this out.
  
 4. Create the outcome variable (math scores) as a function of SES,
    planning to go to college and GPA. Make this
-   flexible such that the impact of GPA can vary.
+   flexible such that the impact of GPA can vary by SES.
 4. Repeatedly sample from the population data you generated above,
    then run two regressions for each sample, one which includes
    GPA and one which does not. Create a graphic that
@@ -32,5 +32,5 @@ figure this out.
    population. Run a Monte Carlo study that shows what happens to the
    sampling distribution of coefficients for planning to go college
    when do and don't control for both SES and GPA when
-   GPA has differing impacts on math scores. 
+   GPA has differing impacts on math scores depending on SES. 
 
