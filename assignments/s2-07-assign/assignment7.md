@@ -6,7 +6,7 @@ simulation study to figure out if an approach is appropriate for a
 certain situation.
 
 You are trying to establish the association between planning to go to
-college and math scores, using the plans dataset. You're wondering
+college and math scores, using the plans2 `(data/plans2.data)` dataset. You're wondering
 whether it would be better to include a control for both ses AND
 GPA. Complete the following steps to
 figure this out.
@@ -17,7 +17,7 @@ figure this out.
    the sample. Also make sure that this variable is correlated with
    SES in the same magnitude and direction as
    in your smaple.
-2. Create another binary variable for respondent's GPA. This should be correlated with math scores and plans to go to college. 
+2. Create another binary variable for respondent's GPA above 3.0. This should be correlated with math scores and plans to go to college. 
  
 4. Create the outcome variable (math scores) as a function of SES,
    planning to go to college and GPA. Make this
