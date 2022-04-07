@@ -122,9 +122,11 @@ if `counter'==1{
     else mat results_tab=(results_tab,M_col)
 	
 mat li results_tab
+
 } // End loop over test scores
 
-matrix rownames results_tab="Native American" "t value"  "Asian"  "t value" "African American" "t value" "Hispanic" "t value" "Multiracial" "t value" "White" "t value"
+
+//matrix rownames results_tab="Native American" "t value"  "Asian"  "t value" "African American" "t value" "Hispanic" "t value" "Multiracial" "t value" "White" "t value"
 
 matrix colnames results_tab ="Lowest Quartile" "2nd Quartile" "3rd Quartile" "4th Quartile" 
 
