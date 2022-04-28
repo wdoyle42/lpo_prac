@@ -1,6 +1,6 @@
 ## Vanderbilt University
 ## Leadership, Policy and Organizations Class Number 9522
-## Spring 2020
+## Spring 2022
 
 Replication File Assignment
 
