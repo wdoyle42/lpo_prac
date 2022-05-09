@@ -6,7 +6,7 @@ output:
 ## Vanderbilt University
 ## Leadership, Policy and Organizations
 ## Class Number 9553
-## Maymester 2021
+## Maymester 2022
 
 
 William R. Doyle
@@ -36,10 +36,10 @@ Evaluation for the course will be based on the following factors:
   manuscript, reporting the results of the analysis conducted over the
   course of the year. You will need to turn in a replication file with
   this paper. This will be worth 100% of your grade. The paper will be
-  due at midnight on June 18.
+  due at midnight on June 24.
 
 *Presentation* : You will give a presentation based on your paper on
- May 28. The presentation will be in preparation for the presentation
+ May 27. The presentation will be in preparation for the presentation
  you will give to all students and faculty next year. I will give
  you feedback on this presentation along with the rest of the class.
 
@@ -47,61 +47,60 @@ Evaluation for the course will be based on the following factors:
 Stata will again be the order of the day for this semester.
 
 # Schedule for Meetings
-Class will meet from 12-3 via Zoom.
+Class will meet from 12-3. 
 
-*May   11*
+*May   9*
 
 Polychotomous Outcomes
 
-*May 12*
+*May 10*
 
 Limited dependent variables: censored data, count data
 
-*May 13*
+*May 11*
 
 Methods for Selection Bias: Propensity Score Matching
 
-*May 14*
+*May 12*
 
 Missing data, multiple imputation
 
+*May 16*
+
+Panel Data
+
 *May 17*
-
-Methods for latent variables
-
-*May 18*
 
 Difference in Differences, Event History Analysis
 
-*May 19*
+*May 18*
 
 Spatial Analysis
 
+Note: Class will meet 9-12 
+
+*May 19*
+Intro to ML: Lasso, Ridge and Elastic Net Models 
+
 *May 20*
+Student Presntations: Cox
 
-Student Presentations: Christensen, Ellison
+*May 23*
+ Student Presentations: Flanagan
 
-*May 21*
-
-Student Presentations: McGill, McGuiness
 
 *May 24*
+Student Presentations: Fresard
 
-Student Presentations: Quintero Castellanos, Shero
 
 *May 25*
-
-Student Presentations: Smith, Wellborn
+Student Presentations: Nienstadt
 
 *May 26*
 
-Student Presentations: Xu
-
-*May 27*
-
 Code-A-Rama: Open Office Hours from 10-3 to help with coding issues
 
-*May 28*
+*May 27*
 
 In-class conference style presentations
 
