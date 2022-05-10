@@ -195,7 +195,7 @@ else{
   if `analysis'==1{
 
   
- if count_section==1{ 
+ if `count_section'==1{ 
   
   // Count outcome: number of apps
   
@@ -360,13 +360,15 @@ eststo zinb_fll: zinb n_apps female `race' `pared' `test' `income', ///
   } // End 1st section 
 
 
-  if truncated_section==1{
+  if `truncated_section'==1{
  
  // Truncated Outcome: number of credits
  
  sum credits
  
  kdensity credits, name(density_credits)
+ 
+ exit 
  
  eststo ols_full_censor: reg credits female `race' `pared' `test' `income', vce(robust)
  
