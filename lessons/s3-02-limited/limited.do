@@ -25,6 +25,8 @@ global ddir "../../data/"
 
 local coding=1
 local analysis=1
+local count_section=0
+local truncated_section=1
 
 
 /*Locals for analysis*/
@@ -192,6 +194,9 @@ else{
 
   if `analysis'==1{
 
+  
+ if count_section==1{ 
+  
   // Count outcome: number of apps
   
   sum n_apps
@@ -199,24 +204,20 @@ else{
   kdensity n_apps, name(dist_apps)
   
   tab n_apps
-  
  
   //OLS
   
 eststo ols_full_count:  reg n_apps female `race' `pared' `test' `income', vce(robust)
-
-  
+ 
   //Poisson: assumption is that variance=mean
   
 eststo poisson_full:  poisson n_apps female `race' `pared' `test' `income'
  
-
  
   // Negative binomial: more flexible, generally better
 
 eststo nbreg_simple:  nbreg n_apps  `income'
  
-  
 eststo nbreg_full:  nbreg n_apps female `race' `pared' `test' `income'
  
 esttab nbreg_simple nbreg_full using nbreg_results.rtf, ///
@@ -226,15 +227,12 @@ esttab nbreg_simple nbreg_full using nbreg_results.rtf, ///
     b(2) ///
     replace     
 
-exit  
- 
   // Marginal effects
   
-
   margins, dydx(female `race' `pared' `test' `income')
   
   margins, dydx(*)
-  
+ 
   
   estimates restore nbreg_full
   
@@ -277,6 +275,7 @@ local step=`diff'/`no_steps'
 	ytitle("Predicted Number of Applications") ///
 	xtitle("SES") ///
 	title("")
+
 	
  
   // Margins: pr y=n
@@ -296,20 +295,61 @@ margins, predict(pr(4)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `
 	xtitle("SES") ///
 	title("")
 	
-exit	
 	
   //Margins: pr a<y<b
  
-  estimates restore nbreg_full
+ estimates restore nbreg_full
   
 margins, predict(pr(5,100)) at(byses=(`mymin'(`step')`mymax')  (min) female `race' `pared'  (mean) `test'  )  post
  
-marginsplot, recastci(rarea) recast(line) name(prymoren)
+marginsplot, recastci(rarea)  ///
+	ciopts(color(eltblue%25) lwidth(0)) ///
+	recast(line) ///
+	plotopts(lcolor(black)) ///
+	name(prymoren) ///
+	ytitle("Pr(Applications>5)") ///
+	xtitle("SES") ///
+	title("")
+
+
+	
+sum bynels2m, detail
+
+local no_steps=100
+local mymin=r(min)
+local mymax=r(max)
+local diff=`mymax'-`mymin'
+local step=`diff'/`no_steps'	
+
+
+estimates restore nbreg_full
+  
+margins, ///
+	predict(pr(2,.)) ///
+	at( ///
+	(mean) `test'   ///
+	bynels2m=(`mymin'(`step')`mymax') 	///
+	(min) female `race' `pared' ///
+	hispanic= (0 1) ///
+	) ///
+	post
+
+marginsplot, ///
+	recastci(rarea) ///
+	ci1opts(color(orange%25) lwidth(0)) ///
+		ci2opts(color(purple%25) lwidth(0)) ///
+	recast(line) ///
+	plot1opts(lcolor(blue)) ///
+		plot2opts(lcolor(yellow)) ///
+	ytitle("Pr(>2 Applications)") ///
+	xtitle("Math Scores") ///
+	title("")
+
 
 
 // Another model: zero-inflated poisson (zip)
 
-eststo zip_full: zip n_apps female`race' `pared' `test' `income', ///
+eststo zip_full: zip n_apps female `race' `pared' `test' `income', ///
 				inflate(female `race' `pared' `test' `income')
 
 // And . . . zero-inflated negative binomial
@@ -317,9 +357,10 @@ eststo zip_full: zip n_apps female`race' `pared' `test' `income', ///
 eststo zinb_fll: zinb n_apps female `race' `pared' `test' `income', ///
 				inflate(female `race' `pared' `test' `income')
 
-exit
+  } // End 1st section 
 
 
+  if truncated_section==1{
  
  // Truncated Outcome: number of credits
  
@@ -368,7 +409,7 @@ margins, predict(ystar(0,5000)) at(byses=(`mymin'(`step')`mymax')  (min) female 
  
 marginsplot, recastci(rarea) recast(line) name(e_credits)
 
- 
-  }
+  } //end truncated_section
+  } //end analysis section
 
 
