@@ -5,7 +5,7 @@ output:
 ---
 ## Vanderbilt University
 ## Leadership, Policy and Organizations
-## Class Number 9553
+## Class Number 9953
 ## Maymester 2022
 
 
@@ -105,4 +105,4 @@ Code-A-Rama: Open Office Hours from 10-3 to help with coding issues
 In-class conference style presentations
 
 
-*Final Paper Due Midnight, June 18 (three weeks after last class)*
+*Final Paper Due Midnight, June 24 (three weeks after last class)*
