@@ -6,7 +6,7 @@ log using "match.log",replace /*Open up new log */
 /* Matching Examples */
 /* Following Zhao, 2004 examples of difft kinds of matching */
 /* Will Doyle */
-/* 2021-05-13 */
+/* 2022-05-11 */
 /* Practicum Folder */
 
 
@@ -15,7 +15,7 @@ log using "match.log",replace /*Open up new log */
 *ssc install sensatt
 *net search attnd
 *ssc install rbounds
-/* install st0026_2 */
+/* ssc install st0026_2 */
 /* Super Useful Source: http://www.ssc.wisc.edu/sscc/pubs/stata_psmatch.htm*/    
 
 clear
@@ -60,7 +60,7 @@ local y bach_plus
 
 local t cc
 
-local controls  byses1  bynels2m bynels2r amind asian black hispanic white  bysex 
+local controls byses1  bynels2m bynels2r amind asian black hispanic white  bysex 
 
 /*Basic pattern*/
     
@@ -87,7 +87,9 @@ ttest `y' ,by(`t')
 
 reg `y' `t' `controls', vce(robust)
 
+
 /* Full matching Table */
+
 
 
 /* Propensity Score Matching: 1 to 1 */
@@ -108,9 +110,9 @@ psgraph
   psmatch2 `t'   ///
          `controls', ///
          outcome(`y') ///
-         neighbor(5) ///
+         neighbor(4) ///
          caliper(.15) 
-
+		 
 		 
 /* Plotting Kdensity based on the psmatch weights */		 
 
@@ -129,14 +131,6 @@ graph save balance_ses_match.gph, replace
 grc1leg2 balance_ses_unmatch.gph balance_ses_match.gph
 
 
-	
-/* Propensity Score Matching: 1 to 4 */
-  psmatch2 `t'   ///
-         `controls', ///
-         outcome(`y') ///
-         neighbor(4) ///
-         caliper(.25) 
-		 
 
 /*How this gets results */
 
@@ -148,29 +142,11 @@ reg `y' `t' [iweight=_weight]
 reg `y' `t' `controls' [iweight=_weight] 
 
 
+
 /*Regression with ps as control */
 reg `y' `t' `controls'  _pscore
 
 
-
-/* Propensity Score Matching: Calipers, multiple matches */
-  
-  psmatch2 `t' ///
-         `controls' , ///
-         outcome(`y') ///
-         caliper(.25) ///
-         common ///
-         neighbor(3) 
-         
-
-pstest _pscore `controls', treated(`t') both
-
-
- kdensity _pscore if `t'==1 , ///
- addplot(kdensity _pscore if `t'==0, lpattern(dash))  ///
- legend(order(1 "Treated"  2 "Untreated")) 
- 
-graph save balance_ses_unmatch.gph 
 
 /* Propensity Score Matching: Calipers on propensity score and Mahalonobis metric */
   psmatch2 `t' ///
@@ -260,16 +236,28 @@ di "Estimate is " myest
 di "SE is " myse
 
 
+/* The Stata teffects approach */
+
+/*Locals */
+
+local y bach_plus
+
+local t cc
+
+local controls  byses1  bynels2m bynels2r amind asian black hispanic white  bysex 
+
+
 /* Teffects -- PS matching, 1 to 1 */
     teffects psmatch (`y') (`t' `controls'), ///
         nn(1) ///
 		caliper(.25) ///
-            atet 
-         
+        atet 
+
 
 /*Replicate psmatch2, almost*/
 
 teffects psmatch (`y') (`t' `controls', probit) , nn(1) atet caliper(.25)
+
 
 tebalance summarize
 
@@ -283,6 +271,7 @@ estout matrix(balance) using balance.rtf, replace
     (`t'), ///
     nn(4) 
 	
+	
 /*use teffects to estimate difference, algorithm: ps matching, 5 nn, .15 calipers */ 
 teffects psmatch (`y') (`t' `controls', probit) , nn(5) atet caliper(.15)
 
@@ -294,6 +283,7 @@ teffects nnmatch (`y'  `controls') (`t') , nn(5)   atet
 teffects nnmatch (`y' `controls' ) (`t'),  ///
 ematch( amind asian black hispanic white bysex ) 
 
+
 /* Teffects -- Nearest Neighbor matching, 4 neighboring units */
     teffects nnmatch (`y' `controls')  ///
     (`t'), ///
@@ -302,25 +292,9 @@ ematch( amind asian black hispanic white bysex )
 
 /* AIPW: Augmented Inverse Probability Weights */
    teffects aipw (`y' `controls') ///
-    (`t' `controls') 
-
+    (`t' `controls')
 	
-predict pscore, ps
-
-gen pscore_weight=.
-replace pscore_weight=1/pscore if `t'==1
-replace pscore_weight=pscore/(1-pscore) if `t'==0
-
-preserve
-sample 1000, count
-
-graph twoway (scatter pscore bynels2m [w=pscore_weight] if `t'==1, msize(vtiny) msymbol(circle_hollow)) ///
-    (scatter pscore bynels2m [w=pscore_weight] if `t'==0,msize(vtiny) msymbol(circle_hollow) ), ///
-legend (order(1 "PS, CC Attend" 2 "PS, 4yr Attend")) ytitle("Propensity Score")
-
-restore
-
-
+	
 
 /*Using sensatt */
 
