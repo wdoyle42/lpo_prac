@@ -1,125 +1,66 @@
-/* Working with diff in diffs data */
+// Diff in diff using Stata 17 commands
+// Will Doyle
+// 2022-05-17
 
-use eitc.dta, clear
+net install cleanplots, replace from("https://tdmize.github.io/data/cleanplots")
 
-/*Setup */
+// Card and Krueger Study
 
-gen treat=children>0
+// https://www.jstor.org/stable/2677856
+use ck_min_wage, clear
 
-gen post=year>1993
 
-gen treat_post=treat*post
+gen fte = empft + emppt/2 + nmgrs 
+drop if fte == .
+bys store: gen nperiods = [_N]
+keep if nperiods == 2
 
-/* Four groups */
+summarize fte if state==1 & time==0
+summarize fte if state==1 & time==1
+summarize fte if state==0 & time==0
+summarize fte if state==0 & time==1
 
-gen no_treat_before=treat==0&post==0
-
-gen no_treat_after=treat==0&post==1
-
-gen treat_before=treat==1&post==0
-
-gen treat_after=treat==1&post==1
-
-/*Unconditional diff in diffs */
-
-mean work if no_treat_before==1
-
-mat result=e(b)
-
-scalar mean_no_treat_before=result[1,1]
-
-scalar li mean_no_treat_before
-
-mean work if no_treat_after==1
-
-mat result=e(b)
-
-scalar mean_no_treat_after=result[1,1]
-
-mean work if treat_before==1
-
-mat result=e(b)
-
-scalar mean_treat_before=result[1,1]
-
-mean work if treat_after==1
-
-mat result=e(b)
-
-scalar mean_treat_after=result[1,1]
-
-scalar change_notreat=mean_no_treat_after-mean_no_treat_before
-
-scalar change_treat=mean_treat_after-mean_treat_before
-
-scalar diff_diffs=change_treat-change_notreat
-
-scalar li diff_diffs
-
-exit 
-
-save eitc_new, replace
-
-/*Plot */
-
-collapse work, by(year treat)
-
-graph twoway line work year if treat==0 || line work year if treat==1, ytitle("Labor Force Participation") xtitle("Year") xline(1993) legend(order(1 "LFP Single Women" 2 "LFP Single Mothers"))
-
-/*Regression */
-
-use eitc_new, clear
-
-reg work treat post treat_post
-
-/*Four groups */
-
-di _b[_cons]
-
-scalar li mean_no_treat_before
-
-di _b[_cons]+_b[post]
-
-scalar li mean_no_treat_after
-
-di _b[_cons]+_b[treat]
-
-scalar li mean_treat_before
-
-di _b[_cons]+_b[treat]+_b[post]+_b[treat_post]
-
-scalar li mean_treat_after
-
-/*With covariates */
-
-reg work treat post treat_post urate nonwhite age ed unearn
-
-/*With covariates and robust se's */
-
-reg work treat post treat_post urate nonwhite age ed unearn, vce(robust)
-
-  
-/*With covariates and clustered se's on states */
-
-reg work treat post treat_post urate nonwhite age ed unearn, vce(cluster state)
- 
-/* With covariates, clustered se's and fixed effects for years: does this make sense to do? */
-
-xi: reg work treat post treat_post urate nonwhite age ed unearn i.year, vce(cluster state)
-
-/* Fixed effects for states */
-
-xi: reg work treat post treat_post urate nonwhite age ed unearn i.state
-
-/* Fixed effects for states and years: again, does this make sense? */
-
-xi: reg work treat post treat_post urate nonwhite age ed unearn i.state i.year
-
-/* Alternate */
+gen treatment = time*state
+reg fte state time treatment, cluster(store)
 
 xtset state
+xtreg fte treatment time, fe 
 
-xtreg work treat post treat_post urate nonwhite age ed unearn i.year, fe
+xtset store
+
+xtreg fte treatment time, fe vce(robust)
+
+xtreg fte treatment time hoursopen, fe vce(robust)
+
+
+// Parallel Trends
+
+//https://www.stata.com/new-in-stata/difference-in-differences-DID-DDD/
+
+webuse hospdd, clear
+
+didregress (satis) (procedure), group(hospital) time(month)
+
+estat trendplots
+
+estat ptrends
+
+estat grangerplot
+
+estat grangerplot, nodraw verbose
+
+
+// Two Way FE
+
+// https://doi-org.proxy.library.vanderbilt.edu/10.1002/(SICI)1099-1255(199803/04)13:2%3C163::AID-JAE460%3E3.0.CO;2-Y
+
+use wagepan, clear
+
+xtset nr year
+
+xtreg lwage union  i.year
+
+xtdidregress (lwage) (union), group(nr) time(year) 
 
 
 
