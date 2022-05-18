@@ -35,6 +35,8 @@ unzipfile tl_2020_us_county.zip
 
 // Convert to stata format 
 
+// Takes all of the files that define the geography and converts them into a single stata data file */
+
 spshape2dta tl_2020_us_county, replace
 
 // Open up relevant data file
@@ -67,6 +69,8 @@ use tl_2020_tn_county, clear
 
 merge 1:1 fips using county_stats.dta
 
+save tn_county_stats.dta
+
 
 spmap college_educ using tl_2020_us_county_shp , /// 
 		id(_ID) 
@@ -83,6 +87,23 @@ spmap college_educ using tl_2020_us_county_shp , ///
 		point(data(inst) xcoord(longitud) ycoord(latitude) ///
 		by(sector) fcolor(Set1) )
 		
+
+use tn_county_stats, clear		
+		
+gen highly_educated=college_educ>40
+
+recode highly_educated (0=0 "Low") (1=1 "High"), gen(hi_educ) 		
+
+
+spmap hi_educ using tl_2020_us_county_shp , /// 
+		id(_ID) ///
+		fcolor(Set2)  ///
+		ocolor(white ..) osize(*0.15 ..)  ///
+		ndocolor(black) ndfcolor(gs14) /// 
+		ndlabel("No data")  ndsize(*0.15 ..)  ///
+		legend(pos(8) size(*2)) legstyle(2)  
+
+		exit
 
 spmap income_75 using tl_2020_us_county_shp , /// 
 		id(_ID) ///
